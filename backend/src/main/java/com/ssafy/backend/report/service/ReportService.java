@@ -10,5 +10,5 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public interface ReportService {
-	public ResponseEntity<Resource> createPdf(String filename);
+	public ResponseEntity<Resource> fileDownload(String filename);
 }
