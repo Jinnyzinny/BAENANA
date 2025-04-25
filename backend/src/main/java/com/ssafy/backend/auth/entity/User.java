@@ -1,11 +1,11 @@
-package com.ssafy.backend.entity;
+package com.ssafy.backend.auth.entity;
 
-import com.ssafy.backend.entity.chatMessages.ChatMessages;
-import com.ssafy.backend.entity.hospital.HospitalReservation;
-import com.ssafy.backend.entity.inquiry.Inquiry;
-import com.ssafy.backend.entity.medication.Medication;
-import com.ssafy.backend.entity.menstrual.MenstrualCycle;
-import com.ssafy.backend.entity.symptom.SymptomLog;
+import com.ssafy.backend.chatMessages.entity.ChatMessages;
+import com.ssafy.backend.hospital.entity.HospitalReservation;
+import com.ssafy.backend.inquiry.entity.Inquiry;
+import com.ssafy.backend.medication.entity.Medication;
+import com.ssafy.backend.menstrual.entity.MenstrualCycle;
+import com.ssafy.backend.symptom.entity.SymptomLog;
 import jakarta.persistence.*;
 import lombok.Getter;
 

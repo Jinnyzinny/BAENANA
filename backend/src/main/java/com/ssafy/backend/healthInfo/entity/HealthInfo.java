@@ -1,14 +1,13 @@
-package com.ssafy.backend.entity.healthInfo;
+package com.ssafy.backend.healthInfo.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter
-public class Category {
+public class HealthInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -16,13 +15,16 @@ public class Category {
     /*
     * =====연관 관계=====
     * */
-    @OneToMany(mappedBy = "category")
-    private List<HealthInfo> healthInfoList;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     /*
     * =====Column=====
     * */
-    private String name;
-    private String description;
+    private String title;
+    private String content;
+    private String imageUrl;
     private LocalDateTime createdAt;
 }
