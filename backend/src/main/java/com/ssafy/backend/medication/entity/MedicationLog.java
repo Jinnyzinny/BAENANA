@@ -1,4 +1,4 @@
-package com.ssafy.backend.entity.medication;
+package com.ssafy.backend.medication.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

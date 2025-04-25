@@ -1,4 +1,4 @@
-package com.ssafy.backend.entity.menstrual;
+package com.ssafy.backend.menstrual.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

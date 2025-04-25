@@ -1,6 +1,6 @@
-package com.ssafy.backend.entity.inquiry;
+package com.ssafy.backend.inquiry.entity;
 
-import com.ssafy.backend.entity.User;
+import com.ssafy.backend.auth.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 
