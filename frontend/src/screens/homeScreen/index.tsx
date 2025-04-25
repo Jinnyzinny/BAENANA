@@ -1,9 +1,9 @@
-import { SafeAreaView } from "react-native-safe-area-context";
-import { HeaderLogo } from "../../components/common/headerLogo";
-import { Alert } from "../../components/common/alert";
-import { DonutChart } from "../../components/home/donutChart";
 import { View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Alert } from "../../components/common/alert";
 import { Button } from "../../components/common/button";
+import { HeaderLogo } from "../../components/common/headerLogo";
+import { DonutChart } from "../../components/home/donutChart";
 
 export function HomeScreen() {
   return (
@@ -14,8 +14,8 @@ export function HomeScreen() {
         <View className="gap-3">
           <Alert
             type="hospital"
-            title="병원 예약 알림 메시지"
-            content="n월 n일 n시 ㅇㅇ산부인과 예약이 있습니다."
+            title="병원 예약이 있어요"
+            content="4월 18일 14시 더블유 여성병원"
           />
           <Alert
             type="pill"
@@ -31,7 +31,7 @@ export function HomeScreen() {
         {/* 버튼 */}
         <View className="w-full absolute bottom-28 -translate-y-1/2">
           <View className="mx-28">
-            <Button fill={false} content="입력" onPress={() => {}} />
+            <Button fill={false} content="월경일 입력" onPress={() => {}} />
           </View>
         </View>
       </View>

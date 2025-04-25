@@ -24,38 +24,38 @@ export function CurrentPeriod() {
       {/* 반복문 사용해서 최근 6개월 간 기록 보여줄 예정 */}
       <View className="gap-3">
         <BarChart
-          startDate="2025년 04월 18일"
-          endDate="2025년 04월 18일"
+          startDate="2025년 03월 04일"
+          endDate="2025년 04월 06일"
+          period={33}
+          maxPeriod={40}
+        />
+        <BarChart
+          startDate="2025년 02월 01일"
+          endDate="2025년 03월 04일"
+          period={31}
+          maxPeriod={40}
+        />
+        <BarChart
+          startDate="2025년 01월 01일"
+          endDate="2025년 01월 31일"
+          period={30}
+          maxPeriod={40}
+        />
+        <BarChart
+          startDate="2024년 11월 30일"
+          endDate="2024년 12월 31일"
+          period={31}
+          maxPeriod={40}
+        />
+        <BarChart
+          startDate="2024년 10월 28일"
+          endDate="2024년 11월 29일"
           period={32}
           maxPeriod={40}
         />
         <BarChart
-          startDate="2025년 04월 18일"
-          endDate="2025년 04월 18일"
-          period={32}
-          maxPeriod={40}
-        />
-        <BarChart
-          startDate="2025년 04월 18일"
-          endDate="2025년 04월 18일"
-          period={32}
-          maxPeriod={40}
-        />
-        <BarChart
-          startDate="2025년 04월 18일"
-          endDate="2025년 04월 18일"
-          period={32}
-          maxPeriod={40}
-        />
-        <BarChart
-          startDate="2025년 04월 18일"
-          endDate="2025년 04월 18일"
-          period={32}
-          maxPeriod={40}
-        />
-        <BarChart
-          startDate="2025년 04월 18일"
-          endDate="2025년 04월 18일"
+          startDate="2024년 09월 25일"
+          endDate="2024년 10월 27일"
           period={32}
           maxPeriod={40}
         />

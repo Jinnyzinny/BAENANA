@@ -22,9 +22,7 @@ export function ScheduleModal({
     <Modal visible={visible} transparent animationType="slide">
       <View className="flex-1 justify-center items-center bg-black/50">
         <View className="w-10/12 p-5 bg-white rounded-xl gap-3">
-          <Text className="text-lg font-bold text-center">
-            {date} 일정 입력
-          </Text>
+          <Text className="text-lg font-bold">{date} 일정 추가</Text>
           <TextInput
             placeholder="일정을 입력하세요"
             value={inputText}

@@ -1,15 +1,15 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
-  BookText,
   Bot,
   CalendarCheck,
   ChartColumnIncreasing,
+  Focus,
   Home,
 } from "lucide-react-native";
 import { CalendarScreen } from "../../screens/calendarScreen";
-import { HealthInfoScreen } from "../../screens/healthInfoScreen";
 import { HomeScreen } from "../../screens/homeScreen";
 import { ReportScreen } from "../../screens/reportScreen";
+import { TestScreen } from "../../screens/testScreen";
 import { ChatbotDrawerNavigator } from "../chatbotDrawerNavigator";
 
 export function BottomTabNavigator() {
@@ -53,26 +53,26 @@ export function BottomTabNavigator() {
         }}
       />
       <Tab.Screen
+        name="Test"
+        component={TestScreen}
+        options={{
+          title: "검사",
+          tabBarIcon: ({ color }) => (
+            <Focus color={color} size={size} strokeWidth={stroke} />
+          ),
+        }}
+      />
+      <Tab.Screen
         name="Report"
         component={ReportScreen}
         options={{
-          title: "분석",
+          title: "기록",
           tabBarIcon: ({ color }) => (
             <ChartColumnIncreasing
               color={color}
               size={size}
               strokeWidth={stroke}
             />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="HealthInfo"
-        component={HealthInfoScreen}
-        options={{
-          title: "건강정보",
-          tabBarIcon: ({ color }) => (
-            <BookText color={color} size={size} strokeWidth={stroke} />
           ),
         }}
       />

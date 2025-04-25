@@ -1,15 +1,22 @@
 import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ArrowLeft, Settings } from "lucide-react-native";
 import { Image, TouchableOpacity, View } from "react-native";
+import { RootStackParamList } from "../../../navigation/types";
 
 export function HeaderLogo() {
   const color: string = "#737373";
-  const navigation = useNavigation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   function handleBackPress() {
     if (navigation.canGoBack()) {
       navigation.goBack();
     }
+  }
+
+  function handleSettingPress() {
+    navigation.navigate("SettingsStack", { screen: "Settings" });
   }
 
   return (
@@ -32,7 +39,9 @@ export function HeaderLogo() {
 
       {/* 우측 톱니바퀴 */}
       <View className="absolute right-0 top-3 bottom-0 justify-center">
-        <Settings size={22} color={color} />
+        <TouchableOpacity onPress={handleSettingPress}>
+          <Settings size={22} color={color} />
+        </TouchableOpacity>
       </View>
     </View>
   );

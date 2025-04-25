@@ -19,7 +19,9 @@ export function Alert({
 }) {
   const [isOpened, setIsOpened] = useState<boolean>(true);
   const typeSize: number = 16;
-  const typeColor: string = "#262626";
+  const warnColor: string = "#EC6344";
+  const hospitalColor: string = "#7FD19B";
+  const pillColor: string = "#A684FF";
   const typeStrokeWidth: number = 2.2;
   const toggleSize: number = 18;
   const toggleColor: string = "#A1A1A1";
@@ -35,19 +37,19 @@ export function Alert({
           {type === "warn" ? (
             <TriangleAlert
               size={typeSize}
-              color={typeColor}
+              color={warnColor}
               strokeWidth={typeStrokeWidth}
             />
           ) : type === "hospital" ? (
             <Hospital
               size={typeSize}
-              color={typeColor}
+              color={hospitalColor}
               strokeWidth={typeStrokeWidth}
             />
           ) : (
             <Pill
               size={typeSize}
-              color={typeColor}
+              color={pillColor}
               strokeWidth={typeStrokeWidth}
             />
           )}
@@ -65,7 +67,7 @@ export function Alert({
       </View>
       {isOpened ? (
         <View>
-          <Text className="mt-1 text-neutral-600 text-sm">{content}</Text>
+          <Text className="mt-1 pl-6 text-neutral-600 text-sm">{content}</Text>
         </View>
       ) : (
         <View />

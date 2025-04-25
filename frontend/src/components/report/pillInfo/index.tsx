@@ -14,7 +14,7 @@ export function PillInfo() {
             <Text className="text-neutral-600 text-sm">
               현재 복용 중인 약은{" "}
             </Text>
-            <Text className="text-violet-700 text-sm font-bold">2개</Text>
+            <Text className="text-violet-700 text-sm font-bold">1개</Text>
             <Text className="text-neutral-600 text-sm">입니다.</Text>
           </View>
         </View>
@@ -24,21 +24,19 @@ export function PillInfo() {
       </View>
       {/* 반복문 사용해서 복용약 보여줄 예정 */}
       <View className="gap-3">
-        <Text>복용약 1</Text>
-        <Text>복용약 2</Text>
+        <Text>오가루트란주 주사</Text>
       </View>
       <View className="w-full h-0.5 bg-neutral-100" />
       <View className="flex-row">
         <Text className="text-neutral-600 text-sm">
           최근 3개월 복용했던 약은{" "}
         </Text>
-        <Text className="text-violet-700 text-sm font-bold">3개</Text>
+        <Text className="text-violet-700 text-sm font-bold">2개</Text>
         <Text className="text-neutral-600 text-sm">입니다.</Text>
       </View>
       <View className="gap-3">
-        <Text>복용약 1</Text>
-        <Text>복용약 2</Text>
-        <Text>복용약 3</Text>
+        <Text>오가루트란주 주사</Text>
+        <Text>고날-에프펜</Text>
       </View>
     </View>
   );
