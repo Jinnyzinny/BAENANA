@@ -45,8 +45,6 @@ public class User {
     * */
     private String socialId;
     private String provider;
-    private String email;
-    private String name;
     private String role;
     private Boolean allowAlarm;
     private LocalDateTime createdAt;
