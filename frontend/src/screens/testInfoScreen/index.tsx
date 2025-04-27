@@ -3,7 +3,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Button } from "../../components/common/button";
 import { HeaderLogo } from "../../components/common/headerLogo";
 
-export function TestScreen() {
+export function TestInfoScreen() {
   return (
     <SafeAreaView className="flex-1">
       <HeaderLogo />

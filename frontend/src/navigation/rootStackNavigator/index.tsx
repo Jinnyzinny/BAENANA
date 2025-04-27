@@ -7,8 +7,10 @@ export function RootStackNavigator() {
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
+      {/* 하단 탭 */}
       <Stack.Screen name="Main" component={BottomTabNavigator} />
-      <Stack.Screen name="SettingsStack" component={SettingsStackNavigator} />
+      {/* 설정 */}
+      <Stack.Screen name="Settings" component={SettingsStackNavigator} />
     </Stack.Navigator>
   );
 }

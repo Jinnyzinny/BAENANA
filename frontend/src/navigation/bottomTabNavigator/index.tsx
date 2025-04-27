@@ -8,9 +8,9 @@ import {
 } from "lucide-react-native";
 import { CalendarScreen } from "../../screens/calendarScreen";
 import { HomeScreen } from "../../screens/homeScreen";
-import { ReportScreen } from "../../screens/reportScreen";
-import { TestScreen } from "../../screens/testScreen";
 import { ChatbotDrawerNavigator } from "../chatbotDrawerNavigator";
+import { TestStackNavigator } from "../testStackNavigator";
+import { ReportStackNavigator } from "../reportStackNavigator";
 
 export function BottomTabNavigator() {
   const Tab = createBottomTabNavigator();
@@ -54,7 +54,7 @@ export function BottomTabNavigator() {
       />
       <Tab.Screen
         name="Test"
-        component={TestScreen}
+        component={TestStackNavigator}
         options={{
           title: "검사",
           tabBarIcon: ({ color }) => (
@@ -64,7 +64,7 @@ export function BottomTabNavigator() {
       />
       <Tab.Screen
         name="Report"
-        component={ReportScreen}
+        component={ReportStackNavigator}
         options={{
           title: "기록",
           tabBarIcon: ({ color }) => (
