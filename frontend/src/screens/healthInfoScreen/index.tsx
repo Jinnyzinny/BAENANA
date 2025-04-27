@@ -15,8 +15,8 @@ export function HealthInfoScreen() {
             <Text className="text-neutral-800 text-lg font-bold">
               건강 정보
             </Text>
-            <Text className="text-neutral-800 text-sm">
-              건강 정보 설명이나 주의사항 문구가 들어갈 예정
+            <Text className="text-neutral-600 text-sm">
+              다양한 건강 정보를 확인해보세요
             </Text>
           </View>
           {/* 이미지 슬라이더 */}

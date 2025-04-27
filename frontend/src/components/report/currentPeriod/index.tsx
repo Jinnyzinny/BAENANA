@@ -1,8 +1,13 @@
 import { ChevronRight } from "lucide-react-native";
 import { Text, TouchableOpacity, View } from "react-native";
 import { BarChart } from "../barChart";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { ReportStackParamList } from "../../../navigation/types";
 
 export function CurrentPeriod() {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<ReportStackParamList>>();
   const size: number = 22;
   const color: string = "#A1A1A1";
 
@@ -17,7 +22,7 @@ export function CurrentPeriod() {
             <Text className="text-neutral-600 text-sm">입니다.</Text>
           </View>
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("Period")}>
           <ChevronRight size={size} color={color} />
         </TouchableOpacity>
       </View>

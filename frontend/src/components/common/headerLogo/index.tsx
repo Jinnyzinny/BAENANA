@@ -16,7 +16,7 @@ export function HeaderLogo() {
   }
 
   function handleSettingPress() {
-    navigation.navigate("SettingsStack", { screen: "Settings" });
+    navigation.navigate("Settings");
   }
 
   return (

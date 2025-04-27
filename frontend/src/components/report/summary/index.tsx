@@ -6,7 +6,7 @@ export function Summary({ type1, type2 }: { type1: string; type2: string }) {
 
   return (
     <View className="p-5 rounded-xl gap-5 bg-white shadow-neutral-300">
-      <View className="gap-1">
+      <View className="gap-3">
         <View className="flex-row items-center gap-2">
           <Text className="text-neutral-800 font-bold">
             이번 달 월경 출혈량
@@ -26,7 +26,7 @@ export function Summary({ type1, type2 }: { type1: string; type2: string }) {
 
       <View className="w-full h-0.5 bg-neutral-100" />
 
-      <View className="gap-1">
+      <View className="gap-3">
         <View className="flex-row items-center gap-2">
           <Text className="text-neutral-800 font-bold">스트레스 지수</Text>
           {type2 === "normal" ? (
@@ -44,7 +44,7 @@ export function Summary({ type1, type2 }: { type1: string; type2: string }) {
 
       <View className="w-full h-0.5 bg-neutral-100" />
 
-      <View className="gap-1">
+      <View className="gap-3">
         <Text className="text-neutral-800 font-bold">이번 달 월경 증상</Text>
         <View className="flex-row">
           <Text className="text-neutral-600 text-sm">

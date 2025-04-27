@@ -9,39 +9,30 @@ import { useState } from "react";
 export function CalendarScreen() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [inputText, setInputText] = useState("");
 
   const handleDatePress = (date: string) => {
     setSelectedDate(date);
     setModalVisible(true);
   };
 
-  const handleSave = () => {
-    console.log("저장:", selectedDate, inputText);
-    setModalVisible(false);
-    setInputText("");
-  };
-
   return (
-    <SafeAreaView>
-      <HeaderLogo />
-      <ScrollView>
-        <View className="flex-1 mx-5 gap-3">
-          {/* 캘린더 */}
-          <Monthly onDateSelect={handleDatePress} />
-          <View>
+    <>
+      <SafeAreaView className="flex-1 bg-white">
+        <HeaderLogo />
+        <ScrollView>
+          <View className="flex-1 mx-5 gap-3">
+            <Monthly onDateSelect={handleDatePress} />
             <ScheduleList />
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </SafeAreaView>
+
+      {/* 여기!! SafeAreaView 바깥!! */}
       <ScheduleModal
         visible={modalVisible}
         date={selectedDate}
-        inputText={inputText}
-        onChangeText={setInputText}
         onClose={() => setModalVisible(false)}
-        onSave={handleSave}
       />
-    </SafeAreaView>
+    </>
   );
 }

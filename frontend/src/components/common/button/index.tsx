@@ -10,7 +10,7 @@ export function Button({
   onPress: () => void;
 }) {
   return (
-    <TouchableOpacity className="flex-1" onPress={onPress}>
+    <TouchableOpacity onPress={onPress}>
       <View
         className={`py-3 items-center rounded-xl border border-violet-400 ${fill ? "bg-violet-400" : "bg-white"}`}
       >

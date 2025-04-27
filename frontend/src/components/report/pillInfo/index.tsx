@@ -1,7 +1,12 @@
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ChevronRight } from "lucide-react-native";
 import { Text, TouchableOpacity, View } from "react-native";
+import { ReportStackParamList } from "../../../navigation/types";
 
 export function PillInfo() {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<ReportStackParamList>>();
   const size: number = 22;
   const color: string = "#A1A1A1";
 
@@ -18,13 +23,13 @@ export function PillInfo() {
             <Text className="text-neutral-600 text-sm">입니다.</Text>
           </View>
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("Medicine")}>
           <ChevronRight size={size} color={color} />
         </TouchableOpacity>
       </View>
       {/* 반복문 사용해서 복용약 보여줄 예정 */}
       <View className="gap-3">
-        <Text>오가루트란주 주사</Text>
+        <Text className="text-neutral-800 text-sm">오가루트란주 주사</Text>
       </View>
       <View className="w-full h-0.5 bg-neutral-100" />
       <View className="flex-row">
@@ -35,8 +40,8 @@ export function PillInfo() {
         <Text className="text-neutral-600 text-sm">입니다.</Text>
       </View>
       <View className="gap-3">
-        <Text>오가루트란주 주사</Text>
-        <Text>고날-에프펜</Text>
+        <Text className="text-neutral-800 text-sm">오가루트란주 주사</Text>
+        <Text className="text-neutral-800 text-sm">고날-에프펜</Text>
       </View>
     </View>
   );
