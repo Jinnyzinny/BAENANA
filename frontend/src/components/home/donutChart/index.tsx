@@ -1,5 +1,6 @@
 import { Text, View } from "react-native";
 import Svg, { Circle, Defs, LinearGradient, Stop } from "react-native-svg";
+import { ChartTag } from "../chartTag";
 
 export function DonutChart({
   percentage,
@@ -17,10 +18,29 @@ export function DonutChart({
 
   return (
     <View className="relative m-5 items-center">
+      {/* 월경예정일 정보 */}
       <View className="absolute items-center top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 gap-1">
         <Text className="text-neutral-600 text-sm">월경 예정일</Text>
         <Text className="text-violet-700 font-bold text-xl">{dDay}일 전</Text>
       </View>
+
+      {/* 고정 태그 */}
+      <View className="absolute -top-7 left-1/2 -translate-x-1/2">
+        <ChartTag fill={false} content="시작" />
+      </View>
+      <View className="absolute -right-7 top-1/3 translate-x-1/2">
+        <ChartTag fill={true} content="월경 끝" />
+      </View>
+      <View className="absolute -right-7 bottom-1/3 translate-x-1/2">
+        <ChartTag fill={false} content="가임기" />
+      </View>
+      <View className="absolute -bottom-7 left-1/2 -translate-x-1/2">
+        <ChartTag fill={true} content="배란일" />
+      </View>
+      <View className="absolute -left-7 top-1/2 -translate-y-1/2 -translate-x-1/2">
+        <ChartTag fill={false} content="PMS" />
+      </View>
+
       <Svg height="200" width="200">
         {/* 그라데이션 정의 */}
         <Defs>

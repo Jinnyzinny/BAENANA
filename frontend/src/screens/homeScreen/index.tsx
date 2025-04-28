@@ -29,8 +29,8 @@ export function HomeScreen() {
           <DonutChart percentage={70} dDay={7} />
         </View>
         {/* 버튼 */}
-        <View className="w-full absolute bottom-28 -translate-y-1/2">
-          <View className="mx-28">
+        <View className="w-full absolute bottom-16 -translate-y-1/2">
+          <View className="mx-24">
             <Button fill={false} content="월경일 입력" onPress={() => {}} />
           </View>
         </View>
