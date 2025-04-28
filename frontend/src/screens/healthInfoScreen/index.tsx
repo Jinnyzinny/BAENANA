@@ -3,8 +3,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { HeaderLogo } from "../../components/common/headerLogo";
 import { ImageSlider } from "../../components/healthInfo/imageSlider";
 import { InfoCard } from "../../components/healthInfo/infoCard";
+import { TabMenu } from "../../components/common/tabMenu";
+import { useState } from "react";
 
 export function HealthInfoScreen() {
+  const [selectedMenu, setSelectedMenu] = useState<string>("menses");
+
   return (
     <SafeAreaView>
       <HeaderLogo before={true} settings={false} />
@@ -21,8 +25,20 @@ export function HealthInfoScreen() {
           </View>
           {/* 이미지 슬라이더 */}
           <ImageSlider />
+          {/* 카테고리 */}
+          <View className="m-1" />
+          <TabMenu
+            tabs={[
+              { key: "menses", label: "월경 관리" },
+              { key: "diet", label: "식이 요법" },
+              { key: "exercise", label: "운동 요법" },
+              { key: "habit", label: "생활 습관" },
+            ]}
+            onSelect={(key) => {
+              setSelectedMenu(key);
+            }}
+          />
           {/* 건강 정보 카드 */}
-          <Text className="text-neutral-800 font-bold">건강 정보</Text>
           <InfoCard />
         </View>
       </ScrollView>

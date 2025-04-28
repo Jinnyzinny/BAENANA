@@ -1,8 +1,12 @@
 import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { HeaderLogo } from "../../components/common/headerLogo";
+import { TabMenu } from "../../components/common/tabMenu";
+import { useState } from "react";
 
 export function InquriyScreen() {
+  const [selectedMenu, setSelectedMenu] = useState<string>("inquriy");
+
   return (
     <SafeAreaView>
       <HeaderLogo before={true} settings={false} />
@@ -15,6 +19,16 @@ export function InquriyScreen() {
               사용 중 궁금한 점을 남겨주세요
             </Text>
           </View>
+          <View className="m-1" />
+          <TabMenu
+            tabs={[
+              { key: "inquriy", label: "문의 하기" },
+              { key: "list", label: "문의 내역" },
+            ]}
+            onSelect={(key) => {
+              setSelectedMenu(key);
+            }}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>

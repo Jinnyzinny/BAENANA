@@ -41,7 +41,7 @@ export function Notice() {
       </View>
       <View className="gap-1">
         {dummyNotice.map((item) => (
-          <View className="flex-row gap-3">
+          <View key={item.id} className="flex-row gap-3">
             <Text className="text-sm text-neutral-600">{item.date}</Text>
             <Text className="text-sm text-neutral-600">
               [{item.type}] {item.title}

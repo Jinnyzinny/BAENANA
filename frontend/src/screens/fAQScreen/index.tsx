@@ -1,8 +1,12 @@
 import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { HeaderLogo } from "../../components/common/headerLogo";
+import { useState } from "react";
+import { TabMenu } from "../../components/common/tabMenu";
 
 export function FAQScreen() {
+  const [selectedMenu, setSelectedMenu] = useState<string>("calendar");
+
   return (
     <SafeAreaView>
       <HeaderLogo before={true} settings={false} />
@@ -17,6 +21,18 @@ export function FAQScreen() {
               자주 묻는 질문을 확인해보세요
             </Text>
           </View>
+          <View className="m-1" />
+          <TabMenu
+            tabs={[
+              { key: "calendar", label: "캘린더" },
+              { key: "alert", label: "알림" },
+              { key: "login", label: "계정" },
+              { key: "etc", label: "기타" },
+            ]}
+            onSelect={(key) => {
+              setSelectedMenu(key);
+            }}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
