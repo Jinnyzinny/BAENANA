@@ -27,7 +27,7 @@ export function CalendarScreen() {
         </ScrollView>
       </SafeAreaView>
 
-      {/* 여기!! SafeAreaView 바깥!! */}
+      {/* SafeAreaView 외부 */}
       <ScheduleModal
         visible={modalVisible}
         date={selectedDate}

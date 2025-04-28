@@ -1,5 +1,5 @@
-import { Image, Modal, Text, TouchableOpacity, View } from "react-native";
 import { X } from "lucide-react-native";
+import { Image, Modal, Text, TouchableOpacity, View } from "react-native";
 
 export function ScheduleModal({
   visible,
@@ -10,8 +10,6 @@ export function ScheduleModal({
   date: string | null;
   onClose: () => void;
 }) {
-  if (!date) return null;
-
   return (
     <Modal
       visible={visible}
