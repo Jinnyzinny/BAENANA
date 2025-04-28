@@ -44,4 +44,8 @@ public class CalendarController {
     public ResponseEntity<MessageResDto> updateHospitalReservation(){
         return ResponseEntity.ok(hospitalReservationService.updateHospitalReservation());
     }
+    @DeleteMapping("/ob_gyn")
+    public ResponseEntity<MessageResDto> deleteHospitalReservation(){
+        return ResponseEntity.ok(hospitalReservationService.updateHospitalReservation());
+    }
 }
