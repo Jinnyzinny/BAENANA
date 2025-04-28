@@ -1,7 +1,7 @@
-package com.ssafy.backend.calendar.service;
+package com.ssafy.backend.calendar.service.hospital;
 
 import com.ssafy.backend.calendar.dto.reqDto.AddHospitalReservationReqDto;
-import com.ssafy.backend.calendar.dto.resDto.getHospitalReservationResDto;
+import com.ssafy.backend.calendar.dto.resDto.GetHospitalReservationResDto;
 import com.ssafy.backend.calendar.repository.HospitalReservationRepository;
 import com.ssafy.backend.home.dto.response.MessageResDto;
 import com.ssafy.backend.hospital.entity.HospitalReservation;
@@ -36,7 +36,7 @@ public class HospitalReservationServiceImpl implements HospitalReservationServic
     }
 
     @Override
-    public List<getHospitalReservationResDto> getHospitalReservation(
+    public List<GetHospitalReservationResDto> getHospitalReservation(
 //            @AuthenticationPrincipal UserDetails userDetails
     ) {
         Long userId = 0L;
@@ -48,7 +48,7 @@ public class HospitalReservationServiceImpl implements HospitalReservationServic
             return null;
         } else {
             return hospitalReservationList.stream().map(
-                    hr -> getHospitalReservationResDto.builder()
+                    hr -> GetHospitalReservationResDto.builder()
                             .reservation_id(hr.getReservationId())
                             .hospital_name(hr.getHospitalName())
                             .reservation_date_time(hr.getReservationDate())
@@ -61,6 +61,15 @@ public class HospitalReservationServiceImpl implements HospitalReservationServic
 
     @Override
     public MessageResDto updateHospitalReservation() {
-        return MessageResDto.builder().build();
+        return MessageResDto.builder()
+                .message("예약 일정이 성공적으로 변경되었습니다.")
+                .build();
+    }
+
+    @Override
+    public MessageResDto deleteHospitalReservation() {
+        return MessageResDto.builder()
+                .message("예약 일정이 성공적으로 삭제되었습니다.")
+                .build();
     }
 }
