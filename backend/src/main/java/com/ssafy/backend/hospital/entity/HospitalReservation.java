@@ -2,12 +2,18 @@ package com.ssafy.backend.hospital.entity;
 
 import com.ssafy.backend.auth.entity.User;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Builder
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class HospitalReservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +28,17 @@ public class HospitalReservation {
      * */
     private String hospitalName;
     private LocalDateTime reservationDate;
-//    private Enum purpose;
-//    private Enum status;
+
+    @Enumerated(EnumType.STRING)
+    private PurposeType purpose;
+    /*
+    * 산부인과
+    * 정기검진
+    * */
+    @Enumerated(EnumType.STRING)
+    private StatusType status;
+    /*
+    * 예약됨
+    * 완료됨
+    * */
 }
