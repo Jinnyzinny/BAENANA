@@ -50,7 +50,7 @@ export function ChatbotScreen() {
       <View className="flex-1 justify-between">
         {/* 상단: 헤더 + 채팅 목록 */}
         <View>
-          <HeaderLogo />
+          <HeaderLogo before={false} settings={true} />
           <ScrollView className="px-5">
             <View className="gap-3 pb-4">
               {/* 고정 멘트 */}

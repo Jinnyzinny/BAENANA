@@ -5,7 +5,7 @@ import { HeaderLogo } from "../../components/common/headerLogo";
 export function PeriodScreen() {
   return (
     <SafeAreaView>
-      <HeaderLogo />
+      <HeaderLogo before={true} settings={true} />
       <View className="mx-5">
         <Text>주기</Text>
       </View>

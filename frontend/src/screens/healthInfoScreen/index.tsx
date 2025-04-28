@@ -7,7 +7,7 @@ import { InfoCard } from "../../components/healthInfo/infoCard";
 export function HealthInfoScreen() {
   return (
     <SafeAreaView>
-      <HeaderLogo />
+      <HeaderLogo before={true} settings={false} />
       <ScrollView>
         <View className="mx-5 gap-3 pb-16">
           {/* 건강 정보 설명 */}

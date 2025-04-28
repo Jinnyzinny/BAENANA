@@ -1,9 +1,9 @@
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Button } from "../../components/common/button";
 import { HeaderLogo } from "../../components/common/headerLogo";
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { TestStackParamList } from "../../navigation/types";
 
 export function TestInfoScreen() {
@@ -12,7 +12,7 @@ export function TestInfoScreen() {
 
   return (
     <SafeAreaView className="flex-1">
-      <HeaderLogo />
+      <HeaderLogo before={false} settings={true} />
       <View className="flex-1 mx-5 gap-3">
         {/* 테스트 정보 */}
         <View>

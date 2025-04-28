@@ -13,7 +13,7 @@ export function Monthly({
           onDateSelect(day.dateString);
         }}
         style={{
-          borderRadius: 20,
+          borderRadius: 10,
           overflow: "hidden",
           paddingBottom: 30,
           shadowColor: "#D4D4D4",

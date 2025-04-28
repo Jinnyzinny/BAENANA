@@ -1,10 +1,10 @@
-import { SafeAreaView } from "react-native-safe-area-context";
-import { HeaderLogo } from "../../components/common/headerLogo";
-import { Monthly } from "../../components/calendar/monthly";
+import { useState } from "react";
 import { ScrollView, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Monthly } from "../../components/calendar/monthly";
 import { ScheduleList } from "../../components/calendar/scheduleList";
 import { ScheduleModal } from "../../components/calendar/scheduleModal";
-import { useState } from "react";
+import { HeaderLogo } from "../../components/common/headerLogo";
 
 export function CalendarScreen() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
@@ -17,8 +17,8 @@ export function CalendarScreen() {
 
   return (
     <>
-      <SafeAreaView className="flex-1 bg-white">
-        <HeaderLogo />
+      <SafeAreaView className="flex-1">
+        <HeaderLogo before={false} settings={true} />
         <ScrollView>
           <View className="flex-1 mx-5 gap-3">
             <Monthly onDateSelect={handleDatePress} />

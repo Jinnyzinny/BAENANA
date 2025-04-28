@@ -5,7 +5,7 @@ import { HeaderLogo } from "../../components/common/headerLogo";
 export function NoticeScreen() {
   return (
     <SafeAreaView>
-      <HeaderLogo />
+      <HeaderLogo before={true} settings={false} />
       <ScrollView>
         <View className="mx-5 gap-3 pb-16">
           {/* 시스템 공지 정보 설명 */}

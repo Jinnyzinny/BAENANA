@@ -5,7 +5,7 @@ import { HeaderLogo } from "../../components/common/headerLogo";
 export function MedicineScreen() {
   return (
     <SafeAreaView>
-      <HeaderLogo />
+      <HeaderLogo before={true} settings={true} />
       <View className="mx-5">
         <Text>약 정보</Text>
       </View>

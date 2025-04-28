@@ -8,7 +8,7 @@ import { DonutChart } from "../../components/home/donutChart";
 export function HomeScreen() {
   return (
     <SafeAreaView className="flex-1 relative">
-      <HeaderLogo />
+      <HeaderLogo before={false} settings={true} />
       <View className="flex-1 relative mx-5">
         {/* 알림 메시지 */}
         <View className="gap-3">

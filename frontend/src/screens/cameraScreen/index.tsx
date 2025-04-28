@@ -5,7 +5,7 @@ import { HeaderLogo } from "../../components/common/headerLogo";
 export function CameraScreen() {
   return (
     <SafeAreaView>
-      <HeaderLogo />
+      <HeaderLogo before={true} settings={true} />
       <View className="mx-5">
         <Text>카메라</Text>
       </View>

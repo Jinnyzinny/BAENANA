@@ -4,7 +4,13 @@ import { ArrowLeft, Settings } from "lucide-react-native";
 import { Image, TouchableOpacity, View } from "react-native";
 import { RootStackParamList } from "../../../navigation/types";
 
-export function HeaderLogo() {
+export function HeaderLogo({
+  before,
+  settings,
+}: {
+  before: boolean;
+  settings: boolean;
+}) {
   const color: string = "#737373";
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -22,11 +28,13 @@ export function HeaderLogo() {
   return (
     <View className="relative mx-5 h-16 justify-center mb-2">
       {/* 좌측 이전 */}
-      <View className="absolute left-0 top-3 bottom-0 justify-center">
-        <TouchableOpacity onPress={handleBackPress}>
-          <ArrowLeft size={22} color={color} />
-        </TouchableOpacity>
-      </View>
+      {before && (
+        <View className="absolute left-0 top-3 bottom-0 justify-center">
+          <TouchableOpacity onPress={handleBackPress}>
+            <ArrowLeft size={22} color={color} />
+          </TouchableOpacity>
+        </View>
+      )}
 
       {/* 중앙 로고 */}
       <View className="absolute left-0 right-0 flex-row justify-center items-center">
@@ -38,11 +46,13 @@ export function HeaderLogo() {
       </View>
 
       {/* 우측 톱니바퀴 */}
-      <View className="absolute right-0 top-3 bottom-0 justify-center">
-        <TouchableOpacity onPress={handleSettingPress}>
-          <Settings size={22} color={color} />
-        </TouchableOpacity>
-      </View>
+      {settings && (
+        <View className="absolute right-0 top-3 bottom-0 justify-center">
+          <TouchableOpacity onPress={handleSettingPress}>
+            <Settings size={22} color={color} />
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 }

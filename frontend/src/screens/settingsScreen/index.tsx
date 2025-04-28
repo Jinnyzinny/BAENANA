@@ -1,13 +1,13 @@
-import { Text, TouchableOpacity, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { HeaderLogo } from "../../components/common/headerLogo";
-import { Card } from "../../components/settings/card";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { SettingsStackParamList } from "../../navigation/types";
-import { Notice } from "../../components/settings/notice";
-import { Faq } from "../../components/settings/faq";
+import { Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Button } from "../../components/common/button";
+import { HeaderLogo } from "../../components/common/headerLogo";
+import { Card } from "../../components/settings/card";
+import { Faq } from "../../components/settings/faq";
+import { Notice } from "../../components/settings/notice";
+import { SettingsStackParamList } from "../../navigation/types";
 
 export function SettingsScreen() {
   const navigation =
@@ -15,7 +15,7 @@ export function SettingsScreen() {
 
   return (
     <SafeAreaView>
-      <HeaderLogo />
+      <HeaderLogo before={true} settings={false} />
       <View className="mx-5 gap-10">
         <View className="gap-3">
           <Card

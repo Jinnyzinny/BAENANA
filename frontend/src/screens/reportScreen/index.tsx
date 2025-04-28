@@ -11,7 +11,7 @@ import { Summary } from "../../components/report/summary";
 export function ReportScreen() {
   return (
     <SafeAreaView>
-      <HeaderLogo />
+      <HeaderLogo before={false} settings={true} />
       <ScrollView>
         <View className="gap-3 mx-5 pb-16">
           {/* 알림 메시지 */}
