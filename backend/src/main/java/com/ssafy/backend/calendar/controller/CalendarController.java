@@ -1,8 +1,8 @@
 package com.ssafy.backend.calendar.controller;
 
 import com.ssafy.backend.calendar.dto.reqDto.AddHospitalReservationReqDto;
-import com.ssafy.backend.calendar.dto.resDto.getHospitalReservationResDto;
-import com.ssafy.backend.calendar.service.HospitalReservationService;
+import com.ssafy.backend.calendar.dto.resDto.GetHospitalReservationResDto;
+import com.ssafy.backend.calendar.service.hospital.HospitalReservationService;
 import com.ssafy.backend.home.dto.response.MessageResDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,29 +23,29 @@ public class CalendarController {
 //            @AuthenticationPrincipal UserDetails userDetails
             @RequestBody AddHospitalReservationReqDto request
     ) {
-        return ResponseEntity.ok(
-                hospitalReservationService.addHospitalReservation(
-//                userDetails
-                        request
-                )
-        );
+        return ResponseEntity.ok(hospitalReservationService.addHospitalReservation(
+                //userDetails
+                request));
     }
 
     @GetMapping("/ob_gyn")
-    public ResponseEntity<List<getHospitalReservationResDto>> getHospitalReservation(
+    public ResponseEntity<List<GetHospitalReservationResDto>> getHospitalReservation(
 //            @AuthenticationPrincipal UserDetails userDetails
     ) {
-        return ResponseEntity.ok(
-                hospitalReservationService.getHospitalReservation()
-        );
+        return ResponseEntity.ok(hospitalReservationService.getHospitalReservation());
     }
 
     @PatchMapping("/ob_gyn")
-    public ResponseEntity<MessageResDto> updateHospitalReservation(){
+    public ResponseEntity<MessageResDto> updateHospitalReservation(
+//            @AuthenticationPrincipal UserDetails userDetails
+    ) {
         return ResponseEntity.ok(hospitalReservationService.updateHospitalReservation());
     }
+
     @DeleteMapping("/ob_gyn")
-    public ResponseEntity<MessageResDto> deleteHospitalReservation(){
-        return ResponseEntity.ok(hospitalReservationService.updateHospitalReservation());
+    public ResponseEntity<MessageResDto> deleteHospitalReservation(
+//            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        return ResponseEntity.ok(hospitalReservationService.deleteHospitalReservation());
     }
 }

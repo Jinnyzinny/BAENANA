@@ -6,8 +6,8 @@ import java.time.LocalDateTime;
 
 @Getter
 public class AddHospitalReservationReqDto {
-    private String hospitalName;
-    private LocalDateTime reservationDate;
-    private String purpose;
-    private String status;
+    String hospitalName;
+    LocalDateTime reservationDate;
+    String purpose;
+    String status;
 }
