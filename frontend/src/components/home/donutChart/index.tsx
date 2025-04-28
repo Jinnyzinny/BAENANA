@@ -1,5 +1,5 @@
 import { Text, View } from "react-native";
-import Svg, { Circle } from "react-native-svg";
+import Svg, { Circle, Defs, LinearGradient, Stop } from "react-native-svg";
 
 export function DonutChart({
   percentage,
@@ -14,7 +14,6 @@ export function DonutChart({
   const strokeDashoffset: number =
     circumference - (circumference * percentage) / 100;
   const backgroundColor: string = "#EEEEEE";
-  const pointColor: string = "#A684FF";
 
   return (
     <View className="relative m-5 items-center">
@@ -23,6 +22,14 @@ export function DonutChart({
         <Text className="text-violet-700 font-bold text-xl">{dDay}일 전</Text>
       </View>
       <Svg height="200" width="200">
+        {/* 그라데이션 정의 */}
+        <Defs>
+          <LinearGradient id="grad" x1="0.7" y1="0" x2="0" y2="1.1">
+            <Stop offset="0%" stopColor="#FFF7B4" stopOpacity="1" />
+            <Stop offset="100%" stopColor="#A684FF" stopOpacity="1" />
+          </LinearGradient>
+        </Defs>
+
         {/* 배경 */}
         <Circle
           cx="100"
@@ -32,19 +39,20 @@ export function DonutChart({
           strokeWidth={strokeWidth}
           fill="none"
         />
+
         {/* 진행률 */}
         <Circle
-          cx="50"
+          cx="100"
           cy="100"
           r={radius}
-          stroke={pointColor}
+          stroke="url(#grad)"
           strokeWidth={strokeWidth}
           strokeDasharray={circumference}
           strokeDashoffset={strokeDashoffset}
           strokeLinecap="round"
           fill="none"
           rotation="-90"
-          origin="75,75"
+          origin="100,100"
         />
       </Svg>
     </View>
