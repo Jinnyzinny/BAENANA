@@ -6497,6 +6497,11 @@ react-native-is-edge-to-edge@1.1.7:
   resolved "https://registry.yarnpkg.com/react-native-is-edge-to-edge/-/react-native-is-edge-to-edge-1.1.7.tgz#28947688f9fafd584e73a4f935ea9603bd9b1939"
   integrity sha512-EH6i7E8epJGIcu7KpfXYXiV2JFIYITtq+rVS8uEb+92naMRBdxhTuS8Wn2Q7j9sqyO0B+Xbaaf9VdipIAmGW4w==
 
+react-native-permissions@^5.4.0:
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-5.4.0.tgz#04427be8897625ba5af29c3f1dc81b7bec48fd12"
+  integrity sha512-D+YOIss+aKXi/VuZvm7hAq4WSugYyif58AIAWsT2/uLh9pz9ukOttGzPttjrv617J3bOEnt7C6cJBWoXmj/QRw==
+
 react-native-reanimated-carousel@^4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/react-native-reanimated-carousel/-/react-native-reanimated-carousel-4.0.2.tgz#4d719afd18c2007e7809f2849ccbee17a2dbd811"
@@ -6569,6 +6574,11 @@ react-native-vector-icons@^10.2.0:
   dependencies:
     prop-types "^15.7.2"
     yargs "^16.1.1"
+
+react-native-vision-camera@^4.6.4:
+  version "4.6.4"
+  resolved "https://registry.yarnpkg.com/react-native-vision-camera/-/react-native-vision-camera-4.6.4.tgz#f1c51dda2c5d558ea0ec235e2401abf5efa46875"
+  integrity sha512-d998uTHsGJ9bTlsClgT37RK1sK7ZQekv5y6ylynds3vmdK6YbFQJUoi2cvMrFN4dp9qvSlCjEfwekjMIz3guQA==
 
 react-native@0.79.1:
   version "0.79.1"
