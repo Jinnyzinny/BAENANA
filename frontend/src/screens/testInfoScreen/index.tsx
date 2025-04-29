@@ -1,19 +1,19 @@
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Button } from "../../components/common/button";
 import { HeaderLogo } from "../../components/common/headerLogo";
-import { TestStackParamList } from "../../navigation/types";
 import { TabMenu } from "../../components/common/tabMenu";
-import { useState } from "react";
-import { PregnancyInfo } from "../../components/test/pregnancyInfo";
-import { OvulationInfo } from "../../components/test/ovulationInfo";
+import { ResultInfo } from "../../components/test/resultInfo";
+import { TestInfo } from "../../components/test/testInfo";
+import { TestStackParamList } from "../../navigation/types";
 
 export function TestInfoScreen() {
   const navigation =
     useNavigation<NativeStackNavigationProp<TestStackParamList>>();
-  const [selectedMenu, setSelectedMenu] = useState<string>("ovulation");
+  const [selectedMenu, setSelectedMenu] = useState<string>("test");
 
   return (
     <SafeAreaView className="flex-1">
@@ -30,8 +30,8 @@ export function TestInfoScreen() {
         </View>
         <TabMenu
           tabs={[
-            { key: "ovulation", label: "배란 테스트 안내" },
-            { key: "pregnancy", label: "임신 테스트 안내" },
+            { key: "test", label: "테스트 준비" },
+            { key: "result", label: "결과 확인" },
           ]}
           onSelect={(key) => {
             setSelectedMenu(key);
@@ -40,11 +40,7 @@ export function TestInfoScreen() {
         {/* 컴포넌트 추가 예정(컴포넌트는 ScrollView로 감싸야 함) */}
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <View className="mx-5 gap-5 flex-1">
-            {selectedMenu === "ovulation" ? (
-              <OvulationInfo />
-            ) : (
-              <PregnancyInfo />
-            )}
+            {selectedMenu === "test" ? <TestInfo /> : <ResultInfo />}
             <View className="gap-3">
               <Button content="타이머 시작" fill={false} onPress={() => {}} />
               <Button
