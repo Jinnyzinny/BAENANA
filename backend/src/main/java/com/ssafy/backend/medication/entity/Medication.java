@@ -2,12 +2,16 @@ package com.ssafy.backend.medication.entity;
 
 import com.ssafy.backend.auth.entity.User;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
+@Setter
 public class Medication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +25,7 @@ public class Medication {
     private User user;
 
     @OneToMany(mappedBy = "medication")
-    private List<MedicationLog> medications;
+    private List<MedicationLog> medicationLogList;
 
     /*
     *  =====Column=====
