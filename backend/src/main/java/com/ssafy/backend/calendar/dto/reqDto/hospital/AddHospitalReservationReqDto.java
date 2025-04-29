@@ -1,4 +1,4 @@
-package com.ssafy.backend.calendar.dto.reqDto;
+package com.ssafy.backend.calendar.dto.reqDto.hospital;
 
 import lombok.Getter;
 
