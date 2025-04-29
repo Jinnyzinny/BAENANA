@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Response, HTTPException
 from app.models.schema import Question, Answer
-# from app.services.rag_pipeline import get_rag_answer
+from app.services.rag_pipeline import get_rag_answer
 
 app = FastAPI()
 
@@ -16,7 +16,8 @@ async def favicon():
 # 챗봇 API
 @app.post("/chatbot/rag", response_model=Answer)
 async def chatbot(payload: Question):
+    # 질문이 입력되지 않은 경우
     if not payload.question.strip():
         raise HTTPException(status_code=400, detail="질문을 입력하세요.")
-    return Answer(answer=payload.question)
-    # return get_rag_answer(payload.question)
+    # 정상적인 답변
+    return get_rag_answer(payload.question)

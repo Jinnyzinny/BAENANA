@@ -2,9 +2,7 @@
 ```bash
 ai/
 ├── app/                         # FastAPI 메인 앱
-│   ├── main.py                  # FastAPI 실행 진입점
-│   ├── api/                     # API 라우터 (엔드포인트)
-│   │   └── chat.py              # /chat/ask POST 처리
+│   ├── main.py                  # FastAPI 실행 진입점, 엔드포인트
 │   ├── models/                  # Pydantic 모델 정의
 │   │   └── schema.py            # Question, Answer 등
 │   ├── core/                    # 설정, 로거 등 공통 모듈
