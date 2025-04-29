@@ -31,6 +31,13 @@ export function CameraView({ onPhotoTaken }: CameraViewProps) {
         isActive={true}
         photo={true}
       />
+      {/* 빨간 사각형 */}
+      <View className="absolute top-52 left-10 p-6 border-4 border-red-500" />
+      <View className="absolute top-52 right-10 p-6 border-4 border-red-500" />
+      <View className="absolute bottom-64 left-10 p-6 border-4 border-red-500" />
+      <View className="absolute bottom-64 right-10 p-6 border-4 border-red-500" />
+
+      {/* 촬영 버튼 */}
       <TouchableOpacity
         onPress={takePhoto}
         className="absolute bottom-7 self-center bg-white p-1 rounded-full"

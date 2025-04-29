@@ -22,7 +22,7 @@ export function BeforePeriod({
           <TriangleAlert size={size} color={"#EC6344"} />
         )}
       </View>
-      <Text className="text-neutral-600 font-bold text-lg">{date}일 </Text>
+      <Text className="text-violet-700 font-semibold text-lg">{date}일 </Text>
     </View>
   );
 }

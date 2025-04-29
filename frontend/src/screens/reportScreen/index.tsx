@@ -12,7 +12,7 @@ export function ReportScreen() {
   return (
     <SafeAreaView>
       <HeaderLogo before={false} settings={true} />
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 32 }}>
         <View className="gap-3 mx-5 pb-16">
           {/* 알림 메시지 */}
           <Alert
@@ -38,6 +38,7 @@ export function ReportScreen() {
           {/* 이번 달 월경 출혈량 / 최근 복용약 / 이번 달 월경 증상 */}
           <Summary type1="warn" type2="normal" />
 
+          <View />
           {/* 버튼 */}
           <Button fill={true} content="PDF로 저장" onPress={() => {}} />
         </View>
