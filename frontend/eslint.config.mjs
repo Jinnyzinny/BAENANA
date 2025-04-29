@@ -31,6 +31,9 @@ export default [
         module: true,
         __dirname: true,
         console: true,
+        NodeJS: true,
+        setInterval: "readonly",
+        clearInterval: "readonly",
       },
     },
     plugins: {
