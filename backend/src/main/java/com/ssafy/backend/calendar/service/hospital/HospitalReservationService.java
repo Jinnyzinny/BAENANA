@@ -4,8 +4,8 @@ import com.ssafy.backend.calendar.dto.reqDto.hospital.AddHospitalReservationReqD
 import com.ssafy.backend.calendar.dto.reqDto.hospital.UpdateHospitalReservationReqDto;
 import com.ssafy.backend.calendar.dto.resDto.GetHospitalReservationResDto;
 import com.ssafy.backend.home.dto.response.MessageResDto;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

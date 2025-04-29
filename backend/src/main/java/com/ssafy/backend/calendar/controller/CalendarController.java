@@ -4,8 +4,12 @@ import com.ssafy.backend.calendar.dto.reqDto.hospital.AddHospitalReservationReqD
 import com.ssafy.backend.calendar.dto.reqDto.hospital.UpdateHospitalReservationReqDto;
 import com.ssafy.backend.calendar.dto.reqDto.medication.AddMedicationScheduleReqDto;
 import com.ssafy.backend.calendar.dto.reqDto.medication.UpdateMedicationScheduleReqDto;
+import com.ssafy.backend.calendar.dto.reqDto.menstrual_cycle.AddMenstrualCycleReqDto;
+import com.ssafy.backend.calendar.dto.reqDto.menstrual_cycle.UpdateMenstrualCycleReqDto;
 import com.ssafy.backend.calendar.dto.resDto.GetHospitalReservationResDto;
 import com.ssafy.backend.calendar.dto.resDto.GetMedicationResDto;
+import com.ssafy.backend.calendar.dto.resDto.GetMenstrualCycleResDto;
+import com.ssafy.backend.calendar.service.cycle.CycleService;
 import com.ssafy.backend.calendar.service.hospital.HospitalReservationService;
 import com.ssafy.backend.calendar.service.medication.MedicationService;
 import com.ssafy.backend.home.dto.response.MessageResDto;
@@ -23,6 +27,7 @@ import java.util.List;
 public class CalendarController {
     private final HospitalReservationService hospitalReservationService;
     private final MedicationService medicationService;
+    private final CycleService cycleService;
 
     @PostMapping("/ob_gyn")
     public ResponseEntity<MessageResDto> addHospitalReservation(
@@ -86,5 +91,25 @@ public class CalendarController {
             @PathVariable Long id
     ){
         return ResponseEntity.ok(medicationService.deleteMedication(id));
+    }
+
+    @PostMapping("menstrual_cycle")
+    public ResponseEntity<MessageResDto> addMenstrualCycle(
+            @RequestBody AddMenstrualCycleReqDto request
+    ){
+        return ResponseEntity.ok(cycleService.addMenstrualCycle(request));
+    }
+
+   @GetMapping("menstrual_cycle")
+   public ResponseEntity<GetMenstrualCycleResDto> getMenstrualCycle(){
+        return ResponseEntity.ok(cycleService.getMenstrualCycle());
+   }
+
+    @PatchMapping("menstrual_cycle/{cycle_id}")
+    public ResponseEntity<MessageResDto> updateMenstrualCycle(
+            @RequestBody UpdateMenstrualCycleReqDto request,
+            @PathVariable Long cycle_id
+            ){
+        return ResponseEntity.ok(cycleService.updateMenstrualCycle(request,cycle_id));
     }
 }
