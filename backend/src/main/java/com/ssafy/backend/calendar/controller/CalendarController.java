@@ -25,4 +25,16 @@ import java.util.List;
 @RequestMapping("/api/calendar")
 @RequiredArgsConstructor
 public class CalendarController {
+
+    @GetMapping("/bearing_period")
+    public ResponseEntity<String> getBearingPeriod() {
+
+        return ResponseEntity.ok("bearing period");
+    }
+
+    @GetMapping("/menstrual_prediction")
+    public ResponseEntity<String> getMenstrualPrediction() {
+
+        return ResponseEntity.ok("menstrual_prediction");
+    }
 }
