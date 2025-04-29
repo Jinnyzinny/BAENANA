@@ -162,13 +162,13 @@ export function TimerModal({
             <View className="p-3 gap-5 flex-row justify-center items-center">
               <TouchableOpacity onPress={handlePlayPause}>
                 {isRunning ? (
-                  <Pause color="#525252" size={20} fill="#525252" />
+                  <Pause color="#525252" size={25} fill="#525252" />
                 ) : (
-                  <Play color="#525252" size={20} fill="#525252" />
+                  <Play color="#525252" size={25} fill="#525252" />
                 )}
               </TouchableOpacity>
               <TouchableOpacity onPress={handleReset}>
-                <TimerReset color="#525252" size={20} />
+                <TimerReset color="#525252" size={24} />
               </TouchableOpacity>
             </View>
           </View>

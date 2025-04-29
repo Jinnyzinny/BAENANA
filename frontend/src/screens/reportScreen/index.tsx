@@ -5,8 +5,8 @@ import { Button } from "../../components/common/button";
 import { HeaderLogo } from "../../components/common/headerLogo";
 import { BeforePeriod } from "../../components/report/beforePeriod";
 import { CurrentPeriod } from "../../components/report/currentPeriod";
-import { PillInfo } from "../../components/report/pillInfo";
 import { Summary } from "../../components/report/summary";
+import { MedicineInfo } from "../../components/report/medicineInfo";
 
 export function ReportScreen() {
   return (
@@ -33,7 +33,7 @@ export function ReportScreen() {
           <CurrentPeriod />
 
           {/* 최근 복용약 */}
-          <PillInfo />
+          <MedicineInfo />
 
           {/* 이번 달 월경 출혈량 / 최근 복용약 / 이번 달 월경 증상 */}
           <Summary type1="warn" type2="normal" />

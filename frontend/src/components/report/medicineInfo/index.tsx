@@ -4,7 +4,7 @@ import { ChevronRight } from "lucide-react-native";
 import { Text, TouchableOpacity, View } from "react-native";
 import { ReportStackParamList } from "../../../navigation/types";
 
-export function PillInfo() {
+export function MedicineInfo() {
   const navigation =
     useNavigation<NativeStackNavigationProp<ReportStackParamList>>();
   const size: number = 22;
@@ -28,8 +28,8 @@ export function PillInfo() {
         </TouchableOpacity>
       </View>
       {/* 반복문 사용해서 복용약 보여줄 예정 */}
-      <View className="gap-3">
-        <Text className="text-neutral-800 text-sm">오가루트란주 주사</Text>
+      <View className="gap-2">
+        <Text className="text-neutral-600 text-sm">오가루트란주 주사</Text>
       </View>
       <View className="w-full h-0.5 bg-neutral-100" />
       <View className="flex-row">
@@ -39,9 +39,9 @@ export function PillInfo() {
         <Text className="text-violet-700 text-sm font-bold">2개</Text>
         <Text className="text-neutral-600 text-sm">입니다.</Text>
       </View>
-      <View className="gap-3">
-        <Text className="text-neutral-800 text-sm">오가루트란주 주사</Text>
-        <Text className="text-neutral-800 text-sm">고날-에프펜</Text>
+      <View className="gap-2">
+        <Text className="text-neutral-600 text-sm">고날-에프펜</Text>
+        <Text className="text-neutral-600 text-sm">타이레놀</Text>
       </View>
     </View>
   );
