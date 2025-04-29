@@ -21,6 +21,7 @@ export function BarChart({
       </Text>
       <View className="flex-row items-center gap-2">
         <View className="flex-1 h-5 relative bg-[#EEEEEE] rounded-full overflow-hidden">
+          {/* 그라데이션 정의 */}
           <LinearGradient
             colors={["#A684FF", "#C4B4FF"]}
             start={{ x: 0, y: 0 }}

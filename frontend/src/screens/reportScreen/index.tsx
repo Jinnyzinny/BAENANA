@@ -7,6 +7,7 @@ import { BeforePeriod } from "../../components/report/beforePeriod";
 import { CurrentPeriod } from "../../components/report/currentPeriod";
 import { Summary } from "../../components/report/summary";
 import { MedicineInfo } from "../../components/report/medicineInfo";
+import { OvulationInfo } from "../../components/report/ovulationInfo";
 
 export function ReportScreen() {
   return (
@@ -28,6 +29,7 @@ export function ReportScreen() {
           </View>
 
           {/* 배란테스트 결과 컴포넌트 구현 필요 */}
+          <OvulationInfo />
 
           {/* 최근 주기 */}
           <CurrentPeriod />
