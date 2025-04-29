@@ -1,7 +1,8 @@
-package com.ssafy.backend.calendar.service;
+package com.ssafy.backend.calendar.service.hospital;
 
-import com.ssafy.backend.calendar.dto.reqDto.AddHospitalReservationReqDto;
-import com.ssafy.backend.calendar.dto.resDto.getHospitalReservationResDto;
+import com.ssafy.backend.calendar.dto.reqDto.hospital.AddHospitalReservationReqDto;
+import com.ssafy.backend.calendar.dto.reqDto.hospital.UpdateHospitalReservationReqDto;
+import com.ssafy.backend.calendar.dto.resDto.GetHospitalReservationResDto;
 import com.ssafy.backend.home.dto.response.MessageResDto;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -17,11 +18,18 @@ public interface HospitalReservationService {
             AddHospitalReservationReqDto request
     );
 
-    List<getHospitalReservationResDto> getHospitalReservation(
+    List<GetHospitalReservationResDto> getHospitalReservation(
 //            @AuthenticationPrincipal UserDetails userDetails
     );
 
     MessageResDto updateHospitalReservation(
 //            @AuthenticationPrincipal UserDetails userDetails
+            UpdateHospitalReservationReqDto request,
+            Long id
+    );
+
+    MessageResDto deleteHospitalReservation(
+//            @AuthenticationPrincipal UserDetails userDetails
+            Long id
     );
 }

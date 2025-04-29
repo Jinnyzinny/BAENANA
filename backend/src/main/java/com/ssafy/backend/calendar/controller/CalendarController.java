@@ -1,8 +1,13 @@
 package com.ssafy.backend.calendar.controller;
 
-import com.ssafy.backend.calendar.dto.reqDto.AddHospitalReservationReqDto;
-import com.ssafy.backend.calendar.dto.resDto.getHospitalReservationResDto;
-import com.ssafy.backend.calendar.service.HospitalReservationService;
+import com.ssafy.backend.calendar.dto.reqDto.hospital.AddHospitalReservationReqDto;
+import com.ssafy.backend.calendar.dto.reqDto.hospital.UpdateHospitalReservationReqDto;
+import com.ssafy.backend.calendar.dto.reqDto.medication.AddMedicationScheduleReqDto;
+import com.ssafy.backend.calendar.dto.reqDto.medication.UpdateMedicationScheduleReqDto;
+import com.ssafy.backend.calendar.dto.resDto.GetHospitalReservationResDto;
+import com.ssafy.backend.calendar.dto.resDto.GetMedicationResDto;
+import com.ssafy.backend.calendar.service.hospital.HospitalReservationService;
+import com.ssafy.backend.calendar.service.medication.MedicationService;
 import com.ssafy.backend.home.dto.response.MessageResDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,35 +22,69 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CalendarController {
     private final HospitalReservationService hospitalReservationService;
+    private final MedicationService medicationService;
 
     @PostMapping("/ob_gyn")
     public ResponseEntity<MessageResDto> addHospitalReservation(
 //            @AuthenticationPrincipal UserDetails userDetails
             @RequestBody AddHospitalReservationReqDto request
     ) {
-        return ResponseEntity.ok(
-                hospitalReservationService.addHospitalReservation(
-//                userDetails
-                        request
-                )
-        );
+        return ResponseEntity.ok(hospitalReservationService.addHospitalReservation(
+                //userDetails
+                request));
     }
 
     @GetMapping("/ob_gyn")
-    public ResponseEntity<List<getHospitalReservationResDto>> getHospitalReservation(
+    public ResponseEntity<List<GetHospitalReservationResDto>> getHospitalReservation(
 //            @AuthenticationPrincipal UserDetails userDetails
     ) {
-        return ResponseEntity.ok(
-                hospitalReservationService.getHospitalReservation()
-        );
+        return ResponseEntity.ok(hospitalReservationService.getHospitalReservation());
     }
 
-    @PatchMapping("/ob_gyn")
-    public ResponseEntity<MessageResDto> updateHospitalReservation(){
-        return ResponseEntity.ok(hospitalReservationService.updateHospitalReservation());
+    @PatchMapping("/ob_gyn/{id}")
+    public ResponseEntity<MessageResDto> updateHospitalReservation(
+//            @AuthenticationPrincipal UserDetails userDetails
+            @PathVariable Long id,
+            @RequestBody UpdateHospitalReservationReqDto request
+            ) {
+        return ResponseEntity.ok(hospitalReservationService.updateHospitalReservation(request,id));
     }
-    @DeleteMapping("/ob_gyn")
-    public ResponseEntity<MessageResDto> deleteHospitalReservation(){
-        return ResponseEntity.ok(hospitalReservationService.updateHospitalReservation());
+
+    @DeleteMapping("/ob_gyn/{id}")
+    public ResponseEntity<MessageResDto> deleteHospitalReservation(
+//            @AuthenticationPrincipal UserDetails userDetails
+            @PathVariable Long id
+    ) {
+        return ResponseEntity.ok(hospitalReservationService.deleteHospitalReservation(id));
+    }
+
+    @PostMapping("/medication")
+    public ResponseEntity<MessageResDto> addMedication(
+//            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody AddMedicationScheduleReqDto request) {
+        return ResponseEntity.ok(medicationService.addMedication(request));
+    }
+
+    @GetMapping("/medication")
+    public ResponseEntity<GetMedicationResDto> getMedication(){
+
+        return ResponseEntity.ok(medicationService.getMedication());
+    }
+
+    @PatchMapping("/medication/{id}")
+    public ResponseEntity<MessageResDto> updateMedication(
+//            @AuthenticationPrincipal UserDetails UserDetails,
+            @RequestBody UpdateMedicationScheduleReqDto request,
+            @PathVariable Long id
+    ){
+        return ResponseEntity.ok(medicationService.updateMedication(request,id));
+    }
+
+    @DeleteMapping("/medication/{id}")
+    public ResponseEntity<MessageResDto> deleteMedication(
+//            @AuthenticationPrincipal UserDetails UserDetails,
+            @PathVariable Long id
+    ){
+        return ResponseEntity.ok(medicationService.deleteMedication(id));
     }
 }
