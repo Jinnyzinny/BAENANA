@@ -1,6 +1,7 @@
 package com.ssafy.backend.calendar.service.hospital;
 
-import com.ssafy.backend.calendar.dto.reqDto.AddHospitalReservationReqDto;
+import com.ssafy.backend.calendar.dto.reqDto.hospital.AddHospitalReservationReqDto;
+import com.ssafy.backend.calendar.dto.reqDto.hospital.UpdateHospitalReservationReqDto;
 import com.ssafy.backend.calendar.dto.resDto.GetHospitalReservationResDto;
 import com.ssafy.backend.home.dto.response.MessageResDto;
 import jakarta.transaction.Transactional;
@@ -23,9 +24,12 @@ public interface HospitalReservationService {
 
     MessageResDto updateHospitalReservation(
 //            @AuthenticationPrincipal UserDetails userDetails
+            UpdateHospitalReservationReqDto request,
+            Long id
     );
 
     MessageResDto deleteHospitalReservation(
 //            @AuthenticationPrincipal UserDetails userDetails
+            Long id
     );
 }
