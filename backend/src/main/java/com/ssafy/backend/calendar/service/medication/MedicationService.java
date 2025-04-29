@@ -4,8 +4,8 @@ import com.ssafy.backend.calendar.dto.reqDto.medication.AddMedicationScheduleReq
 import com.ssafy.backend.calendar.dto.reqDto.medication.UpdateMedicationScheduleReqDto;
 import com.ssafy.backend.calendar.dto.resDto.GetMedicationResDto;
 import com.ssafy.backend.home.dto.response.MessageResDto;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
