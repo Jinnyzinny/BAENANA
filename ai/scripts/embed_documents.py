@@ -52,7 +52,7 @@ def main():
     documents = load_documents(DOCS_DIR)
     
     for doc_name, content in documents:
-        chunks = split_text(content, chunk_size=500, overlap=50)
+        chunks = split_text(content, chunk_size=500, chunk_overlap=50)
         for idx, chunk in enumerate(chunks):
             all_chunks.append(chunk)
             all_ids.append(f"{doc_name}_{idx}")
@@ -63,7 +63,7 @@ def main():
     save_to_chroma(
         ids=all_ids,
         documents=all_chunks,
-        embeddings=embeddings.tolist(),
+        embeddings=embeddings,
         metadatas=all_metadatas
     )
 

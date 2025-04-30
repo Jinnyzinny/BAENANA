@@ -17,10 +17,10 @@ def get_rag_answer(question: str) -> str:
     """
     질문 → 검색 → 프롬프트 생성 → 답변 생성
     """
-
     if DB_BACKEND == "chroma":
-        # 질문 임베딩
+        # llama-cpp는 embed_text가 List[List[float]] 반환 → [0]으로 첫 임베딩 사용
         question_embedding = embed_text([question])[0]
+
         search_result = search_documents(question_embedding, n_results=3)
         contexts = search_result["documents"][0] if search_result["documents"] else []
     else:
@@ -30,4 +30,4 @@ def get_rag_answer(question: str) -> str:
     prompt = build_prompt(question, contexts)
     answer = generate_answer(prompt)
 
-    return answer
+    return {"answer": answer}
