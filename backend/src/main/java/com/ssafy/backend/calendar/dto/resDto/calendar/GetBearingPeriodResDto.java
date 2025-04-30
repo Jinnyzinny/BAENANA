@@ -1,4 +1,4 @@
-package com.ssafy.backend.calendar.dto.resDto;
+package com.ssafy.backend.calendar.dto.resDto.calendar;
 
 import lombok.Builder;
 import lombok.Getter;

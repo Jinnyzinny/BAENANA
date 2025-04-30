@@ -1,7 +1,7 @@
 package com.ssafy.backend.calendar.service.calendar;
 
-import com.ssafy.backend.calendar.dto.resDto.GetBearingPeriodResDto;
-import com.ssafy.backend.calendar.dto.resDto.GetMenstrualPredictionResDto;
+import com.ssafy.backend.calendar.dto.resDto.calendar.GetBearingPeriodResDto;
+import com.ssafy.backend.calendar.dto.resDto.calendar.GetMenstrualPredictionResDto;
 import com.ssafy.backend.calendar.repository.cycle.MenstrualCycleRepository;
 import com.ssafy.backend.menstrual.entity.MenstrualCycle;
 import lombok.RequiredArgsConstructor;
