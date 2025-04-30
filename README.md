@@ -3,7 +3,7 @@
 ai/.env
 
 - 양자화된 모델 파일
-ai/**/*.gguf
+ai/models/*.gguf
 
 ```
 S12P31S205
