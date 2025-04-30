@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class GetHospitalReservationResDto {
     private Long reservation_id;
     private String hospital_name;
-    private LocalDateTime reservation_date_time;
+    private String reservation_date_time;
     private String purpose;
     private String status;
 }
