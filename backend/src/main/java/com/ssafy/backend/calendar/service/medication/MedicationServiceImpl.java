@@ -15,9 +15,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @Transactional
@@ -65,11 +67,38 @@ public class MedicationServiceImpl implements MedicationService {
     }
 
     @Override
-    public GetMedicationResDto getMedication(
+    public List<GetMedicationResDto> getMedication(
 //            UserDetails userDetails
     ) {
+        Long userId = 0L;
+        /*
+         * 사용자가 복용하는 의약품 종류를 조회한다.
+         * */
+        List<Medication> medication =
+                medicationRepository.findByUser_UserId(userId).orElseThrow(NoSuchElementException::new);
 
-        return GetMedicationResDto.builder().build();
+        /*
+         * 해당 종류를 순회하면서 의약품 기록을 가져온다.
+         * */
+        return medication.stream().map(
+                m -> {
+                    //의약품 기록 정보를 최신에서 과거 순서로 가져온다.
+                    List<MedicationLog> log =
+                            medicationLogRepository.findByMedication_MedicationIdOrderByDateDesc(
+                                    m.getMedicationId()
+                            ).orElseThrow(/*
+                            * 약을 받아는 왔는데 복용을 언제까지 하는 정보가 없는 건 불가능
+                            */NoSuchElementException::new);
+
+                    return GetMedicationResDto.builder()
+                            .medication_id(m.getMedicationId())
+                            .start_date(log.get(log.size()-1).getDate().toString())
+                            .end_date(log.get(0).getDate().toString())
+//                            .time_taken()
+                            .memo(m.getDescription())
+                            .build();
+                }
+        ).toList();
     }
 
     @Override
@@ -81,9 +110,7 @@ public class MedicationServiceImpl implements MedicationService {
                     .message("복용할 약 정보를 수정하는데 실패했습니다.")
                     .build();
         }
-
         BeanUtils.copyProperties(request, medication, NullAwareBeanUtils.class);
-
         return MessageResDto.builder()
                 .message("복용할 약 정보가 성공적으로 수정되었습니다.")
                 .build();

@@ -7,12 +7,14 @@ import com.ssafy.backend.home.dto.response.MessageResDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public interface MedicationService {
     MessageResDto addMedication(AddMedicationScheduleReqDto request);
 
-    GetMedicationResDto getMedication();
+    List<GetMedicationResDto> getMedication();
 
     MessageResDto updateMedication(UpdateMedicationScheduleReqDto request, Long id);
 
