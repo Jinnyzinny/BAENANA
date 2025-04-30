@@ -55,7 +55,7 @@ public class HospitalReservationServiceImpl implements HospitalReservationServic
                     hr -> GetHospitalReservationResDto.builder()
                             .reservation_id(hr.getReservationId())
                             .hospital_name(hr.getHospitalName())
-                            .reservation_date_time(hr.getReservationDate())
+                            .reservation_date_time(hr.getReservationDate().toString())
                             .purpose(hr.getPurpose().getDescription())
                             .status(hr.getStatus().getDescription())
                             .build()
