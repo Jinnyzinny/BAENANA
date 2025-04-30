@@ -3,7 +3,7 @@ package com.ssafy.backend.calendar.service.cycle;
 import com.ssafy.backend.calendar.dto.reqDto.menstrual_cycle.AddMenstrualCycleReqDto;
 import com.ssafy.backend.calendar.dto.reqDto.menstrual_cycle.UpdateMenstrualCycleReqDto;
 import com.ssafy.backend.calendar.dto.resDto.GetMenstrualCycleResDto;
-import com.ssafy.backend.calendar.repository.cycle.CycleRepository;
+import com.ssafy.backend.calendar.repository.cycle.MenstrualCycleRepository;
 import com.ssafy.backend.common.utils.NullAwareBeanUtils;
 import com.ssafy.backend.home.dto.response.MessageResDto;
 import com.ssafy.backend.menstrual.entity.MenstrualCycle;
@@ -16,14 +16,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @RequiredArgsConstructor
 public class CycleServiceImpl implements CycleService {
-    private final CycleRepository cycleRepository;
+    private final MenstrualCycleRepository menstrualCycleRepository;
 
     @Override
     public MessageResDto addMenstrualCycle(
 //            UserDetails userDetails
             AddMenstrualCycleReqDto request
     ) {
-        cycleRepository.save(
+        menstrualCycleRepository.save(
                 MenstrualCycle.builder()
                         .startDate(request.getStart_date())
                         .endDate(request.getEnd_date())
@@ -47,7 +47,7 @@ public class CycleServiceImpl implements CycleService {
             UpdateMenstrualCycleReqDto request,
             Long cycleId
     ) {
-        MenstrualCycle cycle = cycleRepository.findById(cycleId).orElse(null);
+        MenstrualCycle cycle = menstrualCycleRepository.findById(cycleId).orElse(null);
         if (cycle == null)
             return MessageResDto.builder()
                     .message("생리 주기의 수정이 실패했습니다.")

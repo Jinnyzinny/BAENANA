@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 public class GetMenstrualCycleResDto {
     private Long cycle_id;
-    private LocalDate start_date;
-    private LocalDate end_date;
+    private String start_date;
+    private String end_date;
     private List<SymptomLog> detail;
 }
