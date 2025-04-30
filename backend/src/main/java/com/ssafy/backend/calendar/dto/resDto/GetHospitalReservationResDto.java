@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
-public class getHospitalReservationResDto {
+public class GetHospitalReservationResDto {
     private Long reservation_id;
     private String hospital_name;
     private LocalDateTime reservation_date_time;
