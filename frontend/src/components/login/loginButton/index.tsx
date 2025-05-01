@@ -15,7 +15,7 @@ export function LoginButton({
             source={require("../../../assets/images/google_logo.png")}
             className="w-5 h-5"
           />
-          <Text className="text-neutral-800 text-sm font-bold">
+          <Text className="text-neutral-800 text-sm font-semibold">
             구글 계정으로 로그인
           </Text>
         </View>

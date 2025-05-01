@@ -14,12 +14,16 @@ export function LoginScreen() {
     <SafeAreaView className="flex-1 bg-neutral-100 mx-5 justify-center gap-20">
       <Image
         source={require("../../assets/images/mascot.png")}
-        className="w-32 h-32 self-center"
+        className="w-28 h-28 self-center"
       />
-      <View className="gap-5 mx-10">
-        <Text>SNS 계정으로 로그인</Text>
-        <LoginButton type="kakao" onPress={handleLogin} />
-        <LoginButton type="google" onPress={handleLogin} />
+      <View className="gap-7 mx-5">
+        <Text className="self-center text-neutral-800 text-sm">
+          SNS 계정으로 로그인
+        </Text>
+        <View className="gap-5">
+          <LoginButton type="kakao" onPress={handleLogin} />
+          <LoginButton type="google" onPress={handleLogin} />
+        </View>
       </View>
     </SafeAreaView>
   );
