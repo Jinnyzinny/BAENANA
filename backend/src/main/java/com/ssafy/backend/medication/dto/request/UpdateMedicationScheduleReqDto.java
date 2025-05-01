@@ -1,4 +1,4 @@
-package com.ssafy.backend.medication.dto.reqDto;
+package com.ssafy.backend.medication.dto.request;
 
 import lombok.Getter;
 
@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Getter
-public class AddMedicationScheduleReqDto {
+public class UpdateMedicationScheduleReqDto {
     String name;
     LocalDate start_date;
     LocalDate end_date;

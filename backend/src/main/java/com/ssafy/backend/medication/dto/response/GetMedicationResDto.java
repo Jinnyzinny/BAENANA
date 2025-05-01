@@ -1,4 +1,4 @@
-package com.ssafy.backend.medication.dto.resDto;
+package com.ssafy.backend.medication.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;

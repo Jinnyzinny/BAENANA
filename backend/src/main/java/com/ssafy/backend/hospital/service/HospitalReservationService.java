@@ -1,8 +1,8 @@
 package com.ssafy.backend.hospital.service;
 
-import com.ssafy.backend.hospital.dto.req.AddHospitalReservationReqDto;
-import com.ssafy.backend.hospital.dto.req.UpdateHospitalReservationReqDto;
-import com.ssafy.backend.hospital.dto.res.GetHospitalReservationResDto;
+import com.ssafy.backend.hospital.dto.request.AddHospitalReservationReqDto;
+import com.ssafy.backend.hospital.dto.request.UpdateHospitalReservationReqDto;
+import com.ssafy.backend.hospital.dto.response.GetHospitalReservationResDto;
 import com.ssafy.backend.home.dto.response.MessageResDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

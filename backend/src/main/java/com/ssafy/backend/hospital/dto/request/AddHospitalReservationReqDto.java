@@ -1,4 +1,4 @@
-package com.ssafy.backend.hospital.dto.req;
+package com.ssafy.backend.hospital.dto.request;
 
 import lombok.Getter;
 

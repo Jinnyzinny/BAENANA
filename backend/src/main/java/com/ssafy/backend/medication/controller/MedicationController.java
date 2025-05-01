@@ -1,8 +1,8 @@
 package com.ssafy.backend.medication.controller;
 
-import com.ssafy.backend.medication.dto.reqDto.AddMedicationScheduleReqDto;
-import com.ssafy.backend.medication.dto.reqDto.UpdateMedicationScheduleReqDto;
-import com.ssafy.backend.medication.dto.resDto.GetMedicationResDto;
+import com.ssafy.backend.medication.dto.request.AddMedicationScheduleReqDto;
+import com.ssafy.backend.medication.dto.request.UpdateMedicationScheduleReqDto;
+import com.ssafy.backend.medication.dto.response.GetMedicationResDto;
 import com.ssafy.backend.medication.service.MedicationService;
 import com.ssafy.backend.home.dto.response.MessageResDto;
 import lombok.RequiredArgsConstructor;

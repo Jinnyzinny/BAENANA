@@ -1,8 +1,8 @@
 package com.ssafy.backend.hospital.controller;
 
-import com.ssafy.backend.hospital.dto.req.AddHospitalReservationReqDto;
-import com.ssafy.backend.hospital.dto.req.UpdateHospitalReservationReqDto;
-import com.ssafy.backend.hospital.dto.res.GetHospitalReservationResDto;
+import com.ssafy.backend.hospital.dto.request.AddHospitalReservationReqDto;
+import com.ssafy.backend.hospital.dto.request.UpdateHospitalReservationReqDto;
+import com.ssafy.backend.hospital.dto.response.GetHospitalReservationResDto;
 import com.ssafy.backend.hospital.service.HospitalReservationService;
 import com.ssafy.backend.home.dto.response.MessageResDto;
 import lombok.RequiredArgsConstructor;
