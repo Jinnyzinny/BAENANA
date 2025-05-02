@@ -50,9 +50,20 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/"),
                                 new AntPathRequestMatcher("/auth/success"),
                                 new AntPathRequestMatcher("/auth/**"),
-                                new AntPathRequestMatcher("/public/**")
+                                new AntPathRequestMatcher("/public/**"),
+
+                                // 공지사항 공개 경로 추가
+                                new AntPathRequestMatcher("/api/notifications", "GET"),
+                                new AntPathRequestMatcher("/api/notifications/*", "GET"),
+                                new AntPathRequestMatcher("/api/faq", "GET"),
+                                new AntPathRequestMatcher("/api/faq/*", "GET")
                         ).permitAll()
                         .anyRequest().authenticated()
+                        // 관리자 전용 경로 설정
+                        .requestMatchers(
+                                new AntPathRequestMatcher("/api/notifications/admin/**"),
+                                new AntPathRequestMatcher("/api/faq/admin/**")
+                        ).hasAuthority("ADMIN")
                 )
 
                 .oauth2Login(oauth -> oauth

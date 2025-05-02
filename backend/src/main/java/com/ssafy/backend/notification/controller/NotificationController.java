@@ -1,12 +1,17 @@
 package com.ssafy.backend.notification.controller;
 
 import com.ssafy.backend.common.ApiResponse;
+import com.ssafy.backend.common.exception.ForbiddenException;
 import com.ssafy.backend.notification.dto.requestDto.NotificationRequestDto;
 import com.ssafy.backend.notification.dto.responseDto.NotificationResponseDto;
 import com.ssafy.backend.notification.service.NotificationService;
+import com.ssafy.backend.user.entity.User;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import java.util.List;
 
@@ -34,19 +39,38 @@ public class NotificationController {
     //(관리자) 공지사항 작성
     // 실제 인증/인가 구현 전까지는 userId를 파라미터로 받아 사용
     @PostMapping("/admin")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ApiResponse<NotificationResponseDto.Create> createNotification(
             @RequestBody NotificationRequestDto.Create request,
-            @RequestParam Long userId) {
+            @AuthenticationPrincipal User user) {
 
-        NotificationResponseDto.Create response = notificationService.createNotification(request, userId);
+        if (user == null) {
+            throw new ForbiddenException("인증된 사용자만 접근할 수 있습니다.");
+        }
+
+        if (!"ADMIN".equals(user.getRole())) {
+            throw new ForbiddenException("관리자만 접근할 수 있습니다.");
+        }
+
+        NotificationResponseDto.Create response = notificationService.createNotification(request, user.getUserId());
         return ApiResponse.success("공지사항이 등록되었습니다.", HttpStatus.CREATED, response);
     }
 
     // (관리자) 공지사항 수정
     @PatchMapping("/admin/{noticeId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ApiResponse<NotificationResponseDto.Create> updateNotification(
             @PathVariable Long noticeId,
-            @RequestBody NotificationRequestDto.Update request) {
+            @RequestBody NotificationRequestDto.Update request,
+            @AuthenticationPrincipal User user) {
+
+        if (user == null) {
+            throw new ForbiddenException("인증된 사용자만 접근할 수 있습니다.");
+        }
+
+        if (!"ADMIN".equals(user.getRole())) {
+            throw new ForbiddenException("관리자만 접근할 수 있습니다.");
+        }
 
         NotificationResponseDto.Create response = notificationService.updateNotification(noticeId, request);
         return ApiResponse.success("공지사항이 수정되었습니다.", response);
@@ -54,7 +78,19 @@ public class NotificationController {
 
     //(관리자) 공지사항 삭제
     @DeleteMapping("/admin/{noticeId}")
-    public ApiResponse<?> deleteNotification(@PathVariable Long noticeId) {
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ApiResponse<?> deleteNotification(
+            @PathVariable Long noticeId,
+            @AuthenticationPrincipal User user) {
+
+        if (user == null) {
+            throw new ForbiddenException("인증된 사용자만 접근할 수 있습니다.");
+        }
+
+        if (!"ADMIN".equals(user.getRole())) {
+            throw new ForbiddenException("관리자만 접근할 수 있습니다.");
+        }
+
         notificationService.deleteNotification(noticeId);
         return ApiResponse.success("공지사항이 삭제되었습니다.");
     }

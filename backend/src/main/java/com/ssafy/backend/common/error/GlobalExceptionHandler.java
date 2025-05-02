@@ -4,7 +4,10 @@ package com.ssafy.backend.common.error;
 import com.ssafy.backend.common.ApiResponse;
 import com.ssafy.backend.common.exception.BusinessBaseException;
 import com.ssafy.backend.common.exception.ForbiddenException;
+import com.ssafy.backend.common.exception.UnauthorizedException;
 import com.ssafy.backend.notification.exception.NotificationNotFoundException;
+import org.springframework.security.access.AccessDeniedException;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,4 +53,19 @@ public class GlobalExceptionHandler {
         return ApiResponse.error("FORBIDDEN", HttpStatus.FORBIDDEN, e.getMessage());
     }
 
+    @ExceptionHandler(UnauthorizedException.class)
+    public ApiResponse<?> handleUnauthorizedException(UnauthorizedException e) {
+        return ApiResponse.error("UNAUTHORIZED", HttpStatus.UNAUTHORIZED, e.getMessage());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ApiResponse<?> handleAccessDeniedException(AccessDeniedException e) {
+        return ApiResponse.error("ACCESS_DENIED", HttpStatus.FORBIDDEN, "접근 권한이 없습니다.");
+    }
+
+    // 기타 예외 처리
+    @ExceptionHandler(Exception.class)
+    public ApiResponse<?> handleException(Exception e) {
+        return ApiResponse.error("SERVER_ERROR", HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류가 발생했습니다.");
+    }
 }
