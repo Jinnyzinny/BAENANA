@@ -15,10 +15,12 @@ export function ScheduleModal({
   visible,
   date,
   onClose,
+  handleBottomSheet,
 }: {
   visible: boolean;
   date: string | null;
   onClose: () => void;
+  handleBottomSheet: (type: "hospital" | "medicine" | "period") => void;
 }) {
   return (
     <Modal
@@ -59,11 +61,20 @@ export function ScheduleModal({
             {/* 버튼 - 병원 예약 / 복용약 알림 / 월경일 입력 */}
             <View className="gap-3">
               <View className="flex-row gap-3">
-                <ScheduleButton type="hospital" onPress={() => {}} />
-                <ScheduleButton type="pill" onPress={() => {}} />
+                <ScheduleButton
+                  type="hospital"
+                  onPress={() => handleBottomSheet("hospital")}
+                />
+                <ScheduleButton
+                  type="pill"
+                  onPress={() => handleBottomSheet("medicine")}
+                />
               </View>
               <View className="flex-row">
-                <ScheduleButton type="droplet" onPress={() => {}} />
+                <ScheduleButton
+                  type="droplet"
+                  onPress={() => handleBottomSheet("period")}
+                />
               </View>
             </View>
           </View>
