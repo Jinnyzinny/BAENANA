@@ -7,12 +7,13 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+
 @Getter
 @Builder
-public class GetRecentMenstrualResDto {
+public class GetAllMenstrualResDto {
     private Integer average_cycle;
     private Integer max_cycle;
-    private List<each_cycle_record> cycle_record;
+    private List<GetRecentMenstrualResDto.each_cycle_record> cycle_record;
 
     @Getter
     @Builder

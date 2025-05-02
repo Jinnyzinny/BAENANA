@@ -1,5 +1,8 @@
 package com.ssafy.backend.report.controller;
 
+import com.ssafy.backend.medication.service.calendar.MedicationService;
+import com.ssafy.backend.medication.service.report.MedicationReportService;
+import com.ssafy.backend.menstrual.service.report.MenstrualService;
 import com.ssafy.backend.report.dto.response.*;
 import com.ssafy.backend.report.service.ReportService;
 import lombok.RequiredArgsConstructor;
@@ -9,14 +12,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @Slf4j
 @RestController
 @RequestMapping("/api/report")
 @RequiredArgsConstructor
 public class ReportController {
+    private final MedicationReportService medicationReportService;
     private final ReportService reportService;
+    private final MenstrualService menstrualService;
 
     @GetMapping("/alarm")
     public ResponseEntity<GetAlarmResDto> getAlarm() {
@@ -24,32 +27,33 @@ public class ReportController {
     }
 
     @GetMapping("/menstrual/info")
-    public ResponseEntity<GetMenstrualResDto> getMenstrual() {
-        return ResponseEntity.ok(reportService.getMenstrual());
+    public ResponseEntity<GetMenstrualInfoResDto> getMenstrualInfo() {
+        return ResponseEntity.ok(menstrualService.getMenstrualInfo());
     }
 
     @GetMapping("/menstrual/ovulation_test")
     public ResponseEntity<GetOvulationTestResDto> getOvulationTest() {
-        return ResponseEntity.ok(reportService.getOvulationTest());
+        return ResponseEntity.ok(menstrualService.getOvulationTest());
     }
 
     @GetMapping("/menstrual/recent")
-    public ResponseEntity<List<GetRecentMenstrualResDto>> getRecentMenstrual() {
-        return ResponseEntity.ok(reportService.getRecentMenstrual());
+    public ResponseEntity<GetRecentMenstrualResDto> getRecentMenstrual() {
+        return ResponseEntity.ok(menstrualService.getRecentMenstrual());
     }
+
     @GetMapping("/menstrual/all")
-    public ResponseEntity<List<GetMenstrualResDto>> getAllMenstrual() {
-        return ResponseEntity.ok(reportService.getMenstrual());
+    public ResponseEntity<GetAllMenstrualResDto> getAllMenstrual() {
+        return ResponseEntity.ok(menstrualService.getAllMenstrual());
     }
 
     @GetMapping("/medication/recent")
     public ResponseEntity<GetRecentMedicationResDto> getRecentMedication() {
-        return ResponseEntity.ok(reportService.getRecentMedication());
+        return ResponseEntity.ok(medicationReportService.getRecentMedication());
     }
 
     @GetMapping("/medication/all")
     public ResponseEntity<GetAllMedicationResDto> getAllMedication() {
-        return ResponseEntity.ok(reportService.getAllMedication());
+        return ResponseEntity.ok(medicationReportService.getAllMedication());
     }
 
     @GetMapping("/summary")

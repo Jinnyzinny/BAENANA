@@ -18,7 +18,7 @@ public class GetRecentMedicationResDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    static class MedicationInfo{
+    public static class MedicationInfo{
         private String name;
     }
 }

@@ -8,6 +8,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -21,40 +26,6 @@ public class ReportServiceImpl implements ReportService {
                 .menstraul_is_normal(true)
                 .message("")
                 .build();
-    }
-
-    @Override
-    public GetAllMedicationResDto getAllMedication() {
-        return null;
-    }
-
-    @Override
-    public GetRecentMenstrualResDto getRecentMenstrual() {
-        return null;
-    }
-
-    @Override
-    public GetMenstrualResDto getMenstrual() {
-        Long userId = 0L;
-        MenstrualCycle menstrualCycle =
-                menstrualCycleRepository.findFirstByUser_UserIdOrderByStartDateDesc(userId).orElseThrow();
-
-        return GetMenstrualResDto.builder()
-                .cycle()
-                .period()
-                .is_cycle_normal()
-                .is_period_normal()
-                .build();
-    }
-
-    @Override
-    public GetOvulationTestResDto getOvulationTest() {
-        return null;
-    }
-
-    @Override
-    public GetRecentMedicationResDto getRecentMedication() {
-        return null;
     }
 
     @Override

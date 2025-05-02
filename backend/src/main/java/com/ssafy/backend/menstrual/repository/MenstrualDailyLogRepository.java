@@ -8,5 +8,5 @@ import java.util.Optional;
 
 public interface MenstrualDailyLogRepository extends JpaRepository<MenstrualDailyLog, Long> {
 
-    Optional<MenstrualDailyLog> findMenstrualDailyLogByCycle_CycleIdAndDate(Long cycleCycleId, LocalDate date);
+    Optional<MenstrualDailyLog> findMenstrualDailyLogByCycle_CycleIdAndDate(Long cycleId, LocalDate date);
 }
