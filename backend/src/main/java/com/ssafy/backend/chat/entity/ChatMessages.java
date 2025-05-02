@@ -1,6 +1,6 @@
-package com.ssafy.backend.chatMessages.entity;
+package com.ssafy.backend.chat.entity;
 
-import com.ssafy.backend.auth.entity.User;
+import com.ssafy.backend.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 
