@@ -1,14 +1,17 @@
 package com.ssafy.backend.report.service;
 
-import java.util.List;
-
-import org.springframework.core.io.Resource;
-import org.springframework.http.ResponseEntity;
+import com.ssafy.backend.report.dto.response.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
 public interface ReportService {
-	public ResponseEntity<Resource> fileDownload(String filename);
+    GetAlarmResDto getAlarm();
+    GetAllMedicationResDto getAllMedication();
+    GetRecentMenstrualResDto getRecentMenstrual();
+    GetMenstrualResDto getMenstrual();
+    GetOvulationTestResDto getOvulationTest();
+    GetRecentMedicationResDto getRecentMedication();
+    GetSummaryResDto getSummary();
 }

@@ -1,5 +1,6 @@
 package com.ssafy.backend.medication.repository;
 
+import com.ssafy.backend.auth.entity.User;
 import com.ssafy.backend.medication.entity.Medication;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

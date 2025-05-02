@@ -1,32 +1,64 @@
 package com.ssafy.backend.report.service;
 
-import java.io.File;
-import java.util.List;
-
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.ssafy.backend.menstrual.entity.MenstrualCycle;
+import com.ssafy.backend.menstrual.repository.MenstrualCycleRepository;
+import com.ssafy.backend.menstrual.repository.MenstrualDailyLogRepository;
+import com.ssafy.backend.report.dto.response.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class ReportServiceImpl implements ReportService {
+    private final MenstrualCycleRepository menstrualCycleRepository;
+    private final MenstrualDailyLogRepository menstrualDailyLogRepository;
 
-	private static final String UPLOAD_DIR = "uploads";
+    @Override
+    public GetAlarmResDto getAlarm() {
+        return GetAlarmResDto.builder()
+                .menstraul_is_normal(true)
+                .message("")
+                .build();
+    }
 
-	@Override
-	public ResponseEntity<Resource> fileDownload(String filename) {
-		// TODO Auto-generated method stub
-		File file = new File(UPLOAD_DIR, filename);
+    @Override
+    public GetAllMedicationResDto getAllMedication() {
+        return null;
+    }
 
-		if (!file.exists()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-		}
+    @Override
+    public GetRecentMenstrualResDto getRecentMenstrual() {
+        return null;
+    }
 
-		Resource resource = new FileSystemResource(file);
-		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"").body(resource);
-	}
+    @Override
+    public GetMenstrualResDto getMenstrual() {
+        Long userId = 0L;
+        MenstrualCycle menstrualCycle =
+                menstrualCycleRepository.findFirstByUser_UserIdOrderByStartDateDesc(userId).orElseThrow();
+
+        return GetMenstrualResDto.builder()
+                .cycle()
+                .period()
+                .is_cycle_normal()
+                .is_period_normal()
+                .build();
+    }
+
+    @Override
+    public GetOvulationTestResDto getOvulationTest() {
+        return null;
+    }
+
+    @Override
+    public GetRecentMedicationResDto getRecentMedication() {
+        return null;
+    }
+
+    @Override
+    public GetSummaryResDto getSummary() {
+        return null;
+    }
 }
