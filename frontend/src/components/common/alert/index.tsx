@@ -13,7 +13,7 @@ export function Alert({
   title,
   content,
 }: {
-  type: "warn" | "hospital" | "pill";
+  type: "warn" | "hospital" | "medicine";
   title: string;
   content: string;
 }) {
@@ -21,7 +21,7 @@ export function Alert({
   const typeSize: number = 16;
   const warnColor: string = "#EC6344";
   const hospitalColor: string = "#7FD19B";
-  const pillColor: string = "#A684FF";
+  const medicineColor: string = "#A684FF";
   const typeStrokeWidth: number = 2.2;
   const toggleSize: number = 18;
   const toggleColor: string = "#A1A1A1";
@@ -49,7 +49,7 @@ export function Alert({
           ) : (
             <Pill
               size={typeSize}
-              color={pillColor}
+              color={medicineColor}
               strokeWidth={typeStrokeWidth}
             />
           )}

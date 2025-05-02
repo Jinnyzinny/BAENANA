@@ -18,7 +18,7 @@ export function HomeScreen() {
             content="4월 18일 14시 더블유 여성병원"
           />
           <Alert
-            type="pill"
+            type="medicine"
             title="복용약 알림 메시지"
             content="오후 8시에 알림이 울릴 예정입니다."
           />

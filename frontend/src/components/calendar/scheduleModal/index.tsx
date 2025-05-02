@@ -66,13 +66,13 @@ export function ScheduleModal({
                   onPress={() => handleBottomSheet("hospital")}
                 />
                 <ScheduleButton
-                  type="pill"
+                  type="medicine"
                   onPress={() => handleBottomSheet("medicine")}
                 />
               </View>
               <View className="flex-row">
                 <ScheduleButton
-                  type="droplet"
+                  type="period"
                   onPress={() => handleBottomSheet("period")}
                 />
               </View>
