@@ -9,9 +9,11 @@ import { LevelSelectBox } from "../levelSelectBox";
 export function PeriodBottomSheet({
   height,
   sheetRef,
+  selectedDate,
 }: {
   height: number;
   sheetRef: RefObject<Modalize | null>;
+  selectedDate: string | null;
 }) {
   const [selectedPeriod, setSelectedPeriod] = useState<0 | 1 | 2 | 3 | 4 | 5>(
     0
@@ -28,6 +30,9 @@ export function PeriodBottomSheet({
     { id: 5, label: "피로" },
     { id: 6, label: "우울" },
   ];
+  const year = Number(selectedDate?.slice(0, 4));
+  const month = Number(selectedDate?.slice(5, 7));
+  const day = Number(selectedDate?.slice(8, 10));
 
   function handleSymptom(id: number) {
     // 선택된 증상 선택 시 배열에서 삭제, 선택되지 않은 증상 선택 시 배열에 추가
@@ -58,15 +63,25 @@ export function PeriodBottomSheet({
               <SelectNumber
                 min={1}
                 max={9999}
-                initial={2025}
+                initial={year}
                 onChange={() => {}}
               />
 
               {/* 월 */}
-              <SelectNumber min={1} max={12} initial={10} onChange={() => {}} />
+              <SelectNumber
+                min={1}
+                max={12}
+                initial={month}
+                onChange={() => {}}
+              />
 
               {/* 일 */}
-              <SelectNumber min={1} max={31} initial={2} onChange={() => {}} />
+              <SelectNumber
+                min={1}
+                max={31}
+                initial={day}
+                onChange={() => {}}
+              />
             </View>
           </View>
 
@@ -80,15 +95,25 @@ export function PeriodBottomSheet({
               <SelectNumber
                 min={1}
                 max={9999}
-                initial={2025}
+                initial={year}
                 onChange={() => {}}
               />
 
               {/* 월 */}
-              <SelectNumber min={1} max={12} initial={10} onChange={() => {}} />
+              <SelectNumber
+                min={1}
+                max={12}
+                initial={month}
+                onChange={() => {}}
+              />
 
               {/* 일 */}
-              <SelectNumber min={1} max={31} initial={2} onChange={() => {}} />
+              <SelectNumber
+                min={1}
+                max={31}
+                initial={day}
+                onChange={() => {}}
+              />
             </View>
           </View>
 

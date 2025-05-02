@@ -60,7 +60,11 @@ export function CalendarScreen() {
       {/* 바텀 시트 */}
       {selectedType === "period" && (
         // 주기 입력
-        <PeriodBottomSheet height={height} sheetRef={sheetRef} />
+        <PeriodBottomSheet
+          height={height}
+          sheetRef={sheetRef}
+          selectedDate={selectedDate}
+        />
       )}
     </>
   );
