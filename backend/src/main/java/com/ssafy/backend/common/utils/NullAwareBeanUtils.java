@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 //해당 Class 파일은 Null값을 찾고 해당 객체의 Property들을 그대로 복제하는 것을 한다.
+//PATCH Mapping에서 사용하면 유용하다
 public class NullAwareBeanUtils {
     public static String[] getNullPropertyNames(Object source) {
         BeanWrapper src = new BeanWrapperImpl(source);

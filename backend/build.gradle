@@ -22,6 +22,20 @@ configurations {
 repositories {
 	mavenCentral()
 }
+def querydslDir = "$buildDir/generated"
+
+//아래의 옵션을 추가함으로서 STS의 에러를 방지한다.
+sourceSets {
+	main {
+		java {
+			srcDirs += querydslDir
+		}
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
+}
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -43,6 +57,12 @@ dependencies {
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.2'
 	implementation 'com.fasterxml.jackson.core:jackson-core:2.17.2'
 	implementation 'com.fasterxml.jackson.core:jackson-annotations:2.17.2'
+
+	//Querydsl 추가
+	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+	annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 }
 
 tasks.named('test') {
