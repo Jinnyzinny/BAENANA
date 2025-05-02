@@ -1,4 +1,4 @@
-package com.ssafy.backend.medication.service;
+package com.ssafy.backend.medication.service.calendar;
 
 import com.ssafy.backend.medication.dto.request.AddMedicationScheduleReqDto;
 import com.ssafy.backend.medication.dto.request.UpdateMedicationScheduleReqDto;
@@ -9,6 +9,7 @@ import com.ssafy.backend.common.utils.NullAwareBeanUtils;
 import com.ssafy.backend.home.dto.response.MessageResDto;
 import com.ssafy.backend.medication.entity.Medication;
 import com.ssafy.backend.medication.entity.MedicationLog;
+import com.ssafy.backend.medication.repository.custom.MedicationCustomRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -23,10 +24,9 @@ import java.util.NoSuchElementException;
 @Transactional
 @RequiredArgsConstructor
 public class MedicationServiceImpl implements MedicationService {
-//    private final UserRepository userRepository;
-
     private final MedicationRepository medicationRepository;
     private final MedicationLogRepository medicationLogRepository;
+    private final MedicationCustomRepository medicationCustomRepository;
 
     @Override
     public MessageResDto addMedication(

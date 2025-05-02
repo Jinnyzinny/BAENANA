@@ -1,4 +1,4 @@
-package com.ssafy.backend.medication.service;
+package com.ssafy.backend.medication.service.calendar;
 
 import com.ssafy.backend.medication.dto.request.AddMedicationScheduleReqDto;
 import com.ssafy.backend.medication.dto.request.UpdateMedicationScheduleReqDto;
@@ -12,6 +12,9 @@ import java.util.List;
 @Service
 @Transactional
 public interface MedicationService {
+    /*
+    * Medication CRUD
+    * */
     MessageResDto addMedication(AddMedicationScheduleReqDto request);
 
     List<GetMedicationResDto> getMedication();
