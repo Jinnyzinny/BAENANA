@@ -3,7 +3,7 @@ package com.ssafy.backend.calendar.service.medication;
 import com.ssafy.backend.calendar.dto.reqDto.medication.AddMedicationScheduleReqDto;
 import com.ssafy.backend.calendar.dto.reqDto.medication.UpdateMedicationScheduleReqDto;
 import com.ssafy.backend.calendar.dto.resDto.GetMedicationResDto;
-import com.ssafy.backend.calendar.repository.UserRepository;
+import com.ssafy.backend.user.repository.UserRepository;
 import com.ssafy.backend.calendar.repository.medication.MedicationLogRepository;
 import com.ssafy.backend.calendar.repository.medication.MedicationRepository;
 import com.ssafy.backend.common.utils.NullAwareBeanUtils;
