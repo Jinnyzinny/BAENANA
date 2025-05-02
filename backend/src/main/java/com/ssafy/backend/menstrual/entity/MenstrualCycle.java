@@ -1,6 +1,6 @@
 package com.ssafy.backend.menstrual.entity;
 
-import com.ssafy.backend.auth.entity.User;
+import com.ssafy.backend.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
