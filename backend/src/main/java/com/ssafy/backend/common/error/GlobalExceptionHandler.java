@@ -1,8 +1,12 @@
 package com.ssafy.backend.common.error;
 
 
+import com.ssafy.backend.common.ApiResponse;
 import com.ssafy.backend.common.exception.BusinessBaseException;
+import com.ssafy.backend.common.exception.ForbiddenException;
+import com.ssafy.backend.notification.exception.NotificationNotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -33,6 +37,17 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(
                 ErrorResponse.of(errorCode),
                 errorCode.getStatus());
+    }
+
+    // 공지사항(notification) 예외처리
+    @ExceptionHandler(NotificationNotFoundException.class)
+    public ApiResponse<?> handleNotificationNotFoundException(NotificationNotFoundException e) {
+        return ApiResponse.error("NOTIFICATION_NOT_FOUND", HttpStatus.NOT_FOUND, e.getMessage());
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ApiResponse<?> handleForbiddenException(ForbiddenException e) {
+        return ApiResponse.error("FORBIDDEN", HttpStatus.FORBIDDEN, e.getMessage());
     }
 
 }
