@@ -30,30 +30,41 @@ public class CalendarServiceImpl implements CalendarService {
             int day
     ) {
         //검색을 원하는 날짜를 localDate 형태로 바꾼다.
-        LocalDate localDate = LocalDate.of(year, month, day);
-        //해당 날짜가 포함된 주기 정보를 얻는다.
+        LocalDate searchForDate = LocalDate.of(year, month, day);
+
         MenstrualCycle menstrualCycle =
                 menstrualCycleRepository
                         .findByUser_UserIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(
                                 user.getUserId(),
-                                localDate,
-                                localDate)
-                        .orElseThrow(NoSuchElementException::new);
+                                searchForDate,
+                                searchForDate).orElse(null);
 
         //해당 날짜가 포함된 주기정보의 해당 날짜 세부 정보를 얻어낸다.
         MenstrualDailyLog dailyLog =
                 menstrualDailyLogRepository
-                        .findMenstrualDailyLogByCycle_CycleIdAndDate(
-                                menstrualCycle.getCycleId(),
-                                localDate)
-                        .orElseThrow();
+                        .findByCycle_User_UserIdAndDate(
+                                user.getUserId(),
+                                searchForDate)
+                        .orElse(null);
 
         return GetDailyInfoResDto.builder()
-                .date(localDate.toString())
-                .start_date(menstrualCycle.getStartDate().toString())//생리 주기의 시작일
-                .end_date(menstrualCycle.getEndDate().toString())//생리 주기의 종료일
-                .bleeding_level(dailyLog.getBleedingLevel())//출혈량
-                .pain_level(dailyLog.getPainLevel())//통증 정도
+                .date(searchForDate.toString())
+                .start_date(
+                        menstrualCycle == null ?
+                                "" :
+                                menstrualCycle.getStartDate().toString())//생리 주기의 시작일
+                .end_date(
+                        menstrualCycle == null ?
+                                "" :
+                                menstrualCycle.getEndDate().toString())//생리 주기의 종료일
+                .bleeding_level(
+                        dailyLog == null ?
+                                null :
+                                dailyLog.getBleedingLevel())//출혈량
+                .pain_level(
+                        dailyLog == null ?
+                                null :
+                                dailyLog.getPainLevel())//통증 정도
                 .build();
     }
 
@@ -69,7 +80,7 @@ public class CalendarServiceImpl implements CalendarService {
         MenstrualCycle menstrualCycle =
                 menstrualCycleRepository
                         .findFirstByUser_UserIdOrderByStartDateDesc(userId)
-                        .orElseThrow(NoSuchElementException::new);
+                        .orElseThrow();
 
         return GetBearingPeriodResDto.builder()
                 .start_date(menstrualCycle.getStartDate().plusDays(19).toString())
@@ -85,11 +96,17 @@ public class CalendarServiceImpl implements CalendarService {
         MenstrualCycle menstrualCycle =
                 menstrualCycleRepository
                         .findFirstByUser_UserIdOrderByStartDateDesc(userId)
-                        .orElseThrow(NoSuchElementException::new);
+                        .orElse(null);
 
         return GetMenstrualPredictionResDto.builder()
-                .start_date(menstrualCycle.getStartDate().plusDays(28).toString())
-                .end_date(menstrualCycle.getEndDate().plusDays(35).toString())
+                .start_date(
+                        menstrualCycle == null ?
+                                "" :
+                                menstrualCycle.getStartDate().plusDays(28).toString())
+                .end_date(
+                        menstrualCycle == null ?
+                                "" :
+                                menstrualCycle.getEndDate().plusDays(35).toString())
                 .build();
     }
 }

@@ -39,8 +39,8 @@ public class User implements UserDetails, OAuth2User {
     @OneToMany(mappedBy = "user")
     private List<HospitalReservation> hospitalReservations;
 
-    @OneToMany(mappedBy = "user")
-    private List<SymptomLog> symptomLogs;
+//    @OneToMany(mappedBy = "user")
+//    private List<SymptomLog> symptomLogs;
 
     @OneToMany(mappedBy = "user")
     private List<Medication> medications;
