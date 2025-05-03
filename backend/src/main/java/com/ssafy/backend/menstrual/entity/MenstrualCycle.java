@@ -31,7 +31,7 @@ public class MenstrualCycle {
     private User user;
 
     /*
-    * =====Column=====
+    * ===== Column =====
     * */
     private LocalDate startDate;
     private LocalDate endDate;

@@ -9,4 +9,5 @@ public class UpdateHospitalReservationReqDto {
     String hospital_name;
     LocalDateTime reservation_date;
     String purpose;
+    String status;
 }

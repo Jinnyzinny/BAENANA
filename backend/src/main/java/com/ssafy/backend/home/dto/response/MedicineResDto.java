@@ -6,7 +6,5 @@ import lombok.Getter;
 @Getter
 @Builder
 public class MedicineResDto {
-	
-	private String reservation;
 	private String medicine;
 }

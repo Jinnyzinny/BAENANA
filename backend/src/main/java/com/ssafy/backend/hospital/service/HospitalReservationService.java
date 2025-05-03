@@ -4,6 +4,8 @@ import com.ssafy.backend.hospital.dto.request.AddHospitalReservationReqDto;
 import com.ssafy.backend.hospital.dto.request.UpdateHospitalReservationReqDto;
 import com.ssafy.backend.hospital.dto.response.GetHospitalReservationResDto;
 import com.ssafy.backend.home.dto.response.MessageResDto;
+import com.ssafy.backend.user.entity.User;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,22 +16,22 @@ import java.util.List;
 public interface HospitalReservationService {
 
     MessageResDto addHospitalReservation(
-//            @AuthenticationPrincipal UserDetails userDetails
+            @AuthenticationPrincipal User user,
             AddHospitalReservationReqDto request
     );
 
     List<GetHospitalReservationResDto> getHospitalReservation(
-//            @AuthenticationPrincipal UserDetails userDetails
+            @AuthenticationPrincipal User user
     );
 
     MessageResDto updateHospitalReservation(
-//            @AuthenticationPrincipal UserDetails userDetails
+            @AuthenticationPrincipal User user,
             UpdateHospitalReservationReqDto request,
             Long id
     );
 
     MessageResDto deleteHospitalReservation(
-//            @AuthenticationPrincipal UserDetails userDetails
+            @AuthenticationPrincipal User user,
             Long id
     );
 }

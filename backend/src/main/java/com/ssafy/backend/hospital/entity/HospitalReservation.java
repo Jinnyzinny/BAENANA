@@ -28,17 +28,25 @@ public class HospitalReservation {
      * */
     private String hospitalName;
     private LocalDateTime reservationDate;
-
-    @Enumerated(EnumType.STRING)
+    /*
+     * 산부인과
+     * 정기검진
+     * */
+    @Convert(converter = PurposeTypeConverter.class)
     private PurposeType purpose;
+
+    // 사용자가 선택한 한글 문자열로 Enum을 설정하는 메서드
+    public void setPurposeTypeByDescription(String description) {
+        this.purpose = PurposeType.fromDescription(description);
+    }
     /*
-    * 산부인과
-    * 정기검진
-    * */
-    @Enumerated(EnumType.STRING)
+     * 예약됨
+     * 완료됨
+     * */
+    @Convert(converter = StatusTypeConverter.class)
     private StatusType status;
-    /*
-    * 예약됨
-    * 완료됨
-    * */
+
+    public void setStatusTypeByDescription(String description) {
+        this.status = StatusType.fromDescription(description);
+    }
 }
