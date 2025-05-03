@@ -7,11 +7,13 @@ export function DateDropdown({
   year,
   month,
   day,
+  title,
   onChange,
 }: {
   year: number;
   month: number;
   day: number;
+  title: string;
   onChange: (date: Date) => void;
 }) {
   const [date, setDate] = useState(new Date(year, month - 1, day));
@@ -40,7 +42,7 @@ export function DateDropdown({
         date={date}
         mode="date"
         locale="ko"
-        title="병원 예약 일시"
+        title={title}
         confirmText="확인"
         cancelText="취소"
         onConfirm={(selectedDate) => {

@@ -6,7 +6,7 @@ import { SelectLevel } from "../selectLevel";
 import { CustomButton } from "../../common/customButton";
 import { SelectTag } from "../../common/selectTag";
 
-export function PeriodBottomSheet({
+export function SymptomBottomSheet({
   height,
   sheetRef,
   selectedDate,
@@ -39,7 +39,7 @@ export function PeriodBottomSheet({
   }
 
   return (
-    <Modalize ref={sheetRef} snapPoint={height * 0.67}>
+    <Modalize ref={sheetRef} snapPoint={height * 0.671}>
       {/* 헤더 */}
       <View className="mx-5 mt-7 mb-5 flex-row items-start justify-start gap-2">
         <Image
@@ -52,10 +52,10 @@ export function PeriodBottomSheet({
       </View>
       <ScrollView>
         <View className="mx-7 gap-7">
-          {/* 출혈량 입력 (선택) */}
+          {/* 출혈량 입력 */}
           <View className="gap-3">
             <Text className="text-neutral-800 text-sm font-bold ">
-              출혈량 입력 (선택)
+              출혈량 입력
             </Text>
             <View className="mx-5">
               <SelectLevel
@@ -66,10 +66,10 @@ export function PeriodBottomSheet({
             </View>
           </View>
 
-          {/* 스트레스 지수 입력 (선택) */}
+          {/* 스트레스 지수 입력 */}
           <View className="gap-3">
             <Text className="text-neutral-800 text-sm font-bold ">
-              스트레스 지수 입력 (선택)
+              스트레스 지수 입력
             </Text>
             <View className="mx-5">
               <SelectLevel
@@ -80,10 +80,10 @@ export function PeriodBottomSheet({
             </View>
           </View>
 
-          {/* 증상 입력 (선택) */}
+          {/* 증상 입력 */}
           <View className="gap-3">
             <Text className="text-neutral-800 text-sm font-bold ">
-              증상 입력 (선택)
+              증상 입력 (중복 선택 가능)
             </Text>
             <View className="gap-3">
               {/* 증상: 복통 / 두통 / 요통 / 메스꺼움 */}

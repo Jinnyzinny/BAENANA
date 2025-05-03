@@ -3,7 +3,13 @@ import React, { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import DatePicker from "react-native-date-picker";
 
-export function TimeDropdown({ onChange }: { onChange: (time: Date) => void }) {
+export function TimeDropdown({
+  title,
+  onChange,
+}: {
+  title: string;
+  onChange: (time: Date) => void;
+}) {
   const [open, setOpen] = useState(false);
   const [time, setTime] = useState(new Date(0, 0, 0, 9, 0));
 
@@ -28,7 +34,7 @@ export function TimeDropdown({ onChange }: { onChange: (time: Date) => void }) {
         date={time}
         mode="time"
         locale="ko"
-        title="예약 시간"
+        title={title}
         confirmText="확인"
         cancelText="취소"
         onConfirm={(selectedTime) => {

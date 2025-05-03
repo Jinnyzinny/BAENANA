@@ -8,17 +8,18 @@ import {
 import { Modalize } from "react-native-modalize";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Monthly } from "../../components/calendar/monthly";
-import { PeriodBottomSheet } from "../../components/calendar/periodBottomSheet";
 import { ScheduleList } from "../../components/calendar/scheduleList";
 import { ScheduleModal } from "../../components/calendar/scheduleModal";
 import { HeaderLogo } from "../../components/common/headerLogo";
 import { HospitalBottomSheet } from "../../components/calendar/hospitalBottomSheet";
+import { SymptomBottomSheet } from "../../components/calendar/symptomBottomSheet";
+import { MedicineBottomSheet } from "../../components/calendar/medicineBottomSheet";
 
 export function CalendarScreen() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [selectedType, setSelectedType] = useState<
-    "period" | "hospital" | "medicine" | null
+    "symptom" | "hospital" | "medicine" | null
   >(null);
   const sheetRef = useRef<Modalize>(null);
   const { height } = useWindowDimensions();
@@ -28,7 +29,7 @@ export function CalendarScreen() {
     setModalVisible(true);
   }
 
-  function handleBottomSheet(type: "period" | "hospital" | "medicine" | null) {
+  function handleBottomSheet(type: "symptom" | "hospital" | "medicine" | null) {
     setSelectedType(type);
     setModalVisible(false);
     InteractionManager.runAfterInteractions(() => {
@@ -59,9 +60,9 @@ export function CalendarScreen() {
       />
 
       {/* 바텀 시트 */}
-      {selectedType === "period" && (
-        // 주기 입력
-        <PeriodBottomSheet
+      {selectedType === "symptom" && (
+        // 월경 증상 입력
+        <SymptomBottomSheet
           height={height}
           sheetRef={sheetRef}
           selectedDate={selectedDate}
@@ -70,6 +71,14 @@ export function CalendarScreen() {
       {selectedType === "hospital" && (
         // 병원 입력
         <HospitalBottomSheet
+          height={height}
+          sheetRef={sheetRef}
+          selectedDate={selectedDate}
+        />
+      )}
+      {selectedType === "medicine" && (
+        // 복용약 입력
+        <MedicineBottomSheet
           height={height}
           sheetRef={sheetRef}
           selectedDate={selectedDate}

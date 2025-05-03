@@ -20,7 +20,7 @@ export function ScheduleModal({
   visible: boolean;
   date: string | null;
   onClose: () => void;
-  handleBottomSheet: (type: "hospital" | "medicine" | "period") => void;
+  handleBottomSheet: (type: "hospital" | "medicine" | "symptom") => void;
 }) {
   return (
     <Modal
@@ -58,7 +58,7 @@ export function ScheduleModal({
               {/* 안내선 */}
               {/* <View className="w-full h-[0.5px] my-3 bg-neutral-300" /> */}
             </ScrollView>
-            {/* 버튼 - 병원 예약 / 복용약 알림 / 월경일 입력 */}
+            {/* 버튼 - 병원 예약 / 복용약 알림 / 월경 증상 입력 */}
             <View className="gap-3">
               <View className="flex-row gap-3">
                 <ScheduleButton
@@ -73,7 +73,7 @@ export function ScheduleModal({
               <View className="flex-row">
                 <ScheduleButton
                   type="period"
-                  onPress={() => handleBottomSheet("period")}
+                  onPress={() => handleBottomSheet("symptom")}
                 />
               </View>
             </View>
