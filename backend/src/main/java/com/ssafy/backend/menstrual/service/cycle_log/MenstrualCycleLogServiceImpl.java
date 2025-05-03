@@ -36,7 +36,7 @@ public class MenstrualCycleLogServiceImpl implements MenstrualCycleLogService {
                         .build()
         );
         return MessageResDto.builder()
-                .message("생리 주기 정보가 성공적으로 저장되었습니다.")
+                .message("생리 주기 세부정보가 성공적으로 저장되었습니다.")
                 .build();
     }
 

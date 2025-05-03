@@ -5,10 +5,14 @@ import com.ssafy.backend.menstrual.dto.request.UpdateMenstrualCycleReqDto;
 import com.ssafy.backend.menstrual.dto.response.GetMenstrualCycleResDto;
 import com.ssafy.backend.menstrual.service.cycle.CycleService;
 import com.ssafy.backend.home.dto.response.MessageResDto;
+import com.ssafy.backend.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @Slf4j
@@ -20,14 +24,17 @@ public class MenstrualCycleController {
 
     @PostMapping
     public ResponseEntity<MessageResDto> addMenstrualCycle(
+            @AuthenticationPrincipal User user,
             @RequestBody AddMenstrualCycleReqDto request
     ){
-        return ResponseEntity.ok(cycleService.addMenstrualCycle(request));
+        return ResponseEntity.ok(cycleService.addMenstrualCycle(user,request));
     }
 
     @GetMapping
-    public ResponseEntity<GetMenstrualCycleResDto> getMenstrualCycle(){
-        return ResponseEntity.ok(cycleService.getMenstrualCycle());
+    public ResponseEntity<List<GetMenstrualCycleResDto>> getMenstrualCycle(
+            @AuthenticationPrincipal User user
+    ){
+        return ResponseEntity.ok(cycleService.getMenstrualCycle(user));
     }
 
     @PatchMapping("/{cycle_id}")
