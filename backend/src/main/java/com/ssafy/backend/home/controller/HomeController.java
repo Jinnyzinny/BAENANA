@@ -22,22 +22,22 @@ public class HomeController {
 
     @GetMapping("/remain_day")
     public ResponseEntity<RemainDayResDto> getRemainDay(
-//            @AuthenticationPrincipal UserDetails userDetails
+            @AuthenticationPrincipal User user
     ) {
-        return ResponseEntity.ok(homeService.getRemainDay());
+        return ResponseEntity.ok(homeService.getRemainDay(user));
     }
 
-    @GetMapping("/alarm/medicine")
+    @GetMapping("/medicine")
     public ResponseEntity<MedicineResDto> getMedicine(
             @AuthenticationPrincipal User user
     ) {
-        return ResponseEntity.ok(homeService.getMedicine());
+        return ResponseEntity.ok(homeService.getMedicine(user));
     }
 
-    @GetMapping("/alarm/reservation")
+    @GetMapping("/reservation")
     public ResponseEntity<HospitalReservationResDto> getHospitalReservation(
             @AuthenticationPrincipal User user
     ) {
-        return ResponseEntity.ok(homeService.getHospitalReservation());
+        return ResponseEntity.ok(homeService.getHospitalReservation(user));
     }
 }
