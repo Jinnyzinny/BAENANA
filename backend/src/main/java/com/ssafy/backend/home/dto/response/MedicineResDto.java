@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class alarmResDto {
+public class MedicineResDto {
 	
 	private String reservation;
 	private String medicine;
