@@ -3,11 +3,13 @@ import React, { useState } from "react";
 import { Pressable, TextInput, View } from "react-native";
 
 export function SelectNumber({
+  type,
   min,
   max,
   initial,
   onChange,
 }: {
+  type: boolean;
   min: number;
   max: number;
   initial: number;
@@ -42,10 +44,12 @@ export function SelectNumber({
   };
 
   return (
-    <View className="w-[86px] bg-violet-50 rounded-xl px-2 py-1">
+    <View
+      className={`${type ? "w-[82px]" : "w-[62px]"} bg-violet-50 rounded-xl px-2 py-1`}
+    >
       <View className="flex-row items-center justify-end">
         <TextInput
-          className="mx-1 text-xl text-neutral-600 font-bold text-center"
+          className="mx-1 text-xl text-violet-700 font-bold text-center"
           keyboardType="numeric"
           value={input}
           onChangeText={setInput}
@@ -54,10 +58,10 @@ export function SelectNumber({
         />
         <View className="gap-2">
           <Pressable onPress={() => handleChange("up")}>
-            <ChevronUp size={18} color="#C4B4FF" strokeWidth={3} />
+            <ChevronUp size={15} color="#C4B4FF" strokeWidth={3} />
           </Pressable>
           <Pressable onPress={() => handleChange("down")}>
-            <ChevronDown size={18} color="#C4B4FF" strokeWidth={3} />
+            <ChevronDown size={15} color="#C4B4FF" strokeWidth={3} />
           </Pressable>
         </View>
       </View>

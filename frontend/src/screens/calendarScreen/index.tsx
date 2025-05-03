@@ -12,6 +12,7 @@ import { PeriodBottomSheet } from "../../components/calendar/periodBottomSheet";
 import { ScheduleList } from "../../components/calendar/scheduleList";
 import { ScheduleModal } from "../../components/calendar/scheduleModal";
 import { HeaderLogo } from "../../components/common/headerLogo";
+import { HospitalBottomSheet } from "../../components/calendar/hospitalBottomSheet";
 
 export function CalendarScreen() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
@@ -61,6 +62,14 @@ export function CalendarScreen() {
       {selectedType === "period" && (
         // 주기 입력
         <PeriodBottomSheet
+          height={height}
+          sheetRef={sheetRef}
+          selectedDate={selectedDate}
+        />
+      )}
+      {selectedType === "hospital" && (
+        // 병원 입력
+        <HospitalBottomSheet
           height={height}
           sheetRef={sheetRef}
           selectedDate={selectedDate}

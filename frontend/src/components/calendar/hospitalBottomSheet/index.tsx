@@ -1,0 +1,125 @@
+import { RefObject, useState } from "react";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Modalize } from "react-native-modalize";
+import { Button } from "../../common/button";
+import { FormatDate } from "../../../utils/formatDate";
+import { TextInput } from "react-native-gesture-handler";
+import { Tag } from "../../common/tag";
+
+export function HospitalBottomSheet({
+  height,
+  sheetRef,
+  selectedDate,
+}: {
+  height: number;
+  sheetRef: RefObject<Modalize | null>;
+  selectedDate: string | null;
+}) {
+  const [hospitalName, setHospitalName] = useState<string>("");
+  const year = Number(selectedDate?.slice(0, 4));
+  const month = Number(selectedDate?.slice(5, 7));
+  const day = Number(selectedDate?.slice(8, 10));
+
+  const [purpose, setPurpose] = useState<number>(0);
+  const purposeItems = [
+    { id: 1, label: "검진" },
+    { id: 2, label: "초음파" },
+    { id: 3, label: "배란확인" },
+    { id: 4, label: "상담" },
+    { id: 5, label: "기타" },
+  ];
+
+  return (
+    <Modalize ref={sheetRef} snapPoint={height * 0.67}>
+      {/* 헤더 */}
+      <View className="mx-5 mt-7 mb-5 flex-row items-start justify-start gap-2">
+        <Image
+          source={require("../../../assets/images/mascot.png")}
+          className="w-10 h-10"
+        />
+        <Text className="text-lg font-bold self-center">
+          {FormatDate(selectedDate)}
+        </Text>
+      </View>
+      <ScrollView>
+        <View className="mx-7 gap-7">
+          {/* 병원 이름 입력 */}
+          <View className="gap-3">
+            <Text className="text-neutral-800 text-sm font-bold ">
+              병원 이름
+            </Text>
+            <View className="mx-5 border-b border-neutral-400">
+              <View className="relative justify-center h-12">
+                {hospitalName === "" && (
+                  <Text className="absolute left-3 text-neutral-400 font-bold  text-lg">
+                    병원 이름을 입력해주세요.
+                  </Text>
+                )}
+                <TextInput
+                  className="pl-3 h-12 font-bold text-lg"
+                  value={hospitalName}
+                  onChangeText={setHospitalName}
+                />
+              </View>
+            </View>
+          </View>
+
+          {/* 병원 예약 일시 */}
+          <View className="gap-3">
+            <Text className="text-neutral-800 text-sm font-bold ">
+              병원 예약 일시
+            </Text>
+            <View className="flex-row mx-5 items-center justify-between">
+              {/* 토글 들어가야 함 */}
+            </View>
+          </View>
+
+          {/* 예약 시간 */}
+          <View className="gap-3">
+            <Text className="text-neutral-800 text-sm font-bold ">
+              예약 시간
+            </Text>
+            <View className="mx-5">{/* 예약 시간 들어가야 함 */}</View>
+          </View>
+
+          {/* 방문 목적 입력 */}
+          <View className="gap-3">
+            <Text className="text-neutral-800 text-sm font-bold ">
+              방문 목적
+            </Text>
+            <View className="gap-2">
+              {/* 목적: 검진 / 초음파 / 배란확인 / 상담 */}
+              <View className="mx-5 flex-row gap-2 flex-wrap">
+                {purposeItems.slice(0, 4).map((item) => (
+                  <TouchableOpacity
+                    key={item.id}
+                    onPress={() => setPurpose(item.id)}
+                  >
+                    <Tag fill={purpose === item.id} content={item.label} />
+                  </TouchableOpacity>
+                ))}
+              </View>
+
+              {/* 목적: 기타 */}
+              <View className="mx-5 flex-row gap-2">
+                {purposeItems.slice(4).map((item) => (
+                  <TouchableOpacity
+                    key={item.id}
+                    onPress={() => setPurpose(item.id)}
+                  >
+                    <Tag fill={purpose === item.id} content={item.label} />
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+          </View>
+
+          {/* 저장 버튼 */}
+          <View className="mt-10">
+            <Button fill={true} content="저장" onPress={() => {}} />
+          </View>
+        </View>
+      </ScrollView>
+    </Modalize>
+  );
+}
