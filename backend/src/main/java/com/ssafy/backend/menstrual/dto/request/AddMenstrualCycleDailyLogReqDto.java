@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AddMenstrualCycleDailyLogReqDto {
-    private Long cycleId;
+    private Long cycle_id;
     private LocalDate date;
     private int bleeding_level;
     private int pain_level;

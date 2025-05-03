@@ -25,7 +25,7 @@ public class MenstrualCycleLogServiceImpl implements MenstrualCycleLogService {
         menstrualDailyLogRepository.save(
                 MenstrualDailyLog.builder()
                         .cycle(
-                                menstrualCycleRepository.findById(request.getCycleId()).orElseThrow(
+                                menstrualCycleRepository.findById(request.getCycle_id()).orElseThrow(
                                         () -> new IllegalArgumentException("주기 정보가 없습니다.")
                                 ))
                         .date(request.getDate())
@@ -44,7 +44,6 @@ public class MenstrualCycleLogServiceImpl implements MenstrualCycleLogService {
     public MessageResDto updateMenstrualCycleDailyLog(User user, UpdateMenstrualCycleDailyLogReqDto request) {
         MenstrualDailyLog dailyLog =
                 menstrualDailyLogRepository.findById(request.getDailyLogId()).orElseThrow();
-
         BeanUtils.copyProperties(request, dailyLog, NullAwareBeanUtils.getNullPropertyNames(request));
         return MessageResDto.builder()
                 .message("생리 주기 정보가 성공적으로 변경되었습니다.")
