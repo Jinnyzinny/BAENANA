@@ -5,9 +5,11 @@ import com.ssafy.backend.hospital.dto.request.UpdateHospitalReservationReqDto;
 import com.ssafy.backend.hospital.dto.response.GetHospitalReservationResDto;
 import com.ssafy.backend.hospital.service.HospitalReservationService;
 import com.ssafy.backend.home.dto.response.MessageResDto;
+import com.ssafy.backend.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,35 +24,35 @@ public class HospitalReservationController {
 
     @PostMapping
     public ResponseEntity<MessageResDto> addHospitalReservation(
-//            @AuthenticationPrincipal UserDetails userDetails
+            @AuthenticationPrincipal User user,
             @RequestBody AddHospitalReservationReqDto request
     ) {
         return ResponseEntity.ok(hospitalReservationService.addHospitalReservation(
-                //userDetails
+                user,
                 request));
     }
 
     @GetMapping
     public ResponseEntity<List<GetHospitalReservationResDto>> getHospitalReservation(
-//            @AuthenticationPrincipal UserDetails userDetails
+            @AuthenticationPrincipal User user
     ) {
-        return ResponseEntity.ok(hospitalReservationService.getHospitalReservation());
+        return ResponseEntity.ok(hospitalReservationService.getHospitalReservation(user));
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<MessageResDto> updateHospitalReservation(
-//            @AuthenticationPrincipal UserDetails userDetails
+            @AuthenticationPrincipal User user,
             @PathVariable Long id,
             @RequestBody UpdateHospitalReservationReqDto request
     ) {
-        return ResponseEntity.ok(hospitalReservationService.updateHospitalReservation(request,id));
+        return ResponseEntity.ok(hospitalReservationService.updateHospitalReservation(user,request,id));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<MessageResDto> deleteHospitalReservation(
-//            @AuthenticationPrincipal UserDetails userDetails
+            @AuthenticationPrincipal User user,
             @PathVariable Long id
     ) {
-        return ResponseEntity.ok(hospitalReservationService.deleteHospitalReservation(id));
+        return ResponseEntity.ok(hospitalReservationService.deleteHospitalReservation(user,id));
     }
 }
