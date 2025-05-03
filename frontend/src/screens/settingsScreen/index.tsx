@@ -2,12 +2,12 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Button } from "../../components/common/button";
 import { HeaderLogo } from "../../components/common/headerLogo";
 import { Card } from "../../components/settings/card";
 import { Faq } from "../../components/settings/faq";
 import { Notice } from "../../components/settings/notice";
 import { SettingsStackParamList } from "../../navigation/types";
+import { CustomButton } from "../../components/common/customButton";
 
 export function SettingsScreen() {
   const navigation =
@@ -32,7 +32,7 @@ export function SettingsScreen() {
           />
         </View>
         <View className="gap-3">
-          <Button fill={true} content="로그아웃" onPress={() => {}} />
+          <CustomButton fill={true} content="로그아웃" onPress={() => {}} />
           <TouchableOpacity onPress={() => {}}>
             <Text className="self-center text-violet-400">탈퇴하기</Text>
           </TouchableOpacity>

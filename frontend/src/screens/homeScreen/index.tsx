@@ -1,9 +1,9 @@
 import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Alert } from "../../components/common/alert";
-import { Button } from "../../components/common/button";
+import { AlertMessage } from "../../components/common/alertMessage";
 import { HeaderLogo } from "../../components/common/headerLogo";
 import { DonutChart } from "../../components/home/donutChart";
+import { CustomButton } from "../../components/common/customButton";
 
 export function HomeScreen() {
   return (
@@ -12,12 +12,12 @@ export function HomeScreen() {
       <View className="flex-1 relative mx-5">
         {/* 알림 메시지 */}
         <View className="gap-3">
-          <Alert
+          <AlertMessage
             type="hospital"
             title="병원 예약이 있어요"
             content="4월 18일 14시 더블유 여성병원"
           />
-          <Alert
+          <AlertMessage
             type="medicine"
             title="복용약 알림 메시지"
             content="오후 8시에 알림이 울릴 예정입니다."
@@ -31,7 +31,11 @@ export function HomeScreen() {
         {/* 버튼 */}
         <View className="w-full absolute bottom-16 -translate-y-1/2">
           <View className="mx-24">
-            <Button fill={false} content="월경일 입력" onPress={() => {}} />
+            <CustomButton
+              fill={false}
+              content="월경일 입력"
+              onPress={() => {}}
+            />
           </View>
         </View>
       </View>

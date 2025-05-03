@@ -1,12 +1,12 @@
 import { RefObject, useState } from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { Modalize } from "react-native-modalize";
-import { Button } from "../../common/button";
 import { FormatDate } from "../../../utils/formatDate";
 import { TextInput } from "react-native-gesture-handler";
-import { Tag } from "../../common/tag";
 import { DateDropdown } from "../../common/dateDropdown";
 import { TimeDropdown } from "../../common/timeDropdown";
+import { CustomButton } from "../../common/customButton";
+import { SelectTag } from "../../common/selectTag";
 
 export function HospitalBottomSheet({
   height,
@@ -109,7 +109,10 @@ export function HospitalBottomSheet({
                       setPurposeInput("");
                     }}
                   >
-                    <Tag fill={purpose === item.id} content={item.label} />
+                    <SelectTag
+                      fill={purpose === item.id}
+                      content={item.label}
+                    />
                   </TouchableOpacity>
                 ))}
               </View>
@@ -121,7 +124,10 @@ export function HospitalBottomSheet({
                     key={item.id}
                     onPress={() => setPurpose(item.id)}
                   >
-                    <Tag fill={purpose === item.id} content={item.label} />
+                    <SelectTag
+                      fill={purpose === item.id}
+                      content={item.label}
+                    />
                   </TouchableOpacity>
                 ))}
 
@@ -148,7 +154,7 @@ export function HospitalBottomSheet({
 
           {/* 저장 버튼 */}
           <View className="mt-10">
-            <Button fill={true} content="저장" onPress={() => {}} />
+            <CustomButton fill={true} content="저장" onPress={() => {}} />
           </View>
         </View>
       </ScrollView>

@@ -1,6 +1,6 @@
 import { Text, TouchableOpacity, View } from "react-native";
 
-export function LevelSelectBox({
+export function SelectLevel({
   selected,
   setSelected,
   contents,

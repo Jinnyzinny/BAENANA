@@ -8,7 +8,7 @@ import {
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 
-export function Alert({
+export function AlertMessage({
   type,
   title,
   content,

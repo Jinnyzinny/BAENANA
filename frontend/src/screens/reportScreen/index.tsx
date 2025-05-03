@@ -1,13 +1,13 @@
 import { ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Alert } from "../../components/common/alert";
-import { Button } from "../../components/common/button";
 import { HeaderLogo } from "../../components/common/headerLogo";
 import { BeforePeriod } from "../../components/report/beforePeriod";
 import { CurrentPeriod } from "../../components/report/currentPeriod";
 import { Summary } from "../../components/report/summary";
 import { MedicineInfo } from "../../components/report/medicineInfo";
 import { OvulationInfo } from "../../components/report/ovulationInfo";
+import { AlertMessage } from "../../components/common/alertMessage";
+import { CustomButton } from "../../components/common/customButton";
 
 export function ReportScreen() {
   return (
@@ -16,7 +16,7 @@ export function ReportScreen() {
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 32 }}>
         <View className="gap-3 mx-5 pb-16">
           {/* 알림 메시지 */}
-          <Alert
+          <AlertMessage
             type="warn"
             title="최근 월경 주기가 불규칙합니다."
             content="최근 3개월 월경 주기가 불규칙합니다."
@@ -42,7 +42,7 @@ export function ReportScreen() {
 
           <View />
           {/* 버튼 */}
-          <Button fill={true} content="PDF로 저장" onPress={() => {}} />
+          <CustomButton fill={true} content="PDF로 저장" onPress={() => {}} />
         </View>
       </ScrollView>
     </SafeAreaView>

@@ -1,10 +1,10 @@
 import { RefObject, useState } from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { Modalize } from "react-native-modalize";
-import { Button } from "../../common/button";
-import { Tag } from "../../common/tag";
-import { LevelSelectBox } from "../levelSelectBox";
 import { FormatDate } from "../../../utils/formatDate";
+import { SelectLevel } from "../selectLevel";
+import { CustomButton } from "../../common/customButton";
+import { SelectTag } from "../../common/selectTag";
 
 export function PeriodBottomSheet({
   height,
@@ -58,7 +58,7 @@ export function PeriodBottomSheet({
               출혈량 입력 (선택)
             </Text>
             <View className="mx-5">
-              <LevelSelectBox
+              <SelectLevel
                 selected={selectedPeriod}
                 setSelected={setSelectedPeriod}
                 contents={["매우 적음", "보통", "매우 많음"]}
@@ -72,7 +72,7 @@ export function PeriodBottomSheet({
               스트레스 지수 입력 (선택)
             </Text>
             <View className="mx-5">
-              <LevelSelectBox
+              <SelectLevel
                 selected={selectedStress}
                 setSelected={setSelectedStress}
                 contents={["매우 낮음", "보통", "매우 높음"]}
@@ -93,7 +93,7 @@ export function PeriodBottomSheet({
                     key={item.id}
                     onPress={() => handleSymptom(item.id)}
                   >
-                    <Tag
+                    <SelectTag
                       fill={symptom.includes(item.id)}
                       content={item.label}
                     />
@@ -108,7 +108,7 @@ export function PeriodBottomSheet({
                     key={item.id}
                     onPress={() => handleSymptom(item.id)}
                   >
-                    <Tag
+                    <SelectTag
                       fill={symptom.includes(item.id)}
                       content={item.label}
                     />
@@ -120,7 +120,7 @@ export function PeriodBottomSheet({
 
           {/* 저장 버튼 */}
           <View className="mt-10">
-            <Button fill={true} content="저장" onPress={() => {}} />
+            <CustomButton fill={true} content="저장" onPress={() => {}} />
           </View>
         </View>
       </ScrollView>
