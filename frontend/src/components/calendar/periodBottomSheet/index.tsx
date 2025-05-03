@@ -85,7 +85,7 @@ export function PeriodBottomSheet({
             <Text className="text-neutral-800 text-sm font-bold ">
               증상 입력 (선택)
             </Text>
-            <View className="gap-2">
+            <View className="gap-3">
               {/* 증상: 복통 / 두통 / 요통 / 메스꺼움 */}
               <View className="mx-5 flex-row gap-2 flex-wrap">
                 {symptomItems.slice(0, 4).map((item) => (

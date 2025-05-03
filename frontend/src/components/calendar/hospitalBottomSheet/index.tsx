@@ -5,6 +5,8 @@ import { Button } from "../../common/button";
 import { FormatDate } from "../../../utils/formatDate";
 import { TextInput } from "react-native-gesture-handler";
 import { Tag } from "../../common/tag";
+import { DateDropdown } from "../../common/dateDropdown";
+import { TimeDropdown } from "../../common/timeDropdown";
 
 export function HospitalBottomSheet({
   height,
@@ -19,6 +21,8 @@ export function HospitalBottomSheet({
   const year = Number(selectedDate?.slice(0, 4));
   const month = Number(selectedDate?.slice(5, 7));
   const day = Number(selectedDate?.slice(8, 10));
+  const [reservationDate, setReservationDate] = useState<Date | null>(null);
+  const [reservationTime, setReservationTime] = useState<Date | null>(null);
 
   const [purpose, setPurpose] = useState<number>(0);
   const purposeItems = [
@@ -28,9 +32,10 @@ export function HospitalBottomSheet({
     { id: 4, label: "상담" },
     { id: 5, label: "기타" },
   ];
+  const [purposeInput, setPurposeInput] = useState<string>("");
 
   return (
-    <Modalize ref={sheetRef} snapPoint={height * 0.67}>
+    <Modalize ref={sheetRef} snapPoint={height * 0.77}>
       {/* 헤더 */}
       <View className="mx-5 mt-7 mb-5 flex-row items-start justify-start gap-2">
         <Image
@@ -51,7 +56,7 @@ export function HospitalBottomSheet({
             <View className="mx-5 border-b border-neutral-400">
               <View className="relative justify-center h-12">
                 {hospitalName === "" && (
-                  <Text className="absolute left-3 text-neutral-400 font-bold  text-lg">
+                  <Text className="absolute left-3 text-neutral-400 font-bold text-lg">
                     병원 이름을 입력해주세요.
                   </Text>
                 )}
@@ -70,7 +75,12 @@ export function HospitalBottomSheet({
               병원 예약 일시
             </Text>
             <View className="flex-row mx-5 items-center justify-between">
-              {/* 토글 들어가야 함 */}
+              <DateDropdown
+                year={year}
+                month={month}
+                day={day}
+                onChange={setReservationDate}
+              />
             </View>
           </View>
 
@@ -79,29 +89,33 @@ export function HospitalBottomSheet({
             <Text className="text-neutral-800 text-sm font-bold ">
               예약 시간
             </Text>
-            <View className="mx-5">{/* 예약 시간 들어가야 함 */}</View>
+            <View className="mx-5">
+              <TimeDropdown onChange={setReservationTime} />
+            </View>
           </View>
 
-          {/* 방문 목적 입력 */}
           <View className="gap-3">
-            <Text className="text-neutral-800 text-sm font-bold ">
+            <Text className="text-neutral-800 text-sm font-bold">
               방문 목적
             </Text>
             <View className="gap-2">
-              {/* 목적: 검진 / 초음파 / 배란확인 / 상담 */}
+              {/* 검진 / 초음파 / 배란확인 / 상담 */}
               <View className="mx-5 flex-row gap-2 flex-wrap">
                 {purposeItems.slice(0, 4).map((item) => (
                   <TouchableOpacity
                     key={item.id}
-                    onPress={() => setPurpose(item.id)}
+                    onPress={() => {
+                      setPurpose(item.id);
+                      setPurposeInput("");
+                    }}
                   >
                     <Tag fill={purpose === item.id} content={item.label} />
                   </TouchableOpacity>
                 ))}
               </View>
 
-              {/* 목적: 기타 */}
-              <View className="mx-5 flex-row gap-2">
+              {/* 기타 + 입력창 (조건부 렌더링) */}
+              <View className="mx-5 flex-row gap-2 items-center">
                 {purposeItems.slice(4).map((item) => (
                   <TouchableOpacity
                     key={item.id}
@@ -110,6 +124,24 @@ export function HospitalBottomSheet({
                     <Tag fill={purpose === item.id} content={item.label} />
                   </TouchableOpacity>
                 ))}
+
+                {purpose === 5 && (
+                  <View className="flex-1 border-b border-neutral-400">
+                    {purposeInput === "" && (
+                      <Text
+                        className="absolute text-neutral-400 text-sm"
+                        style={{ left: 4, top: 10 }}
+                      >
+                        방문 목적을 입력해주세요.
+                      </Text>
+                    )}
+                    <TextInput
+                      value={purposeInput}
+                      onChangeText={setPurposeInput}
+                      className="text-sm"
+                    />
+                  </View>
+                )}
               </View>
             </View>
           </View>
