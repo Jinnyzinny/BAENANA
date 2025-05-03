@@ -9,7 +9,7 @@ import {
   View,
 } from "react-native";
 import { FormatDate } from "../../../utils/formatDate";
-import { ScheduleButton } from "../scheduleButton/inde";
+import { ScheduleButton } from "../scheduleButton";
 
 export function ScheduleModal({
   visible,
@@ -42,7 +42,7 @@ export function ScheduleModal({
                 <Text className="text-lg font-bold">{FormatDate(date)}</Text>
               </View>
               <TouchableOpacity onPress={onClose}>
-                <X />
+                <X color="#A3A3A3" size={24} />
               </TouchableOpacity>
             </View>
             <ScrollView>

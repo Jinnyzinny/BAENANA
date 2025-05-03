@@ -132,7 +132,7 @@ export function TimerModal({
                   </Svg>
 
                   <View className="absolute items-center justify-center">
-                    <Text className="text-2xl font-bold text-violet-400">
+                    <Text className="text-2xl font-bold text-neutral-600">
                       {formattedTime}
                     </Text>
                   </View>
