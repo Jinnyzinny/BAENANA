@@ -14,12 +14,14 @@ import { HeaderLogo } from "../../components/common/headerLogo";
 import { HospitalBottomSheet } from "../../components/calendar/hospitalBottomSheet";
 import { SymptomBottomSheet } from "../../components/calendar/symptomBottomSheet";
 import { MedicineBottomSheet } from "../../components/calendar/medicineBottomSheet";
+import { CustomButton } from "../../components/common/customButton";
+import { PeriodBottomSheet } from "../../components/calendar/periodBottomSheet";
 
 export function CalendarScreen() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [selectedType, setSelectedType] = useState<
-    "symptom" | "hospital" | "medicine" | null
+    "period" | "symptom" | "hospital" | "medicine" | null
   >(null);
   const sheetRef = useRef<Modalize>(null);
   const { height } = useWindowDimensions();
@@ -37,6 +39,13 @@ export function CalendarScreen() {
     });
   }
 
+  function handlePeriodOpen() {
+    setSelectedType("period");
+    InteractionManager.runAfterInteractions(() => {
+      sheetRef.current?.open();
+    });
+  }
+
   return (
     <>
       <SafeAreaView className="flex-1">
@@ -45,6 +54,11 @@ export function CalendarScreen() {
           <View className="flex-1 mx-5 gap-3">
             <Monthly onDateSelect={handleDatePress} />
             <ScheduleList />
+            <CustomButton
+              fill={true}
+              content="월경일 입력"
+              onPress={handlePeriodOpen}
+            />
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -60,6 +74,11 @@ export function CalendarScreen() {
       />
 
       {/* 바텀 시트 */}
+      {selectedType === "period" && (
+        // 월경일 입력
+        <PeriodBottomSheet height={height} sheetRef={sheetRef} period={6} />
+      )}
+
       {selectedType === "symptom" && (
         // 월경 증상 입력
         <SymptomBottomSheet
@@ -68,6 +87,7 @@ export function CalendarScreen() {
           selectedDate={selectedDate}
         />
       )}
+
       {selectedType === "hospital" && (
         // 병원 입력
         <HospitalBottomSheet
@@ -76,6 +96,7 @@ export function CalendarScreen() {
           selectedDate={selectedDate}
         />
       )}
+
       {selectedType === "medicine" && (
         // 복용약 입력
         <MedicineBottomSheet
