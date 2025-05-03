@@ -38,10 +38,8 @@ public class CalendarServiceImpl implements CalendarService {
                                 user.getUserId(),
                                 localDate,
                                 localDate)
-                        .orElse(null);
-        if (menstrualCycle == null) {
-            throw new NoSuchElementException();
-        }
+                        .orElseThrow(NoSuchElementException::new);
+
         //해당 날짜가 포함된 주기정보의 해당 날짜 세부 정보를 얻어낸다.
         MenstrualDailyLog dailyLog =
                 menstrualDailyLogRepository
