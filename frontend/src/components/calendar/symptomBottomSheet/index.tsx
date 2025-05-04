@@ -1,7 +1,6 @@
 import { RefObject, useState } from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { Modalize } from "react-native-modalize";
-import { FormatDate } from "../../../utils/formatDate";
 import { SelectLevel } from "../selectLevel";
 import { CustomButton } from "../../common/customButton";
 import { SelectTag } from "../../common/selectTag";
@@ -39,16 +38,14 @@ export function SymptomBottomSheet({
   }
 
   return (
-    <Modalize ref={sheetRef} snapPoint={height * 0.671}>
+    <Modalize ref={sheetRef} snapPoint={height * 0.655}>
       {/* 헤더 */}
       <View className="mx-5 mt-7 mb-5 flex-row items-start justify-start gap-2">
         <Image
           source={require("../../../assets/images/mascot.png")}
           className="w-10 h-10"
         />
-        <Text className="text-lg font-bold self-center">
-          {FormatDate(selectedDate)}
-        </Text>
+        <Text className="text-lg font-bold self-center">월경 증상 입력</Text>
       </View>
       <ScrollView>
         <View className="mx-7 gap-7">

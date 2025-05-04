@@ -10,13 +10,13 @@ export function SelectLevel({
   contents: string[];
 }) {
   return (
-    <>
+    <View>
       <View className="border-2 border-violet-400 rounded-xl overflow-hidden">
         <View className="flex-row w-full">
           {/* 첫 번째 선택지 */}
           <TouchableOpacity className="w-1/5" onPress={() => setSelected(1)}>
             <View
-              className={`p-4 ${selected >= 1 ? "bg-violet-400" : "bg-violet-50"}`}
+              className={`p-3 ${selected >= 1 ? "bg-violet-400" : "bg-violet-50"}`}
             />
           </TouchableOpacity>
 
@@ -29,7 +29,7 @@ export function SelectLevel({
           {/* 두 번째 선택지 */}
           <TouchableOpacity className="w-1/5" onPress={() => setSelected(2)}>
             <View
-              className={`p-4 ${selected >= 2 ? "bg-violet-400" : "bg-violet-50"}`}
+              className={`p-3 ${selected >= 2 ? "bg-violet-400" : "bg-violet-50"}`}
             />
           </TouchableOpacity>
 
@@ -42,7 +42,7 @@ export function SelectLevel({
           {/* 세 번째 선택지 */}
           <TouchableOpacity className="w-1/5" onPress={() => setSelected(3)}>
             <View
-              className={`p-4 ${selected >= 3 ? "bg-violet-400" : "bg-violet-50"}`}
+              className={`p-3 ${selected >= 3 ? "bg-violet-400" : "bg-violet-50"}`}
             />
           </TouchableOpacity>
 
@@ -55,7 +55,7 @@ export function SelectLevel({
           {/* 네 번째 선택지 */}
           <TouchableOpacity className="w-1/5" onPress={() => setSelected(4)}>
             <View
-              className={`p-4 ${selected >= 4 ? "bg-violet-400" : "bg-violet-50"}`}
+              className={`p-3 ${selected >= 4 ? "bg-violet-400" : "bg-violet-50"}`}
             />
           </TouchableOpacity>
 
@@ -68,7 +68,7 @@ export function SelectLevel({
           {/* 다섯 번째 선택지 */}
           <TouchableOpacity className="w-1/5" onPress={() => setSelected(5)}>
             <View
-              className={`p-4 ${selected >= 5 ? "bg-violet-400" : "bg-violet-50"}`}
+              className={`p-3 ${selected >= 5 ? "bg-violet-400" : "bg-violet-50"}`}
             />
           </TouchableOpacity>
         </View>
@@ -85,6 +85,6 @@ export function SelectLevel({
           {contents[2]}
         </Text>
       </View>
-    </>
+    </View>
   );
 }

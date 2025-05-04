@@ -1,0 +1,16 @@
+{
+  "date": "2025-05-05",
+  "start_date": "2025-05-03",
+  "end_date": "2025-05-08",
+  "bleeding_level": 1,
+  "pain_level": 3,
+  "symptom": [1, 6],
+  "hospital_reservation": {
+    "reservation_date": "2025-05-05 14:00",
+    "purpose": "검진"
+  },
+  "medication": {
+    "injection_time": "2025-05-05 19:00",
+    "memo": "메모"
+  }
+}

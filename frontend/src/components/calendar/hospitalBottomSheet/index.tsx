@@ -41,7 +41,9 @@ export function HospitalBottomSheet({
           source={require("../../../assets/images/mascot.png")}
           className="w-10 h-10"
         />
-        <Text className="text-lg font-bold self-center">병원 예약 일정</Text>
+        <Text className="text-lg font-bold self-center">
+          병원 예약 일정 입력
+        </Text>
       </View>
       <ScrollView>
         <View className="mx-7 gap-7">

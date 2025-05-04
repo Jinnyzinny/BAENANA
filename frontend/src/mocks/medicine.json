@@ -1,0 +1,42 @@
+[
+  {
+    "medication_id": 1,
+    "name": "복용약 1",
+    "start_date": "2025-01-28",
+    "end_date": "2025-02-03",
+    "time_taken": ["09:00", "12:00", "15:00"],
+    "memo": "첫 번째 메모"
+  },
+  {
+    "medication_id": 2,
+    "name": "복용약 2",
+    "start_date": "2025-02-12",
+    "end_date": "2025-02-15",
+    "time_taken": ["09:00", "21:00"],
+    "memo": "두 번째 메모"
+  },
+  {
+    "medication_id": 3,
+    "name": "복용약 3",
+    "start_date": "2025-03-05",
+    "end_date": "2025-03-12",
+    "time_taken": ["12:00"],
+    "memo": "세 번째 메모"
+  },
+  {
+    "medication_id": 4,
+    "name": "복용약 4",
+    "start_date": "2025-04-01",
+    "end_date": "2025-04-15",
+    "time_taken": ["19:00"],
+    "memo": "네 번째 메모"
+  },
+  {
+    "medication_id": 5,
+    "name": "복용약 5",
+    "start_date": "2025-05-04",
+    "end_date": "2025-05-11",
+    "time_taken": ["20:00"],
+    "memo": "다섯 번째 메모"
+  }
+]
