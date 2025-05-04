@@ -6,6 +6,8 @@ import com.ssafy.backend.common.exception.BusinessBaseException;
 import com.ssafy.backend.common.exception.ForbiddenException;
 import com.ssafy.backend.common.exception.UnauthorizedException;
 import com.ssafy.backend.notification.exception.NotificationNotFoundException;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.access.AccessDeniedException;
 
 import lombok.extern.slf4j.Slf4j;
@@ -14,9 +16,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @Slf4j
-@ControllerAdvice // 모든 컨트롤러에서 발생하는 예외를 잡아서 처리
+@RestControllerAdvice
+//@ControllerAdvice // 모든 컨트롤러에서 발생하는 예외를 잡아서 처리
 public class GlobalExceptionHandler {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class) // HttpRequestMethodNotSupportedException 예외를 잡아서 처리
     protected ResponseEntity<ErrorResponse> handle(HttpRequestMethodNotSupportedException e) {
@@ -61,11 +68,5 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public ApiResponse<?> handleAccessDeniedException(AccessDeniedException e) {
         return ApiResponse.error("ACCESS_DENIED", HttpStatus.FORBIDDEN, "접근 권한이 없습니다.");
-    }
-
-    // 기타 예외 처리
-    @ExceptionHandler(Exception.class)
-    public ApiResponse<?> handleException(Exception e) {
-        return ApiResponse.error("SERVER_ERROR", HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류가 발생했습니다.");
     }
 }

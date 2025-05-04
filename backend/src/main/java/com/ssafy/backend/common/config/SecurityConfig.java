@@ -58,12 +58,12 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/api/faq", "GET"),
                                 new AntPathRequestMatcher("/api/faq/*", "GET")
                         ).permitAll()
-                        .anyRequest().authenticated()
                         // 관리자 전용 경로 설정
                         .requestMatchers(
                                 new AntPathRequestMatcher("/api/notifications/admin/**"),
                                 new AntPathRequestMatcher("/api/faq/admin/**")
                         ).hasAuthority("ADMIN")
+                        .anyRequest().authenticated()
                 )
 
                 .oauth2Login(oauth -> oauth
