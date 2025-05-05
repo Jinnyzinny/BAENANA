@@ -10,6 +10,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateMenstrualCycleReqDto {
-    private LocalDate start_date;
-    private LocalDate end_date;
+    LocalDate start_date;
+    LocalDate end_date;
 }

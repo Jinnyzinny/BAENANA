@@ -16,7 +16,7 @@ public class GetAllMedicationResDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    static class each_medication_record{
+    public static class each_medication_record{
         private String name;
         private String start_date;
         private String end_date;

@@ -5,7 +5,6 @@ import com.ssafy.backend.home.dto.response.MedicineResDto;
 import com.ssafy.backend.home.dto.response.RemainDayResDto;
 import com.ssafy.backend.hospital.entity.HospitalReservation;
 import com.ssafy.backend.hospital.repository.HospitalReservationRepository;
-import com.ssafy.backend.medication.entity.Medication;
 import com.ssafy.backend.medication.repository.MedicationRepository;
 import com.ssafy.backend.menstrual.entity.MenstrualCycle;
 import com.ssafy.backend.menstrual.repository.MenstrualCycleRepository;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -70,16 +68,23 @@ public class HomeServiceImpl implements HomeService {
 //                        엄청 길긴 한데 UserId와 오늘 날짜 이후로 찾은 결과중 첫번째
 //                        이걸 가져오면 오늘 이후의 첫번째 당면한 예약 결과를 가져온다.
                         .findFirstByUser_UserIdAndReservationDateAfterOrderByReservationDate(userId, LocalDateTime.now())
-                        .orElseThrow(
-                                ()->new NoSuchElementException("아무 예약도 없습니다.")
+                        .orElse(
+                                null
                         );
-        return getMessage(hospitalReservation);
+        return hospitalReservation == null ?
+                HospitalReservationResDto.builder()
+                        .reservation(
+                                "아무 예약도 없습니다."
+                        )
+                        .build() :
+                getMessage(hospitalReservation);
     }
+
     // 00분일 경우 분을 표시하기 싫어서 만든 Method
-    public HospitalReservationResDto getMessage(HospitalReservation hospitalReservation){
+    public HospitalReservationResDto getMessage(HospitalReservation hospitalReservation) {
         LocalDateTime dateTime = hospitalReservation.getReservationDate();
 
-        if(dateTime.getMinute()==0){
+        if (dateTime.getMinute() == 0) {
             return HospitalReservationResDto.builder()
                     .reservation(
                             String.format(

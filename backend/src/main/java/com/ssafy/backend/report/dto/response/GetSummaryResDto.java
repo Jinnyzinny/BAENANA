@@ -16,7 +16,7 @@ public class GetSummaryResDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor    
-    static class Menstrual{
+    public static class Menstrual{
         private String bleeding_level;
         private Boolean anomal;
         private String symptom;
@@ -25,7 +25,7 @@ public class GetSummaryResDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    static class Stress{
+    public static class Stress{
         private String stress;
         private Boolean anomal;
     }

@@ -17,7 +17,8 @@ public interface MenstrualCycleRepository extends JpaRepository<MenstrualCycle,L
     Optional<List<MenstrualCycle>> findByUser_UserIdOrderByStartDateDesc(Long userId);
 //    사용자의 주기 중 최근 6개월만 찾는다
     Optional<List<MenstrualCycle>> findTop6ByUser_UserIdOrderByStartDateDesc(Long userId);
-
+    //    사용자의 주기 중 최근 4개월만 찾는다(3개의 주기를 뽑아내기 위해서)
+    Optional<List<MenstrualCycle>> findTop4ByUser_UserIdOrderByStartDateDesc(Long userId);
     /*특정 날짜를 주고 시작일 뒤와  */
     Optional<MenstrualCycle> findByUser_UserIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(Long userId, LocalDate startDate, LocalDate endDate);
 
