@@ -4,6 +4,7 @@ import com.ssafy.backend.medication.entity.Medication;
 import com.ssafy.backend.medication.repository.custom.MedicationCustomRepository;
 import com.ssafy.backend.report.dto.response.GetAllMedicationResDto;
 import com.ssafy.backend.report.dto.response.GetRecentMedicationResDto;
+import com.ssafy.backend.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,8 +21,8 @@ public class MedicationReportServiceImpl implements MedicationReportService {
      * ===== Report Domain Medication 정보 제공 =====
      * */
     @Override
-    public GetRecentMedicationResDto getRecentMedication() {
-        Long userId = 0L;
+    public GetRecentMedicationResDto getRecentMedication(User user) {
+        Long userId = user.getUserId();
         List<GetRecentMedicationResDto.MedicationInfo> medicationInfoList = new ArrayList<>();
 
         List<Medication> medicationList =
@@ -56,7 +57,7 @@ public class MedicationReportServiceImpl implements MedicationReportService {
     }
 
     @Override
-    public GetAllMedicationResDto getAllMedication() {
+    public GetAllMedicationResDto getAllMedication(User user) {
         return null;
     }
 

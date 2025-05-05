@@ -13,6 +13,6 @@ public interface MedicationRepository extends JpaRepository<Medication,Long> {
     Optional<Medication> findByNameAndUser_UserId(String medication_name, Long userId);
 //    사용자가 복용한 의약품 리스트를 찾는다
     Optional<List<Medication>> findByUser_UserId(Long userUserId);
-//    의약품 ID로 의약품 객체를 찾는다.
+
     Optional<Medication> findByMedicationId(Long id);
 }
