@@ -7,6 +7,9 @@ import com.ssafy.backend.menstrual.dto.request.UpdateMenstrualCycleDailyLogReqDt
 import com.ssafy.backend.menstrual.entity.MenstrualDailyLog;
 import com.ssafy.backend.menstrual.repository.MenstrualCycleRepository;
 import com.ssafy.backend.menstrual.repository.MenstrualDailyLogRepository;
+import com.ssafy.backend.symptom.entity.SymptomLog;
+import com.ssafy.backend.symptom.entity.SymptomType;
+import com.ssafy.backend.symptom.repository.SymptomLogRepository;
 import com.ssafy.backend.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -19,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MenstrualCycleLogServiceImpl implements MenstrualCycleLogService {
     private final MenstrualDailyLogRepository menstrualDailyLogRepository;
     private final MenstrualCycleRepository menstrualCycleRepository;
+    private final SymptomLogRepository symptomLogRepository;
 
     @Override
     public MessageResDto addMenstrualCycleDailyLog(User user, AddMenstrualCycleDailyLogReqDto request) {
@@ -33,6 +37,11 @@ public class MenstrualCycleLogServiceImpl implements MenstrualCycleLogService {
                         .painLevel(request.getPain_level())
                         .isStart(request.getIs_start())
                         .isEnd(request.getIs_end())
+//                        .symptomLog(
+//                                SymptomLog.builder()
+//                                        .symptom()
+//                                        .build()
+//                        )
                         .build()
         );
         return MessageResDto.builder()

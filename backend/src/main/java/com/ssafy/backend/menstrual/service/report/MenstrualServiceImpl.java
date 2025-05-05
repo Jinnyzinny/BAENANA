@@ -93,7 +93,7 @@ public class MenstrualServiceImpl implements MenstrualService {
         List<MenstrualCycle> menstrualCycleList =
                 menstrualCycleRepository.findTop6ByUser_UserIdOrderByStartDateDesc(userId).orElseThrow();
 
-        GetCycleDto cycle =  getCycleInfo(menstrualCycleList);
+        GetCycleDto cycle =  getCycleTerm(menstrualCycleList);
         return GetRecentMenstrualResDto.builder()
                 .average_cycle(cycle.getAverageCycle())
                 .max_cycle(cycle.getMaxCycle())
@@ -108,7 +108,7 @@ public class MenstrualServiceImpl implements MenstrualService {
         List<MenstrualCycle> menstrualCycleList =
                 menstrualCycleRepository.findByUser_UserIdOrderByStartDateDesc(userId).orElseThrow();
 
-        GetCycleDto cycle =  getCycleInfo(menstrualCycleList);
+        GetCycleDto cycle =  getCycleTerm(menstrualCycleList);
         return GetAllMenstrualResDto.builder()
                 .average_cycle(cycle.getAverageCycle())
                 .max_cycle(cycle.getMaxCycle())
@@ -116,7 +116,7 @@ public class MenstrualServiceImpl implements MenstrualService {
                 .build();
     }
 
-    public GetCycleDto getCycleInfo(List<MenstrualCycle> menstrualCycleList) {
+    public GetCycleDto getCycleTerm(List<MenstrualCycle> menstrualCycleList) {
         int cycleSum = 0;
         int maxCycle = Integer.MIN_VALUE;
         for (int i = 1; i < menstrualCycleList.size(); i++) {
@@ -124,9 +124,8 @@ public class MenstrualServiceImpl implements MenstrualService {
             LocalDate prevStartDate = menstrualCycleList.get(i - 1).getStartDate();
 
             maxCycle = Math.max(maxCycle, (int) ChronoUnit.DAYS.between(prevStartDate, startDate));
-            cycleSum += (int) ChronoUnit.DAYS.between(prevStartDate, startDate);
+            cycleSum += (int) ChronoUnit.DAYS.between(startDate, prevStartDate);
         }
-
         List<GetRecentMenstrualResDto.each_cycle_record> cycleRecord = new ArrayList<>();
 
         for (MenstrualCycle cycle : menstrualCycleList) {
