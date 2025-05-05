@@ -7,8 +7,6 @@ import com.ssafy.backend.common.exception.ForbiddenException;
 import com.ssafy.backend.common.exception.UnauthorizedException;
 import com.ssafy.backend.faq.exception.FaqNotFoundException;
 import com.ssafy.backend.notification.exception.NotificationNotFoundException;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.access.AccessDeniedException;
 
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +18,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @Slf4j
 @RestControllerAdvice
@@ -48,20 +45,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(
                 ErrorResponse.of(errorCode),
                 errorCode.getStatus());
-    }
-
-    // 공지사항(notification) 예외처리
-    @ExceptionHandler(NotificationNotFoundException.class)
-    public ApiResponse<?> handleNotificationNotFoundException(NotificationNotFoundException e) {
-        return ApiResponse.error("NOTIFICATION_NOT_FOUND", HttpStatus.NOT_FOUND, e.getMessage());
-    }
-
-    // FAQ 예외처리
-    @ExceptionHandler(FaqNotFoundException.class)
-    public ResponseEntity<ApiResponse<?>> handleFaqNotFoundException(FaqNotFoundException e) {
-        log.error("FAQ not found: {}", e.getMessage());
-        ApiResponse<?> response = ApiResponse.error("FAQ_NOT_FOUND", HttpStatus.NOT_FOUND, e.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ForbiddenException.class)
