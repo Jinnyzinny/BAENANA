@@ -1,6 +1,9 @@
 package com.ssafy.backend.common.security;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.ssafy.backend.common.ApiResponse;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,14 +17,25 @@ import java.io.IOException;
 
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
+
+    // 생성자에서 ObjectMapper를 한 번만 초기화
+    public CustomAuthenticationEntryPoint() {
+        this.objectMapper = new ObjectMapper();
+        // LocalDateTime 직렬화를 위한 모듈 등록
+        objectMapper.registerModule(new JavaTimeModule());
+        // UTF-8 인코딩 설정
+        objectMapper.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, true);
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        objectMapper.findAndRegisterModules(); // LocalDateTime 직렬화를 위해 필요
+    }
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws IOException, ServletException {
 
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8"); // UTF-8 명시
 
         // 경로에 따라 다른 메시지 반환
         String path = request.getRequestURI();
@@ -44,7 +58,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
                     HttpStatus.UNAUTHORIZED, "인증이 필요합니다.");
         }
 
-        objectMapper.findAndRegisterModules(); // LocalDateTime 직렬화를 위해 필요
         response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
     }
 }
