@@ -3,13 +3,19 @@ package com.ssafy.backend.symptom.entity;
 import com.ssafy.backend.menstrual.entity.MenstrualDailyLog;
 import com.ssafy.backend.user.entity.User;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 import java.time.LocalDate;
 
 @Entity
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class SymptomLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
