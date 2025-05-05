@@ -36,26 +36,43 @@ public class MenstrualServiceImpl implements MenstrualService {
         int cycleSum = 0;
         int periodSum = 0;
 
+        int maxCycle=Integer.MIN_VALUE;
+        int minCycle=Integer.MAX_VALUE;
+
         for (int i = 0; i < menstrualCycleList.size(); i++) {
             LocalDate endDate = menstrualCycleList.get(i).getEndDate();
             LocalDate startDate = menstrualCycleList.get(i).getStartDate();
 
             if (i >= 1) {
                 LocalDate prevStartDate = menstrualCycleList.get(i - 1).getStartDate();
-                cycleSum += (int) ChronoUnit.DAYS.between(prevStartDate, startDate);
+                int cycle=(int) ChronoUnit.DAYS.between(prevStartDate, startDate);
+                cycleSum += cycle;
+
+                maxCycle = Math.max(maxCycle, cycle);
+                minCycle = Math.min(minCycle, cycle);
             }
             periodSum += (int) ChronoUnit.DAYS.between(startDate, endDate);
         }
         int avgCycle = cycleSum / menstrualCycleList.size();
         int avgPeriod = periodSum / menstrualCycleList.size();
 
-        return GetMenstrualInfoResDto.builder()
-                .cycle(avgCycle)
-                .period(avgPeriod)
+        if(maxCycle-minCycle>=7){
+            return GetMenstrualInfoResDto.builder()
+                    .cycle(avgCycle)
+                    .period(avgPeriod)
 //                정상 판별 어떻게 할 예정??
-                .is_cycle_normal(null)
-                .is_period_normal(null)
-                .build();
+                    .is_cycle_normal(true)
+                    .is_period_normal(null)
+                    .build();
+        } else {
+            return GetMenstrualInfoResDto.builder()
+                    .cycle(avgCycle)
+                    .period(avgPeriod)
+//                정상 판별 어떻게 할 예정??
+                    .is_cycle_normal(false)
+                    .is_period_normal(null)
+                    .build();
+        }
     }
 
     @Override

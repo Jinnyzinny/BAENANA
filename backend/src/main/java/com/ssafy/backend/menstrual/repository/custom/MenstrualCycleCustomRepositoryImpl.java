@@ -1,6 +1,7 @@
 package com.ssafy.backend.menstrual.repository.custom;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssafy.backend.menstrual.dto.repository.GetMaxCycleAndMinCycle;
 import com.ssafy.backend.menstrual.entity.MenstrualCycle;
 import com.ssafy.backend.menstrual.entity.QMenstrualCycle;
 import com.ssafy.backend.menstrual.entity.QMenstrualDailyLog;
