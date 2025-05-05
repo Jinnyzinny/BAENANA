@@ -7,11 +7,9 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
 public class AddHospitalReservationReqDto {
-    private String hospitalName;
-    private LocalDateTime reservationDate;
-    private String purpose;
-    private String status;
+    String hospital_name;
+    LocalDateTime reservation_date;
+    String purpose;
+    String status;
 }

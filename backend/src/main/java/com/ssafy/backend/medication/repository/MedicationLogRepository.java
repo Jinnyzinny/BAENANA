@@ -9,5 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface MedicationLogRepository extends JpaRepository<MedicationLog,Long> {
+//    의약품 ID로 날짜 순서대로
     Optional<List<MedicationLog>> findByMedication_MedicationIdOrderByDateDesc(Long medicationMedicationId);
 }

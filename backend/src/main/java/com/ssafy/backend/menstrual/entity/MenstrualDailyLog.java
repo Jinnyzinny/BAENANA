@@ -1,12 +1,18 @@
 package com.ssafy.backend.menstrual.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Entity
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class MenstrualDailyLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,7 +22,7 @@ public class MenstrualDailyLog {
      * =====연관 관계=====
      * */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
+    @JoinColumn(name = "cycle_id")
     private MenstrualCycle cycle;
 
     /*
