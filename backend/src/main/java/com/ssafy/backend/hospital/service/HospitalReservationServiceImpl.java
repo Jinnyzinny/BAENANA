@@ -42,7 +42,7 @@ public class HospitalReservationServiceImpl implements HospitalReservationServic
                                                 new NoSuchElementException("병원예약을 할 회원이 존재하지 않습니다")
                                 )
                         )
-                        .purpose(PurposeType.CHECKUP)
+                        .purpose(PurposeType.fromDescription(request.getPurpose()))
                         .status(StatusType.COMPLETE_RESERVATION)
                         .build()
         );
