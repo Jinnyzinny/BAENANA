@@ -47,6 +47,8 @@ public class MedicationServiceImpl implements MedicationService {
 //                                약을 저장하려고 하는데 User가 없으면 예외 처리
                                 .user(userRepository.findById(userId).orElseThrow())
                                 .description(request.getMemo())
+//                                        .startDate()
+//                                        .endDate()
                                 .build())
                 );
         List<MedicationLog> medicationLogList = medication.getMedicationLogList();
@@ -81,8 +83,12 @@ public class MedicationServiceImpl implements MedicationService {
          * */
         List<Medication> medication =
                 medicationRepository.findByUser_UserId(userId).orElseThrow(NoSuchElementException::new);
+
+        if(medication.isEmpty()){
+            return null;
+        }
         /*
-         * 해당 종류를 순회하면서 의약품 기록을 가져온다.
+         * 해당 종류를 순회하면서 의약품 기록을 return한다.
          * */
         return medication.stream().map(
                 m -> {
@@ -99,7 +105,7 @@ public class MedicationServiceImpl implements MedicationService {
                             .start_date(log.get(log.size() - 1).getDate().toString())
                             .end_date(log.get(0).getDate().toString())
 //                            .time_taken()
-                            .memo(m.getDescription())
+//                            .memo(m.getDescription())
                             .build();
                 }
         ).toList();

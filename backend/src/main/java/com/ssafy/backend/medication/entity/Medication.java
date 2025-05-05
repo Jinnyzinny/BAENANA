@@ -4,6 +4,7 @@ import com.ssafy.backend.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -33,4 +34,6 @@ public class Medication {
     private String name;
     private String defaultDose;
     private String description;
+//    private LocalDate startDate;
+//    private LocalDate endDate;
 }

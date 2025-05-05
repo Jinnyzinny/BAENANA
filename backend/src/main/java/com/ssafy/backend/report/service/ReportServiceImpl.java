@@ -1,6 +1,7 @@
 package com.ssafy.backend.report.service;
 
 import com.ssafy.backend.menstrual.entity.MenstrualCycle;
+import com.ssafy.backend.menstrual.entity.MenstrualDailyLog;
 import com.ssafy.backend.menstrual.repository.MenstrualCycleRepository;
 import com.ssafy.backend.menstrual.repository.MenstrualDailyLogRepository;
 import com.ssafy.backend.report.dto.response.GetAlarmResDto;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -39,12 +41,12 @@ public class ReportServiceImpl implements ReportService {
             minCycle = Math.min(minCycle, cycle);
         }
 
-        if(maxCycle-minCycle>=7){
+        if (maxCycle - minCycle >= 7) {
             return GetAlarmResDto.builder()
                     .menstraul_is_normal(false)
                     .message("최근 월경 주기가 불규칙합니다.")
                     .build();
-        } else{
+        } else {
             return GetAlarmResDto.builder()
                     .menstraul_is_normal(true)
                     .message("최근 월경 주기가 규칙적입니다.")
@@ -54,6 +56,29 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public GetSummaryResDto getSummary(User user) {
-        return null;
+        /*
+         * userId를 얻는다.
+         * */
+        Long userId = user.getUserId();
+
+        MenstrualDailyLog dailyLog =
+                menstrualDailyLogRepository.findByCycle_User_UserIdAndDate(userId, LocalDate.now()).orElseThrow();
+
+
+        return GetSummaryResDto.builder()
+//                .menstrual(
+//                        GetSummaryResDto.Menstrual.builder()
+//                                .anomal()
+//                                .bleeding_level(dailyLog.getBleedingLevel())
+//                                .symptom()
+//                                .build()
+//                )
+//                .stress(
+//                        GetSummaryResDto.Stress.builder()
+//                                .anomal()
+//                                .stress()
+//                                .build()
+//                )
+                .build();
     }
 }
