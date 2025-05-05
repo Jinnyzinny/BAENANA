@@ -13,6 +13,7 @@ import { ScheduleButton } from "../scheduleButton";
 import { PeriodInfo } from "../periodInfo";
 import dailyMock from "../../../mocks/daily.json";
 import { Daily } from "../../../types/Daily";
+import { HospitalInfo } from "../hospitalInfo";
 
 export function ScheduleModal({
   visible,
@@ -61,9 +62,9 @@ export function ScheduleModal({
                 <PeriodInfo data={data} />
                 <View className="w-full h-[0.5px] my-3 bg-neutral-300" />
 
-                {/* 토글 형태의 컴포넌트 추가 예정 */}
-                {/* 안내선 */}
-                {/* <View className="w-full h-[0.5px] my-3 bg-neutral-300" /> */}
+                {/* 토글 - 병원 관련 정보보 */}
+                <HospitalInfo data={data} />
+                <View className="w-full h-[0.5px] my-3 bg-neutral-300" />
 
                 {/* 토글 형태의 컴포넌트 추가 예정 */}
                 {/* 안내선 */}

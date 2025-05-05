@@ -9,7 +9,7 @@ import { CustomButton } from "../../common/customButton";
 export function PeriodInfo({ data }: { data: Daily }) {
   const color: string = "#A3A3A3";
   const size: number = 18;
-  const [isPeriodOpen, setIsPeriodOpen] = useState<boolean>(false);
+  const [isToggleOpen, setIsToggleOpen] = useState<boolean>(false);
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
   const [selectedPeriod, setSelectedPeriod] = useState<0 | 1 | 2 | 3 | 4 | 5>(
@@ -38,7 +38,7 @@ export function PeriodInfo({ data }: { data: Daily }) {
   // 수정 시 토글 열기, 상태 변경
   function handleEdit() {
     setIsEdit(true);
-    setIsPeriodOpen(true);
+    setIsToggleOpen(true);
   }
 
   // 수정 취소(입력 내용 초기화, 상태 변경)
@@ -87,8 +87,8 @@ export function PeriodInfo({ data }: { data: Daily }) {
           </View>
         </View>
         {/* 토글 */}
-        <TouchableOpacity onPress={() => setIsPeriodOpen(!isPeriodOpen)}>
-          {isPeriodOpen ? (
+        <TouchableOpacity onPress={() => setIsToggleOpen(!isToggleOpen)}>
+          {isToggleOpen ? (
             <ChevronUp color={color} size={size} />
           ) : (
             <ChevronDown color={color} size={size} />
@@ -97,7 +97,7 @@ export function PeriodInfo({ data }: { data: Daily }) {
       </View>
 
       {/* 본문 */}
-      {isPeriodOpen &&
+      {isToggleOpen &&
         (isEdit ? (
           // 수정 중인 경우
           <>

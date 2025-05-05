@@ -6,12 +6,16 @@ import DatePicker from "react-native-date-picker";
 export function TimeDropdown({
   title,
   onChange,
+  hour = 9,
+  minute = 0,
 }: {
   title: string;
   onChange: (time: Date) => void;
+  hour?: number;
+  minute?: number;
 }) {
   const [open, setOpen] = useState(false);
-  const [time, setTime] = useState(new Date(0, 0, 0, 9, 0));
+  const [time, setTime] = useState(new Date(0, 0, 0, hour, minute));
 
   return (
     <View className="flex-1 pb-3 border-b border-neutral-400">

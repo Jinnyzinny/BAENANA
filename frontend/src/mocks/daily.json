@@ -6,11 +6,13 @@
   "pain_level": 3,
   "symptom": [1, 6],
   "hospital_reservation": {
+    "hospital_name": "더블유 여성병원",
     "reservation_date": "2025-05-05 14:00",
     "purpose": "검진"
   },
   "medication": {
-    "injection_time": "2025-05-05 19:00",
+    "name":"오가루트란주 주사",
+    "injection_time": ["2025-05-05 19:00"],
     "memo": "메모"
   }
 }

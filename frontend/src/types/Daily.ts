@@ -6,11 +6,13 @@ export type Daily = {
   pain_level: 0 | 1 | 2 | 3 | 4 | 5;
   symptom: number[];
   hospital_reservation: {
+    hospital_name: string;
     reservation_date: string;
     purpose: string;
   };
   medication: {
-    injection_time: string;
+    name: string;
+    injection_time: string[];
     memo: string;
   };
 };

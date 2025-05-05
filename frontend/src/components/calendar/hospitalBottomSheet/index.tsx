@@ -68,10 +68,10 @@ export function HospitalBottomSheet({
             </View>
           </View>
 
-          {/* 병원 예약 일시 */}
+          {/* 예약 일시 */}
           <View className="gap-3">
             <Text className="text-neutral-800 text-sm font-bold ">
-              병원 예약 일시
+              예약 일시
             </Text>
             <View className="flex-row mx-5 items-center justify-between">
               <DateDropdown
