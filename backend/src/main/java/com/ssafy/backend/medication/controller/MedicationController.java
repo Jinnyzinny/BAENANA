@@ -5,9 +5,11 @@ import com.ssafy.backend.medication.dto.request.UpdateMedicationScheduleReqDto;
 import com.ssafy.backend.medication.dto.response.GetMedicationResDto;
 import com.ssafy.backend.medication.service.calendar.MedicationService;
 import com.ssafy.backend.home.dto.response.MessageResDto;
+import com.ssafy.backend.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,30 +23,32 @@ public class MedicationController {
 
     @PostMapping
     public ResponseEntity<MessageResDto> addMedication(
-//            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal User user,
             @RequestBody AddMedicationScheduleReqDto request) {
-        return ResponseEntity.ok(medicationService.addMedication(request));
+        return ResponseEntity.ok(medicationService.addMedication(user,request));
     }
 
     @GetMapping
-    public ResponseEntity<List<GetMedicationResDto>> getMedication(){
-        return ResponseEntity.ok(medicationService.getMedication());
+    public ResponseEntity<List<GetMedicationResDto>> getMedication(
+            @AuthenticationPrincipal User user
+    ){
+        return ResponseEntity.ok(medicationService.getMedication(user));
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<MessageResDto> updateMedication(
-//            @AuthenticationPrincipal UserDetails UserDetails,
+            @AuthenticationPrincipal User user,
             @RequestBody UpdateMedicationScheduleReqDto request,
             @PathVariable Long id
     ){
-        return ResponseEntity.ok(medicationService.updateMedication(request,id));
+        return ResponseEntity.ok(medicationService.updateMedication(user,request,id));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<MessageResDto> deleteMedication(
-//            @AuthenticationPrincipal UserDetails UserDetails,
+            @AuthenticationPrincipal User user,
             @PathVariable Long id
     ){
-        return ResponseEntity.ok(medicationService.deleteMedication(id));
+        return ResponseEntity.ok(medicationService.deleteMedication(user,id));
     }
 }

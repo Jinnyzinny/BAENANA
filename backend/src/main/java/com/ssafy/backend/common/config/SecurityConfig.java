@@ -72,9 +72,10 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/auth/**"),
                                 new AntPathRequestMatcher("/public/**"),
 
-                                // 공지사항 공개 경로 추가
+                                // 공지사항 공개 경로
                                 new AntPathRequestMatcher("/api/notifications", "GET"),
                                 new AntPathRequestMatcher("/api/notifications/*", "GET"),
+                                // FAQ 관련 공개 경로
                                 new AntPathRequestMatcher("/api/faq", "GET"),
                                 new AntPathRequestMatcher("/api/faq/*", "GET")
                         ).permitAll()
@@ -84,11 +85,15 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/api/notifications/admin/**"),
                                 new AntPathRequestMatcher("/api/faq/admin/**")
                         ).hasAuthority("ADMIN")
-                        // 인증된 사용자만 접근 가능한 문의사항 경로 설정
+                        // 사용자의 문의사항 공개 경로
                         .requestMatchers(
                                 new AntPathRequestMatcher("/api/inquiries", "POST"),
-                                new AntPathRequestMatcher("/api/inquiries/**", "GET")
+                                new AntPathRequestMatcher("/api/inquiries/my", "GET"),
+                                new AntPathRequestMatcher("/api/inquiries/{inquiryId}", "GET"),
+                                new AntPathRequestMatcher("/api/inquiries/{inquiryId}", "PATCH"),
+                                new AntPathRequestMatcher("/api/inquiries/{inquiryId}", "DELETE")
                         ).authenticated()
+
                         .anyRequest().authenticated()
                 )
 

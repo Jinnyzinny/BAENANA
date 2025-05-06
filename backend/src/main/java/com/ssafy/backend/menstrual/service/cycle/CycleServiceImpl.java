@@ -7,7 +7,7 @@ import com.ssafy.backend.menstrual.dto.request.UpdateMenstrualCycleReqDto;
 import com.ssafy.backend.menstrual.dto.response.GetMenstrualCycleResDto;
 import com.ssafy.backend.menstrual.entity.MenstrualCycle;
 import com.ssafy.backend.menstrual.repository.MenstrualCycleRepository;
-import com.ssafy.backend.menstrual.repository.custom.MenstrualCycleCustomRepositroy;
+import com.ssafy.backend.menstrual.repository.custom.MenstrualCycleCustomRepository;
 import com.ssafy.backend.user.entity.User;
 import com.ssafy.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ import java.util.NoSuchElementException;
 public class CycleServiceImpl implements CycleService {
     private final UserRepository userRepository;
     private final MenstrualCycleRepository menstrualCycleRepository;
-    private final MenstrualCycleCustomRepositroy menstrualCycleCustomRepositroy;
+    private final MenstrualCycleCustomRepository menstrualCycleCustomRepository;
 
     @Override
     public MessageResDto addMenstrualCycle(
@@ -49,7 +49,7 @@ public class CycleServiceImpl implements CycleService {
     public List<GetMenstrualCycleResDto> getMenstrualCycle(
             User user
     ) {
-        List<MenstrualCycle> menstrualCycleList = menstrualCycleCustomRepositroy.findMenstrualCycleByUser(user);
+        List<MenstrualCycle> menstrualCycleList = menstrualCycleCustomRepository.findMenstrualCycleByUser(user);
 
         return menstrualCycleList.stream().map(
                 cycle ->

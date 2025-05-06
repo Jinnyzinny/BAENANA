@@ -14,14 +14,14 @@ public class Category {
     private Long id;
 
     /*
-    * =====연관 관계=====
-    * */
+     * =====연관 관계=====
+     * */
     @OneToMany(mappedBy = "category")
     private List<HealthInfo> healthInfoList;
 
     /*
-    * =====Column=====
-    * */
+     * =====Column=====
+     * */
     private String name;
     private String description;
     private LocalDateTime createdAt;

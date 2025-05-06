@@ -1,13 +1,21 @@
 package com.ssafy.backend.symptom.entity;
 
+import com.ssafy.backend.menstrual.entity.MenstrualDailyLog;
 import com.ssafy.backend.user.entity.User;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 import java.time.LocalDate;
 
 @Entity
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class SymptomLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,14 +24,15 @@ public class SymptomLog {
     * =====연관 관계=====
     * */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn
+    private MenstrualDailyLog menstrualDailyLog;
 
     /*
      * =====Column=====
      * */
     private LocalDate date;
-//    private Enum<> symptomType;
+    @Convert(converter = SymptomTypeConverter.class)
+    private SymptomType symptom;
     private Integer Severity;
     private String memo;
 }
