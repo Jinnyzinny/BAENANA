@@ -5,11 +5,21 @@ import com.ssafy.backend.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import com.ssafy.backend.auth.dto.RefreshTokenRequest;
+import com.ssafy.backend.auth.dto.TokenResponse;
+import com.ssafy.backend.auth.service.AuthService;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
+
+    private final AuthService authService;
+
+    @PostMapping("/refresh")
+    public TokenResponse refreshToken(@RequestBody RefreshTokenRequest request) {
+        return authService.refreshAccessToken(request);
+    }
 
     // JWT로 인증된 사용자 정보 확인 -> 나중에 삭제
     @GetMapping("/me")
