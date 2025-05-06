@@ -12,7 +12,9 @@
   },
   "medication": {
     "name":"오가루트란주 주사",
-    "injection_time": ["2025-05-05 19:00"],
+    "start_date": "2025-05-01",
+    "end_date": "2025-05-07",
+    "injection_time": ["07:00","19:00"],
     "memo": "메모"
   }
 }

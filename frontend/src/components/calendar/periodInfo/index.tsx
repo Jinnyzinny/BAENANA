@@ -5,6 +5,7 @@ import { SelectTag } from "../../common/selectTag";
 import { useState } from "react";
 import { Daily } from "../../../types/Daily";
 import { CustomButton } from "../../common/customButton";
+import { PeriodDate } from "../../../utils/periodDate";
 
 export function PeriodInfo({ data }: { data: Daily }) {
   const color: string = "#A3A3A3";
@@ -74,7 +75,9 @@ export function PeriodInfo({ data }: { data: Daily }) {
       {/* 헤더 - 제목 / 수정 / 삭제 / 토글 */}
       <View className="flex-row items-center justify-between">
         <View className="flex-row items-center gap-2">
-          <Text className="text-neutral-800 text-lg font-bold">월경 증상</Text>
+          <Text className="text-neutral-800 text-lg font-bold">
+            {PeriodDate(data.start_date, data.date)}
+          </Text>
           <View className="pt-1 flex-row items-center gap-1">
             {/* 수정 버튼 */}
             <TouchableOpacity onPress={handleEdit}>

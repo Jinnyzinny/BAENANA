@@ -12,6 +12,8 @@ export type Daily = {
   };
   medication: {
     name: string;
+    start_date: string;
+    end_date: string;
     injection_time: string[];
     memo: string;
   };
