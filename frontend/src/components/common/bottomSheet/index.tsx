@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from "react-native";
+import { X } from "lucide-react-native";
 
 const { height, width } = Dimensions.get("window");
 
@@ -64,7 +65,7 @@ export function BottomSheet({
         <TouchableWithoutFeedback onPress={onClose}>
           <View style={styles.backgroundOverlay} />
         </TouchableWithoutFeedback>
-        
+
         <Animated.View
           style={[
             styles.bottomSheetContainer,
@@ -73,11 +74,16 @@ export function BottomSheet({
             },
           ]}
         >
-          {/* 상단 핸들 영역 */}
-          <View style={styles.handle} />
+          {/* 상단 바 */}
+          <View style={styles.headerContainer}>
+            <View style={styles.handle} />
+            <TouchableOpacity style={styles.closeIcon} onPress={onClose}>
+              <X size={24} color="#666" />
+            </TouchableOpacity>
+          </View>
 
           {/* 컨텐츠 영역 */}
-          <ScrollView 
+          <ScrollView
             style={styles.contentContainer}
             contentContainerStyle={styles.scrollContentContainer}
             showsVerticalScrollIndicator={false}
@@ -93,15 +99,13 @@ export function BottomSheet({
             )}
 
             <Text style={styles.content}>{content}</Text>
-            
+
             {/* 여백 공간 추가 */}
-            <View style={{height: 20}} />
+            <View style={{ height: 20 }} />
           </ScrollView>
 
-          {/* 닫기 버튼 */}
-          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-            <Text style={styles.closeButtonText}>닫기</Text>
-          </TouchableOpacity>
+          {/* 하단 여백 */}
+          <View style={{ height: 10 }} />
         </Animated.View>
       </View>
     </Modal>
@@ -128,9 +132,16 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
     padding: 20,
     width: "100%",
-    height: "90%",
+    height: "85%",
     // 노치 디자인 기기를 위해 하단 패딩 값 지정
     paddingBottom: 34,
+  },
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    width: "100%",
+    position: "relative",
+    marginBottom: 20,
   },
   handle: {
     width: 40,
@@ -138,14 +149,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#e0e0e0",
     borderRadius: 3,
     alignSelf: "center",
-    marginBottom: 20,
+  },
+  closeIcon: {
+    position: "absolute",
+    right: 0,
+    top: -10,
+    padding: 5,
   },
   contentContainer: {
     flex: 1,
     width: "100%",
   },
   scrollContentContainer: {
-    flexGrow: 1, 
+    flexGrow: 1,
   },
   title: {
     fontSize: 20,
@@ -165,17 +181,5 @@ const styles = StyleSheet.create({
     color: "#333333",
     marginBottom: 10,
   },
-  closeButton: {
-    backgroundColor: "#f26b83",
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
-    marginTop: 10,
-    marginBottom: 10, // 하단 버튼에 마진 추가
-  },
-  closeButtonText: {
-    color: "white",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
+
 });

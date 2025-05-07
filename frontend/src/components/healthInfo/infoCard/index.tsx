@@ -6,8 +6,7 @@ interface InfoCardProps {
   selectedMenu: string;
 }
 
-// 인터페이스 정의 추가
-interface InfoItem {
+interface InfoCardItem {
   id: string;
   title: string;
   content: string;
@@ -131,10 +130,10 @@ const habitData = [
 export function InfoCard({ selectedMenu }: InfoCardProps) {
   // 바텀시트 상태 관리
   const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<InfoItem | null>(null);
+  const [selectedItem, setSelectedItem] = useState<InfoCardItem | null>(null);
 
   // 카드 클릭 핸들러
-  const handleCardPress = (item: InfoItem) => {
+  const handleCardPress = (item: InfoCardItem) => {
     setSelectedItem(item);
     setBottomSheetVisible(true);
   };
@@ -158,7 +157,7 @@ export function InfoCard({ selectedMenu }: InfoCardProps) {
   const data = getDataByMenu();
 
   // 데이터가 홀수인 경우 더미 데이터 추가하여 카드 크기 일관성 유지
-  const normalizedData = [...data];
+  const normalizedData: InfoCardItem[] = [...data] as InfoCardItem[];
   if (data.length % 2 !== 0) {
     normalizedData.push({
       id: "dummy",
@@ -172,7 +171,7 @@ export function InfoCard({ selectedMenu }: InfoCardProps) {
   return (
     <View className="flex flex-row flex-wrap">
       {normalizedData.map((item) => {
-        if (item.hasOwnProperty("isDummy")) {
+        if (item.isDummy) {
           // 더미 아이템은 보이지 않지만 공간은 차지
           return (
             <View
