@@ -1,81 +1,102 @@
-import { FlatList, Image, Text, View } from "react-native";
+import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 
 const data = [
   {
     id: "1",
     title: "건강 정보 1",
-    img: "https://i.namu.wiki/i/Mj0aArUbJiq5_c500MqmbYyDPWnSiDBCsxbesdkR0XTOtDvwrjj2ponJvctbYgQ7zPE_LvjsJHAl786rZu0tkw.webp",
-    content: "건강 정보 관련 내용이 들어갈 예정입니다.",
+    image_url:
+      "https://i.namu.wiki/i/Mj0aArUbJiq5_c500MqmbYyDPWnSiDBCsxbesdkR0XTOtDvwrjj2ponJvctbYgQ7zPE_LvjsJHAl786rZu0tkw.webp",
+    created_at: "2025-04-21 10:00:00",
   },
   {
     id: "2",
     title: "건강 정보 2",
-    img: "https://i.namu.wiki/i/Mj0aArUbJiq5_c500MqmbYyDPWnSiDBCsxbesdkR0XTOtDvwrjj2ponJvctbYgQ7zPE_LvjsJHAl786rZu0tkw.webp",
-    content: "건강 정보 관련 내용이 들어갈 예정입니다.",
+    image_url:
+      "https://i.namu.wiki/i/Mj0aArUbJiq5_c500MqmbYyDPWnSiDBCsxbesdkR0XTOtDvwrjj2ponJvctbYgQ7zPE_LvjsJHAl786rZu0tkw.webp",
+    created_at: "2025-04-21 10:00:00",
   },
   {
     id: "3",
     title: "건강 정보 3",
-    img: "https://i.namu.wiki/i/Mj0aArUbJiq5_c500MqmbYyDPWnSiDBCsxbesdkR0XTOtDvwrjj2ponJvctbYgQ7zPE_LvjsJHAl786rZu0tkw.webp",
-    content: "건강 정보 관련 내용이 들어갈 예정입니다.",
+    image_url:
+      "https://i.namu.wiki/i/Mj0aArUbJiq5_c500MqmbYyDPWnSiDBCsxbesdkR0XTOtDvwrjj2ponJvctbYgQ7zPE_LvjsJHAl786rZu0tkw.webp",
+    created_at: "2025-04-21 10:00:00",
   },
   {
     id: "4",
     title: "건강 정보 4",
-    img: "https://i.namu.wiki/i/Mj0aArUbJiq5_c500MqmbYyDPWnSiDBCsxbesdkR0XTOtDvwrjj2ponJvctbYgQ7zPE_LvjsJHAl786rZu0tkw.webp",
-    content: "건강 정보 관련 내용이 들어갈 예정입니다.",
+    image_url:
+      "https://i.namu.wiki/i/Mj0aArUbJiq5_c500MqmbYyDPWnSiDBCsxbesdkR0XTOtDvwrjj2ponJvctbYgQ7zPE_LvjsJHAl786rZu0tkw.webp",
+    created_at: "2025-04-21 10:00:00",
   },
   {
     id: "5",
     title: "건강 정보 5",
-    img: "https://i.namu.wiki/i/Mj0aArUbJiq5_c500MqmbYyDPWnSiDBCsxbesdkR0XTOtDvwrjj2ponJvctbYgQ7zPE_LvjsJHAl786rZu0tkw.webp",
-    content: "건강 정보 관련 내용이 들어갈 예정입니다.",
+    image_url:
+      "https://i.namu.wiki/i/Mj0aArUbJiq5_c500MqmbYyDPWnSiDBCsxbesdkR0XTOtDvwrjj2ponJvctbYgQ7zPE_LvjsJHAl786rZu0tkw.webp",
+    created_at: "2025-04-21 10:00:00",
   },
   {
     id: "6",
     title: "건강 정보 6",
-    img: "https://i.namu.wiki/i/Mj0aArUbJiq5_c500MqmbYyDPWnSiDBCsxbesdkR0XTOtDvwrjj2ponJvctbYgQ7zPE_LvjsJHAl786rZu0tkw.webp",
-    content: "건강 정보 관련 내용이 들어갈 예정입니다.",
+    image_url:
+      "https://i.namu.wiki/i/Mj0aArUbJiq5_c500MqmbYyDPWnSiDBCsxbesdkR0XTOtDvwrjj2ponJvctbYgQ7zPE_LvjsJHAl786rZu0tkw.webp",
+    created_at: "2025-04-21 10:00:00",
   },
   {
     id: "7",
     title: "건강 정보 7",
-    img: "https://i.namu.wiki/i/Mj0aArUbJiq5_c500MqmbYyDPWnSiDBCsxbesdkR0XTOtDvwrjj2ponJvctbYgQ7zPE_LvjsJHAl786rZu0tkw.webp",
-    content: "건강 정보 관련 내용이 들어갈 예정입니다.",
-  },
-  {
-    id: "8",
-    title: "건강 정보 8",
-    img: "https://i.namu.wiki/i/Mj0aArUbJiq5_c500MqmbYyDPWnSiDBCsxbesdkR0XTOtDvwrjj2ponJvctbYgQ7zPE_LvjsJHAl786rZu0tkw.webp",
-    content: "건강 정보 관련 내용이 들어갈 예정입니다.",
+    image_url:
+      "https://i.namu.wiki/i/Mj0aArUbJiq5_c500MqmbYyDPWnSiDBCsxbesdkR0XTOtDvwrjj2ponJvctbYgQ7zPE_LvjsJHAl786rZu0tkw.webp",
+    created_at: "2025-04-21 10:00:00",
   },
 ];
 
-export function InfoCard() {
+export function InfoCard({ onPress }: { onPress: () => void }) {
+  const paddedData =
+    data.length % 2 === 0
+      ? data
+      : [
+          ...data,
+          {
+            id: "placeholder",
+            title: "",
+            image_url: "",
+            created_at: "",
+          },
+        ];
+
   return (
     <FlatList
-      data={data}
+      data={paddedData}
       numColumns={2}
       scrollEnabled={false}
       columnWrapperStyle={{ gap: 12 }}
       contentContainerStyle={{ gap: 12 }}
       keyExtractor={(item) => item.id}
-      renderItem={({ item }) => (
-        <View className="flex-1">
-          <View className="flex-1 p-3 rounded-xl gap-2 bg-white shadow-neutral-300">
-            <Image
-              source={{
-                uri: item.img,
-              }}
-              className="w-full h-28 rounded-lg"
-            />
-            <View className="gap-5">
-              <Text className="text-neutral-800 font-bold">{item.title}</Text>
-              <Text className="text-neutral-800 text-sm">{item.content}</Text>
+      renderItem={({ item }) => {
+        if (item.id === "placeholder") {
+          return (
+            <View className="flex-1">
+              <View className="p-3 rounded-xl bg-white opacity-0" />
             </View>
-          </View>
-        </View>
-      )}
+          );
+        }
+
+        return (
+          <TouchableOpacity className="flex-1" onPress={onPress}>
+            <View className="flex-1">
+              <View className="flex-1 p-3 rounded-xl gap-7 bg-white shadow-neutral-300">
+                <Image
+                  source={{ uri: item.image_url }}
+                  className="w-full h-28 rounded-lg"
+                />
+                <Text className="text-neutral-800 font-bold">{item.title}</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        );
+      }}
     />
   );
 }
