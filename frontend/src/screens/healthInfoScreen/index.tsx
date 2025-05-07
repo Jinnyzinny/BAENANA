@@ -39,7 +39,7 @@ export function HealthInfoScreen() {
             }}
           />
           {/* 건강 정보 카드 */}
-          <InfoCard />
+          <InfoCard selectedMenu={selectedMenu} />
         </View>
       </ScrollView>
     </SafeAreaView>
