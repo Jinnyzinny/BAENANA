@@ -1,6 +1,12 @@
 import { Text, View } from "react-native";
 
-export function Tag({ fill, content }: { fill: boolean; content: string }) {
+export function SelectTag({
+  fill,
+  content,
+}: {
+  fill: boolean;
+  content: string;
+}) {
   return (
     <View
       className={`px-3 py-1 rounded-full border border-violet-400 ${fill ? "bg-violet-400" : "bg-white"}`}

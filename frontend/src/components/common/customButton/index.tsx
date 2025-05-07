@@ -1,6 +1,6 @@
 import { Text, TouchableOpacity, View } from "react-native";
 
-export function Button({
+export function CustomButton({
   fill,
   content,
   onPress,

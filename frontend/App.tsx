@@ -1,6 +1,7 @@
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import React, { useEffect } from "react";
 import RNBootSplash from "react-native-bootsplash";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "./global.css";
 import { RootStackNavigator } from "./src/navigation/rootStackNavigator";
 import { LoginScreen } from "./src/screens/loginScreen";
@@ -25,8 +26,10 @@ export default function App(): React.JSX.Element {
   }, []);
 
   return (
-    <NavigationContainer theme={mainTheme}>
-      {isLoggedIn ? <RootStackNavigator /> : <LoginScreen />}
-    </NavigationContainer>
+    <GestureHandlerRootView className="flex-1">
+      <NavigationContainer theme={mainTheme}>
+        {isLoggedIn ? <RootStackNavigator /> : <LoginScreen />}
+      </NavigationContainer>
+    </GestureHandlerRootView>
   );
 }
