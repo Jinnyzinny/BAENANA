@@ -24,7 +24,7 @@ public class SymptomLog {
     * =====연관 관계=====
     * */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
+    @JoinColumn(name = "daily_id")
     private MenstrualDailyLog menstrualDailyLog;
 
     /*
@@ -32,7 +32,7 @@ public class SymptomLog {
      * */
     private LocalDate date;
     @Convert(converter = SymptomTypeConverter.class)
-    private SymptomType symptom;
-    private Integer Severity;
+    private SymptomType symptomType;
+    private Integer severity;
     private String memo;
 }

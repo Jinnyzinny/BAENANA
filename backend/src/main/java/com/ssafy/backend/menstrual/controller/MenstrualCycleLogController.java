@@ -1,5 +1,6 @@
 package com.ssafy.backend.menstrual.controller;
 
+import com.ssafy.backend.common.ApiResponse;
 import com.ssafy.backend.menstrual.dto.request.AddMenstrualCycleDailyLogReqDto;
 import com.ssafy.backend.menstrual.dto.request.UpdateMenstrualCycleDailyLogReqDto;
 import com.ssafy.backend.menstrual.service.cycle_log.MenstrualCycleLogService;
@@ -19,18 +20,19 @@ public class MenstrualCycleLogController {
     private final MenstrualCycleLogService menstrualCycleLogService;
 
     @PostMapping
-    public ResponseEntity<MessageResDto> addMenstrualCycleDailyLog(
+    public ResponseEntity<ApiResponse<?>> addMenstrualCycleDailyLog(
             @AuthenticationPrincipal User user,
             @RequestBody AddMenstrualCycleDailyLogReqDto request
             ){
         return ResponseEntity.ok(menstrualCycleLogService.addMenstrualCycleDailyLog(user,request));
     }
 
-    @PatchMapping
-    public ResponseEntity<MessageResDto> updateMenstrualCycleDailyLog(
+    @PatchMapping("/{id}")
+    public ResponseEntity<ApiResponse<?>> updateMenstrualCycleDailyLog(
             @AuthenticationPrincipal User user,
-            @RequestBody UpdateMenstrualCycleDailyLogReqDto request
+            @RequestBody UpdateMenstrualCycleDailyLogReqDto request,
+            @PathVariable Long id
     ){
-        return ResponseEntity.ok(menstrualCycleLogService.updateMenstrualCycleDailyLog(user,request));
+        return ResponseEntity.ok(menstrualCycleLogService.updateMenstrualCycleDailyLog(user,request,id));
     }
 }
