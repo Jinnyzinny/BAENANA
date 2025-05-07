@@ -3,6 +3,8 @@ package com.ssafy.backend.medication.dto.response;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 @Builder
 public class GetMedicationResDto {
@@ -10,6 +12,6 @@ public class GetMedicationResDto {
     String name;
     String start_date;
     String end_date;
-    String[] time_taken;
+    List<String> time_taken;
     String memo;
 }
