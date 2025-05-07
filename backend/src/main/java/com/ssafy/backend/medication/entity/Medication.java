@@ -28,12 +28,15 @@ public class Medication {
     @OneToMany(mappedBy = "medication")
     private List<MedicationLog> medicationLogList;
 
+    @OneToMany(mappedBy = "medication")
+    private List<TimeTaken> timeTakenList;
+
     /*
     *  =====Column=====
     * */
     private String name;
     private String defaultDose;
     private String description;
-//    private LocalDate startDate;
-//    private LocalDate endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
 }

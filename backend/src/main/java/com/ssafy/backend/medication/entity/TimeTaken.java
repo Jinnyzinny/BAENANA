@@ -17,8 +17,8 @@ public class TimeTaken {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
-    private MedicationLog medicationLog;
+    @JoinColumn(name = "medication_id")
+    private Medication medication;
 
     private LocalTime time_taken;
 }

@@ -1,5 +1,6 @@
 package com.ssafy.backend.medication.service.calendar;
 
+import com.ssafy.backend.common.ApiResponse;
 import com.ssafy.backend.medication.dto.request.AddMedicationScheduleReqDto;
 import com.ssafy.backend.medication.dto.request.UpdateMedicationScheduleReqDto;
 import com.ssafy.backend.medication.dto.response.GetMedicationResDto;
@@ -16,11 +17,11 @@ public interface MedicationService {
     /*
     * Medication CRUD
     * */
-    MessageResDto addMedication(User user, AddMedicationScheduleReqDto request);
+    ApiResponse<?> addMedication(User user, AddMedicationScheduleReqDto request);
 
-    List<GetMedicationResDto> getMedication(User user);
+    ApiResponse<?> getMedication(User user);
 
-    MessageResDto updateMedication(User user,UpdateMedicationScheduleReqDto request, Long id);
+    ApiResponse<?> updateMedication(User user,UpdateMedicationScheduleReqDto request, Long id);
 
-    MessageResDto deleteMedication(User user,Long id);
+    ApiResponse<?> deleteMedication(User user,Long id);
 }

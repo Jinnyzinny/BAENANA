@@ -57,7 +57,13 @@ public class MedicationReportServiceImpl implements MedicationReportService {
 
     @Override
     public GetAllMedicationResDto getAllMedication(User user) {
+        /*
+        * userId를 얻어낸다
+        * */
         Long userId = user.getUserId();
+        /*
+        * 사용자가 복용한 모든 의약품 리스트를 얻는다.
+        * */
         List<Medication> medicationList =
                 medicationCustomRepository.findMedicationByUserId(userId);
 

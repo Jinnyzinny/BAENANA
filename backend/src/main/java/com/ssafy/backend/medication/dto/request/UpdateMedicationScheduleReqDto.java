@@ -11,9 +11,9 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateMedicationScheduleReqDto {
-    private String name;
-    private LocalDate start_date;
-    private LocalDate end_date;
-    private LocalTime[] time_taken;
-    private String memo;
+    String name;
+    LocalDate start_date;
+    LocalDate end_date;
+    LocalTime[] time_taken;
+    String memo;
 }
