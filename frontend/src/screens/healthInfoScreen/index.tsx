@@ -7,7 +7,7 @@ import { TabMenu } from "../../components/common/tabMenu";
 import { useState } from "react";
 
 export function HealthInfoScreen() {
-  const [selectedMenu, setSelectedMenu] = useState<string>("menses");
+  const [selectedMenu, setSelectedMenu] = useState<string>("period");
 
   return (
     <SafeAreaView>
@@ -29,7 +29,7 @@ export function HealthInfoScreen() {
           <View className="m-1" />
           <TabMenu
             tabs={[
-              { key: "menses", label: "월경 관리" },
+              { key: "period", label: "월경 관리" },
               { key: "diet", label: "식이 요법" },
               { key: "exercise", label: "운동 요법" },
               { key: "habit", label: "생활 습관" },

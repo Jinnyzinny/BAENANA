@@ -1,6 +1,16 @@
+import { useCallback } from "react";
 import { Text, View } from "react-native";
 import Svg, { Circle, Defs, LinearGradient, Stop } from "react-native-svg";
 import { ChartTag } from "../chartTag";
+import Animated, {
+  useSharedValue,
+  useAnimatedProps,
+  withTiming,
+} from "react-native-reanimated";
+import { useFocusEffect } from "@react-navigation/native";
+
+// 애니메이션이 가능한 Circle로 래핑
+const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 export function DonutChart({
   percentage,
@@ -9,16 +19,31 @@ export function DonutChart({
   percentage: number;
   dDay: number;
 }) {
-  const radius: number = 80;
-  const strokeWidth: number = 25;
-  const circumference: number = 2 * Math.PI * radius;
-  const strokeDashoffset: number =
-    circumference - (circumference * percentage) / 100;
-  const backgroundColor: string = "#EEEEEE";
+  const radius = 80;
+  const strokeWidth = 25;
+  const circumference = 2 * Math.PI * radius;
+  const progress = useSharedValue(0);
+
+  // 애니메이션 재시작
+  useFocusEffect(
+    useCallback(() => {
+      progress.value = 0;
+      progress.value = withTiming(percentage, { duration: 1200 });
+    }, [])
+  );
+
+  // AnimatedProps 정의
+  const animatedProps = useAnimatedProps(() => {
+    const strokeDashoffset =
+      circumference - (circumference * progress.value) / 100;
+    return {
+      strokeDashoffset,
+    };
+  });
 
   return (
     <View className="relative m-5 items-center">
-      {/* 월경예정일 정보 */}
+      {/* 중앙 텍스트 */}
       <View className="absolute items-center top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 gap-1">
         <Text className="text-neutral-600 text-sm">월경 예정일</Text>
         <Text className="text-violet-700 font-bold text-xl">{dDay}일 전</Text>
@@ -55,20 +80,20 @@ export function DonutChart({
           cx="100"
           cy="100"
           r={radius}
-          stroke={backgroundColor}
+          stroke="#EEEEEE"
           strokeWidth={strokeWidth}
           fill="none"
         />
 
         {/* 진행률 */}
-        <Circle
+        <AnimatedCircle
           cx="100"
           cy="100"
           r={radius}
           stroke="url(#grad)"
           strokeWidth={strokeWidth}
           strokeDasharray={circumference}
-          strokeDashoffset={strokeDashoffset}
+          animatedProps={animatedProps}
           strokeLinecap="round"
           fill="none"
           rotation="-90"

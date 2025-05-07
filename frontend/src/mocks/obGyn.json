@@ -1,0 +1,37 @@
+[
+  {
+    "reservation_id": 1,
+    "hospital_name": "정성산부인과",
+    "reservation_date_time": "2025-04-21 14:00",
+    "purpose": "정기검진",
+    "status": "방문 완료"
+  },
+  {
+    "reservation_id": 2,
+    "hospital_name": "정성산부인과",
+    "reservation_date_time": "2025-04-28 14:00",
+    "purpose": "초음파",
+    "status": "방문 완료"
+  },
+  {
+    "reservation_id": 3,
+    "hospital_name": "정성산부인과",
+    "reservation_date_time": "2025-05-07 14:00",
+    "purpose": "배란확인",
+    "status": "예약 완료"
+  },
+  {
+    "reservation_id": 4,
+    "hospital_name": "정성산부인과",
+    "reservation_date_time": "2025-05-14 14:00",
+    "purpose": "상담",
+    "status": "예약 완료"
+  },
+  {
+    "reservation_id": 5,
+    "hospital_name": "정성산부인과",
+    "reservation_date_time": "2025-05-21 14:00",
+    "purpose": "기타",
+    "status": "예약 완료"
+  }
+]
