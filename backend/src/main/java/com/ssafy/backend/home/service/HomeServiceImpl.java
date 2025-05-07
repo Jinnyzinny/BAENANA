@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -29,24 +30,24 @@ public class HomeServiceImpl implements HomeService {
     @Override
     public ApiResponse<?> getRemainDay(User user) {
         /*
-        * userId를 얻는다
-        * */
+         * userId를 얻는다
+         * */
         Long userId = user.getUserId();
         /*
-        * userId를 이용해서 주기 정보를 최근 것에서 과거로 정렬시킨 첫번째 객체를 반환
-        * */
+         * userId를 이용해서 주기 정보를 최근 것에서 과거로 정렬시킨 첫번째 객체를 반환
+         * */
         MenstrualCycle menstrualCycle = menstrualCycleRepository
                 .findFirstByUser_UserIdOrderByStartDateDesc(userId)
                 .orElse(null);
         /*
-        * 만약 해당 객체가 null이라면 사용자의 주기 정보가 아무 것도 없는 것
-        * */
+         * 만약 해당 객체가 null이라면 사용자의 주기 정보가 아무 것도 없는 것
+         * */
         if (menstrualCycle == null) {
             return ApiResponse.success("사용자의 주기 정보가 없습니다.");
         }
         /*
-        * 해당 주기 정보를 가지고 다음 주기를 예측한다.
-        * */
+         * 해당 주기 정보를 가지고 다음 주기를 예측한다.
+         * */
         return ApiResponse.success(
                 "사용자의 다음 생리주기 예측일입니다.",
                 RemainDayResDto.builder()
@@ -70,17 +71,28 @@ public class HomeServiceImpl implements HomeService {
         /*
          * 복용 종료일이 오늘 이후인 약들 중 오늘 복용해야할 약물들을 찾는다.
          * */
-        List<Medication> medication = medicationRepository.findByUser_UserId(userId).orElse(null);
+        List<Medication> medication = medicationRepository
+                .findDistinctByUser_UserIdAndEndDateAfter(
+                        userId,
+                        LocalDate.now()
+                ).orElse(null);
         /*
-        * 만약 복용해야할 약물이 아무것도 없다면 복용할 약이 없다고 알림을 보낸다.
-        * */
+         * 만약 복용해야할 약물이 아무것도 없다면 복용할 약이 없다고 알림을 보낸다.
+         * */
         if (medication == null) {
             ApiResponse.success("복용할 약이 없습니다.");
         }
         return ApiResponse.success(
                 "복용할 약의 정보입니다.",
                 MedicineResDto.builder()
-                        .medicine("")
+//                        .medicine(
+//                                medication.stream().map(
+//                                        m -> String.format("%d시에 %s약을 복용해야 합니다.",
+//                                                m.getTimeTakenList().get(0).toString(),
+//                                                m.getName()
+//                                        )
+//                                ).toList()
+//                        )
                         .build()
         );
     }
@@ -88,14 +100,14 @@ public class HomeServiceImpl implements HomeService {
     @Override
     public ApiResponse<?> getHospitalReservation(User user) {
         /*
-        * userId를 얻는다.
-        * */
+         * userId를 얻는다.
+         * */
         Long userId = user.getUserId();
 
         /*
-        * 엄청 길긴 한데 UserId와 오늘 날짜 이후로 찾은 결과중 첫번째를 가져온다.
-        * 이걸 가져오면 오늘 이후의 첫번째 당면한 예약 결과를 가져온다.
-        * */
+         * 엄청 길긴 한데 UserId와 오늘 날짜 이후로 찾은 결과중 첫번째를 가져온다.
+         * 이걸 가져오면 오늘 이후의 첫번째 당면한 예약 결과를 가져온다.
+         * */
         HospitalReservation hospitalReservation =
                 hospitalreservationRepository
                         .findFirstByUser_UserIdAndReservationDateAfterOrderByReservationDate(userId, LocalDateTime.now())
@@ -103,14 +115,14 @@ public class HomeServiceImpl implements HomeService {
                                 null
                         );
         /*
-        * 예약 정보가 아무것도 없다면 메시지를 반환한다.
-        * */
+         * 예약 정보가 아무것도 없다면 메시지를 반환한다.
+         * */
         if (hospitalReservation == null) {
             return ApiResponse.success("사용자의 병원 예약이 없습니다");
         }
         /*
-        * 사용자의 병원 예약 정보를 시간을 깔끔하게 다듬어 보낸다.
-        * */
+         * 사용자의 병원 예약 정보를 시간을 깔끔하게 다듬어 보낸다.
+         * */
         return ApiResponse.success(
                 "사용자의 병원 예약입니다.",
                 getMessage(hospitalReservation));
