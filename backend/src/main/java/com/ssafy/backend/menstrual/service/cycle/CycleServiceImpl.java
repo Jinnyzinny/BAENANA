@@ -1,7 +1,7 @@
 package com.ssafy.backend.menstrual.service.cycle;
 
+import com.ssafy.backend.common.ApiResponse;
 import com.ssafy.backend.common.utils.NullAwareBeanUtils;
-import com.ssafy.backend.home.dto.response.MessageResDto;
 import com.ssafy.backend.menstrual.dto.request.AddMenstrualCycleReqDto;
 import com.ssafy.backend.menstrual.dto.request.UpdateMenstrualCycleReqDto;
 import com.ssafy.backend.menstrual.dto.response.GetMenstrualCycleResDto;
@@ -27,7 +27,7 @@ public class CycleServiceImpl implements CycleService {
     private final MenstrualCycleCustomRepository menstrualCycleCustomRepository;
 
     @Override
-    public MessageResDto addMenstrualCycle(
+    public ApiResponse<?> addMenstrualCycle(
             User user,
             AddMenstrualCycleReqDto request
     ) {
@@ -40,52 +40,56 @@ public class CycleServiceImpl implements CycleService {
                         .endDate(request.getEnd_date())
                         .build()
         );
-        return MessageResDto.builder()
-                .message("생리 주기 정보가 성공적으로 저장되었습니다.")
-                .build();
+        return ApiResponse.success("생리 주기 정보가 성공적으로 저장되었습니다.");
     }
 
     @Override
-    public List<GetMenstrualCycleResDto> getMenstrualCycle(
+    public ApiResponse<?> getMenstrualCycle(
             User user
     ) {
         List<MenstrualCycle> menstrualCycleList = menstrualCycleCustomRepository.findMenstrualCycleByUser(user);
-
-        return menstrualCycleList.stream().map(
-                cycle ->
-                        GetMenstrualCycleResDto.builder()
-                                .cycle_id(cycle.getCycleId())
-                                .start_date(cycle.getStartDate().toString())
-                                .end_date(cycle.getEndDate().toString())
-                                .detail(
-                                        cycle.getLogs().stream().map(
-                                                log ->
-                                                        GetMenstrualCycleResDto.SymptomDailyDetail.builder()
-                                                                .date(log.getDate().toString())
-                                                                .bleeding_level(log.getBleedingLevel())
-                                                                .pain_level(log.getPainLevel())
-//                                                              .symptoms(log.)
-                                                                .build())
-                                                .toList())
-                                .build()
-        ).toList();
+        return ApiResponse.success(
+                "사용자의 주기 데이터입니다.",
+                menstrualCycleList.stream().map(
+                        cycle ->
+                                GetMenstrualCycleResDto.builder()
+                                        .cycle_id(cycle.getCycleId())
+                                        .start_date(cycle.getStartDate().toString())
+                                        .end_date(cycle.getEndDate().toString())
+                                        .detail(
+                                                cycle.getLogs().stream().map(
+                                                                log ->
+                                                                        GetMenstrualCycleResDto.SymptomDailyDetail.builder()
+                                                                                .daily_log_id(log.getDailyId())
+                                                                                .date(log.getDate().toString())
+                                                                                .bleeding_level(log.getBleedingLevel())
+                                                                                .pain_level(log.getPainLevel())
+                                                                                .symptoms(
+                                                                                        log.getSymptomLog().stream().map(
+                                                                                                symptomLog -> symptomLog.getSymptomType().getDescription()
+                                                                                        ).toList()
+                                                                                ).build())
+                                                        .toList()
+                                        ).build()
+                ).toList());
     }
 
     @Override
-    public MessageResDto updateMenstrualCycle(
+    public ApiResponse<?> updateMenstrualCycle(
             UpdateMenstrualCycleReqDto request,
             Long cycleId
     ) {
         MenstrualCycle cycle = menstrualCycleRepository.findById(cycleId).orElse(null);
         if (cycle == null)
-            return MessageResDto.builder()
-                    .message("생리 주기의 수정이 실패했습니다.")
-                    .build();
+            return ApiResponse.success("생리 주기의 수정이 실패했습니다.");
 
         BeanUtils.copyProperties(request, cycle, NullAwareBeanUtils.getNullPropertyNames(request));
-
-        return MessageResDto.builder()
-                .message("생리 주기 정보가 성공적으로 수정되었습니다.")
-                .build();
+        if (request.getStart_date() != null) {
+            cycle.setStartDate(request.getStart_date());
+        }
+        if (request.getEnd_date() != null) {
+            cycle.setEndDate(request.getEnd_date());
+        }
+        return ApiResponse.success("생리 주기 정보가 성공적으로 수정되었습니다.");
     }
 }

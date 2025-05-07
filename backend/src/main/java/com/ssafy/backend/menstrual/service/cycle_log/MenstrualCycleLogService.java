@@ -1,5 +1,6 @@
 package com.ssafy.backend.menstrual.service.cycle_log;
 
+import com.ssafy.backend.common.ApiResponse;
 import com.ssafy.backend.home.dto.response.MessageResDto;
 import com.ssafy.backend.menstrual.dto.request.AddMenstrualCycleDailyLogReqDto;
 import com.ssafy.backend.menstrual.dto.request.UpdateMenstrualCycleDailyLogReqDto;
@@ -10,6 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public interface MenstrualCycleLogService {
-    MessageResDto addMenstrualCycleDailyLog(User user, AddMenstrualCycleDailyLogReqDto request);
-    MessageResDto updateMenstrualCycleDailyLog(User user, UpdateMenstrualCycleDailyLogReqDto request);
+    ApiResponse<?> addMenstrualCycleDailyLog(User user, AddMenstrualCycleDailyLogReqDto request);
+    ApiResponse<?> updateMenstrualCycleDailyLog(User user, UpdateMenstrualCycleDailyLogReqDto request, Long id);
 }

@@ -10,12 +10,10 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateMenstrualCycleDailyLogReqDto {
-    private Long dailyLogId;
-
-    private Long cycleId;
-    private LocalDate date;
-    private int bleeding_level;
-    private int pain_level;
-    private Boolean is_start;
-    private Boolean is_end;
+    Long cycle_id;
+    LocalDate date;
+    Integer bleeding_level;
+    Integer pain_level;
+    Boolean is_start;
+    Boolean is_end;
 }

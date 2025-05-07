@@ -4,6 +4,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.backend.menstrual.entity.MenstrualCycle;
 import com.ssafy.backend.menstrual.entity.QMenstrualCycle;
 import com.ssafy.backend.menstrual.entity.QMenstrualDailyLog;
+import com.ssafy.backend.symptom.entity.QSymptomLog;
 import com.ssafy.backend.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -18,11 +19,13 @@ public class MenstrualCycleCustomRepositoryImpl implements MenstrualCycleCustomR
     private final JPAQueryFactory queryFactory;
     QMenstrualCycle menstrualCycle = QMenstrualCycle.menstrualCycle;
     QMenstrualDailyLog menstrualDailyLog = QMenstrualDailyLog.menstrualDailyLog;
+    QSymptomLog symptomLog = QSymptomLog.symptomLog;
 
     public List<MenstrualCycle> findMenstrualCycleByUser(User user) {
         return queryFactory.selectDistinct(menstrualCycle)
                 .from(menstrualCycle)
                 .leftJoin(menstrualCycle.logs, menstrualDailyLog).fetchJoin()
+                .leftJoin(menstrualDailyLog.symptomLog, symptomLog).fetchJoin()
                 .where(menstrualCycle.user.userId.eq(user.getUserId())) // ← 필요한 조건으로 수정
                 .fetch();
     }
