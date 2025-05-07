@@ -1,5 +1,6 @@
 package com.ssafy.backend.hospital.service;
 
+import com.ssafy.backend.common.ApiResponse;
 import com.ssafy.backend.hospital.dto.request.AddHospitalReservationReqDto;
 import com.ssafy.backend.hospital.dto.request.UpdateHospitalReservationReqDto;
 import com.ssafy.backend.hospital.dto.response.GetHospitalReservationResDto;
@@ -15,22 +16,22 @@ import java.util.List;
 @Transactional
 public interface HospitalReservationService {
 
-    MessageResDto addHospitalReservation(
+    ApiResponse<?> addHospitalReservation(
             @AuthenticationPrincipal User user,
             AddHospitalReservationReqDto request
     );
 
-    List<GetHospitalReservationResDto> getHospitalReservation(
+    ApiResponse<?> getHospitalReservation(
             @AuthenticationPrincipal User user
     );
 
-    MessageResDto updateHospitalReservation(
+    ApiResponse<?> updateHospitalReservation(
             @AuthenticationPrincipal User user,
             UpdateHospitalReservationReqDto request,
             Long id
     );
 
-    MessageResDto deleteHospitalReservation(
+    ApiResponse<?> deleteHospitalReservation(
             @AuthenticationPrincipal User user,
             Long id
     );

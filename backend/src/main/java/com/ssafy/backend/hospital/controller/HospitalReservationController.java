@@ -1,5 +1,6 @@
 package com.ssafy.backend.hospital.controller;
 
+import com.ssafy.backend.common.ApiResponse;
 import com.ssafy.backend.hospital.dto.request.AddHospitalReservationReqDto;
 import com.ssafy.backend.hospital.dto.request.UpdateHospitalReservationReqDto;
 import com.ssafy.backend.hospital.dto.response.GetHospitalReservationResDto;
@@ -23,7 +24,7 @@ public class HospitalReservationController {
 
 
     @PostMapping
-    public ResponseEntity<MessageResDto> addHospitalReservation(
+    public ResponseEntity<ApiResponse<?>> addHospitalReservation(
             @AuthenticationPrincipal User user,
             @RequestBody AddHospitalReservationReqDto request
     ) {
@@ -33,14 +34,14 @@ public class HospitalReservationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<GetHospitalReservationResDto>> getHospitalReservation(
+    public ResponseEntity<ApiResponse<?>> getHospitalReservation(
             @AuthenticationPrincipal User user
     ) {
         return ResponseEntity.ok(hospitalReservationService.getHospitalReservation(user));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<MessageResDto> updateHospitalReservation(
+    public ResponseEntity<ApiResponse<?>> updateHospitalReservation(
             @AuthenticationPrincipal User user,
             @PathVariable Long id,
             @RequestBody UpdateHospitalReservationReqDto request
@@ -49,7 +50,7 @@ public class HospitalReservationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<MessageResDto> deleteHospitalReservation(
+    public ResponseEntity<ApiResponse<?>> deleteHospitalReservation(
             @AuthenticationPrincipal User user,
             @PathVariable Long id
     ) {
