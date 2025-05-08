@@ -1,13 +1,23 @@
+import { login } from "@react-native-seoul/kakao-login";
 import { Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useLoginStore } from "../../store/loginStore";
 import { LoginButton } from "../../components/login/loginButton";
+import { useLoginStore } from "../../store/loginStore";
 
 export function LoginScreen() {
   const setLogin = useLoginStore((state) => state.setLogin);
 
   function handleLogin() {
     setLogin();
+  }
+
+  async function handleKakaoLogin() {
+    try {
+      const token = await login();
+      console.log("카카오 로그인: ", token.accessToken);
+    } catch (error) {
+      console.log("카카오 로그인 오류: ", error);
+    }
   }
 
   return (
@@ -21,7 +31,7 @@ export function LoginScreen() {
           SNS 계정으로 로그인
         </Text>
         <View className="gap-5">
-          <LoginButton type="kakao" onPress={handleLogin} />
+          <LoginButton type="kakao" onPress={handleKakaoLogin} />
           <LoginButton type="google" onPress={handleLogin} />
         </View>
       </View>
