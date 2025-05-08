@@ -1,5 +1,6 @@
 package com.ssafy.backend.report.service;
 
+import com.ssafy.backend.common.ApiResponse;
 import com.ssafy.backend.menstrual.entity.MenstrualCycle;
 import com.ssafy.backend.menstrual.entity.MenstrualDailyLog;
 import com.ssafy.backend.menstrual.repository.MenstrualCycleRepository;
@@ -23,7 +24,7 @@ public class ReportServiceImpl implements ReportService {
     private final MenstrualDailyLogRepository menstrualDailyLogRepository;
 
     @Override
-    public GetAlarmResDto getAlarm(User user) {
+    public ApiResponse<?> getAlarm(User user) {
         Long userId = user.getUserId();
         List<MenstrualCycle> menstrualCycle =
                 menstrualCycleRepository.findTop4ByUser_UserIdOrderByStartDateDesc(userId).orElse(null);
@@ -42,30 +43,35 @@ public class ReportServiceImpl implements ReportService {
         }
 
         if (maxCycle - minCycle >= 7) {
-            return GetAlarmResDto.builder()
-                    .menstraul_is_normal(false)
-                    .message("최근 월경 주기가 불규칙합니다.")
-                    .build();
+            return ApiResponse.success("사용자의 월경 주기 정상 여부 결과입니다.",
+                    GetAlarmResDto.builder()
+                            .menstraul_is_normal(false)
+                            .message("최근 월경 주기가 불규칙합니다.")
+                            .build());
         } else {
-            return GetAlarmResDto.builder()
-                    .menstraul_is_normal(true)
-                    .message("최근 월경 주기가 규칙적입니다.")
-                    .build();
+            return ApiResponse.success("사용자의 월경 주기 정상 여부 결과입니다.",
+                    GetAlarmResDto.builder()
+                            .menstraul_is_normal(true)
+                            .message("최근 월경 주기가 규칙적입니다.")
+                            .build());
         }
     }
 
     @Override
-    public GetSummaryResDto getSummary(User user) {
+    public ApiResponse<?> getSummary(User user) {
         /*
          * userId를 얻는다.
          * */
         Long userId = user.getUserId();
 
         MenstrualDailyLog dailyLog =
-                menstrualDailyLogRepository.findByCycle_User_UserIdAndDate(userId, LocalDate.now()).orElseThrow();
+                menstrualDailyLogRepository.findByCycle_User_UserIdAndDate(userId, LocalDate.now()).orElse(null);
 
+        if (dailyLog == null) {
+            return ApiResponse.success("요약할 정보가 없습니다.");
+        }
 
-        return GetSummaryResDto.builder()
+        return ApiResponse.success("", GetSummaryResDto.builder()
 //                .menstrual(
 //                        GetSummaryResDto.Menstrual.builder()
 //                                .anomal()
@@ -79,6 +85,6 @@ public class ReportServiceImpl implements ReportService {
 //                                .stress()
 //                                .build()
 //                )
-                .build();
+                .build());
     }
 }

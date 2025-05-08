@@ -1,5 +1,6 @@
 package com.ssafy.backend.medication.service.report;
 
+import com.ssafy.backend.common.ApiResponse;
 import com.ssafy.backend.medication.entity.Medication;
 import com.ssafy.backend.medication.repository.custom.MedicationCustomRepository;
 import com.ssafy.backend.report.dto.response.GetAllMedicationResDto;
@@ -9,8 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class MedicationReportServiceImpl implements MedicationReportService {
      * ===== Report Domain Medication 정보 제공 =====
      * */
     @Override
-    public GetRecentMedicationResDto getRecentMedication(User user) {
+    public ApiResponse<?> getRecentMedication(User user) {
 //        userId를 얻는다
         Long userId = user.getUserId();
 //        userId로 
@@ -40,44 +40,56 @@ public class MedicationReportServiceImpl implements MedicationReportService {
                     GetRecentMedicationResDto.MedicationInfo.builder()
                             .name(medication.getName())
                             .build());
-            if (ChronoUnit.DAYS.between(
-                    LocalDateTime.now(),
-                    medication.getMedicationLogList().get(0).getDate()) > 0) {
+            if (medication.getEndDate().isAfter(LocalDate.now())) {
                 todayMedicine.add(
                         GetRecentMedicationResDto.MedicationInfo.builder()
                                 .name(medication.getName())
                                 .build());
             }
         }
-        return GetRecentMedicationResDto.builder()
-                .today_medicine(todayMedicine)
-                .medicine_record(medicineRecord)
-                .build();
+        return ApiResponse.success(
+                "현재를 포함한 최근 3개월 간의 복용한 약 정보를 조회합니다.",
+                GetRecentMedicationResDto.builder()
+                        .today_medicine(todayMedicine)
+                        .medicine_record(medicineRecord)
+                        .build());
     }
 
     @Override
-    public GetAllMedicationResDto getAllMedication(User user) {
+    public ApiResponse<?> getAllMedication(User user) {
+        /*
+         * userId를 얻어낸다
+         * */
         Long userId = user.getUserId();
+        /*
+         * 사용자가 복용한 모든 의약품 리스트를 얻는다.
+         * */
         List<Medication> medicationList =
                 medicationCustomRepository.findMedicationByUserId(userId);
 
-        return GetAllMedicationResDto.builder()
-                .medicine_record(
-                        medicationList.stream().map(
-                                record -> GetAllMedicationResDto.each_medication_record.builder()
-                                        .name(record.getName())
-//                                                    .memo(record.ge)
-                                        .start_date(
-                                                record.getMedicationLogList().get(0).getDate().toString())
-                                        .end_date(
-                                                record.getMedicationLogList().get(record.getMedicationLogList().size()-1)
-                                                        .getDate().toString())
-//                                        .time_taken()
-                                        .build()
+        if (medicationList == null || medicationList.isEmpty()) {
+            return ApiResponse.success("사용자가 복용한 의약품이 없습니다.");
+        }
 
-                        ).toList()
-                )
-                .build();
+        return ApiResponse.success("사용자가 복용한 모든 의약품 리스트를 얻는다.",
+                GetAllMedicationResDto.builder()
+                        .medicine_record(
+                                medicationList.stream().map(
+                                        record -> GetAllMedicationResDto.each_medication_record.builder()
+                                                .name(record.getName())
+
+                                                .start_date(
+                                                        record.getStartDate().toString())
+                                                .end_date(
+                                                        record.getEndDate().toString())
+                                                .time_taken(record.getTimeTakenList().stream().map(
+                                                        t -> t.getTime_taken().toString()
+                                                ).toList())
+//                                                .memo(record.)
+                                                .build()
+                                ).toList()
+                        )
+                        .build());
     }
 
 }

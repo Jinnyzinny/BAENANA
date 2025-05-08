@@ -1,5 +1,6 @@
 package com.ssafy.backend.medication.service.report;
 
+import com.ssafy.backend.common.ApiResponse;
 import com.ssafy.backend.report.dto.response.GetAllMedicationResDto;
 import com.ssafy.backend.report.dto.response.GetRecentMedicationResDto;
 import com.ssafy.backend.user.entity.User;
@@ -12,6 +13,6 @@ public interface MedicationReportService {    /*
     /*
     * Report Service
     * */
-    GetRecentMedicationResDto getRecentMedication(User user);
-    GetAllMedicationResDto getAllMedication(User user);
+    ApiResponse<?> getRecentMedication(User user);
+    ApiResponse<?> getAllMedication(User user);
 }

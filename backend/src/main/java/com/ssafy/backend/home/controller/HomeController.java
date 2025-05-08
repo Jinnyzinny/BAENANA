@@ -1,5 +1,6 @@
 package com.ssafy.backend.home.controller;
 
+import com.ssafy.backend.common.ApiResponse;
 import com.ssafy.backend.home.dto.response.HospitalReservationResDto;
 import com.ssafy.backend.home.dto.response.MedicineResDto;
 import com.ssafy.backend.home.dto.response.RemainDayResDto;
@@ -21,21 +22,21 @@ public class HomeController {
     private final HomeService homeService;
 
     @GetMapping("/remain_day")
-    public ResponseEntity<RemainDayResDto> getRemainDay(
+    public ResponseEntity<ApiResponse<?>> getRemainDay(
             @AuthenticationPrincipal User user
     ) {
         return ResponseEntity.ok(homeService.getRemainDay(user));
     }
 
     @GetMapping("/medicine")
-    public ResponseEntity<MedicineResDto> getMedicine(
+    public ResponseEntity<ApiResponse<?>> getMedicine(
             @AuthenticationPrincipal User user
     ) {
         return ResponseEntity.ok(homeService.getMedicine(user));
     }
 
     @GetMapping("/reservation")
-    public ResponseEntity<HospitalReservationResDto> getHospitalReservation(
+    public ResponseEntity<ApiResponse<?>> getHospitalReservation(
             @AuthenticationPrincipal User user
     ) {
         return ResponseEntity.ok(homeService.getHospitalReservation(user));

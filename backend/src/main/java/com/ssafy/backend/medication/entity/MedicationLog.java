@@ -24,10 +24,9 @@ public class MedicationLog {
     @JoinColumn(name = "medication_id")
     private Medication medication;
 
-    @OneToMany(mappedBy = "medicationLog")
-    private List<TimeTaken> time_taken;
 
     private LocalDate date;
+    private LocalTime time_taken;
     private String dose;
     private String memo;
 }

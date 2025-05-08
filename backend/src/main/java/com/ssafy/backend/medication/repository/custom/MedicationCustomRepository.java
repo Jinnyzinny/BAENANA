@@ -8,4 +8,5 @@ import java.util.List;
 @Repository
 public interface MedicationCustomRepository {
     List<Medication> findMedicationByUserId(Long userId);
+    List<Medication> findTodayMedicationByUserId(Long userId);
 }

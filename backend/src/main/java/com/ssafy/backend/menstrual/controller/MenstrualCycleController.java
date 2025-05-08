@@ -1,5 +1,6 @@
 package com.ssafy.backend.menstrual.controller;
 
+import com.ssafy.backend.common.ApiResponse;
 import com.ssafy.backend.menstrual.dto.request.AddMenstrualCycleReqDto;
 import com.ssafy.backend.menstrual.dto.request.UpdateMenstrualCycleReqDto;
 import com.ssafy.backend.menstrual.dto.response.GetMenstrualCycleResDto;
@@ -23,7 +24,7 @@ public class MenstrualCycleController {
     private final CycleService cycleService;
 
     @PostMapping
-    public ResponseEntity<MessageResDto> addMenstrualCycle(
+    public ResponseEntity<ApiResponse<?>> addMenstrualCycle(
             @AuthenticationPrincipal User user,
             @RequestBody AddMenstrualCycleReqDto request
     ){
@@ -31,14 +32,14 @@ public class MenstrualCycleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<GetMenstrualCycleResDto>> getMenstrualCycle(
+    public ResponseEntity<ApiResponse<?>> getMenstrualCycle(
             @AuthenticationPrincipal User user
     ){
         return ResponseEntity.ok(cycleService.getMenstrualCycle(user));
     }
 
     @PatchMapping("/{cycle_id}")
-    public ResponseEntity<MessageResDto> updateMenstrualCycle(
+    public ResponseEntity<ApiResponse<?>> updateMenstrualCycle(
             @RequestBody UpdateMenstrualCycleReqDto request,
             @PathVariable Long cycle_id
     ){

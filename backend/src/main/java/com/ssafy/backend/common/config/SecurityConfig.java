@@ -69,7 +69,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 new AntPathRequestMatcher("/"),
                                 new AntPathRequestMatcher("/auth/success"),
-                                new AntPathRequestMatcher("/auth/**"),
+                                new AntPathRequestMatcher("/api/auth/**"),
                                 new AntPathRequestMatcher("/public/**"),
 
                                 // 공지사항 공개 경로

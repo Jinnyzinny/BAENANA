@@ -1,5 +1,6 @@
 package com.ssafy.backend.report.controller;
 
+import com.ssafy.backend.common.ApiResponse;
 import com.ssafy.backend.medication.service.calendar.MedicationService;
 import com.ssafy.backend.medication.service.report.MedicationReportService;
 import com.ssafy.backend.menstrual.service.report.MenstrualService;
@@ -24,56 +25,56 @@ public class ReportController {
     private final MenstrualService menstrualService;
 
     @GetMapping("/alarm")
-    public ResponseEntity<GetAlarmResDto> getAlarm(
+    public ResponseEntity<ApiResponse<?>> getAlarm(
             @AuthenticationPrincipal User user
     ) {
         return ResponseEntity.ok(reportService.getAlarm(user));
     }
 
     @GetMapping("/menstrual/info")
-    public ResponseEntity<GetMenstrualInfoResDto> getMenstrualInfo(
+    public ResponseEntity<ApiResponse<?>> getMenstrualInfo(
             @AuthenticationPrincipal User user
     ) {
         return ResponseEntity.ok(menstrualService.getMenstrualInfo(user));
     }
 
     @GetMapping("/menstrual/ovulation_test")
-    public ResponseEntity<GetOvulationTestResDto> getOvulationTest(
+    public ResponseEntity<ApiResponse<?>> getOvulationTest(
             @AuthenticationPrincipal User user
     ) {
         return ResponseEntity.ok(menstrualService.getOvulationTest(user));
     }
 
     @GetMapping("/menstrual/recent")
-    public ResponseEntity<GetRecentMenstrualResDto> getRecentMenstrual(
+    public ResponseEntity<ApiResponse<?>> getRecentMenstrual(
             @AuthenticationPrincipal User user
     ) {
         return ResponseEntity.ok(menstrualService.getRecentMenstrual(user));
     }
 
     @GetMapping("/menstrual/all")
-    public ResponseEntity<GetAllMenstrualResDto> getAllMenstrual(
+    public ResponseEntity<ApiResponse<?>> getAllMenstrual(
             @AuthenticationPrincipal User user
     ) {
         return ResponseEntity.ok(menstrualService.getAllMenstrual(user));
     }
 
     @GetMapping("/medication/recent")
-    public ResponseEntity<GetRecentMedicationResDto> getRecentMedication(
+    public ResponseEntity<ApiResponse<?>> getRecentMedication(
             @AuthenticationPrincipal User user
     ) {
         return ResponseEntity.ok(medicationReportService.getRecentMedication(user));
     }
 
     @GetMapping("/medication/all")
-    public ResponseEntity<GetAllMedicationResDto> getAllMedication(
+    public ResponseEntity<ApiResponse<?>> getAllMedication(
             @AuthenticationPrincipal User user
     ) {
         return ResponseEntity.ok(medicationReportService.getAllMedication(user));
     }
 
     @GetMapping("/summary")
-    public ResponseEntity<GetSummaryResDto> getSummary(
+    public ResponseEntity<ApiResponse<?>> getSummary(
             @AuthenticationPrincipal User user
     ) {
         return ResponseEntity.ok(reportService.getSummary(user));
