@@ -67,7 +67,7 @@ public class HospitalReservationServiceImpl implements HospitalReservationServic
         /*
          * 예약 병원 리스트가 없을 경우
          * */
-        if (hospitalReservationList == null) {
+        if (hospitalReservationList == null || hospitalReservationList.isEmpty()) {
             return ApiResponse.success("사용자의 병원 예약 리스트가 없습니다");
         }
         return ApiResponse.success(
@@ -94,8 +94,8 @@ public class HospitalReservationServiceImpl implements HospitalReservationServic
         HospitalReservation hospitalReservation =
                 hospitalReservationRepository.findById(id).orElse(null);
         /*
-        * 병원 예약이 없을 경우 메시지를 반환한다.
-        * */
+         * 병원 예약이 없을 경우 메시지를 반환한다.
+         * */
         if (hospitalReservation == null) {
             return ApiResponse.success("존재 하지 않는 예약입니다.");
         }
