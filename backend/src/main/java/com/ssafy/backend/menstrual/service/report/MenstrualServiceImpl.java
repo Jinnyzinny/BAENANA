@@ -1,5 +1,6 @@
 package com.ssafy.backend.menstrual.service.report;
 
+import com.ssafy.backend.common.ApiResponse;
 import com.ssafy.backend.menstrual.entity.MenstrualCycle;
 import com.ssafy.backend.menstrual.repository.MenstrualCycleRepository;
 import com.ssafy.backend.menstrual.repository.MenstrualDailyLogRepository;
@@ -28,7 +29,7 @@ public class MenstrualServiceImpl implements MenstrualService {
 
 
     @Override
-    public GetMenstrualInfoResDto getMenstrualInfo(User user) {
+    public ApiResponse<?> getMenstrualInfo(User user) {
         Long userId = user.getUserId();
         List<MenstrualCycle> menstrualCycleList =
                 menstrualCycleRepository.findByUser_UserId(userId).orElseThrow();
@@ -36,8 +37,8 @@ public class MenstrualServiceImpl implements MenstrualService {
         int cycleSum = 0;
         int periodSum = 0;
 
-        int maxCycle=Integer.MIN_VALUE;
-        int minCycle=Integer.MAX_VALUE;
+        int maxCycle = Integer.MIN_VALUE;
+        int minCycle = Integer.MAX_VALUE;
 
         for (int i = 0; i < menstrualCycleList.size(); i++) {
             LocalDate endDate = menstrualCycleList.get(i).getEndDate();
@@ -45,7 +46,7 @@ public class MenstrualServiceImpl implements MenstrualService {
 
             if (i >= 1) {
                 LocalDate prevStartDate = menstrualCycleList.get(i - 1).getStartDate();
-                int cycle=(int) ChronoUnit.DAYS.between(prevStartDate, startDate);
+                int cycle = (int) ChronoUnit.DAYS.between(prevStartDate, startDate);
                 cycleSum += cycle;
 
                 maxCycle = Math.max(maxCycle, cycle);
@@ -56,64 +57,79 @@ public class MenstrualServiceImpl implements MenstrualService {
         int avgCycle = cycleSum / menstrualCycleList.size();
         int avgPeriod = periodSum / menstrualCycleList.size();
 
-        if(maxCycle-minCycle>=7){
-            return GetMenstrualInfoResDto.builder()
-                    .cycle(avgCycle)
-                    .period(avgPeriod)
+
+        List<Integer> periods = menstrualCycleList
+                .stream()
+                .map(cycle -> (int) ChronoUnit.DAYS.between(cycle.getStartDate(), cycle.getEndDate()))
+                .toList();
+
+        // 평균 계산
+        double mean = periods.stream().mapToDouble(Integer::doubleValue).average().orElse(0.0);
+
+        // 분산 계산
+        double variance = periods.stream()
+                .mapToDouble(period -> Math.pow(period - mean, 2))
+                .sum() / periods.size();
+        // 표준편차 계산
+        double stddev = Math.sqrt(variance);
+
+        boolean normalCycle = maxCycle - minCycle >= 7;
+        boolean normalPeriod = stddev > 2;
+        return ApiResponse.success("사용자의 주기 정보입니다",
+                GetMenstrualInfoResDto.builder()
+                        .cycle(avgCycle)
+                        .period(avgPeriod)
 //                정상 판별 어떻게 할 예정??
-                    .is_cycle_normal(true)
-                    .is_period_normal(null)
-                    .build();
-        } else {
-            return GetMenstrualInfoResDto.builder()
-                    .cycle(avgCycle)
-                    .period(avgPeriod)
-//                정상 판별 어떻게 할 예정??
-                    .is_cycle_normal(false)
-                    .is_period_normal(null)
-                    .build();
-        }
+                        .is_cycle_normal(normalCycle)
+                        .is_period_normal(normalPeriod)
+                        .build());
     }
 
+
     @Override
-    public GetOvulationTestResDto getOvulationTest(User user) {
+    public ApiResponse<?> getOvulationTest(User user) {
         Long userId = user.getUserId();
 
 //        디아 비전측 정보로 채운다. 이 부분은 제공 API로 대체 가능성 높음
-        return GetOvulationTestResDto.builder()
-                .fertile_day("")
-                .fertile_period_start_date("")
-                .fertile_period_end_date("")
-                .build();
+        return ApiResponse.success("배란 테스트 정보입니다.",
+                GetOvulationTestResDto.builder()
+                        .fertile_day("")
+                        .fertile_period_start_date("")
+                        .fertile_period_end_date("")
+                        .build());
     }
 
     @Override
-    public GetRecentMenstrualResDto getRecentMenstrual(User user) {
+    public ApiResponse<?> getRecentMenstrual(User user) {
         Long userId = user.getUserId();
         List<MenstrualCycle> menstrualCycleList =
                 menstrualCycleRepository.findTop6ByUser_UserIdOrderByStartDateDesc(userId).orElseThrow();
 
-        GetCycleDto cycle =  getCycleTerm(menstrualCycleList);
-        return GetRecentMenstrualResDto.builder()
-                .average_cycle(cycle.getAverageCycle())
-                .max_cycle(cycle.getMaxCycle())
-                .cycle_record(cycle.getCycleRecord())
-                .build();
+        GetCycleDto cycle = getCycleTerm(menstrualCycleList);
+        return ApiResponse.success("사용자의 최근 6개월 주기 정보를 불러옵니다.",
+                GetRecentMenstrualResDto.builder()
+                        .average_cycle(cycle.getAverageCycle())
+                        .max_cycle(cycle.getMaxCycle())
+                        .cycle_record(cycle.getCycleRecord())
+                        .build());
     }
 
     @Override
-    public GetAllMenstrualResDto getAllMenstrual(User user) {
+    public ApiResponse<?> getAllMenstrual(User user) {
         Long userId = user.getUserId();
 
         List<MenstrualCycle> menstrualCycleList =
                 menstrualCycleRepository.findByUser_UserIdOrderByStartDateDesc(userId).orElseThrow();
 
-        GetCycleDto cycle =  getCycleTerm(menstrualCycleList);
-        return GetAllMenstrualResDto.builder()
-                .average_cycle(cycle.getAverageCycle())
-                .max_cycle(cycle.getMaxCycle())
-                .cycle_record(cycle.getCycleRecord())
-                .build();
+        GetCycleDto cycle = getCycleTerm(menstrualCycleList);
+        return ApiResponse.success(
+                "사용자의 전체 주기 정보를 불러옵니다.",
+                GetAllMenstrualResDto.builder()
+                        .average_cycle(cycle.getAverageCycle())
+                        .max_cycle(cycle.getMaxCycle())
+                        .cycle_record(cycle.getCycleRecord())
+                        .build()
+        );
     }
 
     public GetCycleDto getCycleTerm(List<MenstrualCycle> menstrualCycleList) {

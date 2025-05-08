@@ -1,5 +1,6 @@
 package com.ssafy.backend.menstrual.service.report;
 
+import com.ssafy.backend.common.ApiResponse;
 import com.ssafy.backend.report.dto.response.GetAllMenstrualResDto;
 import com.ssafy.backend.report.dto.response.GetMenstrualInfoResDto;
 import com.ssafy.backend.report.dto.response.GetOvulationTestResDto;
@@ -11,8 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public interface MenstrualService {
-    GetMenstrualInfoResDto getMenstrualInfo(User user);
-    GetOvulationTestResDto getOvulationTest(User user);
-    GetRecentMenstrualResDto getRecentMenstrual(User user);
-    GetAllMenstrualResDto getAllMenstrual(User user);
+    ApiResponse<?> getMenstrualInfo(User user);
+    ApiResponse<?> getOvulationTest(User user);
+    ApiResponse<?> getRecentMenstrual(User user);
+    ApiResponse<?> getAllMenstrual(User user);
 }
