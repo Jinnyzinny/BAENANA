@@ -80,19 +80,18 @@ public class HomeServiceImpl implements HomeService {
          * 만약 복용해야할 약물이 아무것도 없다면 복용할 약이 없다고 알림을 보낸다.
          * */
         if (medication == null) {
-            ApiResponse.success("복용할 약이 없습니다.");
+            return ApiResponse.success("복용할 약이 없습니다.");
         }
+        StringBuilder medicineMessage = new StringBuilder();
+        medication.forEach(m -> {
+            medicineMessage.append(String.format("%d시에 %s약을 복용해야 합니다.",
+                    m.getTimeTakenList().get(0).getTime_taken().getHour(),
+                    m.getName()));
+        });
         return ApiResponse.success(
                 "복용할 약의 정보입니다.",
                 MedicineResDto.builder()
-//                        .medicine(
-//                                medication.stream().map(
-//                                        m -> String.format("%d시에 %s약을 복용해야 합니다.",
-//                                                m.getTimeTakenList().get(0).toString(),
-//                                                m.getName()
-//                                        )
-//                                ).toList()
-//                        )
+                        .medicine(medicineMessage.toString())
                         .build()
         );
     }
