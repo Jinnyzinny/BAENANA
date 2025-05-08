@@ -8,7 +8,9 @@ public enum ErrorCode {
     INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST, "E1", "올바르지 않은 입력값입니다."),
     METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "E2", "잘못된 HTTP 메서드를 호출했습니다."),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "E3", "서버 에러가 발생했습니다."),
-    NOT_FOUND(HttpStatus.NOT_FOUND, "E4", "존재하지 않는 엔티티입니다.");
+    NOT_FOUND(HttpStatus.NOT_FOUND, "E4", "존재하지 않는 엔티티입니다."),
+    UNAUTHORIZED_TOKEN(HttpStatus.UNAUTHORIZED, "E5", "유효하지 않은 리프레시 토큰입니다."),
+    EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "E6", "리프레시 토큰이 만료되었습니다.");
 
     private final String message;
     private final String code;

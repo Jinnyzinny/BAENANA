@@ -41,4 +41,9 @@ public class HealthInfoController {
         return ApiResponse.success("카테고리별 건강 정보 조회에 성공하였습니다.", HttpStatus.OK, page);
     }
 
+    @GetMapping("/{id}")
+    public ApiResponse<HealthInfoDto> getHealthInfoDetail(@PathVariable Long id) {
+        HealthInfoDto dto = healthInfoService.getHealthInfoById(id);
+        return ApiResponse.success("건강 정보 상세 조회에 성공하였습니다.", HttpStatus.OK, dto);
+    }
 }
