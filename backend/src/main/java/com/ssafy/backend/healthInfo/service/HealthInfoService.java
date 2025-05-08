@@ -50,4 +50,17 @@ public class HealthInfoService {
                 ));
     }
 
+    public HealthInfoDto getHealthInfoById(Long id) {
+        HealthInfo info = healthInfoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("해당 건강 정보를 찾을 수 없습니다."));
+
+        return new HealthInfoDto(
+                info.getId(),
+                info.getTitle(),
+                info.getContent(),
+                info.getImageUrl(),
+                info.getCreatedAt()
+        );
+    }
+
 }

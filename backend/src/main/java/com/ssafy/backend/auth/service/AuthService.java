@@ -3,6 +3,7 @@ package com.ssafy.backend.auth.service;
 import com.ssafy.backend.auth.dto.RefreshTokenRequest;
 import com.ssafy.backend.auth.dto.TokenResponse;
 import com.ssafy.backend.auth.jwt.JwtProvider;
+import com.ssafy.backend.common.exception.UnauthorizedException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
@@ -28,9 +29,9 @@ public class AuthService {
             return new TokenResponse(newAccessToken, refreshToken); // 또는 새 refreshToken도 재발급 가능
 
         } catch (ExpiredJwtException e) {
-            throw new RuntimeException("리프레시 토큰이 만료되었습니다.");
+            throw new UnauthorizedException("리프레시 토큰이 만료되었습니다.");
         } catch (JwtException e) {
-            throw new RuntimeException("유효하지 않은 리프레시 토큰입니다.");
+            throw new UnauthorizedException("유효하지 않은 리프레시 토큰입니다.");
         }
     }
 }
