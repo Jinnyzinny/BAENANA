@@ -1,8 +1,10 @@
 package com.ssafy.backend.auth.controller;
 
 
+import com.ssafy.backend.common.ApiResponse;
 import com.ssafy.backend.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import com.ssafy.backend.auth.dto.RefreshTokenRequest;
@@ -17,8 +19,8 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/refresh")
-    public TokenResponse refreshToken(@RequestBody RefreshTokenRequest request) {
-        return authService.refreshAccessToken(request);
+    public ApiResponse<TokenResponse> refreshToken(@RequestBody RefreshTokenRequest request) {
+        return ApiResponse.success("리프레쉬 토큰이 재발급되었습니다.", HttpStatus.OK, authService.refreshAccessToken(request));
     }
 
     // JWT로 인증된 사용자 정보 확인 -> 나중에 삭제
