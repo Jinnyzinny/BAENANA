@@ -34,6 +34,15 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         // 우리 DB에 사용자 있는지 조회하고 없으면 생성
         User user = userRepository.findBySocialIdAndProvider(socialId, provider)
+                .map(existingUser -> {
+                    // ✅ 탈퇴한 유저라면 재가입 처리
+                    if (Boolean.TRUE.equals(existingUser.getIsDeleted())) {
+                        existingUser.setIsDeleted(false);
+                        existingUser.setDeletedAt(null);
+                        userRepository.save(existingUser);
+                    }
+                    return existingUser;
+                })
                 .orElseGet(() -> userRepository.save(User.builder()
                         .socialId(socialId)
                         .provider(provider)
