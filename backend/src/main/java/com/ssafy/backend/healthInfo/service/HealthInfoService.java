@@ -39,4 +39,15 @@ public class HealthInfoService {
                 ));
     }
 
+    public Page<HealthInfoDto> getHealthInfoByCategory(Long categoryId, Pageable pageable) {
+        return healthInfoRepository.findByCategoryId(categoryId, pageable)
+                .map(info -> new HealthInfoDto(
+                        info.getId(),
+                        info.getTitle(),
+                        info.getContent(),
+                        info.getImageUrl(),
+                        info.getCreatedAt()
+                ));
+    }
+
 }

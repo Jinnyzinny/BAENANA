@@ -32,4 +32,13 @@ public class HealthInfoController {
         return ApiResponse.success("건강 정보 목록 조회에 성공하였습니다.", HttpStatus.OK, page);
     }
 
+    @GetMapping("/category/{categoryId}")
+    public ApiResponse<Page<HealthInfoDto>> getHealthInfoByCategory(
+            @PathVariable Long categoryId,
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        Page<HealthInfoDto> page = healthInfoService.getHealthInfoByCategory(categoryId, pageable);
+        return ApiResponse.success("카테고리별 건강 정보 조회에 성공하였습니다.", HttpStatus.OK, page);
+    }
+
 }

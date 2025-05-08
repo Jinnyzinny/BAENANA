@@ -1,6 +1,8 @@
 package com.ssafy.backend.healthInfo.repository;
 
 import com.ssafy.backend.healthInfo.entity.HealthInfo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,4 +18,7 @@ public interface HealthInfoRepository extends JpaRepository<HealthInfo, Long> {
     // 단건 상세 조회 (Fetch Join 포함)
     @Query("SELECT h FROM HealthInfo h JOIN FETCH h.category WHERE h.id = :id")
     HealthInfo findDetailById(@Param("id") Long id);
+
+    Page<HealthInfo> findByCategoryId(Long categoryId, Pageable pageable);
+
 }
