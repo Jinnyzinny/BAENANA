@@ -23,4 +23,16 @@ public class UserService {
         managedUser.setDeletedAt(LocalDateTime.now());
         // 굳이 save 안 해도 JPA가 트랜잭션 내에서 dirty checking 처리함
     }
+
+    @Transactional
+    public Boolean toggleUserAlarm(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+        boolean newValue = !Boolean.TRUE.equals(user.getAllowAlarm());
+        user.setAllowAlarm(newValue);
+        userRepository.save(user); // 트랜잭션 + save로 확실히 반영
+        return newValue;
+    }
+
 }
