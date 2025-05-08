@@ -14,7 +14,7 @@ import java.time.LocalTime;
 public class TimeTaken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long timeTakenId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medication_id")
