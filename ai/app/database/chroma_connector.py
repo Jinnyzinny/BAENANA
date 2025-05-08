@@ -25,7 +25,7 @@ def save_to_chroma(ids: list, documents: list, embeddings: list, metadatas: list
         print(f"❌ 저장 실패: {e}")
 
 
-def search_from_chroma(query_embedding: list, n_results: int = 3):
+def search_from_chroma(query_embedding: list, n_results: int = 2):
     # ✅ 강제 변환: np.ndarray → List[float]
     if isinstance(query_embedding, np.ndarray):
         query_embedding = query_embedding.tolist()
