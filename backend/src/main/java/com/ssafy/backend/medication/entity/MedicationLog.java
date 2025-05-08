@@ -26,7 +26,7 @@ public class MedicationLog {
 
 
     private LocalDate date;
-    private LocalTime time;
+    private LocalTime time_taken;
     private String dose;
     private String memo;
 }
