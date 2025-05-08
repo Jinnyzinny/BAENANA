@@ -76,7 +76,7 @@ public class MedicationServiceImpl implements MedicationService {
         List<Medication> medication =
                 medicationCustomRepository.findMedicationByUserId(userId);
 
-        if (medication == null) {
+        if (medication == null||medication.isEmpty()) {
             return ApiResponse.success("사용자가 복용한 의약품이 없습니다.");
         }
         /*
