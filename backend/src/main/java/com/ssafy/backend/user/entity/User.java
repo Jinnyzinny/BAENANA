@@ -7,10 +7,7 @@ import com.ssafy.backend.medication.entity.Medication;
 import com.ssafy.backend.menstrual.entity.MenstrualCycle;
 import com.ssafy.backend.symptom.entity.SymptomLog;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -22,6 +19,7 @@ import java.util.Map;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
