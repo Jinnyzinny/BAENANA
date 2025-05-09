@@ -33,8 +33,8 @@ function subscribeTokenRefresh(cb: (token: string) => void) {
 // 토큰 갱신 요청
 async function refreshingToken(): Promise<AxiosResponse> {
   // 토큰 저장소에서 갱신해야하는 토큰을 꺼내서 보냄
-  const refresh_token = await AsyncStorage.getItem("refreshToken");
-  return client.post("/auth/refresh", { refresh_token });
+  const refreshToken = await AsyncStorage.getItem("refreshToken");
+  return client.post("/auth/refresh", { refresh_token: refreshToken });
 }
 
 // 요청 가로채서 확인
