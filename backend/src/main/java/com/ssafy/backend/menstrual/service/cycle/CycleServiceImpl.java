@@ -6,6 +6,7 @@ import com.ssafy.backend.menstrual.dto.request.AddMenstrualCycleReqDto;
 import com.ssafy.backend.menstrual.dto.request.UpdateMenstrualCycleReqDto;
 import com.ssafy.backend.menstrual.dto.response.GetMenstrualCycleResDto;
 import com.ssafy.backend.menstrual.entity.MenstrualCycle;
+import com.ssafy.backend.menstrual.exception.MenstrualException;
 import com.ssafy.backend.menstrual.repository.MenstrualCycleRepository;
 import com.ssafy.backend.menstrual.repository.custom.MenstrualCycleCustomRepository;
 import com.ssafy.backend.user.entity.User;
@@ -84,9 +85,10 @@ public class CycleServiceImpl implements CycleService {
             UpdateMenstrualCycleReqDto request,
             Long cycleId
     ) {
-        MenstrualCycle cycle = menstrualCycleRepository.findById(cycleId).orElse(null);
-        if (cycle == null)
-            return ApiResponse.success("생리 주기의 수정이 실패했습니다.");
+        MenstrualCycle cycle = menstrualCycleRepository.findById(cycleId)
+                .orElseThrow(
+                        () ->
+                                new MenstrualException("생리 주기의 수정하려는 정보가 없습니다"));
 
         BeanUtils.copyProperties(request, cycle, NullAwareBeanUtils.getNullPropertyNames(request));
         if (request.getStart_date() != null) {
