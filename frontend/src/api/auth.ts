@@ -4,7 +4,7 @@ import { client } from "./client";
 // 카카오 로그인 (카카오에서 받아온 AccessToken 백엔드로 전송)
 export async function kakaoLogin(data: string) {
   try {
-    const response = await client.post("/login", data);
+    const response = await client.post("/auth/kakao", data);
     console.log("카카오 로그인 성공: ", response.data);
     return response.data;
   } catch (error: unknown) {
