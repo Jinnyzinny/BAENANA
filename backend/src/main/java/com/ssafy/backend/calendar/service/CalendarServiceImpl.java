@@ -4,6 +4,10 @@ import com.ssafy.backend.calendar.dto.response.GetBearingPeriodResDto;
 import com.ssafy.backend.calendar.dto.response.GetDailyInfoResDto;
 import com.ssafy.backend.calendar.dto.response.GetMenstrualPredictionResDto;
 import com.ssafy.backend.common.ApiResponse;
+import com.ssafy.backend.hospital.entity.HospitalReservation;
+import com.ssafy.backend.hospital.repository.HospitalReservationRepository;
+import com.ssafy.backend.medication.entity.Medication;
+import com.ssafy.backend.medication.repository.MedicationRepository;
 import com.ssafy.backend.menstrual.entity.MenstrualCycle;
 import com.ssafy.backend.menstrual.entity.MenstrualDailyLog;
 import com.ssafy.backend.menstrual.repository.MenstrualCycleRepository;
@@ -14,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Transactional
@@ -21,6 +27,8 @@ import java.time.LocalDate;
 public class CalendarServiceImpl implements CalendarService {
     private final MenstrualDailyLogRepository menstrualDailyLogRepository;
     private final MenstrualCycleRepository menstrualCycleRepository;
+    private final HospitalReservationRepository hospitalreservationRepository;
+    private final MedicationRepository medicationRepository;
 
     @Override
     public ApiResponse<?> getDailyInfo(
@@ -29,6 +37,7 @@ public class CalendarServiceImpl implements CalendarService {
             int month,
             int day
     ) {
+        Long userId = user.getUserId();
         /*
          *검색을 원하는 날짜를 localDate 형태로 바꾼다.
          */
@@ -40,7 +49,7 @@ public class CalendarServiceImpl implements CalendarService {
         MenstrualCycle menstrualCycle =
                 menstrualCycleRepository
                         .findByUser_UserIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(
-                                user.getUserId(),
+                                userId,
                                 searchForDate,
                                 searchForDate).orElse(null);
 
@@ -48,9 +57,17 @@ public class CalendarServiceImpl implements CalendarService {
         MenstrualDailyLog dailyLog =
                 menstrualDailyLogRepository
                         .findByCycle_User_UserIdAndDate(
-                                user.getUserId(),
+                                userId,
                                 searchForDate)
                         .orElse(null);
+
+        HospitalReservation reservation =
+                hospitalreservationRepository
+                        .findByUser_UserIdAndReservationDate(userId, LocalDateTime.now())
+                        .orElse(null);
+        List<Medication> medication = medicationRepository
+                .findDistinctByUser_UserIdAndEndDateAfter(userId, LocalDate.now())
+                .orElse(null);
         /*
          * 해당 일자의 정보가 없다면 메시지를 반환한다.
          * */
@@ -59,17 +76,34 @@ public class CalendarServiceImpl implements CalendarService {
                     "사용자의 생리주기 데이터가 없습니다."
             );
         }
-        return ApiResponse.success("", GetDailyInfoResDto.builder()
-                .date(searchForDate.toString())
-                .start_date(
-                        menstrualCycle.getStartDate().toString())//생리 주기의 시작일
-                .end_date(
-                        menstrualCycle.getEndDate().toString())//생리 주기의 종료일
-                .bleeding_level(
-                        dailyLog.getBleedingLevel())//출혈량
-                .pain_level(
-                        dailyLog.getPainLevel())//통증 정도
-                .build());
+        return ApiResponse.success("",
+                GetDailyInfoResDto.builder()
+                        .date(searchForDate.toString())
+                        .start_date(
+                                menstrualCycle.getStartDate().toString())//생리 주기의 시작일
+                        .end_date(
+                                menstrualCycle.getEndDate().toString())//생리 주기의 종료일
+                        .bleeding_level(
+                                dailyLog.getBleedingLevel())//출혈량
+                        .pain_level(
+                                dailyLog.getPainLevel())//통증 정도
+                        .hospital_reservation(
+                                GetDailyInfoResDto.Hospital_reservation.builder()
+                                        .reservation_date(reservation.getReservationDate().toString())
+                                        .purpose(reservation.getPurpose().getDescription())
+                                        .build())
+                        .medication(null
+//                                GetDailyInfoResDto.Medication.builder()
+//                                        .injection_time(medication.stream().map(
+//                                                medication->{
+//                                                    return medication.gett
+//                                                }
+//                                        ).toList())
+//                                        .memo()
+//                                        .build()
+                        )
+                        .build()
+        );
 
     }
 
@@ -114,16 +148,16 @@ public class CalendarServiceImpl implements CalendarService {
         Long userId = user.getUserId();
 
         /*
-        * 사용자 ID를 기준으로 시작일을 최근에서 과거로 가는 객체 리스트를 뽑아 첫번째 객체를 뽑는다.
-        * */
+         * 사용자 ID를 기준으로 시작일을 최근에서 과거로 가는 객체 리스트를 뽑아 첫번째 객체를 뽑는다.
+         * */
         MenstrualCycle menstrualCycle =
                 menstrualCycleRepository
                         .findFirstByUser_UserIdOrderByStartDateDesc(userId)
                         .orElse(null);
 
         /*
-        * 사용자의 주기 정보가 없다면 메시지를 반환한다.
-        * */
+         * 사용자의 주기 정보가 없다면 메시지를 반환한다.
+         * */
         if (menstrualCycle == null) {
             return ApiResponse.success(
                     "사용자의 생리주기가 없습니다."

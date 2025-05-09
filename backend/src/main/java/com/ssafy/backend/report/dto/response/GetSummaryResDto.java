@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Getter
 @Builder
 public class GetSummaryResDto {
@@ -18,8 +20,8 @@ public class GetSummaryResDto {
     @AllArgsConstructor    
     public static class Menstrual{
         private String bleeding_level;
-        private Boolean anomal;
-        private String symptom;
+        private Boolean abnormal;
+        private List<String> symptom;
     }
     @Getter
     @Builder
@@ -27,6 +29,6 @@ public class GetSummaryResDto {
     @AllArgsConstructor
     public static class Stress{
         private String stress;
-        private Boolean anomal;
+        private Boolean abnormal;
     }
 }

@@ -47,6 +47,7 @@ public class MedicationServiceImpl implements MedicationService {
                         .name(request.getName())
                         .startDate(request.getStart_date())
                         .endDate(request.getEnd_date())
+                        .description(request.getMemo())
                         .build()
         );
         em.flush();
@@ -118,6 +119,9 @@ public class MedicationServiceImpl implements MedicationService {
         }
         if (request.getStart_date() != null) {
             medication.setStartDate(request.getStart_date());
+        }
+        if(request.getMemo()!=null){
+            medication.setDescription(request.getMemo());
         }
         return ApiResponse.success("복용할 약 정보가 성공적으로 수정되었습니다.");
     }
