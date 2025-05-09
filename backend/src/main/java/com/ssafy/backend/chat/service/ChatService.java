@@ -40,8 +40,8 @@ public class ChatService {
         // 3. 챗봇 메시지 저장
         ChatMessages botMessage = saveMessage(user, sessionId, "bot", botReply, now.plusSeconds(1));
 
-        // 4. 세션 전체 메시지 조회
-        List<MessageDto> messages = chatMessageRepository.findBySessionIdOrderByCreatedAt(sessionId).stream()
+        // ✅ 4. 방금 보낸 두 메시지만 응답
+        List<MessageDto> messages = List.of(userMessage, botMessage).stream()
                 .map(chat -> new MessageDto(
                         chat.getSender(),
                         chat.getMessage(),
