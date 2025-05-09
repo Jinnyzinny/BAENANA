@@ -48,6 +48,11 @@ public class CycleServiceImpl implements CycleService {
             User user
     ) {
         List<MenstrualCycle> menstrualCycleList = menstrualCycleCustomRepository.findMenstrualCycleByUser(user);
+
+        if (menstrualCycleList == null || menstrualCycleList.isEmpty()) {
+            return ApiResponse.success("사용자의 생리주기 정보가 없습니다.");
+        }
+
         return ApiResponse.success(
                 "사용자의 주기 데이터입니다.",
                 menstrualCycleList.stream().map(
