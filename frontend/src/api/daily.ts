@@ -1,4 +1,4 @@
-import authClient from "./authClient";
+import authClient from "./client/authClient";
 
 // 일일 정보 조회
 export async function getDaily(year: number, month: number, day: number) {

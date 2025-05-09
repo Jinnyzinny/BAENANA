@@ -1,4 +1,17 @@
-import authClient from "./authClient";
+import { Date, Dday, Period } from "../types/Period";
+import authClient from "./client/authClient";
+
+// 월경 예정일 D-day 조회
+export async function getDday(): Promise<Dday> {
+  try {
+    const response = await authClient.get("/home/remain_day");
+    console.log("월경 예정일 D-day 조희 성공", response.data.data);
+    return response.data.data;
+  } catch (error: unknown) {
+    console.error("월경 예정일 D-day 조희 실패: ", error);
+    throw error;
+  }
+}
 
 // 월경 주기 등록
 export async function addPeriod(startDate: string, endDate: string) {
@@ -11,17 +24,19 @@ export async function addPeriod(startDate: string, endDate: string) {
     return response.data;
   } catch (error: unknown) {
     console.error("월경 주기 등록 실패: ", error);
+    throw error;
   }
 }
 
 // 월별 월경 주기 조회
-export async function getPeriod(month: number) {
+export async function getPeriod(month: number): Promise<Period> {
   try {
     const response = await authClient.get(`/calendar/menstrual_cycle/${month}`);
-    console.log("월별 월경 주기 조회 성공: ", response.data);
-    return response.data;
+    console.log("월별 월경 주기 조회 성공: ", response.data.data);
+    return response.data.data;
   } catch (error: unknown) {
     console.error("월별 월경 주기 조회 실패: ", error);
+    throw error;
   }
 }
 
@@ -50,6 +65,7 @@ export async function editPeriod(
     return response.data;
   } catch (error: unknown) {
     console.error("월경 주기 변경 실패: ", error);
+    throw error;
   }
 }
 
@@ -77,6 +93,7 @@ export async function addPeriodSymtom(
     return response.data;
   } catch (error: unknown) {
     console.error("월경 주기 세부 정보 등록 실패: ", error);
+    throw error;
   }
 }
 
@@ -107,27 +124,30 @@ export async function editPeriodSymtom(
     return response.data;
   } catch (error: unknown) {
     console.error("월경 주기 세부 정보 변경 실패: ", error);
+    throw error;
   }
 }
 
 // 가임기 조회
-export async function getChildbearingAge() {
+export async function getChildbearingAge(): Promise<Date> {
   try {
     const response = await authClient.get("/calendar/bearing_period");
-    console.log("가임기 조회 성공: ", response.data);
-    return response.data;
+    console.log("가임기 조회 성공: ", response.data.data);
+    return response.data.data;
   } catch (error: unknown) {
     console.error("가임기 조회 실패: ", error);
+    throw error;
   }
 }
 
 // 월경 예정일 조회
-export async function getPredictedPeriod() {
+export async function getPredictedPeriod(): Promise<Date> {
   try {
     const response = await authClient.get("/calendar/menstrual_prediction");
-    console.log("월경 예정일 조회 성공: ", response.data);
-    return response.data;
+    console.log("월경 예정일 조회 성공: ", response.data.data);
+    return response.data.data;
   } catch (error: unknown) {
     console.error("월경 예정일 조회 실패: ", error);
+    throw error;
   }
 }

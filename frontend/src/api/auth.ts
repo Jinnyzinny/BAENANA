@@ -1,14 +1,16 @@
-import authClient from "./authClient";
-import { client } from "./client";
+import { Auth } from "../types/Auth";
+import authClient from "./client/authClient";
+import { client } from "./client/client";
 
 // 카카오 로그인 (카카오에서 받아온 AccessToken 백엔드로 전송)
-export async function kakaoLogin(data: string) {
+export async function kakaoLogin(data: string): Promise<Auth> {
   try {
     const response = await client.post("/auth/kakao", data);
-    console.log("카카오 로그인 성공: ", response.data);
-    return response.data;
+    console.log("카카오 로그인 성공: ", response.data.data);
+    return response.data.data;
   } catch (error: unknown) {
     console.error("카카오 로그인 실패", error);
+    throw error;
   }
 }
 
@@ -20,6 +22,7 @@ export async function withdraw() {
     return response.data;
   } catch (error: unknown) {
     console.error("회원 탈퇴 실패: ", error);
+    throw error;
   }
 }
 
@@ -33,5 +36,6 @@ export async function userAlarm(allowAlarm: boolean) {
     return response.data;
   } catch (error: unknown) {
     console.log("사용자 알림 설정 변경 실패: ", error);
+    throw error;
   }
 }
