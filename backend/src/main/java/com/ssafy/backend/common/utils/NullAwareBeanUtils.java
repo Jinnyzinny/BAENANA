@@ -1,0 +1,41 @@
+package com.ssafy.backend.common.utils;
+
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
+
+import java.beans.FeatureDescriptor;
+import java.beans.PropertyDescriptor;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Stream;
+
+//해당 Class 파일은 Null값을 찾고 해당 객체의 Property들을 그대로 복제하는 것을 한다.
+//PATCH Mapping에서 사용하면 유용하다
+@Getter
+@Setter
+public class NullAwareBeanUtils {
+    public static String[] getNullPropertyNames(Object source) {
+        BeanWrapper src = new BeanWrapperImpl(source);
+        PropertyDescriptor[] pds = src.getPropertyDescriptors();
+        Set<String> emptyNames = new HashSet<>();
+        for (PropertyDescriptor pd : pds) {
+        Object srcValue = src.getPropertyValue(pd.getName());
+            if (srcValue == null) {
+        emptyNames.add(pd.getName());
+        }
+        }
+        return emptyNames.toArray(new String[0]);
+    }
+}
+//BeanWrapper src = new BeanWrapperImpl(source);
+//        PropertyDescriptor[] pds = src.getPropertyDescriptors();
+//        Set<String> emptyNames = new HashSet<>();
+//        for (PropertyDescriptor pd : pds) {
+//        Object srcValue = src.getPropertyValue(pd.getName());
+//            if (srcValue == null) {
+//        emptyNames.add(pd.getName());
+//        }
+//        }
+//        return emptyNames.toArray(new String[0]);
