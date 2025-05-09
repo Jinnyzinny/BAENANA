@@ -14,8 +14,8 @@ public class GetDailyInfoResDto {
     Integer bleeding_level;
     Integer pain_level;
     List<String> symptom;
-    Hospital_reservation hospital_reservation;
-    Medication medication;
+    List<Hospital_reservation> hospital_reservation;
+    List<Medication> medication;
 
     @Getter
     @Setter
@@ -23,6 +23,7 @@ public class GetDailyInfoResDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Hospital_reservation {
+        String hospital_name;
         String reservation_date;
         String purpose;
     }
@@ -33,7 +34,10 @@ public class GetDailyInfoResDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Medication {
-        String injection_time;
+        String medication_name;
+        String start_date;
+        String end_date;
+        List<String> injection_time;
         String memo;
     }
 }
