@@ -1,6 +1,8 @@
 package com.ssafy.backend.auth.controller;
 
 
+import com.ssafy.backend.auth.dto.KakaoLoginRequest;
+import com.ssafy.backend.auth.dto.LoginResponse;
 import com.ssafy.backend.common.ApiResponse;
 import com.ssafy.backend.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -23,14 +25,13 @@ public class AuthController {
         return ApiResponse.success("리프레쉬 토큰이 재발급되었습니다.", HttpStatus.OK, authService.refreshAccessToken(request));
     }
 
-    // JWT로 인증된 사용자 정보 확인 -> 나중에 삭제
-    @GetMapping("/me")
-    public String getCurrentUser(@AuthenticationPrincipal User user) {
-        if (user == null) {
-            return "인증되지 않은 사용자입니다.";
-        }
-
-        return "현재 로그인한 사용자 ID: " + user.getUserId() + ", 소셜ID: " + user.getSocialId();
+    @PostMapping("/kakao")
+    public ApiResponse<LoginResponse> kakaoLogin(@RequestBody KakaoLoginRequest request) {
+        return ApiResponse.success(
+                "카카오 로그인 성공",
+                HttpStatus.OK,
+                authService.kakaoLogin(request.getAccessToken())
+        );
     }
 
 }
