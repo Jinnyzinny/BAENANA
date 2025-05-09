@@ -2,6 +2,7 @@ package com.ssafy.backend.chat.service;
 
 import com.ssafy.backend.chat.dto.ChatMessageRequest;
 import com.ssafy.backend.chat.dto.ChatResponse;
+import com.ssafy.backend.chat.dto.ChatSessionDto;
 import com.ssafy.backend.chat.dto.MessageDto;
 import com.ssafy.backend.chat.entity.ChatMessages;
 import com.ssafy.backend.chat.repository.ChatMessageRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -65,5 +67,27 @@ public class ChatService {
     private String getBotResponse(String userMessage) {
         // TODO: 파이썬 챗봇 서버와 연동 예정
         return "챗봇 서버와 연동이 안 됐습니다.";
+    }
+
+    public List<ChatSessionDto> getUserSessions(User user) {
+        // 1. 사용자의 모든 메시지 중 sender == "user" 인 것만 필터링
+        List<ChatMessages> userMessages = chatMessageRepository.findByUser(user).stream()
+                .filter(msg -> "user".equals(msg.getSender()))
+                .collect(Collectors.toList());
+
+        // 2. 세션별로 마지막 user 메시지만 추출
+        return userMessages.stream()
+                .collect(Collectors.groupingBy(ChatMessages::getSessionId))
+                .values().stream()
+                .map(sessionMsgs -> sessionMsgs.stream()
+                        .max(Comparator.comparing(ChatMessages::getCreatedAt))
+                        .orElseThrow())
+                .map(msg -> new ChatSessionDto(
+                        msg.getSessionId(),
+                        msg.getMessage(),
+                        msg.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                ))
+                .sorted((a, b) -> b.getLastTime().compareTo(a.getLastTime()))
+                .collect(Collectors.toList());
     }
 }

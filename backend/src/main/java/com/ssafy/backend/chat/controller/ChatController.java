@@ -2,16 +2,16 @@ package com.ssafy.backend.chat.controller;
 
 import com.ssafy.backend.chat.dto.ChatMessageRequest;
 import com.ssafy.backend.chat.dto.ChatResponse;
+import com.ssafy.backend.chat.dto.ChatSessionDto;
 import com.ssafy.backend.chat.service.ChatService;
 import com.ssafy.backend.common.ApiResponse;
 import com.ssafy.backend.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/chat")
@@ -25,4 +25,11 @@ public class ChatController {
         ChatResponse response = chatService.sendMessage(user, request);
         return ApiResponse.success("대화 전송에 성공했습니다.", HttpStatus.CREATED, response);
     }
+
+    @GetMapping("/sessions")
+    public ApiResponse<List<ChatSessionDto>> getUserSessions(@AuthenticationPrincipal User user) {
+        List<ChatSessionDto> sessions = chatService.getUserSessions(user);
+        return ApiResponse.success("세션 목록 조회에 성공했습니다.", HttpStatus.OK, sessions);
+    }
+
 }
