@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -52,21 +52,26 @@ public class CalendarServiceImpl implements CalendarService {
                                 userId,
                                 searchForDate,
                                 searchForDate).orElse(null);
-
-        //해당 날짜가 포함된 주기정보의 해당 날짜 세부 정보를 얻어낸다.
+        /*
+         * 해당 날짜가 포함된 주기정보의 해당 날짜 세부 정보를 얻어낸다.
+         * */
         MenstrualDailyLog dailyLog =
                 menstrualDailyLogRepository
                         .findByCycle_User_UserIdAndDate(
                                 userId,
                                 searchForDate)
                         .orElse(null);
+        /*
+         * 해당 날짜의 병원 예약을 얻어낸다
+         * */
 
-        HospitalReservation reservation =
+        List<HospitalReservation> reservation =
                 hospitalreservationRepository
-                        .findByUser_UserIdAndReservationDate(userId, LocalDateTime.now())
+                        .findByUser_UserIdAndReservationDateBetween(userId, searchForDate.atStartOfDay(), searchForDate.atTime(LocalTime.MAX))
                         .orElse(null);
+
         List<Medication> medication = medicationRepository
-                .findDistinctByUser_UserIdAndEndDateAfter(userId, LocalDate.now())
+                .findDistinctByUser_UserIdAndEndDateAfter(userId, searchForDate)
                 .orElse(null);
         /*
          * 해당 일자의 정보가 없다면 메시지를 반환한다.
@@ -78,33 +83,64 @@ public class CalendarServiceImpl implements CalendarService {
         }
         return ApiResponse.success("",
                 GetDailyInfoResDto.builder()
+//                        정보를 요청한 날짜
                         .date(searchForDate.toString())
+//                        주기의 시작 날짜
                         .start_date(
-                                menstrualCycle.getStartDate().toString())//생리 주기의 시작일
+                                menstrualCycle.getStartDate().toString())
+//                        주기의 종료일
                         .end_date(
-                                menstrualCycle.getEndDate().toString())//생리 주기의 종료일
+                                menstrualCycle.getEndDate().toString())
+//                        주기의 출혈량
                         .bleeding_level(
-                                dailyLog.getBleedingLevel())//출혈량
+                                dailyLog.getBleedingLevel())
+//                        해당 날짜의 통증 정도
                         .pain_level(
-                                dailyLog.getPainLevel())//통증 정도
+                                dailyLog.getPainLevel())
+//                        해당 날짜의 병원 예약 정보
                         .hospital_reservation(
-                                GetDailyInfoResDto.Hospital_reservation.builder()
-                                        .reservation_date(reservation.getReservationDate().toString())
-                                        .purpose(reservation.getPurpose().getDescription())
-                                        .build())
-                        .medication(null
-//                                GetDailyInfoResDto.Medication.builder()
-//                                        .injection_time(medication.stream().map(
-//                                                medication->{
-//                                                    return medication.gett
-//                                                }
-//                                        ).toList())
-//                                        .memo()
-//                                        .build()
+                                reservation == null ?
+                                        null :
+                                        reservation.stream().map(
+                                                        r ->
+                                                                GetDailyInfoResDto.Hospital_reservation.builder()
+//                                                                      병원 이름
+                                                                        .hospital_name(r.getHospitalName())
+//                                                                      예약 날짜
+                                                                        .reservation_date(r.getReservationDate().toString())
+//                                                                      방문 목적
+                                                                        .purpose(r.getPurpose().getDescription())
+                                                                        .build())
+                                                .toList()
+                        )
+
+                        .medication(
+                                /*
+                                 * 사용자의 일일 약품 정보가 null이거나 비어있을 수 있다.
+                                 * 그러나 위에서 null 값 예외처리를 분기를 만든다면 다른 정보에 대한 return이 불가능함
+                                 * */
+                                medication == null || medication.isEmpty() ?
+                                        null :
+                                        medication.stream().map(
+                                                m ->
+                                                        GetDailyInfoResDto.Medication.builder()
+//                                                                약 이름
+                                                                .medication_name(m.getName())
+//                                                                복용 시작 날짜
+                                                                .start_date(m.getStartDate().toString())
+//                                                                복용 종료 날짜
+                                                                .end_date(m.getEndDate().toString())
+//                                                                약에 대한 간략한 설명
+                                                                .memo(m.getDescription())
+//                                                                복용 시간 리스트
+                                                                .injection_time(m.getTimeTakenList().stream().map(
+                                                                        time -> time.getTime_taken().toString()
+                                                                ).toList())
+                                                                .build()
+                                        ).toList()
                         )
                         .build()
         );
-
     }
 
     /*
