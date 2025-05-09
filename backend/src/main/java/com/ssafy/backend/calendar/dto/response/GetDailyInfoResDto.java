@@ -1,7 +1,9 @@
 package com.ssafy.backend.calendar.dto.response;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Builder
@@ -11,7 +13,27 @@ public class GetDailyInfoResDto {
     String end_date;
     Integer bleeding_level;
     Integer pain_level;
-//    List<>symptom
-//    hospital_reservation;
-//    medication;
+    List<String> symptom;
+    Hospital_reservation hospital_reservation;
+    Medication medication;
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Hospital_reservation {
+        String reservation_date;
+        String purpose;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Medication {
+        String injection_time;
+        String memo;
+    }
 }

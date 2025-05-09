@@ -1,5 +1,6 @@
 package com.ssafy.backend.menstrual.repository.custom;
 
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.backend.menstrual.entity.MenstrualCycle;
 import com.ssafy.backend.menstrual.entity.MenstrualDailyLog;
@@ -11,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,5 +42,21 @@ public class MenstrualCycleCustomRepositoryImpl implements MenstrualCycleCustomR
                     cycle.setLogs(distinctLogs); // 중복 제거된 로그로 설정
                 })
                 .collect(Collectors.toList());
+    }
+
+    public List<MenstrualCycle> findThisMonthCycles() {
+        LocalDate startOfMonth = LocalDate.now().withDayOfMonth(1);
+        LocalDate endOfMonth = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
+
+        return queryFactory
+                .selectFrom(menstrualCycle)
+                .leftJoin(menstrualCycle.logs, menstrualDailyLog).fetchJoin()   // Cycle -> DailyLog
+                .leftJoin(menstrualDailyLog.symptomLog, symptomLog).fetchJoin()     // DailyLog -> SymptomLog
+                .where(
+                        menstrualCycle.startDate.between(startOfMonth, endOfMonth)
+                                .or(menstrualCycle.endDate.between(startOfMonth, endOfMonth))
+                )
+                .distinct()
+                .fetch();
     }
 }

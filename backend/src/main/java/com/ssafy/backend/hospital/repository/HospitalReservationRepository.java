@@ -12,5 +12,7 @@ import java.util.Optional;
 public interface HospitalReservationRepository extends JpaRepository<HospitalReservation, Long> {
     Optional<List<HospitalReservation>> findHospitalReservationByUser_UserId(Long userId);
 
-       Optional<HospitalReservation> findFirstByUser_UserIdAndReservationDateAfterOrderByReservationDate(Long userUserId, LocalDateTime reservationDateAfter);
+    Optional<HospitalReservation> findFirstByUser_UserIdAndReservationDateAfterOrderByReservationDate(Long userUserId, LocalDateTime reservationDateAfter);
+
+    Optional<HospitalReservation> findByUser_UserIdAndReservationDate(Long UserId, LocalDateTime reservationDate);
 }

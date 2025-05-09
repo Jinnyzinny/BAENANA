@@ -8,6 +8,7 @@ import com.ssafy.backend.hospital.entity.HospitalReservation;
 import com.ssafy.backend.hospital.repository.HospitalReservationRepository;
 import com.ssafy.backend.medication.entity.Medication;
 import com.ssafy.backend.medication.repository.MedicationRepository;
+import com.ssafy.backend.medication.repository.custom.MedicationCustomRepository;
 import com.ssafy.backend.menstrual.entity.MenstrualCycle;
 import com.ssafy.backend.menstrual.repository.MenstrualCycleRepository;
 import com.ssafy.backend.user.entity.User;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -26,6 +28,7 @@ public class HomeServiceImpl implements HomeService {
     private final HospitalReservationRepository hospitalreservationRepository;
     private final MenstrualCycleRepository menstrualCycleRepository;
     private final MedicationRepository medicationRepository;
+    private final MedicationCustomRepository MedicationCustomRepository;
 
     @Override
     public ApiResponse<?> getRemainDay(User user) {
@@ -71,11 +74,10 @@ public class HomeServiceImpl implements HomeService {
         /*
          * 복용 종료일이 오늘 이후인 약들 중 오늘 복용해야할 약물들을 찾는다.
          * */
-        List<Medication> medication = medicationRepository
-                .findDistinctByUser_UserIdAndEndDateAfter(
-                        userId,
-                        LocalDate.now()
-                ).orElse(null);
+        List<Medication> medication = medicationRepository.findDistinctByUser_UserIdAndEndDateAfter(
+                userId,
+                LocalDate.now()
+        ).orElse(null);
         /*
          * 만약 복용해야할 약물이 아무것도 없다면 복용할 약이 없다고 알림을 보낸다.
          * */
@@ -84,9 +86,13 @@ public class HomeServiceImpl implements HomeService {
         }
         StringBuilder medicineMessage = new StringBuilder();
         medication.forEach(m -> {
-            medicineMessage.append(String.format("%d시에 %s약을 복용해야 합니다.",
-                    m.getTimeTakenList().get(0).getTime_taken().getHour(),
-                    m.getName()));
+            // 복용 시간을 리스트에서 추출하여 ", "로 구분된 문자열로 만듦
+            String times = m.getTimeTakenList().stream()
+                    .map(time -> String.valueOf(time.getTime_taken().getHour()))
+                    .collect(Collectors.joining(", "));
+
+            // 최종 메시지 조합
+            medicineMessage.append(String.format("오늘은 %s시에 %s약을 복용해야 합니다.", times, m.getName()));
         });
         return ApiResponse.success(
                 "복용할 약의 정보입니다.",
