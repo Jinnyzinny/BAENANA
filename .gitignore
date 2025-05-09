@@ -1,3 +1,8 @@
+# 환경 변수 파일
+ai/.env
+
+# 양자화된 모델 파일
+ai/**/*.gguf
 .idea/
 
 HELP.md
