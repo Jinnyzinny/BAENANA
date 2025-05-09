@@ -8,6 +8,7 @@ import com.ssafy.backend.hospital.dto.response.GetHospitalReservationResDto;
 import com.ssafy.backend.hospital.entity.HospitalReservation;
 import com.ssafy.backend.hospital.entity.PurposeType;
 import com.ssafy.backend.hospital.entity.StatusType;
+import com.ssafy.backend.hospital.exception.HospitalReservationException;
 import com.ssafy.backend.hospital.repository.HospitalReservationRepository;
 import com.ssafy.backend.user.entity.User;
 import com.ssafy.backend.user.repository.UserRepository;
@@ -17,6 +18,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -60,10 +63,15 @@ public class HospitalReservationServiceImpl implements HospitalReservationServic
         /*
          * 사용자가 예약한 병원 리스트를 얻는다.
          * */
+        LocalDateTime startOfMonth = LocalDate.now().withDayOfMonth(1).atStartOfDay();
+        LocalDateTime endOfMonth = startOfMonth.plusMonths(1).minusDays(1).withHour(23).withMinute(59).withSecond(59);
+
         List<HospitalReservation> hospitalReservationList =
-                hospitalReservationRepository.findHospitalReservationByUser_UserId(userId).orElse(
-                        null
-                );
+                hospitalReservationRepository.findByUser_UserIdAndReservationDateBetween(
+                        userId,
+                        startOfMonth,
+                        endOfMonth
+                ).orElse(null);
         /*
          * 예약 병원 리스트가 없을 경우
          * */
@@ -90,15 +98,12 @@ public class HospitalReservationServiceImpl implements HospitalReservationServic
             Long id) {
         /*
          * 해당 객체 ID로 병원 객체를 찾는다.
-         * */
-        HospitalReservation hospitalReservation =
-                hospitalReservationRepository.findById(id).orElse(null);
-        /*
          * 병원 예약이 없을 경우 메시지를 반환한다.
          * */
-        if (hospitalReservation == null) {
-            return ApiResponse.success("존재 하지 않는 예약입니다.");
-        }
+        HospitalReservation hospitalReservation =
+                hospitalReservationRepository.findById(id).orElseThrow(() ->
+                        new HospitalReservationException("변경할 병원 예약이 존재하지 않습니다."));
+
         BeanUtils.copyProperties(request, hospitalReservation, NullAwareBeanUtils.getNullPropertyNames(request));
         if (request.getPurpose() != null) {
             hospitalReservation.setPurposeTypeByDescription(request.getPurpose());
@@ -111,7 +116,10 @@ public class HospitalReservationServiceImpl implements HospitalReservationServic
 
     @Override
     public ApiResponse<?> deleteHospitalReservation(User user, Long id) {
-        hospitalReservationRepository.deleteById(id);
+        HospitalReservation hospitalReservation =
+                hospitalReservationRepository.findById(id).orElseThrow(
+                        () -> new HospitalReservationException("변경할 병원 예약이 존재하지 않습니다."));
+        hospitalReservationRepository.deleteById(hospitalReservation.getReservationId());
         return ApiResponse.success("예약 일정이 성공적으로 삭제되었습니다.");
     }
 }
