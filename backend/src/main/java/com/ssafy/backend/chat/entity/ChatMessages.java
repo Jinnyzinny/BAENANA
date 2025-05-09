@@ -3,11 +3,13 @@ package com.ssafy.backend.chat.entity;
 import com.ssafy.backend.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter
 @Table(indexes = {
         @Index(name = "session", columnList = "session_id")
 })
