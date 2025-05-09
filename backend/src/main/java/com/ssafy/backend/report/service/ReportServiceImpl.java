@@ -2,26 +2,29 @@ package com.ssafy.backend.report.service;
 
 import com.ssafy.backend.common.ApiResponse;
 import com.ssafy.backend.menstrual.entity.MenstrualCycle;
-import com.ssafy.backend.menstrual.entity.MenstrualDailyLog;
 import com.ssafy.backend.menstrual.repository.MenstrualCycleRepository;
 import com.ssafy.backend.menstrual.repository.MenstrualDailyLogRepository;
+import com.ssafy.backend.menstrual.repository.custom.MenstrualCycleCustomRepository;
 import com.ssafy.backend.report.dto.response.GetAlarmResDto;
 import com.ssafy.backend.report.dto.response.GetSummaryResDto;
 import com.ssafy.backend.user.entity.User;
+import io.micrometer.core.instrument.binder.logging.LogbackMetrics;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class ReportServiceImpl implements ReportService {
+    private final MenstrualCycleCustomRepository menstrualCycleCustomRepository;
     private final MenstrualCycleRepository menstrualCycleRepository;
     private final MenstrualDailyLogRepository menstrualDailyLogRepository;
+    private final LogbackMetrics logbackMetrics;
 
     @Override
     public ApiResponse<?> getAlarm(User user) {
@@ -57,6 +60,7 @@ public class ReportServiceImpl implements ReportService {
         }
     }
 
+    //    이번달의 월경 출혈량, 스트레스 지수, 이번달 월경 증상등을 반환한다.
     @Override
     public ApiResponse<?> getSummary(User user) {
         /*
@@ -64,27 +68,54 @@ public class ReportServiceImpl implements ReportService {
          * */
         Long userId = user.getUserId();
 
-        MenstrualDailyLog dailyLog =
-                menstrualDailyLogRepository.findByCycle_User_UserIdAndDate(userId, LocalDate.now()).orElse(null);
+        List<MenstrualCycle> cycleList =
+                menstrualCycleCustomRepository.findThisMonthCycles();
 
-        if (dailyLog == null) {
+        if (cycleList == null || cycleList.isEmpty()) {
             return ApiResponse.success("요약할 정보가 없습니다.");
         }
-
-        return ApiResponse.success("", GetSummaryResDto.builder()
-//                .menstrual(
-//                        GetSummaryResDto.Menstrual.builder()
-//                                .anomal()
-//                                .bleeding_level(dailyLog.getBleedingLevel())
-//                                .symptom()
-//                                .build()
-//                )
-//                .stress(
+        return ApiResponse.success("사용자의 요약 리포트 API입니다.", GetSummaryResDto.builder()
+                .menstrual(
+                        GetSummaryResDto.Menstrual.builder()
+                                .abnormal(getAbnormalMenstrual(cycleList))
+                                .bleeding_level(getBleedingLevel(cycleList))
+                                .symptom(getSymptoms(cycleList))
+                                .build()
+                )
+                .stress(null
 //                        GetSummaryResDto.Stress.builder()
-//                                .anomal()
+//                                .abnormal()
 //                                .stress()
 //                                .build()
-//                )
+                )
                 .build());
+
+    }
+
+    public Boolean getAbnormalMenstrual(List<MenstrualCycle> cycleList) {
+        return true;
+    }
+
+    public String getBleedingLevel(List<MenstrualCycle> cycleList) {
+        int bleedingLevel = 0;
+        int bleedingDay = 0;
+        for (int i = 0; i < cycleList.size(); i++) {
+            for (int day = 0; day < cycleList.get(i).getLogs().size(); day++) {
+                bleedingDay++;
+                bleedingLevel += cycleList.get(i).getLogs().get(day).getBleedingLevel();
+            }
+        }
+        return String.format("%.2f", (double) bleedingLevel / bleedingDay);
+    }
+
+    public List<String> getSymptoms(List<MenstrualCycle> cycleList) {
+        return cycleList.stream()
+                .flatMap(cycle -> cycle.getLogs().stream())
+                .flatMap(log -> log.getSymptomLog()
+                        .stream()
+                        .map(symptom -> symptom.getSymptomType().getDescription())
+                )
+                .distinct() // 중복 제거
+                .collect(Collectors.toList());
     }
 }

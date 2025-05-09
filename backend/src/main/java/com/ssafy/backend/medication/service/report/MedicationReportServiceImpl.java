@@ -85,7 +85,7 @@ public class MedicationReportServiceImpl implements MedicationReportService {
                                                 .time_taken(record.getTimeTakenList().stream().map(
                                                         t -> t.getTime_taken().toString()
                                                 ).toList())
-//                                                .memo(record.)
+                                                .memo(record.getDescription())
                                                 .build()
                                 ).toList()
                         )

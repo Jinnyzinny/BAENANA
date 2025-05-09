@@ -12,4 +12,5 @@ import java.util.List;
 public interface MenstrualCycleCustomRepository {
 //    userId를 사용해서 주기 정보 열람(이때 log를 모두 같이 열람한다)
     List<MenstrualCycle> findMenstrualCycleByUser(User user);
+    List<MenstrualCycle> findThisMonthCycles();
 }

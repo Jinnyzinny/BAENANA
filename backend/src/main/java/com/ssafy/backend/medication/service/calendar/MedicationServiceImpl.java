@@ -7,6 +7,7 @@ import com.ssafy.backend.medication.dto.request.UpdateMedicationScheduleReqDto;
 import com.ssafy.backend.medication.dto.response.GetMedicationResDto;
 import com.ssafy.backend.medication.entity.Medication;
 import com.ssafy.backend.medication.entity.TimeTaken;
+import com.ssafy.backend.medication.exception.MedicationException;
 import com.ssafy.backend.medication.repository.MedicationRepository;
 import com.ssafy.backend.medication.repository.TimeTakenRepository;
 import com.ssafy.backend.medication.repository.custom.MedicationCustomRepository;
@@ -47,6 +48,7 @@ public class MedicationServiceImpl implements MedicationService {
                         .name(request.getName())
                         .startDate(request.getStart_date())
                         .endDate(request.getEnd_date())
+                        .description(request.getMemo())
                         .build()
         );
         em.flush();
@@ -76,7 +78,7 @@ public class MedicationServiceImpl implements MedicationService {
         List<Medication> medication =
                 medicationCustomRepository.findMedicationByUserId(userId);
 
-        if (medication == null||medication.isEmpty()) {
+        if (medication == null || medication.isEmpty()) {
             return ApiResponse.success("사용자가 복용한 의약품이 없습니다.");
         }
         /*
@@ -108,10 +110,9 @@ public class MedicationServiceImpl implements MedicationService {
     @Override
     public ApiResponse<?> updateMedication(User user, UpdateMedicationScheduleReqDto request, Long id) {
         Medication medication =
-                medicationRepository.findByMedicationId(id).orElse(null);
-        if (medication == null) {
-            return ApiResponse.success("복용할 약 정보를 수정하는데 실패했습니다.");
-        }
+                medicationRepository.findByMedicationId(id).orElseThrow(
+                        () ->
+                                new MedicationException("복용할 약 정보가 존재하지 않습니다."));
         BeanUtils.copyProperties(request, medication, NullAwareBeanUtils.getNullPropertyNames(request));
         if (request.getEnd_date() != null) {
             medication.setEndDate(request.getEnd_date());
@@ -119,12 +120,18 @@ public class MedicationServiceImpl implements MedicationService {
         if (request.getStart_date() != null) {
             medication.setStartDate(request.getStart_date());
         }
+        if (request.getMemo() != null) {
+            medication.setDescription(request.getMemo());
+        }
         return ApiResponse.success("복용할 약 정보가 성공적으로 수정되었습니다.");
     }
 
     @Override
     public ApiResponse<?> deleteMedication(User user, Long id) {
-        medicationRepository.deleteById(id);
+        Medication medication = medicationRepository.findById(id).orElseThrow(
+                () ->
+                        new MedicationException("삭제할 약 정보가 존재하지 않습니다."));
+        medicationRepository.deleteById(medication.getMedicationId());
         return ApiResponse.success("복용할 약 정보를 삭제하는데 성공했습니다.");
     }
 }

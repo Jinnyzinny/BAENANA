@@ -5,6 +5,7 @@ import com.ssafy.backend.common.utils.NullAwareBeanUtils;
 import com.ssafy.backend.menstrual.dto.request.AddMenstrualCycleDailyLogReqDto;
 import com.ssafy.backend.menstrual.dto.request.UpdateMenstrualCycleDailyLogReqDto;
 import com.ssafy.backend.menstrual.entity.MenstrualDailyLog;
+import com.ssafy.backend.menstrual.exception.MenstrualException;
 import com.ssafy.backend.menstrual.repository.MenstrualCycleRepository;
 import com.ssafy.backend.menstrual.repository.MenstrualDailyLogRepository;
 import com.ssafy.backend.symptom.entity.SymptomLog;
@@ -59,9 +60,9 @@ public class MenstrualCycleLogServiceImpl implements MenstrualCycleLogService {
     @Override
     public ApiResponse<?> updateMenstrualCycleDailyLog(User user, UpdateMenstrualCycleDailyLogReqDto request, Long id) {
         MenstrualDailyLog dailyLog =
-                menstrualDailyLogRepository.findById(id).orElse(null);
-        if (dailyLog == null)
-            return ApiResponse.success("주기 정보가 없습니다.");
+                menstrualDailyLogRepository.findById(id).orElseThrow(
+                        ()-> new MenstrualException("주기 세부 정보가 없습니다.")
+                );
 
         BeanUtils.copyProperties(request, dailyLog, NullAwareBeanUtils.getNullPropertyNames(request));
         if (request.getDate() != null) {
