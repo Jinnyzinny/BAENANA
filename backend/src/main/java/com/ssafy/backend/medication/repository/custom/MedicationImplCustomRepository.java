@@ -31,7 +31,7 @@ public class MedicationImplCustomRepository implements MedicationCustomRepositor
                 .leftJoin(medication.timeTakenList, timeTaken).fetchJoin()
                 .where(medication.user.userId.eq(userId))
                 .distinct()
-                .orderBy(medication.startDate.desc(), timeTaken.time_taken.asc())
+                .orderBy(medication.startDate.asc(), timeTaken.time_taken.asc())
                 .fetch();
     }
 }
