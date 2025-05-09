@@ -90,4 +90,17 @@ public class ChatService {
                 .sorted((a, b) -> b.getLastTime().compareTo(a.getLastTime()))
                 .collect(Collectors.toList());
     }
+
+    public List<MessageDto> getSessionMessages(User user, String sessionId) {
+        List<ChatMessages> messages = chatMessageRepository
+                .findByUserAndSessionIdOrderByCreatedAt(user, sessionId);
+
+        return messages.stream()
+                .map(msg -> new MessageDto(
+                        msg.getSender(),
+                        msg.getMessage(),
+                        msg.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                ))
+                .collect(Collectors.toList());
+    }
 }
