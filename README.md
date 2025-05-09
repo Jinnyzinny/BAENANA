@@ -49,7 +49,11 @@ S12P31S205
 │  │  └─ chroma.sqlite3
 │  ├─ data
 │  │  ├─ documents
-│  │  │  └─ bless_faq.docx
+│  │  │  ├─ FAQ_bless.docx
+│  │  │  ├─ FAQ_test.docx
+│  │  │  ├─ HCG_info.docx
+│  │  │  ├─ health_info.docx
+│  │  │  └─ LH_info.docx
 │  │  └─ test_question.json
 │  ├─ README.md
 │  ├─ requirements.txt
