@@ -9,13 +9,32 @@ import java.util.List;
 @Builder
 public class GetDailyInfoResDto {
     String date;
-    String start_date;
-    String end_date;
-    Integer bleeding_level;
-    Integer pain_level;
-    List<String> symptom;
+    Boolean prediction;
+    menstrual_cycle menstrual_cycle;
+    menstrual_daily_log menstrual_daily_log;
     List<Hospital_reservation> hospital_reservation;
     List<Medication> medication;
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class menstrual_cycle {
+        String start_date;
+        String end_date;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class menstrual_daily_log {
+        int bleeding_level;;
+        int pain_level;
+        List<String> symptom;
+    }
 
     @Getter
     @Setter

@@ -64,7 +64,6 @@ public class CalendarServiceImpl implements CalendarService {
         /*
          * 해당 날짜의 병원 예약을 얻어낸다
          * */
-
         List<HospitalReservation> reservation =
                 hospitalreservationRepository
                         .findByUser_UserIdAndReservationDateBetween(userId, searchForDate.atStartOfDay(), searchForDate.atTime(LocalTime.MAX))
@@ -73,30 +72,37 @@ public class CalendarServiceImpl implements CalendarService {
         List<Medication> medication = medicationRepository
                 .findDistinctByUser_UserIdAndEndDateAfter(userId, searchForDate)
                 .orElse(null);
-        /*
-         * 해당 일자의 정보가 없다면 메시지를 반환한다.
-         * */
-        if (dailyLog == null) {
-            return ApiResponse.success(
-                    "사용자의 생리주기 데이터가 없습니다."
-            );
-        }
-        return ApiResponse.success("",
+        return ApiResponse.success(String.format("%d월 %d일의 일일 정보입니다",
+                        searchForDate.getMonthValue(),
+                        searchForDate.getDayOfMonth()
+                ),
                 GetDailyInfoResDto.builder()
 //                        정보를 요청한 날짜
                         .date(searchForDate.toString())
-//                        주기의 시작 날짜
-                        .start_date(
-                                menstrualCycle.getStartDate().toString())
-//                        주기의 종료일
-                        .end_date(
-                                menstrualCycle.getEndDate().toString())
-//                        주기의 출혈량
-                        .bleeding_level(
-                                dailyLog.getBleedingLevel())
-//                        해당 날짜의 통증 정도
-                        .pain_level(
-                                dailyLog.getPainLevel())
+                        .prediction(searchForDate.isAfter(LocalDate.now()) && menstrualCycle == null)
+                        .menstrual_cycle(
+                                menstrualCycle == null ?
+                                        null :
+                                        GetDailyInfoResDto.menstrual_cycle.builder()
+                                                .start_date(menstrualCycle.getStartDate().toString())
+                                                .end_date(menstrualCycle.getEndDate().toString())
+                                                .build()
+                        )
+                        .menstrual_daily_log(
+                                dailyLog == null ?
+                                        null :
+                                        GetDailyInfoResDto.menstrual_daily_log.builder()
+//                                        주기의 출혈량
+                                                .bleeding_level(dailyLog.getBleedingLevel())
+//                                        해당 날짜의 통증 정도
+                                                .pain_level(dailyLog.getPainLevel())
+                                                .symptom(dailyLog.getSymptomLog()
+                                                        .stream()
+                                                        .map(symptomLog -> symptomLog.getSymptomType().getDescription())
+                                                        .toList()
+                                                )
+                                                .build()
+                        )
 //                        해당 날짜의 병원 예약 정보
                         .hospital_reservation(
                                 reservation == null ?
