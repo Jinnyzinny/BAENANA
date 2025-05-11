@@ -40,7 +40,7 @@ public class ReportController {
             @RequestBody AddOvulationTestReqDto request,
             @AuthenticationPrincipal User user
     ) {
-        return ResponseEntity.ok(menstrualService.addOvulationTest(user,request));
+        return ResponseEntity.ok(menstrualService.AddOvulationTest(user,request));
     }
 
     @GetMapping("/menstrual/ovulation_test")
