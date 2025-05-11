@@ -4,6 +4,7 @@ import com.ssafy.backend.common.ApiResponse;
 import com.ssafy.backend.menstrual.entity.MenstrualCycle;
 import com.ssafy.backend.menstrual.repository.MenstrualCycleRepository;
 import com.ssafy.backend.menstrual.repository.MenstrualDailyLogRepository;
+import com.ssafy.backend.report.dto.request.AddOvulationTestReqDto;
 import com.ssafy.backend.report.dto.response.GetAllMenstrualResDto;
 import com.ssafy.backend.report.dto.response.GetMenstrualInfoResDto;
 import com.ssafy.backend.report.dto.response.GetOvulationTestResDto;
@@ -84,6 +85,11 @@ public class MenstrualServiceImpl implements MenstrualService {
                         .is_cycle_normal(normalCycle)
                         .is_period_normal(normalPeriod)
                         .build());
+    }
+
+    @Override
+    public ApiResponse<?> AddOvulationTest(User user, AddOvulationTestReqDto request) {
+        return null;
     }
 
 

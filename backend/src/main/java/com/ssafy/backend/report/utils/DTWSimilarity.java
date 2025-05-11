@@ -2,6 +2,7 @@ package com.ssafy.backend.report.utils;
 
 import org.springframework.stereotype.Component;
 
+@Component
 public class DTWSimilarity {
     // 유클리디안 거리 계산
     private static double euclideanDistance(double a, double b) {

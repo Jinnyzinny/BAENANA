@@ -1,19 +1,16 @@
 package com.ssafy.backend.report.controller;
 
 import com.ssafy.backend.common.ApiResponse;
-import com.ssafy.backend.medication.service.calendar.MedicationService;
 import com.ssafy.backend.medication.service.report.MedicationReportService;
 import com.ssafy.backend.menstrual.service.report.MenstrualService;
-import com.ssafy.backend.report.dto.response.*;
+import com.ssafy.backend.report.dto.request.AddOvulationTestReqDto;
 import com.ssafy.backend.report.service.ReportService;
 import com.ssafy.backend.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -36,6 +33,14 @@ public class ReportController {
             @AuthenticationPrincipal User user
     ) {
         return ResponseEntity.ok(menstrualService.getMenstrualInfo(user));
+    }
+
+    @PostMapping("/menstrual/ovulation_test")
+    public ResponseEntity<ApiResponse<?>> addOvulationTest(
+            @RequestBody AddOvulationTestReqDto request,
+            @AuthenticationPrincipal User user
+    ) {
+        return ResponseEntity.ok(menstrualService.addOvulationTest(user,request));
     }
 
     @GetMapping("/menstrual/ovulation_test")
