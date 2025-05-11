@@ -5,7 +5,6 @@ import com.ssafy.backend.hospital.entity.HospitalReservation;
 import com.ssafy.backend.inquiry.entity.Inquiry;
 import com.ssafy.backend.medication.entity.Medication;
 import com.ssafy.backend.menstrual.entity.MenstrualCycle;
-import com.ssafy.backend.symptom.entity.SymptomLog;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -36,9 +35,7 @@ public class User implements UserDetails, OAuth2User {
 
     @OneToMany(mappedBy = "user")
     private List<HospitalReservation> hospitalReservations;
-
-//    @OneToMany(mappedBy = "user")
-//    private List<SymptomLog> symptomLogs;
+    
 
     @OneToMany(mappedBy = "user")
     private List<Medication> medications;
