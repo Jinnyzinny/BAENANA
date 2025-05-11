@@ -1,4 +1,4 @@
-package com.ssafy.backend.symptom.entity;
+package com.ssafy.backend.menstrual.entity.symptom;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;

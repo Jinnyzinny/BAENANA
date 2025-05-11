@@ -15,6 +15,7 @@ public class AddMenstrualCycleDailyLogReqDto {
     private LocalDate date;
     private int bleeding_level;
     private int pain_level;
+    private int stress_level;
     private Boolean is_start;
     private Boolean is_end;
     List<String> symptom;

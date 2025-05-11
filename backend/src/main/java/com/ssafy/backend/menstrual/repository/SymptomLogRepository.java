@@ -1,6 +1,6 @@
-package com.ssafy.backend.symptom.repository;
+package com.ssafy.backend.menstrual.repository;
 
-import com.ssafy.backend.symptom.entity.SymptomLog;
+import com.ssafy.backend.menstrual.entity.symptom.SymptomLog;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

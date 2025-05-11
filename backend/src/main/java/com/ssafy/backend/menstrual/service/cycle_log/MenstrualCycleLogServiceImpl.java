@@ -8,9 +8,9 @@ import com.ssafy.backend.menstrual.entity.MenstrualDailyLog;
 import com.ssafy.backend.menstrual.exception.MenstrualException;
 import com.ssafy.backend.menstrual.repository.MenstrualCycleRepository;
 import com.ssafy.backend.menstrual.repository.MenstrualDailyLogRepository;
-import com.ssafy.backend.symptom.entity.SymptomLog;
-import com.ssafy.backend.symptom.entity.SymptomType;
-import com.ssafy.backend.symptom.repository.SymptomLogRepository;
+import com.ssafy.backend.menstrual.entity.symptom.SymptomLog;
+import com.ssafy.backend.menstrual.entity.symptom.SymptomType;
+import com.ssafy.backend.menstrual.repository.SymptomLogRepository;
 import com.ssafy.backend.user.entity.User;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +38,7 @@ public class MenstrualCycleLogServiceImpl implements MenstrualCycleLogService {
                         .date(request.getDate())
                         .bleedingLevel(request.getBleeding_level())
                         .painLevel(request.getPain_level())
+                        .stressLevel(request.getStress_level())
                         .isStart(request.getIs_start())
                         .isEnd(request.getIs_end())
                         .build()
