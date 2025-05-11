@@ -11,6 +11,7 @@ import com.ssafy.backend.report.dto.response.GetRecentMenstrualResDto;
 import com.ssafy.backend.report.dto.service.GetCycleDto;
 import com.ssafy.backend.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.math3.util.MathArrays;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -90,14 +91,26 @@ public class MenstrualServiceImpl implements MenstrualService {
     public ApiResponse<?> getOvulationTest(User user) {
         Long userId = user.getUserId();
 
+//        가장 최근 주기를 불러온다.
+        MenstrualCycle menstrualCycle =
+                menstrualCycleRepository.findFirstByUser_UserIdOrderByStartDateDesc(userId).orElse(null);
+        if (menstrualCycle == null) {
+            return ApiResponse.success("기준이 될 사용자의 데이터가 없습니다.");
+        }
+
+//        사용자의 배란 주기 데이터를 확인해서 1번,2번,3번 그래프 중 어디에 더 맞는지 확인
+
+
 //        디아 비전측 정보로 채운다. 이 부분은 제공 API로 대체 가능성 높음
         return ApiResponse.success("배란 테스트 정보입니다.",
                 GetOvulationTestResDto.builder()
-                        .fertile_day("")
-                        .fertile_period_start_date("")
-                        .fertile_period_end_date("")
+//                        .normal()
+//                        .standard()
+//                        .personal_data()
                         .build());
     }
+
+
 
     @Override
     public ApiResponse<?> getRecentMenstrual(User user) {
