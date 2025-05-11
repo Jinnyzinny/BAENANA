@@ -26,9 +26,12 @@ export async function getNoticeDetail(noticeId: number): Promise<NoticeDetail> {
 }
 
 // [관리자] 공지사항 등록
-export async function addNotice() {
+export async function addNotice(title: string, content: string) {
   try {
-    const response = await authClient.post("/notifications/admin");
+    const response = await authClient.post("/notifications/admin", {
+      title,
+      content,
+    });
     console.log("[관리자] 공지사항 등록 성공: ", response.data);
     return response.data;
   } catch (error: unknown) {
@@ -38,9 +41,20 @@ export async function addNotice() {
 }
 
 // [관리자] 공지사항 변경
-export async function editNotice(noticeId: number) {
+export async function editNotice(
+  noticeId: number,
+  title?: string,
+  content?: string
+) {
   try {
-    const response = await authClient.patch(`/notifications/admin/${noticeId}`);
+    const payload = {
+      ...(title !== undefined && { title }),
+      ...(content !== undefined && { content }),
+    };
+    const response = await authClient.patch(
+      `/notifications/admin/${noticeId}`,
+      payload
+    );
     console.log("[관리자] 공지사항 변경 성공: ", response.data);
     return response.data;
   } catch (error: unknown) {

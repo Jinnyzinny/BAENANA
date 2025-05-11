@@ -26,7 +26,7 @@ export async function withdraw() {
   }
 }
 
-// 사용자 알림 설정 변경(/users/me/alarm)
+// 사용자 알림 설정 변경
 export async function userAlarm(allowAlarm: boolean) {
   try {
     const response = await authClient.patch("/users/me/alarm", {

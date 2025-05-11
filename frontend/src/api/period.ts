@@ -69,7 +69,7 @@ export async function editPeriod(
   }
 }
 
-// 월경 주기 세부 정보 등록
+// 월경 세부 정보 등록
 export async function addPeriodSymtom(
   cycleId: number,
   date: string,
@@ -97,7 +97,7 @@ export async function addPeriodSymtom(
   }
 }
 
-// 월경 주기 세부 정보 변경
+// 월경 세부 정보 변경
 export async function editPeriodSymtom(
   cycleId: number,
   date: string,

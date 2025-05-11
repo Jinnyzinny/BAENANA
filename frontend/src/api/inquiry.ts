@@ -1,12 +1,14 @@
-// 사용자
-
 import { AdminInquiry, Inquiry, InquiryDetail } from "../types/Inquiry";
 import authClient from "./client/authClient";
 
+// 사용자
 // [사용자] 문의사항 등록
-export async function addInquiry() {
+export async function addInquiry(title: string, questionContent: string) {
   try {
-    const response = await authClient.post("/inquiries");
+    const response = await authClient.post("/inquiries", {
+      title,
+      questionContent,
+    });
     console.log("[사용자] 문의사항 등록 성공: ", response.data);
     return response.data;
   } catch (error: unknown) {
@@ -14,6 +16,7 @@ export async function addInquiry() {
     throw error;
   }
 }
+
 // [사용자] 문의사항 목록 조회
 export async function getInquiryList(): Promise<Inquiry[]> {
   try {
@@ -25,6 +28,7 @@ export async function getInquiryList(): Promise<Inquiry[]> {
     throw error;
   }
 }
+
 // [사용자] 문의사항 상세 조회
 export async function getInquiryDetail(
   inquiryId: number
@@ -38,10 +42,19 @@ export async function getInquiryDetail(
     throw error;
   }
 }
+
 // [사용자] 문의사항 변경
-export async function editInquiry(inquiryId: number) {
+export async function editInquiry(
+  inquiryId: number,
+  title?: string,
+  questionContent?: string
+) {
   try {
-    const response = await authClient.patch(`/inquiries/${inquiryId}`);
+    const payload = {
+      ...(questionContent !== undefined && { questionContent }),
+      ...(title !== undefined && { title }),
+    };
+    const response = await authClient.patch(`/inquiries/${inquiryId}`, payload);
     console.log("[사용자] 문의사항 변경 성공: ", response.data);
     return response.data;
   } catch (error: unknown) {
@@ -49,6 +62,7 @@ export async function editInquiry(inquiryId: number) {
     throw error;
   }
 }
+
 // [사용자] 문의사항 삭제
 export async function deleteInquiry(inquiryId: number) {
   try {
@@ -89,10 +103,14 @@ export async function getAdminInquiryDetail(
 }
 
 // [관리자] 문의사항 답변 등록
-export async function addAdminInquiry(inquiryId: number) {
+export async function addAdminInquiry(
+  inquiryId: number,
+  answerContent: string
+) {
   try {
     const response = await authClient.post(
-      `/inquiries/admin/${inquiryId}/answer`
+      `/inquiries/admin/${inquiryId}/answer`,
+      answerContent
     );
     console.log("[관리자] 문의사항 답변 등록 성공: ", response.data);
     return response.data;
@@ -103,10 +121,14 @@ export async function addAdminInquiry(inquiryId: number) {
 }
 
 // [관리자] 문의사항 답변 변경
-export async function editAdminInquiry(inquiryId: number) {
+export async function editAdminInquiry(
+  inquiryId: number,
+  answerContent: string
+) {
   try {
     const response = await authClient.patch(
-      `/inquiries/admin/${inquiryId}/answer`
+      `/inquiries/admin/${inquiryId}/answer`,
+      answerContent
     );
     console.log("[관리자] 문의사항 답변 변경 성공: ", response.data);
     return response.data;

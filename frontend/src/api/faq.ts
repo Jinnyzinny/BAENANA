@@ -26,9 +26,9 @@ export async function getFaqDetail(faqId: number): Promise<FaqDetail> {
 }
 
 // [관리자] FAQ 작성
-export async function addFaq() {
+export async function addFaq(question: string, answer: string) {
   try {
-    const response = await authClient.post("/faq/admin");
+    const response = await authClient.post("/faq/admin", { question, answer });
     console.log("[관리자] FAQ 작성 성공: ", response.data);
     return response.data;
   } catch (error: unknown) {
@@ -38,9 +38,19 @@ export async function addFaq() {
 }
 
 // [관리자] FAQ 변경
-export async function editFaq(faqId: number) {
+export async function editFaq(
+  faqId: number,
+  question?: string,
+  answer?: string
+) {
   try {
-    const response = await authClient.patch(`/faq/admin/${faqId}`);
+    const payload = {
+      ...(question !== undefined && { question }),
+      ...(answer !== undefined && {
+        answer,
+      }),
+    };
+    const response = await authClient.patch(`/faq/admin/${faqId}`, payload);
     console.log("[관리자] FAQ 변경 성공: ", response.data);
     return response.data;
   } catch (error: unknown) {

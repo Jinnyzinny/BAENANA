@@ -52,11 +52,11 @@ export async function getMedicineReservation(month: number): Promise<Medicine> {
 // 복용약 일정 변경
 export async function editMedicineReservation(
   id: number,
-  medicineName: string,
-  startDate: string,
-  endDate: string,
-  timeTaken: string[],
-  memo: string
+  medicineName?: string,
+  startDate?: string,
+  endDate?: string,
+  timeTaken?: string[],
+  memo?: string
 ) {
   try {
     const payload = {
