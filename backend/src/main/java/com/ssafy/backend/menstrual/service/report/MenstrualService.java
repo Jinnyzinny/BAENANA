@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface MenstrualService {
     ApiResponse<?> getMenstrualInfo(User user);
-    ApiResponse<?> AddOvulationTest(User user, AddOvulationTestReqDto request);
+    ApiResponse<?> addOvulationTest(User user, AddOvulationTestReqDto request);
     ApiResponse<?> getOvulationTest(User user);
     ApiResponse<?> getRecentMenstrual(User user);
     ApiResponse<?> getAllMenstrual(User user);
