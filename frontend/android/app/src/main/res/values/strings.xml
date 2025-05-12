@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">배나나</string>
+    <string name="kakao_app_key">71fad7a5dc0a0199c51d541e80bc9aac</string>
 </resources>

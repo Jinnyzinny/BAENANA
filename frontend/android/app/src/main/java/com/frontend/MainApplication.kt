@@ -11,6 +11,8 @@ import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.react.soloader.OpenSourceMergedSoMapping
 import com.facebook.soloader.SoLoader
+import com.kakao.sdk.common.util.Utility
+import android.util.Log
 
 class MainApplication : Application(), ReactApplication {
 
@@ -40,5 +42,7 @@ class MainApplication : Application(), ReactApplication {
       // If you opted-in for the New Architecture, we load the native entry point for this app.
       load()
     }
+    val keyHash = Utility.getKeyHash(this)
+    Log.d("카카오_키해시", "keyHash: $keyHash")
   }
 }

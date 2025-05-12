@@ -1,5 +1,5 @@
-import { Text, TouchableOpacity, View } from "react-native";
 import { useState } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
 
 interface TabItem {
   key: string;
@@ -21,7 +21,7 @@ export function TabMenu({ tabs, onSelect, initialKey }: TabMenuProps) {
   }
 
   return (
-    <View className="flex-row justify-center gap-5 items-center">
+    <View className="flex-row justify-center gap-5 items-center mb-3">
       {tabs.map((tab) => (
         <TouchableOpacity
           key={tab.key}
@@ -29,7 +29,7 @@ export function TabMenu({ tabs, onSelect, initialKey }: TabMenuProps) {
           className="items-center gap-2"
         >
           <Text
-            className={`text-sm font-bold ${
+            className={`font-bold ${
               selectedKey === tab.key ? "text-violet-700" : "text-neutral-400"
             }`}
           >

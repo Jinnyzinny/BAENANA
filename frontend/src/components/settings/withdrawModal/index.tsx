@@ -1,3 +1,4 @@
+import { unlink } from "@react-native-seoul/kakao-login";
 import { X } from "lucide-react-native";
 import {
   Image,
@@ -7,6 +8,8 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import { useWithdraw } from "../../../api/quries/auth";
+import { useLoginStore } from "../../../store/loginStore";
 import { CustomButton } from "../../common/customButton";
 
 export function WithdrawModal({
@@ -16,6 +19,19 @@ export function WithdrawModal({
   visible: boolean;
   onClose: () => void;
 }) {
+  const logout = useLoginStore((state) => state.logout);
+  const { mutate: withdraw, isPending } = useWithdraw();
+
+  async function handleWithdraw() {
+    try {
+      await unlink();
+      withdraw(undefined, {
+        onSuccess: () => logout(),
+      });
+    } catch (error) {
+      console.error("카카오 탈퇴 실패: ", error);
+    }
+  }
   return (
     <Modal
       visible={visible}
@@ -56,7 +72,11 @@ export function WithdrawModal({
                 <CustomButton fill={false} content="취소" onPress={onClose} />
               </View>
               <View className="flex-1">
-                <CustomButton fill={true} content="확인" onPress={() => {}} />
+                <CustomButton
+                  fill={true}
+                  content="확인"
+                  onPress={isPending ? () => {} : handleWithdraw}
+                />
               </View>
             </View>
           </View>

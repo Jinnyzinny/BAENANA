@@ -1,4 +1,5 @@
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React, { useEffect } from "react";
 import RNBootSplash from "react-native-bootsplash";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -16,6 +17,7 @@ export default function App(): React.JSX.Element {
     },
   };
   const isLoggedIn = useLoginStore((state) => state.isLoggedIn);
+  const queryClient = new QueryClient();
 
   useEffect(() => {
     const hide = async () => {
@@ -26,10 +28,12 @@ export default function App(): React.JSX.Element {
   }, []);
 
   return (
-    <GestureHandlerRootView className="flex-1">
-      <NavigationContainer theme={mainTheme}>
-        {isLoggedIn ? <RootStackNavigator /> : <LoginScreen />}
-      </NavigationContainer>
-    </GestureHandlerRootView>
+    <QueryClientProvider client={queryClient}>
+      <GestureHandlerRootView className="flex-1">
+        <NavigationContainer theme={mainTheme}>
+          {isLoggedIn ? <RootStackNavigator /> : <LoginScreen />}
+        </NavigationContainer>
+      </GestureHandlerRootView>
+    </QueryClientProvider>
   );
 }

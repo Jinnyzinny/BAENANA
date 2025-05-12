@@ -18,8 +18,16 @@ export function HealthInfoScreen() {
   const [selectedMenu, setSelectedMenu] = useState<string>("period");
   const sheetRef = useRef<Modalize>(null);
   const { height } = useWindowDimensions();
+  const selectedNumberMap: Record<string, number> = {
+    ovulation: 1,
+    period: 2,
+  };
 
-  function handleBottomSheet() {
+  const selectedNumber = selectedNumberMap[selectedMenu] ?? 1;
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+
+  function handleBottomSheet(id: number) {
+    setSelectedId(id);
     InteractionManager.runAfterInteractions(() => {
       sheetRef.current?.open();
     });
@@ -44,23 +52,29 @@ export function HealthInfoScreen() {
             <ImageSlider />
             {/* 카테고리 */}
             <View className="m-1" />
+            {/* 메뉴 */}
             <TabMenu
               tabs={[
-                { key: "period", label: "월경 관리" },
-                { key: "diet", label: "식이 요법" },
-                { key: "exercise", label: "운동 요법" },
-                { key: "habit", label: "생활 습관" },
+                { key: "period", label: "월경 정보" },
+                { key: "ovulation", label: "배란 정보" },
               ]}
               onSelect={(key) => {
                 setSelectedMenu(key);
               }}
             />
             {/* 건강 정보 카드 */}
-            <InfoCard onPress={handleBottomSheet} />
+            <InfoCard
+              onPress={handleBottomSheet}
+              selectedNumber={selectedNumber}
+            />
           </View>
         </ScrollView>
       </SafeAreaView>
-      <HealthInfoBottomSheet height={height} sheetRef={sheetRef} />
+      <HealthInfoBottomSheet
+        height={height}
+        sheetRef={sheetRef}
+        selectedId={selectedId}
+      />
     </>
   );
 }

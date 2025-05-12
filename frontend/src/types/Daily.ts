@@ -1,3 +1,4 @@
+// 추후 변경되는 대로 재작성 필요
 export type Daily = {
   date: string;
   start_date: string;
