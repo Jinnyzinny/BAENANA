@@ -1,6 +1,11 @@
 import { ChevronLeft, ChevronRight } from "lucide-react-native";
 import { Text, TouchableOpacity, View } from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
+import { HospitalReservation } from "../../../types/Hospital";
+import { Medicine } from "../../../types/Medicine";
+import { MarkPeriod, MergedMark } from "../../../utils/markPeriod";
+import { MarkDate } from "../../../utils/markDate";
+import { MergeMark } from "../../../utils/mergeMark";
 
 LocaleConfig.locales["ko"] = {
   monthNames: [
@@ -50,14 +55,69 @@ export function Monthly({
   onDateSelect,
   selectedMonth,
   setSelectedMonth,
+  hospitalReservation,
+  medicineReservation,
+  predictedPeriod,
+  childbearingAge,
 }: {
   onDateSelect: (date: string) => void;
   selectedMonth: number;
   setSelectedMonth: (month: number) => void;
+  hospitalReservation: HospitalReservation[];
+  medicineReservation: Medicine[];
+  predictedPeriod: Record<"startDate" | "endDate", string>;
+  childbearingAge: Record<"startDate" | "endDate", string>;
 }) {
+  // 병원 예약 일정
+  const hospitalDots = MarkDate(
+    hospitalReservation.map((item) => item.reservation_date_time),
+    "hospital",
+    "#A684FF"
+  );
+
+  // 복용약 예약 일정
+  const medicineDots = MarkDate(
+    medicineReservation.map(({ start_date, end_date }) => ({
+      start_date,
+      end_date,
+    })),
+    "medicine",
+    "#A684FF"
+  );
+
+  // 월경 예정일
+  const firstPeriod = MarkPeriod(
+    predictedPeriod.startDate,
+    predictedPeriod.endDate,
+    "#EDE9fE",
+    "#7008E7",
+    "#F5F3FF",
+    "#A684FF"
+  );
+
+  // 가임기
+  const secondPeriod = MarkPeriod(
+    childbearingAge.startDate,
+    childbearingAge.endDate,
+    "#FEF9C3",
+    "#262626",
+    "FEFCE8",
+    "#262626"
+  );
+
+  const mergedDot = {
+    ...hospitalDots,
+    ...medicineDots,
+  };
+  const mergedMarked = MergedMark(firstPeriod, secondPeriod);
+
+  const marked = MergeMark(mergedMarked, mergedDot);
+
   return (
     <View>
       <Calendar
+        markingType="period"
+        markedDates={marked}
         onDayPress={(day) => {
           onDateSelect(day.dateString);
         }}

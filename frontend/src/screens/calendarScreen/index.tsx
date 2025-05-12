@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   InteractionManager,
   ScrollView,
@@ -16,6 +16,15 @@ import { ScheduleModal } from "../../components/calendar/scheduleModal";
 import { SymptomBottomSheet } from "../../components/calendar/symptomBottomSheet";
 import { CustomButton } from "../../components/common/customButton";
 import { HeaderLogo } from "../../components/common/headerLogo";
+import { useGetHospitalReservation } from "../../api/quries/hospital";
+import { useGetMedicineReservation } from "../../api/quries/medicine";
+import {
+  useGetChildbearingAge,
+  useGetPredictedPeriod,
+} from "../../api/quries/period";
+import { useFocusEffect } from "@react-navigation/native";
+import { HospitalReservation } from "../../types/Hospital";
+import { Medicine } from "../../types/Medicine";
 
 export function CalendarScreen() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
@@ -27,6 +36,78 @@ export function CalendarScreen() {
   const { height } = useWindowDimensions();
   const month = new Date().getMonth() + 1;
   const [selectedMonth, setSelectedMonth] = useState<number>(month);
+
+  // 월별 병원 예약 일정
+  const [hospitalReservation, setHospitalReservation] = useState<
+    HospitalReservation[]
+  >([]);
+  const { data: hospitalReservationData, refetch: refetchHospitalReservation } =
+    useGetHospitalReservation(selectedMonth);
+
+  // 월별 복용약 일정
+  const [medicineReservation, setMedicineReservation] = useState<Medicine[]>(
+    []
+  );
+  const { data: medicineReservationData, refetch: refetchMedicineReservation } =
+    useGetMedicineReservation(month);
+
+  // 월별 가임기
+  const [childbearingAge, setChildbearingAge] = useState({
+    startDate: "",
+    endDate: "",
+  });
+  const { data: childbearingAgeData, refetch: refetchChildbearingAge } =
+    useGetChildbearingAge();
+
+  // 월경 예정일
+  const [predictedPeriod, setPredictedPeriod] = useState({
+    startDate: "",
+    endDate: "",
+  });
+  const { data: predictedPeriodData, refetch: refetchPredictedPeriod } =
+    useGetPredictedPeriod();
+
+  useEffect(() => {
+    // 월별 병원 예약 일정
+    if (hospitalReservationData?.data) {
+      setHospitalReservation(hospitalReservationData.data);
+    }
+
+    // 복용약 예약 일정
+    if (medicineReservationData?.data) {
+      setMedicineReservation(medicineReservationData.data);
+    }
+
+    // 가임기 정보가 있는 경우
+    if (childbearingAgeData?.data) {
+      setChildbearingAge({
+        startDate: childbearingAgeData.data.start_date,
+        endDate: childbearingAgeData.data.end_date,
+      });
+    }
+
+    // 월경 예정일 정보가 있는 경우
+    if (predictedPeriodData?.data) {
+      setPredictedPeriod({
+        startDate: predictedPeriodData.data.start_date,
+        endDate: predictedPeriodData.data.end_date,
+      });
+    }
+  }, [
+    hospitalReservationData,
+    medicineReservationData,
+    childbearingAgeData,
+    predictedPeriodData,
+  ]);
+
+  useFocusEffect(
+    useCallback(() => {
+      refetchHospitalReservation();
+      refetchMedicineReservation();
+      refetchChildbearingAge();
+      refetchPredictedPeriod();
+    }, [])
+  );
 
   // 날짜 선택 시 선택된 날짜 저장, 모달 열기
   function handleDatePress(date: string) {
@@ -57,12 +138,24 @@ export function CalendarScreen() {
         <HeaderLogo before={false} settings={true} />
         <ScrollView>
           <View className="flex-1 mx-5 gap-3">
+            {/* 캘린더 */}
             <Monthly
               onDateSelect={handleDatePress}
               selectedMonth={selectedMonth}
-              setSelectedMonth={() => setSelectedMonth}
+              setSelectedMonth={setSelectedMonth}
+              hospitalReservation={hospitalReservation}
+              medicineReservation={medicineReservation}
+              predictedPeriod={predictedPeriod}
+              childbearingAge={childbearingAge}
             />
-            <ScheduleList selectedMonth={selectedMonth} />
+            {/* 월별 주요 일정 */}
+            <ScheduleList
+              selectedMonth={selectedMonth}
+              hospitalReservation={hospitalReservation}
+              medicineReservation={medicineReservation}
+              predictedPeriod={predictedPeriod}
+              childbearingAge={childbearingAge}
+            />
             <CustomButton
               fill={true}
               content="월경일 입력"

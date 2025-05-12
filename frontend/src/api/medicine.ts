@@ -1,4 +1,4 @@
-import { Medicine, MedicineAlert } from "../types/Medicine";
+import { FullMedicine, MedicineAlert } from "../types/Medicine";
 import authClient from "./client/authClient";
 
 // 복용약 알림 메시지 조회
@@ -38,11 +38,13 @@ export async function addMedicineReservation(
 }
 
 // 월별 복용약 일정 조회
-export async function getMedicineReservation(month: number): Promise<Medicine> {
+export async function getMedicineReservation(
+  month: number
+): Promise<FullMedicine> {
   try {
     const response = await authClient.get(`/calendar/medication/${month}`);
-    console.log("월별 복용약 일정 조회 성공: ", response.data.data);
-    return response.data.data;
+    console.log("월별 복용약 일정 조회 성공: ", response.data);
+    return response.data;
   } catch (error: unknown) {
     console.error("월별 복용약 일정 조회 실패: ", error);
     throw error;

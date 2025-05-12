@@ -1,4 +1,4 @@
-import { Date, FullDday, Period } from "../types/Period";
+import { FullDate, FullDday, Period } from "../types/Period";
 import authClient from "./client/authClient";
 
 // 월경 예정일 D-day 조회
@@ -129,11 +129,11 @@ export async function editPeriodSymtom(
 }
 
 // 가임기 조회
-export async function getChildbearingAge(): Promise<Date> {
+export async function getChildbearingAge(): Promise<FullDate> {
   try {
     const response = await authClient.get("/calendar/bearing_period");
-    console.log("가임기 조회 성공: ", response.data.data);
-    return response.data.data;
+    console.log("가임기 조회 성공: ", response.data);
+    return response.data;
   } catch (error: unknown) {
     console.error("가임기 조회 실패: ", error);
     throw error;
@@ -141,11 +141,11 @@ export async function getChildbearingAge(): Promise<Date> {
 }
 
 // 월경 예정일 조회
-export async function getPredictedPeriod(): Promise<Date> {
+export async function getPredictedPeriod(): Promise<FullDate> {
   try {
     const response = await authClient.get("/calendar/menstrual_prediction");
-    console.log("월경 예정일 조회 성공: ", response.data.data);
-    return response.data.data;
+    console.log("월경 예정일 조회 성공: ", response.data);
+    return response.data;
   } catch (error: unknown) {
     console.error("월경 예정일 조회 실패: ", error);
     throw error;

@@ -1,5 +1,9 @@
 import { Default } from "./Default";
 
+export type FullDate = Default & {
+  data: Date;
+};
+
 export type Date = {
   start_date: string;
   end_date: string;

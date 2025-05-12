@@ -4,6 +4,10 @@ export type MedicineAlert = Default & {
   data: { medicine: string };
 };
 
+export type FullMedicine = Default & {
+  data: Medicine[];
+};
+
 export type Medicine = {
   medication_id: number;
   name: string;
