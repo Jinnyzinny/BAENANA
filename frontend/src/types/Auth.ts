@@ -1,9 +1,7 @@
+import { User } from "./User";
+
 export type Auth = {
   accessToken: string;
   refreshToken: string;
-  user: {
-    socialId: string;
-    provider: string;
-    role: "USER" | "ADMIN";
-  };
+  user: User;
 };

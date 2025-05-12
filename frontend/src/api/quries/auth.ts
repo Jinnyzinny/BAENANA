@@ -1,13 +1,17 @@
 import { useMutation } from "@tanstack/react-query";
-import { kakaoLogin, userAlarm, withdraw } from "../auth";
 import { Alert } from "react-native";
+import { useLoginStore } from "../../store/loginStore";
+import { kakaoLogin, userAlarm, withdraw } from "../auth";
 
 // 로그인
-export function useLogin() {
+export function useKaKaoLogin() {
+  const setLogin = useLoginStore((state) => state.setLogin);
+
   return useMutation({
-    mutationFn: (data: string) => kakaoLogin(data),
+    mutationFn: (accessToken: string) => kakaoLogin(accessToken),
     onSuccess: (data) => {
       console.log("☑️로그인 성공: ", data);
+      setLogin(data);
     },
     onError: (error) => {
       console.log("✖️로그인 실패: ", error);
