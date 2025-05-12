@@ -17,65 +17,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/report")
 @RequiredArgsConstructor
 public class ReportController {
-    private final MedicationReportService medicationReportService;
     private final ReportService reportService;
-    private final MenstrualService menstrualService;
 
     @GetMapping("/alarm")
     public ResponseEntity<ApiResponse<?>> getAlarm(
             @AuthenticationPrincipal User user
     ) {
         return ResponseEntity.ok(reportService.getAlarm(user));
-    }
-
-    @GetMapping("/menstrual/info")
-    public ResponseEntity<ApiResponse<?>> getMenstrualInfo(
-            @AuthenticationPrincipal User user
-    ) {
-        return ResponseEntity.ok(menstrualService.getMenstrualInfo(user));
-    }
-
-    @PostMapping("/menstrual/ovulation_test")
-    public ResponseEntity<ApiResponse<?>> addOvulationTest(
-            @RequestBody AddOvulationTestReqDto request,
-            @AuthenticationPrincipal User user
-    ) {
-        return ResponseEntity.ok(menstrualService.AddOvulationTest(user,request));
-    }
-
-    @GetMapping("/menstrual/ovulation_test")
-    public ResponseEntity<ApiResponse<?>> getOvulationTest(
-            @AuthenticationPrincipal User user
-    ) {
-        return ResponseEntity.ok(menstrualService.getOvulationTest(user));
-    }
-
-    @GetMapping("/menstrual/recent")
-    public ResponseEntity<ApiResponse<?>> getRecentMenstrual(
-            @AuthenticationPrincipal User user
-    ) {
-        return ResponseEntity.ok(menstrualService.getRecentMenstrual(user));
-    }
-
-    @GetMapping("/menstrual/all")
-    public ResponseEntity<ApiResponse<?>> getAllMenstrual(
-            @AuthenticationPrincipal User user
-    ) {
-        return ResponseEntity.ok(menstrualService.getAllMenstrual(user));
-    }
-
-    @GetMapping("/medication/recent")
-    public ResponseEntity<ApiResponse<?>> getRecentMedication(
-            @AuthenticationPrincipal User user
-    ) {
-        return ResponseEntity.ok(medicationReportService.getRecentMedication(user));
-    }
-
-    @GetMapping("/medication/all")
-    public ResponseEntity<ApiResponse<?>> getAllMedication(
-            @AuthenticationPrincipal User user
-    ) {
-        return ResponseEntity.ok(medicationReportService.getAllMedication(user));
     }
 
     @GetMapping("/summary")

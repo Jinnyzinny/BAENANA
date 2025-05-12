@@ -4,48 +4,50 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DTWSimilarity {
-    // 유클리디안 거리 계산
-    private static double euclideanDistance(double a, double b) {
-        return Math.pow(a - b, 2);
-    }
-
     // DTW 유사도 계산 함수
-    public static double calculateDTW(double[] graph1, double[] graph2) {
+    public double calculateDTW(double[] graph1, double[] graph2) {
         int n = graph1.length;
         int m = graph2.length;
+
+        // 빈 배열 처리
+        if (n == 0 || m == 0) {
+            return Double.POSITIVE_INFINITY; // 거리 계산 불가 시 무한대 반환
+        }
 
         // 누적 거리 행렬 초기화
         double[][] dtw = new double[n][m];
 
-        // 무한대 값으로 초기화
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                dtw[i][j] = Double.POSITIVE_INFINITY;
-            }
+        // 첫 번째 거리 초기화 (첫 값의 거리)
+        dtw[0][0] = euclideanDistance(graph1[0], graph2[0]);
+
+        // 첫 번째 행 초기화
+        for (int j = 1; j < m; j++) {
+            dtw[0][j] = dtw[0][j - 1] + euclideanDistance(graph1[0], graph2[j]);
         }
-        dtw[0][0] = 0;
+
+        // 첫 번째 열 초기화
+        for (int i = 1; i < n; i++) {
+            dtw[i][0] = dtw[i - 1][0] + euclideanDistance(graph1[i], graph2[0]);
+        }
 
         // DTW 거리 계산
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
+        for (int i = 1; i < n; i++) {
+            for (int j = 1; j < m; j++) {
                 double cost = euclideanDistance(graph1[i], graph2[j]);
-                if (i == 0 && j == 0) {
-                    dtw[i][j] = cost;
-                } else if (i == 0) {
-                    dtw[i][j] = cost + dtw[i][j - 1];
-                } else if (j == 0) {
-                    dtw[i][j] = cost + dtw[i - 1][j];
-                } else {
-                    double minPrev = Math.min(Math.min(dtw[i - 1][j],    // 위
-                                    dtw[i][j - 1]),   // 왼쪽
-                            dtw[i - 1][j - 1]);// 대각선
-                    dtw[i][j] = cost + minPrev;
-                }
+                double minPrev = Math.min(Math.min(dtw[i - 1][j],    // 위쪽
+                                dtw[i][j - 1]),   // 왼쪽
+                        dtw[i - 1][j - 1]);       // 대각선
+                dtw[i][j] = cost + minPrev;
             }
         }
 
         // 최종 DTW 거리 반환
-        return Math.sqrt(dtw[n - 1][m - 1]);
+        return dtw[n - 1][m - 1];
+    }
+
+    // 유클리디안 거리 계산 함수
+    private double euclideanDistance(double a, double b) {
+        return Math.abs(a - b); // 절대값 사용
     }
 //    public static void main(String[] args) {
 //        // LH 서지 그래프 (예시)

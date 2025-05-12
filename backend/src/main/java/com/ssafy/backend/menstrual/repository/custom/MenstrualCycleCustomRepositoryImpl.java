@@ -5,7 +5,7 @@ import com.ssafy.backend.menstrual.entity.MenstrualCycle;
 import com.ssafy.backend.menstrual.entity.MenstrualDailyLog;
 import com.ssafy.backend.menstrual.entity.QMenstrualCycle;
 import com.ssafy.backend.menstrual.entity.QMenstrualDailyLog;
-import com.ssafy.backend.menstrual.entity.symptom.QSymptomLog;
+import com.ssafy.backend.symptomLog.entity.QSymptomLog;
 import com.ssafy.backend.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
