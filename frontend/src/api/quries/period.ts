@@ -11,7 +11,7 @@ import {
   getPredictedPeriod,
 } from "../period";
 
-// 월경 예정일 D-day 조회
+// ✅월경 예정일 D-day 조회
 export function useGetDday() {
   return useQuery({
     queryKey: ["dDay"],

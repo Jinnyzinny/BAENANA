@@ -1,12 +1,14 @@
 import { Text, View } from "react-native";
 
-export function ScheduleList() {
+export function ScheduleList({ selectedMonth }: { selectedMonth: number }) {
   return (
     <View
       className="bg-white rounded-xl p-5 gap-5
     "
     >
-      <Text className="text-neutral-800 font-bold">4월 주요 일정</Text>
+      <Text className="text-neutral-800 font-bold">
+        {selectedMonth}월 주요 일정
+      </Text>
       <View className="flex-row items-center gap-3">
         <View className="w-2" />
         <View className="w-3 h-3 rounded-full bg-yellow-300" />

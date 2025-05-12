@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Alert } from "react-native";
 import {
   addHospitalReservation,
   deleteHospitalReservation,
@@ -6,9 +7,8 @@ import {
   getHospitalAlert,
   getHospitalReservation,
 } from "../hospital";
-import { Alert } from "react-native";
 
-// 병원 예약 알림 메시지 조회
+// ✅병원 예약 알림 메시지 조회
 export function useGetHospitalAlert() {
   return useQuery({
     queryKey: ["hospitalAlert"],

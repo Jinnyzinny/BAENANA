@@ -7,15 +7,15 @@ import {
 } from "react-native";
 import { Modalize } from "react-native-modalize";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { HospitalBottomSheet } from "../../components/calendar/hospitalBottomSheet";
+import { MedicineBottomSheet } from "../../components/calendar/medicineBottomSheet";
 import { Monthly } from "../../components/calendar/monthly";
+import { PeriodBottomSheet } from "../../components/calendar/periodBottomSheet";
 import { ScheduleList } from "../../components/calendar/scheduleList";
 import { ScheduleModal } from "../../components/calendar/scheduleModal";
-import { HeaderLogo } from "../../components/common/headerLogo";
-import { HospitalBottomSheet } from "../../components/calendar/hospitalBottomSheet";
 import { SymptomBottomSheet } from "../../components/calendar/symptomBottomSheet";
-import { MedicineBottomSheet } from "../../components/calendar/medicineBottomSheet";
 import { CustomButton } from "../../components/common/customButton";
-import { PeriodBottomSheet } from "../../components/calendar/periodBottomSheet";
+import { HeaderLogo } from "../../components/common/headerLogo";
 
 export function CalendarScreen() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
@@ -25,12 +25,16 @@ export function CalendarScreen() {
   >(null);
   const sheetRef = useRef<Modalize>(null);
   const { height } = useWindowDimensions();
+  const month = new Date().getMonth() + 1;
+  const [selectedMonth, setSelectedMonth] = useState<number>(month);
 
+  // 날짜 선택 시 선택된 날짜 저장, 모달 열기
   function handleDatePress(date: string) {
     setSelectedDate(date);
     setModalVisible(true);
   }
 
+  // 바텀시트(증상 / 병원 / 약): 모달 닫기
   function handleBottomSheet(type: "symptom" | "hospital" | "medicine" | null) {
     setSelectedType(type);
     setModalVisible(false);
@@ -39,6 +43,7 @@ export function CalendarScreen() {
     });
   }
 
+  // 주기 입력 바텀시트: 모달 닫기
   function handlePeriodOpen() {
     setSelectedType("period");
     InteractionManager.runAfterInteractions(() => {
@@ -52,8 +57,12 @@ export function CalendarScreen() {
         <HeaderLogo before={false} settings={true} />
         <ScrollView>
           <View className="flex-1 mx-5 gap-3">
-            <Monthly onDateSelect={handleDatePress} />
-            <ScheduleList />
+            <Monthly
+              onDateSelect={handleDatePress}
+              selectedMonth={selectedMonth}
+              setSelectedMonth={() => setSelectedMonth}
+            />
+            <ScheduleList selectedMonth={selectedMonth} />
             <CustomButton
               fill={true}
               content="월경일 입력"

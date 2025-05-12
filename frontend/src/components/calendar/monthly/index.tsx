@@ -1,5 +1,4 @@
 import { ChevronLeft, ChevronRight } from "lucide-react-native";
-import { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 
@@ -49,13 +48,13 @@ LocaleConfig.defaultLocale = "ko";
 
 export function Monthly({
   onDateSelect,
+  selectedMonth,
+  setSelectedMonth,
 }: {
   onDateSelect: (date: string) => void;
+  selectedMonth: number;
+  setSelectedMonth: (month: number) => void;
 }) {
-  const [currentMonth, setCurrentMonth] = useState<number>(
-    new Date().getMonth() + 1
-  );
-
   return (
     <View>
       <Calendar
@@ -63,7 +62,7 @@ export function Monthly({
           onDateSelect(day.dateString);
         }}
         onMonthChange={(date) => {
-          setCurrentMonth(date.month);
+          setSelectedMonth(date.month);
         }}
         style={{
           borderRadius: 10,
@@ -111,7 +110,7 @@ export function Monthly({
           let textColor = "#262626"; // 기본 텍스트 색상
 
           // 'disabled'이거나, 다른 달이면 흐리게
-          if (state === "disabled" || date.month !== currentMonth) {
+          if (state === "disabled" || date.month !== selectedMonth) {
             textColor = "#D4D4D4";
           } else if (dayOfWeek === 0) {
             textColor = "#EC6344"; // 일요일 빨강
