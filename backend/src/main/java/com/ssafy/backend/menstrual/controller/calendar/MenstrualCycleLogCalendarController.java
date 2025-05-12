@@ -1,10 +1,9 @@
-package com.ssafy.backend.menstrual.controller;
+package com.ssafy.backend.menstrual.controller.calendar;
 
 import com.ssafy.backend.common.ApiResponse;
 import com.ssafy.backend.menstrual.dto.request.AddMenstrualCycleDailyLogReqDto;
 import com.ssafy.backend.menstrual.dto.request.UpdateMenstrualCycleDailyLogReqDto;
 import com.ssafy.backend.menstrual.service.cycle_log.MenstrualCycleLogService;
-import com.ssafy.backend.home.dto.response.MessageResDto;
 import com.ssafy.backend.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/calendar/menstrual_cycle/log")
 @RequiredArgsConstructor
-public class MenstrualCycleLogController {
+public class MenstrualCycleLogCalendarController {
     private final MenstrualCycleLogService menstrualCycleLogService;
 
     @PostMapping

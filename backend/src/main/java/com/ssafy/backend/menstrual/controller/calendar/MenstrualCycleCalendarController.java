@@ -1,11 +1,9 @@
-package com.ssafy.backend.menstrual.controller;
+package com.ssafy.backend.menstrual.controller.calendar;
 
 import com.ssafy.backend.common.ApiResponse;
 import com.ssafy.backend.menstrual.dto.request.AddMenstrualCycleReqDto;
 import com.ssafy.backend.menstrual.dto.request.UpdateMenstrualCycleReqDto;
-import com.ssafy.backend.menstrual.dto.response.GetMenstrualCycleResDto;
 import com.ssafy.backend.menstrual.service.cycle.CycleService;
-import com.ssafy.backend.home.dto.response.MessageResDto;
 import com.ssafy.backend.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,14 +11,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 
 @Slf4j
 @RestController
 @RequestMapping("/api/calendar/menstrual_cycle")
 @RequiredArgsConstructor
-public class MenstrualCycleController {
+public class MenstrualCycleCalendarController {
     private final CycleService cycleService;
 
     @PostMapping
