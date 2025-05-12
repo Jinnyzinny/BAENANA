@@ -3,7 +3,7 @@ import { Alert } from "react-native";
 import { useLoginStore } from "../../store/loginStore";
 import { kakaoLogin, userAlarm, withdraw } from "../auth";
 
-// 로그인
+// ✅로그인
 export function useKaKaoLogin() {
   const setLogin = useLoginStore((state) => state.setLogin);
 
@@ -20,7 +20,7 @@ export function useKaKaoLogin() {
   });
 }
 
-// 회원 탈퇴
+// ✅회원 탈퇴
 export function useWithdraw() {
   return useMutation({
     mutationFn: () => withdraw(),

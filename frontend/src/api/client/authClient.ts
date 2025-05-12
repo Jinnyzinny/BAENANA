@@ -59,7 +59,7 @@ authClient.interceptors.response.use(
     const accessToken = response.data?.data?.accessToken;
 
     if (typeof accessToken === "string") {
-      AsyncStorage.setItem("accessToken", `Bearer ${accessToken}`);
+      AsyncStorage.setItem("accessToken", `${accessToken}`);
     }
 
     return response;
@@ -96,12 +96,11 @@ authClient.interceptors.response.use(
         // 응답에서 갱신된 accessToken과 refreshToken을 확인 후 토큰 저장소 갱신
         const response = await refreshingToken();
         const { accessToken, refreshToken } = response.data.data;
-        const bearerToken = `Bearer ${accessToken}`;
-        await AsyncStorage.setItem("accessToken", bearerToken);
+        await AsyncStorage.setItem("accessToken", accessToken);
         await AsyncStorage.setItem("refreshToken", refreshToken);
-        authClient.defaults.headers.common.authorization = bearerToken;
+        authClient.defaults.headers.common.authorization = `Bearer ${accessToken}`;
 
-        onRefreshed(bearerToken);
+        onRefreshed(accessToken);
 
         return authClient(originalRequest);
         // 오류 발생 시 토큰 저장소에서 토큰 삭제
