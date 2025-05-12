@@ -3,14 +3,15 @@ package com.ssafy.backend.menstrual.service.report;
 import com.ssafy.backend.common.ApiResponse;
 import com.ssafy.backend.menstrual.entity.MenstrualCycle;
 import com.ssafy.backend.menstrual.exception.MenstrualException;
+import com.ssafy.backend.menstrual.exception.OvulationTestException;
 import com.ssafy.backend.menstrual.exception.OvulationTestStandardException;
 import com.ssafy.backend.menstrual.repository.MenstrualCycleRepository;
 import com.ssafy.backend.menstrual.repository.MenstrualDailyLogRepository;
 import com.ssafy.backend.ovulation_test.entity.OvulationTest;
 import com.ssafy.backend.ovulation_test.entity.OvulationTestStandard;
-import com.ssafy.backend.menstrual.exception.OvulationTestException;
 import com.ssafy.backend.ovulation_test.repository.OvulationTestRepository;
 import com.ssafy.backend.ovulation_test.repository.OvulationTestStandardRepository;
+import com.ssafy.backend.ovulation_test.repository.custom.OvulationTestCustomRepository;
 import com.ssafy.backend.report.dto.request.AddOvulationTestReqDto;
 import com.ssafy.backend.report.dto.response.GetAllMenstrualResDto;
 import com.ssafy.backend.report.dto.response.GetMenstrualInfoResDto;
@@ -22,12 +23,12 @@ import com.ssafy.backend.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -38,6 +39,7 @@ public class MenstrualServiceImpl implements MenstrualService {
     private final MenstrualDailyLogRepository menstrualDailyLogRepository;
 
     private final OvulationTestRepository ovulationTestRepository;
+    private final OvulationTestCustomRepository ovulationTestCustomRepository;
     private final OvulationTestStandardRepository ovulationTestStandardRepository;
 
     private final DTWSimilarity dtwSimilarity;
@@ -160,34 +162,35 @@ public class MenstrualServiceImpl implements MenstrualService {
                 );
 
 //        사용자의 가장 최근 검사 결과리스트를 불러온다.
-        List<OvulationTest> recentOvulationTest =
-                ovulationTestRepository.findByUserAndDateAfter(user, menstrualCycle.getStartDate()).orElseThrow(
+        Map<LocalDate, Double> recentOvulationTest =
+                ovulationTestCustomRepository.findByUserAndDateAfter(user, menstrualCycle.getStartDate()).orElseThrow(
                         () -> new OvulationTestException("사용자의 최근 검사 결과 리스트가 존재하지 않습니다")
                 );
 
-        List<GetOvulationTestResDto.datePerValue> dateValueList = new ArrayList<>();
 //        사용자의 배란 주기 데이터를 확인해서 1번,2번,3번 그래프 중 어디에 더 맞는지 확인
         int type = Integer.MAX_VALUE;
         double distance = Double.MAX_VALUE;
 
         for (int i = 1; i < graphType.length; i++) {
-            // 빈 배열 체크
+//            빈 배열 체크
             if (graphType[i].isEmpty()) {
                 continue;
             }
+//            DTW 거리 체크
             double typeDistance = dtwSimilarity.calculateDTW(
                     graphType[i].stream().mapToDouble(
                             OvulationTestStandard::getValue
                     ).toArray(),
-                    recentOvulationTest.stream().mapToDouble(
-                            OvulationTest::getValue
+                    recentOvulationTest.values().stream().mapToDouble(
+                            Double::doubleValue
                     ).toArray());
+
             if (typeDistance != Double.MAX_VALUE && typeDistance < distance) {
                 type = i;
                 distance = typeDistance;
             }
         }
-        if(type == Integer.MAX_VALUE) {
+        if (type == Integer.MAX_VALUE) {
 //            예외 처리해야한다.
             throw new OvulationTestStandardException("기준에 일치하는 그래프가 없습니다. 즉 사용자의 데이터가 현저히 부족합니다.");
         }
@@ -199,14 +202,22 @@ public class MenstrualServiceImpl implements MenstrualService {
         List<GetOvulationTestResDto.datePerValue> userTestList = new ArrayList<>();
 
         for (int i = 0; i < graphType[type].size(); i++) {
-            standardTestList.add(new GetOvulationTestResDto.datePerValue(
-                    String.valueOf(graphType[type].get(i).getDate()),
-                    graphType[type].get(i).getValue()));
+            LocalDate startDate = menstrualCycle.getStartDate();
 
-            userTestList.add(new GetOvulationTestResDto.datePerValue(
-                    menstrualCycle.getStartDate().plusDays(i).toString(),
-                    0.0
-            ));
+            standardTestList.add(
+                    new GetOvulationTestResDto.datePerValue(
+                            startDate.plusDays(i).toString(),
+                            graphType[type].get(i).getValue()
+                    )
+            );
+            if (recentOvulationTest.containsKey(startDate.plusDays(i))) {
+                userTestList.add(
+                        new GetOvulationTestResDto.datePerValue(
+                                startDate.plusDays(i).toString(),
+                                recentOvulationTest.get(startDate.plusDays(i))
+                        )
+                );
+            }
         }
 
         return ApiResponse.success("배란 테스트 정보입니다.",

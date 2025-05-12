@@ -10,4 +10,6 @@ import java.util.Optional;
 
 public interface OvulationTestRepository extends JpaRepository<OvulationTest, Long> {
     Optional<List<OvulationTest>> findByUserAndDateAfter(User user, LocalDate date);
+
+    List<OvulationTest> user(User user);
 }
