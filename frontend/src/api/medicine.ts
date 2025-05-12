@@ -4,9 +4,9 @@ import authClient from "./client/authClient";
 // 복용약 알림 메시지 조회
 export async function getMedicineAlert(): Promise<MedicineAlert> {
   try {
-    const response = await authClient.get("/home/alarm/medicine");
-    console.log("복용약 알림 메시지 조회 성공: ", response.data.data);
-    return response.data.data;
+    const response = await authClient.get("/home//medicine");
+    console.log("복용약 알림 메시지 조회 성공: ", response.data);
+    return response.data;
   } catch (error: unknown) {
     console.error("복용약 알림 메시지 조회 실패: ", error);
     throw error;

@@ -1,13 +1,11 @@
+import { Default } from "./Default";
+
 export type Date = {
   start_date: string;
   end_date: string;
 };
 
-export type FullDday = {
-  code: string;
-  status: number;
-  message: string;
-  timestamp: string;
+export type FullDday = Default & {
   data: Dday;
 };
 

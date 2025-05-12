@@ -1,5 +1,7 @@
-export type MedicineAlert = {
-  medicine: string;
+import { Default } from "./Default";
+
+export type MedicineAlert = Default & {
+  data: { medicine: string };
 };
 
 export type Medicine = {

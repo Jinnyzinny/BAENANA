@@ -4,9 +4,9 @@ import authClient from "./client/authClient";
 // 병원 예약 알림 메시지 조회
 export async function getHospitalAlert(): Promise<HospitalAlert> {
   try {
-    const response = await authClient.get("/home/alarm/hospital_reservation");
-    console.log("병원 예약 알림 메시지 조회 성공: ", response.data.data);
-    return response.data.data;
+    const response = await authClient.get("/home/reservation");
+    console.log("병원 예약 알림 메시지 조회 성공: ", response.data);
+    return response.data;
   } catch (error: unknown) {
     console.error("병원 예약 알림 메시지 조회 실패: ", error);
     throw error;

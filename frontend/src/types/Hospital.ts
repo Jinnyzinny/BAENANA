@@ -1,5 +1,7 @@
-export type HospitalAlert = {
-  reservation: string;
+import { Default } from "./Default";
+
+export type HospitalAlert = Default & {
+  data: { reservation: string };
 };
 
 export type HospitalReservation = {
