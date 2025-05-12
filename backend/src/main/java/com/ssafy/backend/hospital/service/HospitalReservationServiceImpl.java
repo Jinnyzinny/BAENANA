@@ -14,7 +14,6 @@ import com.ssafy.backend.user.entity.User;
 import com.ssafy.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,12 +31,15 @@ public class HospitalReservationServiceImpl implements HospitalReservationServic
 
     @Override
     public ApiResponse<?> addHospitalReservation(
-            @AuthenticationPrincipal User user,
+            User user,
             AddHospitalReservationReqDto request) {
+//        request로 받은 정보를 통해서 사용자의 병원 예약 일정을 추가한다.
         hospitalReservationRepository.save(
                 HospitalReservation.builder()
                         .hospitalName(request.getHospital_name())
                         .reservationDate(request.getReservation_date())
+//                        만약 사용자의 데이터가 없다면 오류 처리
+//                        이것은 방법이 없다.
                         .user(userRepository
                                 .findById(user.getUserId())
                                 .orElseThrow(
@@ -54,18 +56,20 @@ public class HospitalReservationServiceImpl implements HospitalReservationServic
 
     @Override
     public ApiResponse<?> getHospitalReservation(
-            @AuthenticationPrincipal User user
+            User user
     ) {
         /*
          * userId를 얻는다
          * */
         Long userId = user.getUserId();
         /*
-         * 사용자가 예약한 병원 리스트를 얻는다.
-         * */
+        * 이번 달의 첫 날과 마지막날을 얻는다.
+        * */
         LocalDateTime startOfMonth = LocalDate.now().withDayOfMonth(1).atStartOfDay();
         LocalDateTime endOfMonth = startOfMonth.plusMonths(1).minusDays(1).withHour(23).withMinute(59).withSecond(59);
-
+        /*
+         * 사용자가 예약한 병원 리스트를 얻는다.
+         * */
         List<HospitalReservation> hospitalReservationList =
                 hospitalReservationRepository.findByUser_UserIdAndReservationDateBetween(
                         userId,
@@ -104,7 +108,11 @@ public class HospitalReservationServiceImpl implements HospitalReservationServic
                 hospitalReservationRepository.findById(id).orElseThrow(() ->
                         new HospitalReservationException("변경할 병원 예약이 존재하지 않습니다."));
 
+        /*
+        * BeanUtils.copyProperties를 이용해서 null값을 제외한 값들을 객체에 DB에서 불러온 객체에 복사한다.
+        * */
         BeanUtils.copyProperties(request, hospitalReservation, NullAwareBeanUtils.getNullPropertyNames(request));
+//        Enum을 자바에서만 검증하므로 copyProperties를 통할수 없다
         if (request.getPurpose() != null) {
             hospitalReservation.setPurposeTypeByDescription(request.getPurpose());
         }

@@ -68,7 +68,9 @@ public class CalendarServiceImpl implements CalendarService {
                 hospitalreservationRepository
                         .findByUser_UserIdAndReservationDateBetween(userId, searchForDate.atStartOfDay(), searchForDate.atTime(LocalTime.MAX))
                         .orElse(null);
-
+        /*
+         * 사용자의 아이디로 해당 날짜에도 복용을 하는 의약품을 조회하고 없다면 null을 반환한다.
+         * */
         List<Medication> medication = medicationRepository
                 .findDistinctByUser_UserIdAndEndDateAfter(userId, searchForDate)
                 .orElse(null);
@@ -168,6 +170,9 @@ public class CalendarServiceImpl implements CalendarService {
                         .findFirstByUser_UserIdOrderByStartDateDesc(userId)
                         .orElse(null);
 
+        /*
+         * 만약 사용자의 생리주기 정보가 없을 경우 null을 반환한다.
+         * */
         if (menstrualCycle == null) {
             return ApiResponse.success(
                     "사용자의 생리 주기 데이터가 없습니다"
@@ -207,8 +212,8 @@ public class CalendarServiceImpl implements CalendarService {
         }
 
         return ApiResponse.success(
-                "사용자의 생리주기입니다."
-                , GetMenstrualPredictionResDto.builder()
+                "사용자의 생리주기입니다.",
+                GetMenstrualPredictionResDto.builder()
                         .start_date(
                                 menstrualCycle.getStartDate().plusDays(28).toString())
                         .end_date(

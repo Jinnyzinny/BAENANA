@@ -32,6 +32,9 @@ public class CycleServiceImpl implements CycleService {
             User user,
             AddMenstrualCycleReqDto request
     ) {
+        /*
+        * 생리 주기 기록 추가
+        * */
         menstrualCycleRepository.save(
                 MenstrualCycle.builder()
                         .user(userRepository.findById(user.getUserId()).orElseThrow(

@@ -25,16 +25,27 @@ public class MedicationReportServiceImpl implements MedicationReportService {
      * */
     @Override
     public ApiResponse<?> getRecentMedication(User user) {
-//        userId를 얻는다
+        /*
+         *userId를 얻는다
+         */
         Long userId = user.getUserId();
-//        userId로 
+        /*
+         * userId로 최근 복용한 약을 불러온다.
+         */
         List<Medication> medicationList =
                 medicationCustomRepository.findMedicationByUserId(userId);
-//        반환할 현재 복용중인 약품 리스트를 생성한다.
+        /*
+         * 반환할 현재 복용중인 약품 리스트를 생성한다.
+         */
         List<GetRecentMedicationResDto.MedicationInfo> todayMedicine = new ArrayList<>();
-//        의약품 기록 리스트를 생성한다.
+        /*
+         *의약품 기록 리스트를 생성한다.
+         */
         List<GetRecentMedicationResDto.MedicationInfo> medicineRecord = new ArrayList<>();
-//        의약품 기록을 순회하면서 사용자의 의약품 기록을 추가하면서 이전 기록과
+        /*
+         * 의약품 기록을 순회하면서 사용자의 의약품 기록을 추가하면서
+         * 오늘 이후에도 복용을 한다면 현재 복용중인 의약품리스트에도 추가한다.
+         * */
         for (Medication medication : medicationList) {
             medicineRecord.add(
                     GetRecentMedicationResDto.MedicationInfo.builder()
@@ -91,5 +102,4 @@ public class MedicationReportServiceImpl implements MedicationReportService {
                         )
                         .build());
     }
-
 }

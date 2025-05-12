@@ -95,7 +95,7 @@ public class HomeServiceImpl implements HomeService {
         /*
          * 2.1 만약 복용해야할 약물이 아무것도 없다면 복용할 약이 없다고 알림을 보낸다.
          * */
-        if (medication == null) {
+        if (medication == null || medication.isEmpty()) {
             return ApiResponse.success("복용할 약이 없습니다.");
         }
         /*
