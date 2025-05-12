@@ -1,14 +1,14 @@
-import { Date, Dday, Period } from "../types/Period";
+import { Date, FullDday, Period } from "../types/Period";
 import authClient from "./client/authClient";
 
 // 월경 예정일 D-day 조회
-export async function getDday(): Promise<Dday> {
+export async function getDday(): Promise<FullDday> {
   try {
     const response = await authClient.get("/home/remain_day");
-    console.log("월경 예정일 D-day 조희 성공", response.data.data);
-    return response.data.data;
+    console.log("월경 예정일 D-day 조회 성공", response.data);
+    return response.data;
   } catch (error: unknown) {
-    console.error("월경 예정일 D-day 조희 실패: ", error);
+    console.error("월경 예정일 D-day 조회 실패: ", error);
     throw error;
   }
 }

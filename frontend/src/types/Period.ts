@@ -3,8 +3,17 @@ export type Date = {
   end_date: string;
 };
 
+export type FullDday = {
+  code: string;
+  status: number;
+  message: string;
+  timestamp: string;
+  data: Dday;
+};
+
 export type Dday = {
-  menstrual: Date;
+  recorded_menstrual: Date;
+  predict_menstrual: Date;
   childbearing_period: string;
   ovulation_day: string;
   PMS: string;

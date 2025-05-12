@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Alert } from "react-native";
 import {
   addPeriod,
   addPeriodSymtom,
@@ -9,12 +10,11 @@ import {
   getPeriod,
   getPredictedPeriod,
 } from "../period";
-import { Alert } from "react-native";
 
 // 월경 예정일 D-day 조회
 export function useGetDday() {
   return useQuery({
-    queryKey: ["dday"],
+    queryKey: ["dDay"],
     queryFn: () => getDday(),
   });
 }

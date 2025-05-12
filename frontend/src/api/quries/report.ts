@@ -26,7 +26,7 @@ export function useGetPeriodInfo() {
   });
 }
 
-// 배란테스트 결과 조희
+// 배란테스트 결과 조회
 export function useGetOvulationTest() {
   return useQuery({
     queryKey: ["ovulationTest"],
@@ -34,7 +34,7 @@ export function useGetOvulationTest() {
   });
 }
 
-// 최근 6개월 간 월경 주기 조희
+// 최근 6개월 간 월경 주기 조회
 export function useGetRecentPeriod() {
   return useQuery({
     queryKey: ["recentPeriod"],

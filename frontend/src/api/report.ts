@@ -32,7 +32,7 @@ export async function getPeriodInfo(): Promise<RecentPeriodInfo> {
   }
 }
 
-// 배란테스트 결과 조희
+// 배란테스트 결과 조회
 export async function getOvulationTest(): Promise<Ovulation> {
   try {
     const response = await authClient.get("/report/menstrual/ovulation_test");
@@ -44,7 +44,7 @@ export async function getOvulationTest(): Promise<Ovulation> {
   }
 }
 
-// 최근 6개월 간 월경 주기 조희
+// 최근 6개월 간 월경 주기 조회
 export async function getRecentPeriod(): Promise<RecentPeriod> {
   try {
     const response = await authClient.get("/report/menstrual/recent");
