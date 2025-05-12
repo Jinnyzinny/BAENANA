@@ -1,6 +1,6 @@
 package com.ssafy.backend.menstrual.entity;
 
-import com.ssafy.backend.menstrual.entity.symptom.SymptomLog;
+import com.ssafy.backend.symptomLog.entity.SymptomLog;
 import jakarta.persistence.*;
 import lombok.*;
 
