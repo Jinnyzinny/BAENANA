@@ -6,11 +6,13 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Transactional
 public interface MenstrualCycleCustomRepository {
 //    userId를 사용해서 주기 정보 열람(이때 log를 모두 같이 열람한다)
     List<MenstrualCycle> findMenstrualCycleByUser(User user);
-    List<MenstrualCycle> findThisMonthCycles();
+    Optional<List<MenstrualCycle>> findThisMonthCycles(Long userId);
+    Optional<List<MenstrualCycle>> findThreeMonthsCycles(Long userId);
 }

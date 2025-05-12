@@ -1,6 +1,5 @@
-package com.ssafy.backend.symptom.entity;
+package com.ssafy.backend.menstrual.entity.symptom;
 
-import com.ssafy.backend.hospital.entity.PurposeType;
 import lombok.Getter;
 
 @Getter
