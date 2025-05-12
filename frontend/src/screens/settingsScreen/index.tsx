@@ -1,3 +1,4 @@
+import { logout as kakaoLogout } from "@react-native-seoul/kakao-login";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useState } from "react";
@@ -18,9 +19,14 @@ export function SettingsScreen() {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const logout = useLoginStore((state) => state.logout);
 
-  function handleLogout() {
-    logout();
-    console.log("☑️로그아웃 성공");
+  async function handleLogout() {
+    try {
+      await kakaoLogout();
+      logout();
+      console.log("☑️카카오, 앱 로그아웃 성공");
+    } catch (error) {
+      console.error("카카오 로그아웃 실패: ", error);
+    }
   }
 
   return (

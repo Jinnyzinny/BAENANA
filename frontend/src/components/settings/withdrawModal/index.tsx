@@ -1,3 +1,4 @@
+import { unlink } from "@react-native-seoul/kakao-login";
 import { X } from "lucide-react-native";
 import {
   Image,
@@ -21,10 +22,15 @@ export function WithdrawModal({
   const logout = useLoginStore((state) => state.logout);
   const { mutate: withdraw, isPending } = useWithdraw();
 
-  function handleWithdraw() {
-    withdraw(undefined, {
-      onSuccess: () => logout(),
-    });
+  async function handleWithdraw() {
+    try {
+      await unlink();
+      withdraw(undefined, {
+        onSuccess: () => logout(),
+      });
+    } catch (error) {
+      console.error("카카오 탈퇴 실패: ", error);
+    }
   }
   return (
     <Modal
