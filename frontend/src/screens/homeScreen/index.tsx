@@ -1,5 +1,6 @@
+import { useFocusEffect } from "@react-navigation/native";
 import { differenceInCalendarDays, parseISO } from "date-fns";
-import { useMemo, useRef } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import { InteractionManager, useWindowDimensions, View } from "react-native";
 import { Modalize } from "react-native-modalize";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -15,9 +16,11 @@ import { DonutChart } from "../../components/home/donutChart";
 export function HomeScreen() {
   const sheetRef = useRef<Modalize>(null);
   const { height } = useWindowDimensions();
-  const { data: dDayData } = useGetDday();
-  const { data: hospitalData } = useGetHospitalAlert();
-  const { data: medicineData } = useGetMedicineAlert();
+  const { data: dDayData, refetch: refetchDday } = useGetDday();
+  const { data: hospitalData, refetch: refetchHospitalData } =
+    useGetHospitalAlert();
+  const { data: medicineData, refetch: refetchMedicineData } =
+    useGetMedicineAlert();
 
   // 오늘 날짜 문자열("yyyy-MM-dd")로 변경
   function getTodayDateString(): string {
@@ -56,6 +59,14 @@ export function HomeScreen() {
       sheetRef.current?.open();
     });
   }
+
+  useFocusEffect(
+    useCallback(() => {
+      refetchDday();
+      refetchHospitalData();
+      refetchMedicineData();
+    }, [])
+  );
 
   return (
     <>
