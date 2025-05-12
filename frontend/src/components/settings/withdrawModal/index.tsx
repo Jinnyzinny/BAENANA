@@ -7,6 +7,8 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import { useWithdraw } from "../../../api/quries/auth";
+import { useLoginStore } from "../../../store/loginStore";
 import { CustomButton } from "../../common/customButton";
 
 export function WithdrawModal({
@@ -16,6 +18,14 @@ export function WithdrawModal({
   visible: boolean;
   onClose: () => void;
 }) {
+  const logout = useLoginStore((state) => state.logout);
+  const { mutate: withdraw, isPending } = useWithdraw();
+
+  function handleWithdraw() {
+    withdraw(undefined, {
+      onSuccess: () => logout(),
+    });
+  }
   return (
     <Modal
       visible={visible}
@@ -56,7 +66,11 @@ export function WithdrawModal({
                 <CustomButton fill={false} content="취소" onPress={onClose} />
               </View>
               <View className="flex-1">
-                <CustomButton fill={true} content="확인" onPress={() => {}} />
+                <CustomButton
+                  fill={true}
+                  content="확인"
+                  onPress={isPending ? () => {} : handleWithdraw}
+                />
               </View>
             </View>
           </View>
