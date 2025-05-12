@@ -1,4 +1,4 @@
-package com.ssafy.backend.medication.controller;
+package com.ssafy.backend.medication.controller.calendar;
 
 import com.ssafy.backend.common.ApiResponse;
 import com.ssafy.backend.medication.dto.request.AddMedicationScheduleReqDto;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/calendar/medication")
 @RequiredArgsConstructor
-public class MedicationController {
+public class MedicationCalendarController {
     private final MedicationService medicationService;
 
     /*

@@ -24,4 +24,7 @@ public interface MedicationService {
     ApiResponse<?> updateMedication(User user,UpdateMedicationScheduleReqDto request, Long id);
 
     ApiResponse<?> deleteMedication(User user,Long id);
+    /*
+    * Medication CRUD
+    * */
 }

@@ -1,12 +1,11 @@
 package com.ssafy.backend.menstrual.repository.custom;
 
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.backend.menstrual.entity.MenstrualCycle;
 import com.ssafy.backend.menstrual.entity.MenstrualDailyLog;
 import com.ssafy.backend.menstrual.entity.QMenstrualCycle;
 import com.ssafy.backend.menstrual.entity.QMenstrualDailyLog;
-import com.ssafy.backend.symptom.entity.QSymptomLog;
+import com.ssafy.backend.symptomLog.entity.QSymptomLog;
 import com.ssafy.backend.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -15,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
@@ -44,19 +44,42 @@ public class MenstrualCycleCustomRepositoryImpl implements MenstrualCycleCustomR
                 .collect(Collectors.toList());
     }
 
-    public List<MenstrualCycle> findThisMonthCycles() {
+    public Optional<List<MenstrualCycle>> findThisMonthCycles(Long userId) {
         LocalDate startOfMonth = LocalDate.now().withDayOfMonth(1);
         LocalDate endOfMonth = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
 
-        return queryFactory
+        return Optional.ofNullable(queryFactory
                 .selectFrom(menstrualCycle)
                 .leftJoin(menstrualCycle.logs, menstrualDailyLog).fetchJoin()   // Cycle -> DailyLog
                 .leftJoin(menstrualDailyLog.symptomLog, symptomLog).fetchJoin()     // DailyLog -> SymptomLog
                 .where(
-                        menstrualCycle.startDate.between(startOfMonth, endOfMonth)
-                                .or(menstrualCycle.endDate.between(startOfMonth, endOfMonth))
+                        menstrualCycle.user.userId.eq(userId)
+                                .and(menstrualCycle.startDate.between(startOfMonth, endOfMonth)
+                                        .or(menstrualCycle.endDate.between(startOfMonth, endOfMonth))
+                                )
+
                 )
                 .distinct()
-                .fetch();
+                .fetch());
+    }
+
+    @Override
+    public Optional<List<MenstrualCycle>> findThreeMonthsCycles(Long userId) {
+        LocalDate startOfMonth = LocalDate.now().minusMonths(2).withDayOfMonth(1);
+        LocalDate endOfMonth = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
+
+        return Optional.ofNullable(queryFactory
+                .selectFrom(menstrualCycle)
+                .leftJoin(menstrualCycle.logs, menstrualDailyLog).fetchJoin()   // Cycle -> DailyLog
+                .leftJoin(menstrualDailyLog.symptomLog, symptomLog).fetchJoin()     // DailyLog -> SymptomLog
+                .where(
+                        menstrualCycle.user.userId.eq(userId)
+                                .and(
+                                        menstrualCycle.startDate.between(startOfMonth, endOfMonth)
+                                                .or(menstrualCycle.endDate.between(startOfMonth, endOfMonth))
+                                )
+                )
+                .distinct()
+                .fetch());
     }
 }

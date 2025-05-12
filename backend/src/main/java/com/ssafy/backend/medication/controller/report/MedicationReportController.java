@@ -1,4 +1,4 @@
-package com.ssafy.backend.report.controller;
+package com.ssafy.backend.medication.controller.report;
 
 import com.ssafy.backend.common.ApiResponse;
 import com.ssafy.backend.medication.service.report.MedicationReportService;
@@ -14,22 +14,22 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/report")
+@RequestMapping("/api/report/medication")
 @RequiredArgsConstructor
-public class ReportController {
-    private final ReportService reportService;
+public class MedicationReportController {
+    private final MedicationReportService medicationReportService;
 
-    @GetMapping("/alarm")
-    public ResponseEntity<ApiResponse<?>> getAlarm(
+    @GetMapping("/recent")
+    public ResponseEntity<ApiResponse<?>> getRecentMedication(
             @AuthenticationPrincipal User user
     ) {
-        return ResponseEntity.ok(reportService.getAlarm(user));
+        return ResponseEntity.ok(medicationReportService.getRecentMedication(user));
     }
 
-    @GetMapping("/summary")
-    public ResponseEntity<ApiResponse<?>> getSummary(
+    @GetMapping("/all")
+    public ResponseEntity<ApiResponse<?>> getAllMedication(
             @AuthenticationPrincipal User user
     ) {
-        return ResponseEntity.ok(reportService.getSummary(user));
+        return ResponseEntity.ok(medicationReportService.getAllMedication(user));
     }
 }

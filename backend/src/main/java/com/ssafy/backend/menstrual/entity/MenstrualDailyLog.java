@@ -1,11 +1,10 @@
 package com.ssafy.backend.menstrual.entity;
 
-import com.ssafy.backend.symptom.entity.SymptomLog;
+import com.ssafy.backend.symptomLog.entity.SymptomLog;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -33,8 +32,9 @@ public class MenstrualDailyLog {
      * =====Column=====
      * */
     private LocalDate date;
-    private int bleedingLevel;
-    private int painLevel;
+    private Integer bleedingLevel;
+    private Integer painLevel;
+    private Integer stressLevel;
     private Boolean isStart;
     private Boolean isEnd;
 }

@@ -14,7 +14,10 @@ import java.util.List;
 @Service
 @Transactional
 public interface CycleService {
+//    사용자의 생리 주기 정보 추가
     ApiResponse<?> addMenstrualCycle(User user, AddMenstrualCycleReqDto request);
+//    사용자의 생리 주기 정보 열람
     ApiResponse<?> getMenstrualCycle(User user);
+//    사용자의 생리 주기 정보 수정
     ApiResponse<?> updateMenstrualCycle(UpdateMenstrualCycleReqDto request,Long cycle_id);
 }

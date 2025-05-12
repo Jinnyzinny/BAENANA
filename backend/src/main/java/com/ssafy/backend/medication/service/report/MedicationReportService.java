@@ -13,6 +13,12 @@ public interface MedicationReportService {    /*
     /*
     * Report Service
     * */
+    /*
+    * 사용자의 현재 복용중인 약을 포함한 최근 6개월 복용약을 조회한다.
+    * */
     ApiResponse<?> getRecentMedication(User user);
+    /*
+    * 사용자가 복용한 모든 의약품을 조회한다.
+    * */
     ApiResponse<?> getAllMedication(User user);
 }

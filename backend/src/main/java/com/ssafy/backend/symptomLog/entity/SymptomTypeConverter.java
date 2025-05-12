@@ -1,4 +1,4 @@
-package com.ssafy.backend.symptom.entity;
+package com.ssafy.backend.symptomLog.entity;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;

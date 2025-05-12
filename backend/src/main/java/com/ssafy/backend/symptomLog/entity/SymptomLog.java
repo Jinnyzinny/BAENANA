@@ -1,13 +1,11 @@
-package com.ssafy.backend.symptom.entity;
+package com.ssafy.backend.symptomLog.entity;
 
 import com.ssafy.backend.menstrual.entity.MenstrualDailyLog;
-import com.ssafy.backend.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 import java.time.LocalDate;
 
