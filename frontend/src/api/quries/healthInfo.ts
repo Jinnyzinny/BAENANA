@@ -22,9 +22,15 @@ export function useGetCategoryHealthInfo(categoryId: number) {
 }
 
 // 건강 정보 상세 조회
-export function useGetHealthInfoDetail(id: number) {
+export function useGetHealthInfoDetail(id: number | null) {
   return useQuery({
     queryKey: ["healthInfoDetail", id],
-    queryFn: () => getHealthInfoDetail(id),
+    queryFn: async () => {
+      if (id === null) {
+        throw new Error("건강 정보 id: null");
+      }
+      return getHealthInfoDetail(id);
+    },
+    enabled: id !== null,
   });
 }

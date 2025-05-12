@@ -1,17 +1,21 @@
 import { RefObject } from "react";
-import { Image, ScrollView, Text, View } from "react-native";
+import { ActivityIndicator, Image, ScrollView, Text, View } from "react-native";
 import { Modalize } from "react-native-modalize";
-import dataMocks from "../../../mocks/healthInfo_Detail.json";
-
-const data = dataMocks;
+import { useGetHealthInfoDetail } from "../../../api/quries/healthInfo";
 
 export function HealthInfoBottomSheet({
   height,
   sheetRef,
+  selectedId,
 }: {
   height: number;
   sheetRef: RefObject<Modalize | null>;
+  selectedId: number | null;
 }) {
+  const { data, isFetching } = useGetHealthInfoDetail(selectedId);
+
+  if (!selectedId) return null;
+
   return (
     <Modalize ref={sheetRef} snapPoint={height * 0.76}>
       {/* 헤더 */}
@@ -20,25 +24,29 @@ export function HealthInfoBottomSheet({
           source={require("../../../assets/images/mascot.png")}
           className="w-10 h-10"
         />
-        <Text className="text-lg font-bold self-center">{data.title}</Text>
+        <Text className="text-lg font-bold self-center">
+          {isFetching ? "로딩 중" : data?.title}
+        </Text>
       </View>
 
       {/* 본문 */}
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 32 }}>
         <View className="mx-7 gap-5">
-          {data.image_url ? (
-            <Image
-              source={{ uri: data.image_url }}
-              className="w-full h-60 rounded-lg"
-            />
+          {isFetching ? (
+            <ActivityIndicator size="large" />
           ) : (
-            <Image
-              source={require("../../../assets/images/default_image.png")}
-              className="w-full h-60 rounded-lg"
-            />
+            <>
+              <Image
+                source={
+                  data?.imageUrl
+                    ? { uri: data.imageUrl }
+                    : require("../../../assets/images/default_image.png")
+                }
+                className="w-full h-60 rounded-lg"
+              />
+              <Text>{data?.content}</Text>
+            </>
           )}
-
-          <Text>{data.content}</Text>
         </View>
       </ScrollView>
     </Modalize>
