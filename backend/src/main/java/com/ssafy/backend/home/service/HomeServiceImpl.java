@@ -54,13 +54,21 @@ public class HomeServiceImpl implements HomeService {
         return ApiResponse.success(
                 "사용자의 다음 생리주기 예측일입니다.",
                 RemainDayResDto.builder()
+//                        가장 최근의 생리  주기
+                        .recorded_menstrual(
+                                RemainDayResDto.Period.builder()
+                                        .start_date(menstrualCycle.getStartDate().toString())
+                                        .end_date(menstrualCycle.getEndDate().toString())
+                                        .build()
+                        )
 //                        생리 주기 예측일의 객체를 반환한다
-                        .remain_day(RemainDayResDto.Period.builder()
+                        .predicted_menstrual(
+                                RemainDayResDto.Period.builder()
 //                                주기의 예측 시작일
-                                .start_date(menstrualCycle.getStartDate().plusDays(28).toString())
+                                        .start_date(menstrualCycle.getStartDate().plusDays(28).toString())
 //                                주기의 예측 종료일
-                                .end_date(menstrualCycle.getEndDate().plusDays(35).toString())
-                                .build())
+                                        .end_date(menstrualCycle.getEndDate().plusDays(35).toString())
+                                        .build())
 //                        가임기
                         .childbearing_period(menstrualCycle.getStartDate().plusDays(9).toString())
 //                        배란일
@@ -91,8 +99,8 @@ public class HomeServiceImpl implements HomeService {
             return ApiResponse.success("복용할 약이 없습니다.");
         }
         /*
-        * 3. 사용자가 복용해야할 약의 정보를 반환한다.
-        * */
+         * 3. 사용자가 복용해야할 약의 정보를 반환한다.
+         * */
         return ApiResponse.success(
                 "복용할 약의 정보입니다.",
                 MedicineResDto.builder()
@@ -101,22 +109,22 @@ public class HomeServiceImpl implements HomeService {
         );
     }
 
-    public String getMedicineMessage(List<Medication> medication){
+    public String getMedicineMessage(List<Medication> medication) {
         /*
-        * 1. 추가적인 메모리 사용을 막기 위해서 StringBuilder를 이용해서 문자열을 붙인다
-        * */
+         * 1. 추가적인 메모리 사용을 막기 위해서 StringBuilder를 이용해서 문자열을 붙인다
+         * */
         StringBuilder medicineMessage = new StringBuilder();
         /*
-        * 2. 복용 시간을 리스트에서 추출하여 ", "로 구분된 문자열로 만듦
-        * */
+         * 2. 복용 시간을 리스트에서 추출하여 ", "로 구분된 문자열로 만듦
+         * */
         medication.forEach(m -> {
             String times = m.getTimeTakenList().stream()
 //                    StringBuilder로 시간을 문자열화 만들어 붙인다.
                     .map(time -> String.valueOf(time.getTime_taken().getHour()))
                     .collect(Collectors.joining(", "));
             /*
-            * 3. 최종 시간을 문자열로 반환한다.
-            * */
+             * 3. 최종 시간을 문자열로 반환한다.
+             * */
             medicineMessage.append(String.format("오늘은 %s시에 %s약을 복용해야 합니다.\n", times, m.getName()));
         });
         return medicineMessage.toString();
@@ -156,6 +164,9 @@ public class HomeServiceImpl implements HomeService {
     public HospitalReservationResDto getHospitalReservationMessage(HospitalReservation hospitalReservation) {
         LocalDateTime dateTime = hospitalReservation.getReservationDate();
 
+        /*
+         * 해당 분이 00분일 경우 00시까지라고 메시지 반환
+         * */
         if (dateTime.getMinute() == 0) {
             return HospitalReservationResDto.builder()
                     .reservation(

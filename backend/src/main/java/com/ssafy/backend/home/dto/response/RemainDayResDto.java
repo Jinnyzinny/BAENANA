@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder
 public class RemainDayResDto {
-    private Period remain_day;
+    private Period recorded_menstrual;
+    private Period predicted_menstrual;
     private String childbearing_period;
     private String ovulation_day;
     private String PMS;
