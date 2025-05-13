@@ -162,7 +162,7 @@ public class CalendarServiceImpl implements CalendarService {
             Long userId
     ) {
         return menstrualCycleRepository.findFirstByUser_UserIdOrderByStartDateDesc(userId).orElseThrow(
-                ()->new MenstrualException("사용자의 주기 정보가 단 하나도 없으므로 반환할 수 없습니다.")
+                ()->new MenstrualException("사용자의 주기 정보가 단 하나도 없으므로 정보 제공이 불가합니다.")
         );
     }
 
