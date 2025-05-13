@@ -36,9 +36,9 @@ public class MedicationImplCustomRepository implements MedicationCustomRepositor
     }
 
     @Override
-    public List<Medication> findThisMonthMedicationByUserId(Long userId, int month) {
-        LocalDate startOfMonth = LocalDate.of(LocalDate.now().getYear(), month, 1);
-        LocalDate endOfMonth = YearMonth.of(LocalDate.now().getYear(), month).atEndOfMonth();
+    public List<Medication> findThisMonthMedicationByUserId(Long userId, int year,int month) {
+        LocalDate startOfMonth = LocalDate.of(year, month, 1);
+        LocalDate endOfMonth = YearMonth.of(year, month).atEndOfMonth();
 
         // 여집합 조건: 이번 달과 겹치지 않는 경우 (제외할 조건)
         BooleanExpression excludeCondition =

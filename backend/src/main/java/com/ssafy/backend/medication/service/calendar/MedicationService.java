@@ -19,7 +19,7 @@ public interface MedicationService {
     * */
     ApiResponse<?> addMedication(User user, AddMedicationScheduleReqDto request);
 
-    ApiResponse<?> getMedication(User user,int month);
+    ApiResponse<?> getMedication(User user,int year,int month);
 
     ApiResponse<?> updateMedication(User user,UpdateMedicationScheduleReqDto request, Long id);
 
