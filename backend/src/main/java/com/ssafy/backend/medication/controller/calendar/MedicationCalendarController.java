@@ -28,12 +28,13 @@ public class MedicationCalendarController {
         return ResponseEntity.ok(medicationService.addMedication(user, request));
     }
 
-    @GetMapping("/{month}")
+    @GetMapping("/{year}/{month}")
     public ResponseEntity<ApiResponse<?>> getMedication(
             @AuthenticationPrincipal User user,
+            @PathVariable int year,
             @PathVariable int month
     ) {
-        return ResponseEntity.ok(medicationService.getMedication(user,month));
+        return ResponseEntity.ok(medicationService.getMedication(user,year,month));
     }
 
     @PatchMapping("/{id}")
