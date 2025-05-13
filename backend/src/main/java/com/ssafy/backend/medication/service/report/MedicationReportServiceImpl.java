@@ -24,6 +24,7 @@ public class MedicationReportServiceImpl implements MedicationReportService {
      * ===== Report Domain Medication 정보 제공 =====
      * */
     @Override
+    @Transactional(readOnly = true)
     public ApiResponse<?> getRecentMedication(User user) {
         /*
          *userId를 얻는다
@@ -67,6 +68,7 @@ public class MedicationReportServiceImpl implements MedicationReportService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ApiResponse<?> getAllMedication(User user) {
         /*
          * userId를 얻어낸다
