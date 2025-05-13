@@ -202,8 +202,8 @@ public class CalendarServiceImpl implements CalendarService {
         return ApiResponse.success(
                 "사용자의 가임기 정보입니다.",
                 GetBearingPeriodResDto.builder()
-                        .start_date(menstrualCycle.getStartDate().plusDays(19).toString())
-                        .end_date(menstrualCycle.getStartDate().plusDays(12).toString())
+                        .start_date(menstrualCycle.getStartDate().plusDays(12).toString())
+                        .end_date(menstrualCycle.getStartDate().plusDays(19).toString())
                         .build()
         );
     }
