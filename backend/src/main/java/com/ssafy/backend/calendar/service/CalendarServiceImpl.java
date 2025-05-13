@@ -84,12 +84,10 @@ public class CalendarServiceImpl implements CalendarService {
                         .date(searchForDate.toString())
                         .prediction(searchForDate.isAfter(LocalDate.now()) && menstrualCycle == null)
                         .menstrual_cycle(
-                                menstrualCycle == null ?
-                                        null :
-                                        GetDailyInfoResDto.menstrual_cycle.builder()
-                                                .start_date(menstrualCycle.getStartDate().toString())
-                                                .end_date(menstrualCycle.getEndDate().toString())
-                                                .build()
+                                GetDailyInfoResDto.menstrual_cycle.builder()
+                                        .start_date(getRecentMenstrualCycle(userId).getStartDate().toString())
+                                        .end_date(getRecentMenstrualCycle(userId).getStartDate().toString())
+                                        .build()
                         )
                         .menstrual_daily_log(
                                 dailyLog == null ?
@@ -150,6 +148,12 @@ public class CalendarServiceImpl implements CalendarService {
                         )
                         .build()
         );
+    }
+
+    public MenstrualCycle getRecentMenstrualCycle(
+            Long userId
+    ) {
+        return menstrualCycleRepository.findFirstByUser_UserIdOrderByStartDateDesc(userId).orElseThrow();
     }
 
     /*
