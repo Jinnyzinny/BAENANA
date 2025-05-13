@@ -34,7 +34,11 @@ public class MedicationReportServiceImpl implements MedicationReportService {
          * userId로 최근 복용한 약을 불러온다.
          */
         List<Medication> medicationList =
-                medicationCustomRepository.findMedicationByUserId(userId);
+                medicationCustomRepository.findMedicationByUserId(userId).orElse(null);
+
+        if(medicationList == null || medicationList.isEmpty()) {
+            return ApiResponse.success("사용자가 최근 복용한 약이 없습니다");
+        }
         /*
          * 반환할 현재 복용중인 약품 리스트를 생성한다.
          */
@@ -78,7 +82,7 @@ public class MedicationReportServiceImpl implements MedicationReportService {
          * 사용자가 복용한 모든 의약품 리스트를 얻는다.
          * */
         List<Medication> medicationList =
-                medicationCustomRepository.findMedicationByUserId(userId);
+                medicationCustomRepository.findMedicationByUserId(userId).orElse(null);
 
         if (medicationList == null || medicationList.isEmpty()) {
             return ApiResponse.success("사용자가 복용한 의약품이 없습니다.");

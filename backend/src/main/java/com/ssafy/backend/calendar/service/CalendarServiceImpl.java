@@ -10,7 +10,6 @@ import com.ssafy.backend.medication.entity.Medication;
 import com.ssafy.backend.medication.repository.MedicationRepository;
 import com.ssafy.backend.menstrual.entity.MenstrualCycle;
 import com.ssafy.backend.menstrual.entity.MenstrualDailyLog;
-import com.ssafy.backend.menstrual.exception.MenstrualException;
 import com.ssafy.backend.menstrual.repository.MenstrualCycleRepository;
 import com.ssafy.backend.menstrual.repository.MenstrualDailyLogRepository;
 import com.ssafy.backend.user.entity.User;
@@ -21,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -48,12 +48,25 @@ public class CalendarServiceImpl implements CalendarService {
          * userId를 이용해서 검색일자가 주기 시작일이 검색을 원하는 날짜보다 이전이고 종료일이 이후인 주기를 찾는다.
          * 그렇게 되면 주기 시작일<=검색일자<=종료일의 주기가 나올 것
          * */
+        boolean prediction = false;
         MenstrualCycle menstrualCycle =
                 menstrualCycleRepository
                         .findByUser_UserIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(
                                 userId,
                                 searchForDate,
                                 searchForDate).orElse(null);
+
+//        해당 일자가 주기 종료일에 포함하지 않는다면 최근 주기로 예측일을 뽑아온다.
+        if (menstrualCycle == null) {
+            menstrualCycle = getRecentMenstrualCycle(userId).orElse(null);
+            if (menstrualCycle != null) {
+                prediction = true;
+            }
+        }
+//        만약 예측일 제공도 불가할 경우 사용자의 주기 정보가 하나도 없는 경우이므로 메시지를 반환합니다.
+        if (menstrualCycle == null) {
+            return ApiResponse.success("사용자의 주기 정보가 단 하나도 없으므로 정보 제공이 불가합니다.");
+        }
         /*
          * 해당 날짜가 포함된 주기정보의 해당 날짜 세부 정보를 얻어낸다.
          * */
@@ -83,19 +96,13 @@ public class CalendarServiceImpl implements CalendarService {
                 GetDailyInfoResDto.builder()
 //                        정보를 요청한 날짜
                         .date(searchForDate.toString())
-                        .prediction(menstrualCycle == null)
+                        .prediction(prediction)
                         .menstrual_cycle(
-                                menstrualCycle == null ?
-//                                        예측일 제공
-                                        GetDailyInfoResDto.menstrual_cycle.builder()
-                                                .start_date(getRecentMenstrualCycle(userId).getStartDate().plusDays(28).toString())
-                                                .end_date(getRecentMenstrualCycle(userId).getEndDate().plusDays(28).toString())
-                                                .build() :
-//                                        주기 정보 제공
-                                        GetDailyInfoResDto.menstrual_cycle.builder()
-                                                .start_date(menstrualCycle.getStartDate().toString())
-                                                .end_date(menstrualCycle.getStartDate().toString())
-                                                .build()
+//                               주기 정보 제공
+                                GetDailyInfoResDto.menstrual_cycle.builder()
+                                        .start_date(menstrualCycle.getStartDate().toString())
+                                        .end_date(menstrualCycle.getStartDate().toString())
+                                        .build()
                         )
                         .menstrual_daily_log(
                                 dailyLog == null ?
@@ -158,12 +165,10 @@ public class CalendarServiceImpl implements CalendarService {
         );
     }
 
-    public MenstrualCycle getRecentMenstrualCycle(
+    public Optional<MenstrualCycle> getRecentMenstrualCycle(
             Long userId
     ) {
-        return menstrualCycleRepository.findFirstByUser_UserIdOrderByStartDateDesc(userId).orElseThrow(
-                ()->new MenstrualException("사용자의 주기 정보가 단 하나도 없으므로 정보 제공이 불가합니다.")
-        );
+        return menstrualCycleRepository.findFirstByUser_UserIdOrderByStartDateDesc(userId);
     }
 
     /*

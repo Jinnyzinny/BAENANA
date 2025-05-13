@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Transactional
@@ -25,18 +26,18 @@ public class MedicationImplCustomRepository implements MedicationCustomRepositor
     QTimeTaken timeTaken = QTimeTaken.timeTaken;
 
     @Override
-    public List<Medication> findMedicationByUserId(Long userId) {
-        return queryFactory
+    public Optional<List<Medication>> findMedicationByUserId(Long userId) {
+        return Optional.of(queryFactory
                 .selectFrom(medication)
                 .leftJoin(medication.timeTakenList, timeTaken).fetchJoin()
                 .where(medication.user.userId.eq(userId))
                 .distinct()
                 .orderBy(medication.startDate.asc(), timeTaken.time_taken.asc())
-                .fetch();
+                .fetch());
     }
 
     @Override
-    public List<Medication> findThisMonthMedicationByUserId(Long userId, int year,int month) {
+    public Optional<List<Medication>> findThisMonthMedicationByUserId(Long userId, int year, int month) {
         LocalDate startOfMonth = LocalDate.of(year, month, 1);
         LocalDate endOfMonth = YearMonth.of(year, month).atEndOfMonth();
 
@@ -45,7 +46,7 @@ public class MedicationImplCustomRepository implements MedicationCustomRepositor
                 medication.endDate.lt(startOfMonth)    // 종료일이 이번 달 이전
                         .or(medication.startDate.gt(endOfMonth)); // 시작일이 이번 달 이후
 
-        return queryFactory
+        return Optional.of(queryFactory
                 .selectFrom(medication)
                 .leftJoin(medication.timeTakenList, timeTaken).fetchJoin()
                 .where(
@@ -54,6 +55,7 @@ public class MedicationImplCustomRepository implements MedicationCustomRepositor
                 )
                 .distinct()
                 .orderBy(medication.startDate.asc(), timeTaken.time_taken.asc())
-                .fetch();
+                .fetch()
+        );
     }
 }
