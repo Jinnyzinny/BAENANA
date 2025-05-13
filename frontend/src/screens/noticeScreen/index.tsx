@@ -1,12 +1,24 @@
 import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { HeaderLogo } from "../../components/common/headerLogo";
-import { TabMenu } from "../../components/common/tabMenu";
-import { useState } from "react";
+import { NoticeCard } from "../../components/notice/noticeCard";
 
 export function NoticeScreen() {
-  const [selectedMenu, setSelectedMenu] = useState<string>("notice");
-
+  // 임시 데이터
+  const data = [
+    {
+      id: 1,
+      title: "시스템 공지 제목",
+    },
+    {
+      id: 2,
+      title: "제목 2",
+    },
+    {
+      id: 3,
+      title: "제목 2",
+    },
+  ];
   return (
     <SafeAreaView>
       <HeaderLogo before={true} settings={false} />
@@ -22,17 +34,14 @@ export function NoticeScreen() {
             </Text>
           </View>
           <View className="m-1" />
-          <TabMenu
-            tabs={[
-              { key: "notice", label: "공지사항" },
-              { key: "update", label: "업데이트" },
-              { key: "bug", label: "버그 수정" },
-              { key: "policy", label: "정책 변경" },
-            ]}
-            onSelect={(key) => {
-              setSelectedMenu(key);
-            }}
-          />
+
+          {/* 관리자: 공지사항 추가 버튼 추가 필요 => 바텀시트 띄워서 공지사항 작성 */}
+
+          <View className="gap-3">
+            {data.map((item) => (
+              <NoticeCard key={item.id} id={item.id} title={item.title} />
+            ))}
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
