@@ -125,7 +125,7 @@ public class HomeServiceImpl implements HomeService {
             /*
              * 3. 최종 시간을 문자열로 반환한다.
              * */
-            medicineMessage.append(String.format("오늘은 %s시에 %s약을 복용해야 합니다.\n", times, m.getName()));
+            medicineMessage.append(String.format("오늘은 %s시에 %s 복용 일정이 있습니다.\n", times, m.getName()));
         });
         return medicineMessage.toString();
     }
@@ -171,7 +171,7 @@ public class HomeServiceImpl implements HomeService {
             return HospitalReservationResDto.builder()
                     .reservation(
                             String.format(
-                                    "%d년 %d일 %d일 %d시에 %s 병원을 방문해야 합니다",
+                                    "%d년 %d일 %d일 %d시에 %s 방문 일정이 있습니다",
                                     dateTime.getYear(),
                                     dateTime.getMonth().getValue(),
                                     dateTime.getDayOfMonth(),
@@ -184,7 +184,7 @@ public class HomeServiceImpl implements HomeService {
             return HospitalReservationResDto.builder()
                     .reservation(
                             String.format(
-                                    "%d년 %d일 %d일 %d시 %d분에 %s 병원을 방문해야 합니다",
+                                    "%d년 %d일 %d일 %d시 %d분에 %s 방문 일정이 있습니다",
                                     dateTime.getYear(),
                                     dateTime.getMonth().getValue(),
                                     dateTime.getDayOfMonth(),
