@@ -14,10 +14,10 @@ import com.ssafy.backend.medication.repository.custom.MedicationCustomRepository
 import com.ssafy.backend.user.entity.User;
 import com.ssafy.backend.user.repository.UserRepository;
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -65,6 +65,7 @@ public class MedicationServiceImpl implements MedicationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ApiResponse<?> getMedication(
             User user,
             int year,
