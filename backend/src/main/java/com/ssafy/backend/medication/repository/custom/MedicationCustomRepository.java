@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface MedicationCustomRepository {
-    List<Medication> findMedicationByUserId(Long userId);
-    List<Medication> findThisMonthMedicationByUserId(Long userId,int year,int month);
+    Optional<List<Medication>> findMedicationByUserId(Long userId);
+    Optional<List<Medication>> findThisMonthMedicationByUserId(Long userId,int year,int month);
 }

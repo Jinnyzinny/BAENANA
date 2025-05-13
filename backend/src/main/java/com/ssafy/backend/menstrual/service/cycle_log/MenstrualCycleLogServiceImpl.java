@@ -33,7 +33,7 @@ public class MenstrualCycleLogServiceImpl implements MenstrualCycleLogService {
                 MenstrualDailyLog.builder()
                         .cycle(
                                 menstrualCycleRepository.findById(request.getCycle_id()).orElseThrow(
-                                        () -> new IllegalArgumentException("주기 정보가 없습니다.")
+                                        () -> new MenstrualException("주기 정보가 없습니다.")
                                 ))
                         .date(request.getDate())
                         .bleedingLevel(request.getBleeding_level())
