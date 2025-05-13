@@ -49,7 +49,7 @@ public class HospitalReservationServiceImpl implements HospitalReservationServic
                                                 new NoSuchElementException("병원예약을 할 회원이 존재하지 않습니다")
                                 )
                         )
-                        .purpose(PurposeType.fromDescription(request.getPurpose()))
+                        .purpose(request.getPurpose())
                         .status(StatusType.COMPLETE_RESERVATION)
                         .build()
         );
@@ -94,7 +94,7 @@ public class HospitalReservationServiceImpl implements HospitalReservationServic
                                 .reservation_id(hr.getReservationId())
                                 .hospital_name(hr.getHospitalName())
                                 .reservation_date_time(hr.getReservationDate().toString())
-                                .purpose(hr.getPurpose().getDescription())
+                                .purpose(hr.getPurpose())
                                 .status(hr.getStatus().getDescription())
                                 .build()
                 ).toList());
@@ -119,7 +119,7 @@ public class HospitalReservationServiceImpl implements HospitalReservationServic
         BeanUtils.copyProperties(request, hospitalReservation, NullAwareBeanUtils.getNullPropertyNames(request));
 //        Enum을 자바에서만 검증하므로 copyProperties를 통할수 없다
         if (request.getPurpose() != null) {
-            hospitalReservation.setPurposeTypeByDescription(request.getPurpose());
+            hospitalReservation.setPurpose(request.getPurpose());
         }
         if (request.getStatus() != null) {
             hospitalReservation.setStatusTypeByDescription(request.getStatus());

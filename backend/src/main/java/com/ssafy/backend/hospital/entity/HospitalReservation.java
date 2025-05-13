@@ -32,12 +32,16 @@ public class HospitalReservation {
      * 산부인과
      * 정기검진
      * */
-    @Convert(converter = PurposeTypeConverter.class)
-    private PurposeType purpose;
+//    @Convert(converter = PurposeTypeConverter.class)
+//    private PurposeType purpose;
+//    // 사용자가 선택한 한글 문자열로 Enum을 설정하는 메서드
+//    public void setPurposeTypeByDescription(String description) {
+//        this.purpose = PurposeType.fromDescription(description);
+//    }
+    private String purpose;
 
-    // 사용자가 선택한 한글 문자열로 Enum을 설정하는 메서드
-    public void setPurposeTypeByDescription(String description) {
-        this.purpose = PurposeType.fromDescription(description);
+    public void setPurpose(String purpose) {
+        this.purpose = purpose;
     }
     /*
      * 예약됨
