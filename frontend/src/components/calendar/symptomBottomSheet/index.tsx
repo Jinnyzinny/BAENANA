@@ -4,6 +4,7 @@ import { Modalize } from "react-native-modalize";
 import { SelectLevel } from "../selectLevel";
 import { CustomButton } from "../../common/customButton";
 import { SelectTag } from "../../common/selectTag";
+import { useAddPeriodSymtom } from "../../../api/quries/period";
 
 export function SymptomBottomSheet({
   height,
@@ -37,8 +38,14 @@ export function SymptomBottomSheet({
     );
   }
 
+  const { mutate: data } = useAddPeriodSymtom();
+
+  function handleSave() {}
+
+  function resetForm() {}
+
   return (
-    <Modalize ref={sheetRef} snapPoint={height * 0.655}>
+    <Modalize ref={sheetRef} snapPoint={height * 0.655} onOpen={resetForm}>
       {/* 헤더 */}
       <View className="mx-5 mt-7 mb-5 flex-row items-start justify-start gap-2">
         <Image
@@ -117,7 +124,7 @@ export function SymptomBottomSheet({
 
           {/* 저장 버튼 */}
           <View className="mt-10">
-            <CustomButton fill={true} content="저장" onPress={() => {}} />
+            <CustomButton fill={true} content="저장" onPress={handleSave} />
           </View>
         </View>
       </ScrollView>

@@ -49,7 +49,7 @@ export function useAddMedicineReservation() {
 // ✅월별 복용약 일정 조회
 export function useGetMedicineReservation(year: number, month: number) {
   return useQuery({
-    queryKey: ["medicineReservation"],
+    queryKey: ["medicineReservation", year, month],
     queryFn: () => getMedicineReservation(year, month),
   });
 }

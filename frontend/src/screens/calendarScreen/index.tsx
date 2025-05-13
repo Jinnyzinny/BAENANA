@@ -7,7 +7,6 @@ import {
   View,
 } from "react-native";
 import { Modalize } from "react-native-modalize";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { useGetHospitalReservation } from "../../api/quries/hospital";
 import { useGetMedicineReservation } from "../../api/quries/medicine";
 import {
@@ -25,6 +24,8 @@ import { CustomButton } from "../../components/common/customButton";
 import { HeaderLogo } from "../../components/common/headerLogo";
 import { HospitalReservation } from "../../types/Hospital";
 import { Medicine } from "../../types/Medicine";
+import { SchedulePeriodList } from "../../components/calendar/schedulePeriodList";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export function CalendarScreen() {
   const [selectedDate, setSelectedDate] = useState<string>("");
@@ -70,30 +71,30 @@ export function CalendarScreen() {
     useGetPredictedPeriod();
 
   useEffect(() => {
-    // 월별 병원 예약 일정
-    if (hospitalReservationData?.data) {
-      setHospitalReservation(hospitalReservationData.data);
-    }
+    // 병원 예약
+    setHospitalReservation(hospitalReservationData?.data ?? []);
 
-    // 복용약 예약 일정
-    if (medicineReservationData?.data) {
-      setMedicineReservation(medicineReservationData.data);
-    }
+    // 복용약 예약
+    setMedicineReservation(medicineReservationData?.data ?? []);
 
-    // 가임기 정보가 있는 경우
+    // 가임기
     if (childbearingAgeData?.data) {
       setChildbearingAge({
         startDate: childbearingAgeData.data.start_date,
         endDate: childbearingAgeData.data.end_date,
       });
+    } else {
+      setChildbearingAge({ startDate: "", endDate: "" });
     }
 
-    // 월경 예정일 정보가 있는 경우
+    // 월경 예정일
     if (predictedPeriodData?.data) {
       setPredictedPeriod({
         startDate: predictedPeriodData.data.start_date,
         endDate: predictedPeriodData.data.end_date,
       });
+    } else {
+      setPredictedPeriod({ startDate: "", endDate: "" });
     }
   }, [
     hospitalReservationData,
@@ -135,38 +136,39 @@ export function CalendarScreen() {
   }
 
   return (
-    <>
-      <SafeAreaView className="flex-1">
-        <HeaderLogo before={false} settings={true} />
-        <ScrollView>
-          <View className="flex-1 mx-5 gap-3">
-            {/* 캘린더 */}
-            <Monthly
-              onDateSelect={handleDatePress}
-              selectedMonth={selectedMonth}
-              setSelectedYear={setSelectedYear}
-              setSelectedMonth={setSelectedMonth}
-              hospitalReservation={hospitalReservation}
-              medicineReservation={medicineReservation}
-              predictedPeriod={predictedPeriod}
-              childbearingAge={childbearingAge}
-            />
-            {/* 월별 주요 일정 */}
-            <ScheduleList
-              selectedMonth={selectedMonth}
-              hospitalReservation={hospitalReservation}
-              medicineReservation={medicineReservation}
-              predictedPeriod={predictedPeriod}
-              childbearingAge={childbearingAge}
-            />
-            <CustomButton
-              fill={true}
-              content="월경일 입력"
-              onPress={handlePeriodOpen}
-            />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
+    <SafeAreaView>
+      <HeaderLogo before={false} settings={true} />
+      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 52 }}>
+        <View className="flex-1 mx-5 gap-3">
+          {/* 캘린더 */}
+          <Monthly
+            onDateSelect={handleDatePress}
+            selectedMonth={selectedMonth}
+            setSelectedYear={setSelectedYear}
+            setSelectedMonth={setSelectedMonth}
+            hospitalReservation={hospitalReservation}
+            medicineReservation={medicineReservation}
+            predictedPeriod={predictedPeriod}
+            childbearingAge={childbearingAge}
+          />
+          {/* 월경 예정일 & 가임기 */}
+          <SchedulePeriodList
+            predictedPeriod={predictedPeriod}
+            childbearingAge={childbearingAge}
+          />
+          {/* 월별 주요 일정 */}
+          <ScheduleList
+            selectedMonth={selectedMonth}
+            hospitalReservation={hospitalReservation}
+            medicineReservation={medicineReservation}
+          />
+          <CustomButton
+            fill={true}
+            content="월경일 입력"
+            onPress={handlePeriodOpen}
+          />
+        </View>
+      </ScrollView>
 
       {/* SafeAreaView 외부 */}
 
@@ -210,6 +212,6 @@ export function CalendarScreen() {
           selectedDate={selectedDate}
         />
       )}
-    </>
+    </SafeAreaView>
   );
 }
