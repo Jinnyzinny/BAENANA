@@ -22,7 +22,8 @@ public interface HospitalReservationService {
     );
 
     ApiResponse<?> getHospitalReservation(
-            @AuthenticationPrincipal User user
+            @AuthenticationPrincipal User user,
+            int month
     );
 
     ApiResponse<?> updateHospitalReservation(

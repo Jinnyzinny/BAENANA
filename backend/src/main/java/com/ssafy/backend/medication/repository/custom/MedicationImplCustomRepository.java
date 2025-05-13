@@ -1,6 +1,6 @@
 package com.ssafy.backend.medication.repository.custom;
 
-import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.backend.medication.entity.Medication;
 import com.ssafy.backend.medication.entity.QMedication;
@@ -11,8 +11,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 @Transactional
@@ -30,6 +30,28 @@ public class MedicationImplCustomRepository implements MedicationCustomRepositor
                 .selectFrom(medication)
                 .leftJoin(medication.timeTakenList, timeTaken).fetchJoin()
                 .where(medication.user.userId.eq(userId))
+                .distinct()
+                .orderBy(medication.startDate.asc(), timeTaken.time_taken.asc())
+                .fetch();
+    }
+
+    @Override
+    public List<Medication> findThisMonthMedicationByUserId(Long userId, int month) {
+        LocalDate startOfMonth = LocalDate.of(LocalDate.now().getYear(), month, 1);
+        LocalDate endOfMonth = YearMonth.of(LocalDate.now().getYear(), month).atEndOfMonth();
+
+        // 여집합 조건: 이번 달과 겹치지 않는 경우 (제외할 조건)
+        BooleanExpression excludeCondition =
+                medication.endDate.lt(startOfMonth)    // 종료일이 이번 달 이전
+                        .or(medication.startDate.gt(endOfMonth)); // 시작일이 이번 달 이후
+
+        return queryFactory
+                .selectFrom(medication)
+                .leftJoin(medication.timeTakenList, timeTaken).fetchJoin()
+                .where(
+                        medication.user.userId.eq(userId)
+                                .and(excludeCondition.not()) // 여집합 조건을 반전하여 이번 달과 겹치는 경우만 남기기
+                )
                 .distinct()
                 .orderBy(medication.startDate.asc(), timeTaken.time_taken.asc())
                 .fetch();
