@@ -207,12 +207,12 @@ public class CalendarServiceImpl implements CalendarService {
          * */
         if (menstrualCycle == null) {
             return ApiResponse.success(
-                    "사용자의 생리주기가 없습니다."
+                    "예측을 할 사용자의 생리주기가 없습니다."
             );
         }
 
         return ApiResponse.success(
-                "사용자의 생리주기입니다.",
+                "사용자의 주기 예측 정보입니다.",
                 GetMenstrualPredictionResDto.builder()
                         .start_date(
                                 menstrualCycle.getStartDate().plusDays(28).toString())
