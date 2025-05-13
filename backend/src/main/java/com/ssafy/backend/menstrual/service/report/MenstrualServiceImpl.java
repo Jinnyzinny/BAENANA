@@ -49,7 +49,10 @@ public class MenstrualServiceImpl implements MenstrualService {
     public ApiResponse<?> getMenstrualInfo(User user) {
         Long userId = user.getUserId();
         List<MenstrualCycle> menstrualCycleList =
-                menstrualCycleRepository.findByUser_UserId(userId).orElseThrow();
+                menstrualCycleRepository.findByUser_UserId(userId).orElse(null);
+        if (menstrualCycleList == null || menstrualCycleList.isEmpty()) {
+            throw new MenstrualException("사용자의 주기 정보가 없습니다");
+        }
 
         int cycleSum = 0;
         int periodSum = 0;

@@ -32,7 +32,7 @@ public class ReportServiceImpl implements ReportService {
                 menstrualCycleRepository.findTop4ByUser_UserIdOrderByStartDateDesc(userId).orElse(null);
 
         if (menstrualCycle == null) {
-            return null;
+            return ApiResponse.success("사용자의 주기 정보가 없습니다.");
         }
         int maxCycle = Integer.MIN_VALUE;
         int minCycle = Integer.MAX_VALUE;
