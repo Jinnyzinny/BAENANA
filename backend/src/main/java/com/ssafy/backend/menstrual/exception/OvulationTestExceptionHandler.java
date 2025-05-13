@@ -22,9 +22,9 @@ public class OvulationTestExceptionHandler {
     }
 
     @ExceptionHandler(OvulationTestStandardException.class)  // 수정: 올바른 예외 타입으로 변경
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ApiResponse<?> handleNoMatchedOvulationTestException(OvulationTestStandardException e) {
         log.error("Not Matched Ovulation Test Standard: {}", e.getMessage());
-        return ApiResponse.error("MENSTRUAL_NOT_MATCHED", HttpStatus.NO_CONTENT, e.getMessage());
+        return ApiResponse.error("MENSTRUAL_AND_STANDARD_NOT_MATCHED", HttpStatus.NOT_FOUND, e.getMessage());
     }
 }
