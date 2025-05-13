@@ -131,7 +131,7 @@ public class CalendarServiceImpl implements CalendarService {
 //                                                                      예약 날짜
                                                                         .reservation_date(r.getReservationDate().toString())
 //                                                                      방문 목적
-                                                                        .purpose(r.getPurpose().getDescription())
+                                                                        .purpose(r.getPurpose())
                                                                         .build())
                                                 .toList()
                         )
