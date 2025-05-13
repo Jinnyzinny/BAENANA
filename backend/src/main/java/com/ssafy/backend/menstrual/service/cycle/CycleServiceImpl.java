@@ -74,6 +74,7 @@ public class CycleServiceImpl implements CycleService {
                                                                                 .date(log.getDate().toString())
                                                                                 .bleeding_level(log.getBleedingLevel())
                                                                                 .pain_level(log.getPainLevel())
+                                                                                .stress_level(log.getStressLevel())
                                                                                 .symptoms(
                                                                                         log.getSymptomLog().stream().map(
                                                                                                 symptomLog -> symptomLog.getSymptomType().getDescription()
