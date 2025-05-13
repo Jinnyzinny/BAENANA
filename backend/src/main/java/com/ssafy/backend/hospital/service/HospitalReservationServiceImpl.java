@@ -112,7 +112,6 @@ public class HospitalReservationServiceImpl implements HospitalReservationServic
         HospitalReservation hospitalReservation =
                 hospitalReservationRepository.findById(id).orElseThrow(() ->
                         new HospitalReservationException("변경할 병원 예약이 존재하지 않습니다."));
-
         /*
         * BeanUtils.copyProperties를 이용해서 null값을 제외한 값들을 객체에 DB에서 불러온 객체에 복사한다.
         * */
