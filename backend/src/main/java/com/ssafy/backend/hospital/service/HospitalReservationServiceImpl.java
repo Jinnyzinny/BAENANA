@@ -19,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -56,7 +58,8 @@ public class HospitalReservationServiceImpl implements HospitalReservationServic
 
     @Override
     public ApiResponse<?> getHospitalReservation(
-            User user
+            User user,
+            int month
     ) {
         /*
          * userId를 얻는다
@@ -65,8 +68,8 @@ public class HospitalReservationServiceImpl implements HospitalReservationServic
         /*
         * 이번 달의 첫 날과 마지막날을 얻는다.
         * */
-        LocalDateTime startOfMonth = LocalDate.now().withDayOfMonth(1).atStartOfDay();
-        LocalDateTime endOfMonth = startOfMonth.plusMonths(1).minusDays(1).withHour(23).withMinute(59).withSecond(59);
+        LocalDateTime startOfMonth = LocalDate.of(LocalDate.now().getYear(), month, 1).atStartOfDay();
+        LocalDateTime endOfMonth = YearMonth.of(LocalDate.now().getYear(),month).atEndOfMonth().atTime(23,59,59);
         /*
          * 사용자가 예약한 병원 리스트를 얻는다.
          * */
