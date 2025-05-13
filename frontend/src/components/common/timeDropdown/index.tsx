@@ -1,5 +1,5 @@
 import { ChevronDown } from "lucide-react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import DatePicker from "react-native-date-picker";
 
@@ -16,6 +16,12 @@ export function TimeDropdown({
 }) {
   const [open, setOpen] = useState(false);
   const [time, setTime] = useState(new Date(0, 0, 0, hour, minute));
+
+  useEffect(() => {
+    const newTime = new Date(0, 0, 0, hour, minute);
+    setTime(newTime);
+    onChange(newTime); // optional: 초기 설정을 부모에도 전달
+  }, [hour, minute]);
 
   return (
     <View className="flex-1 pb-3 border-b border-neutral-400">
