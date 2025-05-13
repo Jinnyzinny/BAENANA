@@ -52,11 +52,18 @@ export function HospitalBottomSheet({
       console.log("예약 일시: ", formattedDateTime);
       console.log("목적: ", finalPurpose);
 
-      addHospitalReservation({
-        hospitalName,
-        reservationDate: formattedDateTime,
-        purpose: finalPurpose,
-      });
+      addHospitalReservation(
+        {
+          hospitalName,
+          reservationDate: formattedDateTime,
+          purpose: finalPurpose,
+        },
+        {
+          onSuccess: () => {
+            sheetRef.current?.close();
+          },
+        }
+      );
     }
   }
 
@@ -139,6 +146,7 @@ export function HospitalBottomSheet({
               <View className="mx-5 flex-row gap-2 flex-wrap">
                 {purposeItems.slice(0, 4).map((item) => (
                   <TouchableOpacity
+                    key={item.id}
                     onPress={() => {
                       setPurpose(item.label);
                       setPurposeInput("");
