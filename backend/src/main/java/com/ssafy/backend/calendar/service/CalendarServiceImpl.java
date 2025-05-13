@@ -77,7 +77,7 @@ public class CalendarServiceImpl implements CalendarService {
                                 searchForDate)
                         .orElse(null);
         /*
-         * 해당 날짜의 병원 예약을 얻어낸다
+         * 해당 날짜의 병원 예약을 얻어낸다.   
          * */
         List<HospitalReservation> reservation =
                 hospitalreservationRepository
