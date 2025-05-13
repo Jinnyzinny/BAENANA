@@ -49,7 +49,7 @@ public class HospitalReservationServiceImpl implements HospitalReservationServic
                                                 new NoSuchElementException("병원예약을 할 회원이 존재하지 않습니다")
                                 )
                         )
-                        .purpose(PurposeType.fromDescription(request.getPurpose()))
+                        .purpose(request.getPurpose())
                         .status(StatusType.COMPLETE_RESERVATION)
                         .build()
         );
@@ -94,7 +94,7 @@ public class HospitalReservationServiceImpl implements HospitalReservationServic
                                 .reservation_id(hr.getReservationId())
                                 .hospital_name(hr.getHospitalName())
                                 .reservation_date_time(hr.getReservationDate().toString())
-                                .purpose(hr.getPurpose().getDescription())
+                                .purpose(hr.getPurpose())
                                 .status(hr.getStatus().getDescription())
                                 .build()
                 ).toList());
@@ -112,14 +112,13 @@ public class HospitalReservationServiceImpl implements HospitalReservationServic
         HospitalReservation hospitalReservation =
                 hospitalReservationRepository.findById(id).orElseThrow(() ->
                         new HospitalReservationException("변경할 병원 예약이 존재하지 않습니다."));
-
         /*
         * BeanUtils.copyProperties를 이용해서 null값을 제외한 값들을 객체에 DB에서 불러온 객체에 복사한다.
         * */
         BeanUtils.copyProperties(request, hospitalReservation, NullAwareBeanUtils.getNullPropertyNames(request));
 //        Enum을 자바에서만 검증하므로 copyProperties를 통할수 없다
         if (request.getPurpose() != null) {
-            hospitalReservation.setPurposeTypeByDescription(request.getPurpose());
+            hospitalReservation.setPurpose(request.getPurpose());
         }
         if (request.getStatus() != null) {
             hospitalReservation.setStatusTypeByDescription(request.getStatus());
