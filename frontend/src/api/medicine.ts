@@ -39,10 +39,13 @@ export async function addMedicineReservation(
 
 // 월별 복용약 일정 조회
 export async function getMedicineReservation(
+  year: number,
   month: number
 ): Promise<FullMedicine> {
   try {
-    const response = await authClient.get(`/calendar/medication/${month}`);
+    const response = await authClient.get(
+      `/calendar/medication/${year}/${month}`
+    );
     console.log("월별 복용약 일정 조회 성공: ", response.data);
     return response.data;
   } catch (error: unknown) {

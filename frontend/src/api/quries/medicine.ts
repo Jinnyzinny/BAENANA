@@ -46,11 +46,11 @@ export function useAddMedicineReservation() {
   });
 }
 
-// 월별 복용약 일정 조회
-export function useGetMedicineReservation(month: number) {
+// ✅월별 복용약 일정 조회
+export function useGetMedicineReservation(year: number, month: number) {
   return useQuery({
     queryKey: ["medicineReservation"],
-    queryFn: () => getMedicineReservation(month),
+    queryFn: () => getMedicineReservation(year, month),
   });
 }
 

@@ -3,8 +3,8 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import { HospitalReservation } from "../../../types/Hospital";
 import { Medicine } from "../../../types/Medicine";
-import { MarkPeriod, MergedMark } from "../../../utils/markPeriod";
 import { MarkDate } from "../../../utils/markDate";
+import { MarkPeriod, MergedMark } from "../../../utils/markPeriod";
 import { MergeMark } from "../../../utils/mergeMark";
 
 LocaleConfig.locales["ko"] = {
@@ -54,6 +54,7 @@ LocaleConfig.defaultLocale = "ko";
 export function Monthly({
   onDateSelect,
   selectedMonth,
+  setSelectedYear,
   setSelectedMonth,
   hospitalReservation,
   medicineReservation,
@@ -62,6 +63,7 @@ export function Monthly({
 }: {
   onDateSelect: (date: string) => void;
   selectedMonth: number;
+  setSelectedYear: (year: number) => void;
   setSelectedMonth: (month: number) => void;
   hospitalReservation: HospitalReservation[];
   medicineReservation: Medicine[];
@@ -122,6 +124,7 @@ export function Monthly({
           onDateSelect(day.dateString);
         }}
         onMonthChange={(date) => {
+          setSelectedYear(date.year);
           setSelectedMonth(date.month);
         }}
         style={{

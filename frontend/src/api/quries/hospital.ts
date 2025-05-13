@@ -41,11 +41,11 @@ export function useAddHospitalReservation() {
   });
 }
 
-// 월별 병원 예약 일정 조회
-export function useGetHospitalReservation(month: number) {
+// ✅월별 병원 예약 일정 조회
+export function useGetHospitalReservation(year: number, month: number) {
   return useQuery({
-    queryKey: ["hospitalReservation", month],
-    queryFn: () => getHospitalReservation(month),
+    queryKey: ["hospitalReservation", year, month],
+    queryFn: () => getHospitalReservation(year, month),
   });
 }
 

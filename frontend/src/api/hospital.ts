@@ -35,10 +35,11 @@ export async function addHospitalReservation(
 
 // 월별 병원 예약 일정 조회
 export async function getHospitalReservation(
+  year: number,
   month: number
 ): Promise<FullHospitalReservation> {
   try {
-    const response = await authClient.get(`/api/calendar/ob_gyn/${month}`);
+    const response = await authClient.get(`/calendar/ob_gyn/${year}/${month}`);
     console.log("월별 병원 예약 일정 조회 성공: ", response.data);
     return response.data;
   } catch (error: unknown) {

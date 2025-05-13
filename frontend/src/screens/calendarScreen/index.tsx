@@ -1,3 +1,4 @@
+import { useFocusEffect } from "@react-navigation/native";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   InteractionManager,
@@ -7,6 +8,12 @@ import {
 } from "react-native";
 import { Modalize } from "react-native-modalize";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useGetHospitalReservation } from "../../api/quries/hospital";
+import { useGetMedicineReservation } from "../../api/quries/medicine";
+import {
+  useGetChildbearingAge,
+  useGetPredictedPeriod,
+} from "../../api/quries/period";
 import { HospitalBottomSheet } from "../../components/calendar/hospitalBottomSheet";
 import { MedicineBottomSheet } from "../../components/calendar/medicineBottomSheet";
 import { Monthly } from "../../components/calendar/monthly";
@@ -16,25 +23,20 @@ import { ScheduleModal } from "../../components/calendar/scheduleModal";
 import { SymptomBottomSheet } from "../../components/calendar/symptomBottomSheet";
 import { CustomButton } from "../../components/common/customButton";
 import { HeaderLogo } from "../../components/common/headerLogo";
-import { useGetHospitalReservation } from "../../api/quries/hospital";
-import { useGetMedicineReservation } from "../../api/quries/medicine";
-import {
-  useGetChildbearingAge,
-  useGetPredictedPeriod,
-} from "../../api/quries/period";
-import { useFocusEffect } from "@react-navigation/native";
 import { HospitalReservation } from "../../types/Hospital";
 import { Medicine } from "../../types/Medicine";
 
 export function CalendarScreen() {
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [selectedDate, setSelectedDate] = useState<string>("");
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [selectedType, setSelectedType] = useState<
     "period" | "symptom" | "hospital" | "medicine" | null
   >(null);
   const sheetRef = useRef<Modalize>(null);
   const { height } = useWindowDimensions();
+  const year = new Date().getFullYear();
   const month = new Date().getMonth() + 1;
+  const [selectedYear, setSelectedYear] = useState<number>(year);
   const [selectedMonth, setSelectedMonth] = useState<number>(month);
 
   // 월별 병원 예약 일정
@@ -42,14 +44,14 @@ export function CalendarScreen() {
     HospitalReservation[]
   >([]);
   const { data: hospitalReservationData, refetch: refetchHospitalReservation } =
-    useGetHospitalReservation(selectedMonth);
+    useGetHospitalReservation(selectedYear, selectedMonth);
 
   // 월별 복용약 일정
   const [medicineReservation, setMedicineReservation] = useState<Medicine[]>(
     []
   );
   const { data: medicineReservationData, refetch: refetchMedicineReservation } =
-    useGetMedicineReservation(month);
+    useGetMedicineReservation(selectedYear, selectedMonth);
 
   // 월별 가임기
   const [childbearingAge, setChildbearingAge] = useState({
@@ -142,6 +144,7 @@ export function CalendarScreen() {
             <Monthly
               onDateSelect={handleDatePress}
               selectedMonth={selectedMonth}
+              setSelectedYear={setSelectedYear}
               setSelectedMonth={setSelectedMonth}
               hospitalReservation={hospitalReservation}
               medicineReservation={medicineReservation}

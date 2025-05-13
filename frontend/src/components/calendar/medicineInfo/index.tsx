@@ -6,14 +6,14 @@ import {
   SquarePen,
   Trash2,
 } from "lucide-react-native";
-import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useRef, useState } from "react";
+import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Daily } from "../../../types/Daily";
-import { CustomButton } from "../../common/customButton";
-import { TimeDropdown } from "../../common/timeDropdown";
-import { DateDropdown } from "../../common/dateDropdown";
 import { parseDate } from "../../../utils/parseDate";
 import { parseTime } from "../../../utils/parseTime";
+import { CustomButton } from "../../common/customButton";
+import { DateDropdown } from "../../common/dateDropdown";
+import { TimeDropdown } from "../../common/timeDropdown";
 
 export function MedicineInfo({ data }: { data: Daily }) {
   const color: string = "#A3A3A3";
@@ -23,7 +23,7 @@ export function MedicineInfo({ data }: { data: Daily }) {
 
   // 약 이름
   const [medicineName, setMedicineName] = useState<string>(
-    data.medication.name
+    data.medication.medication_name
   );
 
   // 복용일(시작, 종료) - 초기값
@@ -102,7 +102,7 @@ export function MedicineInfo({ data }: { data: Daily }) {
 
   // 수정 취소(입력 내용 초기화, 상태 변경)
   function cancelEdit() {
-    setMedicineName(data.medication.name);
+    setMedicineName(data.medication.medication_name);
     setStartDate(parseDate(data.medication.start_date));
     setEndDate(parseDate(data.medication.end_date));
     setReservationTimes(initReservationTimes);
@@ -136,7 +136,7 @@ export function MedicineInfo({ data }: { data: Daily }) {
       <View className="flex-row items-center justify-between">
         <View className="flex-row items-center gap-2">
           <Text className="text-neutral-800 text-lg font-bold">
-            {data.medication.name}
+            {data.medication.medication_name}
           </Text>
           <View className="pt-1 flex-row items-center gap-1">
             {/* 수정 버튼 */}

@@ -1,4 +1,6 @@
+import { useFocusEffect } from "@react-navigation/native";
 import { X } from "lucide-react-native";
+import { useCallback, useEffect, useState } from "react";
 import {
   Image,
   Modal,
@@ -8,13 +10,10 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import { useGetDaily } from "../../../api/quries/daily";
+import { Daily } from "../../../types/Daily";
 import { FormatDate } from "../../../utils/formatDate";
 import { ScheduleButton } from "../scheduleButton";
-import dailyMock from "../../../mocks/daily.json";
-import { Daily } from "../../../types/Daily";
-import { HospitalInfo } from "../hospitalInfo";
-import { MedicineInfo } from "../medicineInfo";
-import { PeriodInfo } from "../periodInfo";
 
 export function ScheduleModal({
   visible,
@@ -23,12 +22,60 @@ export function ScheduleModal({
   handleBottomSheet,
 }: {
   visible: boolean;
-  date: string | null;
+  date: string;
   onClose: () => void;
   handleBottomSheet: (type: "hospital" | "medicine" | "symptom") => void;
 }) {
-  // 임시 데이터(추후 변경 예정)
-  const data = dailyMock as Daily;
+  const shouldFetch = visible && !!date;
+
+  const year = shouldFetch ? Number(date.slice(0, 4)) : null;
+  const month = shouldFetch ? Number(date.slice(5, 7)) : null;
+  const day = shouldFetch ? Number(date.slice(8, 10)) : null;
+
+  const { data: dailyData, refetch } = useGetDaily(
+    year!,
+    month!,
+    day!,
+    shouldFetch
+  );
+
+  const [data, setData] = useState<Daily>({
+    date: "",
+    prediction: false,
+    menstrual_cycle: {
+      start_date: "",
+      end_date: "",
+    },
+    menstrual_daily_log: {
+      bleeding_level: 0,
+      pain_level: 0,
+      symptom: [],
+    },
+    hospital_reservation: {
+      hospital_name: "",
+      reservation_date: "",
+      purpose: "",
+    },
+    medication: {
+      medication_name: "",
+      start_date: "",
+      end_date: "",
+      injection_time: [],
+      memo: "",
+    },
+  });
+
+  useEffect(() => {
+    if (dailyData?.data) {
+      setData(dailyData.data);
+    }
+  });
+
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, [])
+  );
 
   return (
     <Modal
@@ -61,21 +108,30 @@ export function ScheduleModal({
               >
                 <View className="px-5 pb-5 gap-2">
                   {/* 토글 - 주기 관련 정보 */}
-                  <PeriodInfo data={data} />
+                  {/* 실제 주기 데이터를 받아와서 그 날짜 안에 있는 경우 */}
+                  {/* {data.prediction &&
+                    IsInRange(
+                      date,
+                      data.menstrual_cycle.start_date,
+                      data.menstrual_cycle.end_date
+                    ) && <PeriodInfo data={data} />} */}
                   <View
                     className="w-full my-3 bg-neutral-300"
                     style={{ height: 1 }}
                   />
 
                   {/* 토글 - 병원 관련 정보 */}
-                  <HospitalInfo data={data} />
+                  {/* {data.hospital_reservation?.reservation_date && (
+                    <HospitalInfo data={data} />
+                  )} */}
+
                   <View
                     className="w-full my-3 bg-neutral-300"
                     style={{ height: 1 }}
                   />
 
-                  {/* 토글 - 병원 관련 정보 */}
-                  <MedicineInfo data={data} />
+                  {/* 토글 - 복용약 관련 정보 */}
+                  {/* {data.medication && <MedicineInfo data={data} />} */}
                   <View
                     className="w-full my-3 bg-neutral-300"
                     style={{ height: 1 }}

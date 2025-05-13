@@ -1,11 +1,11 @@
 import { ChevronDown, ChevronUp, SquarePen, Trash2 } from "lucide-react-native";
-import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useState } from "react";
+import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Daily } from "../../../types/Daily";
 import { CustomButton } from "../../common/customButton";
-import { TimeDropdown } from "../../common/timeDropdown";
 import { DateDropdown } from "../../common/dateDropdown";
 import { SelectTag } from "../../common/selectTag";
+import { TimeDropdown } from "../../common/timeDropdown";
 
 export function HospitalInfo({ data }: { data: Daily }) {
   const color: string = "#A3A3A3";
@@ -18,22 +18,23 @@ export function HospitalInfo({ data }: { data: Daily }) {
     data.hospital_reservation.hospital_name
   );
 
+  const reservationDateRaw = data.hospital_reservation?.reservation_date;
   // 예약 일시 - 초기값
-  const year: number = Number(
-    data.hospital_reservation.reservation_date.slice(0, 4)
-  ); // 연도
-  const month: number = Number(
-    data.hospital_reservation.reservation_date.slice(5, 7)
-  ); // 월
-  const day: number = Number(
-    data.hospital_reservation.reservation_date.slice(8, 10)
-  ); // 일
-  const hour: number = Number(
-    data.hospital_reservation.reservation_date.slice(11, 13)
-  ); // 시
-  const minute: number = Number(
-    data.hospital_reservation.reservation_date.slice(14, 16)
-  ); // 분
+  const year: number = reservationDateRaw
+    ? Number(reservationDateRaw.slice(0, 4))
+    : 0; // 연
+  const month: number = reservationDateRaw
+    ? Number(reservationDateRaw.slice(5, 7))
+    : 0; // 월
+  const day: number = reservationDateRaw
+    ? Number(reservationDateRaw.slice(8, 10))
+    : 0; // 일
+  const hour: number = reservationDateRaw
+    ? Number(reservationDateRaw.slice(11, 13))
+    : 0; // 시
+  const minute: number = reservationDateRaw
+    ? Number(reservationDateRaw.slice(14, 16))
+    : 0; // 분
 
   // 예약 일시
   const [reservationDate, setReservationDate] = useState<Date | null>(null);
