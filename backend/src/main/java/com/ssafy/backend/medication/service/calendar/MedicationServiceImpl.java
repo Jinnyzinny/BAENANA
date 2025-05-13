@@ -79,7 +79,7 @@ public class MedicationServiceImpl implements MedicationService {
          * 사용자가 복용하는 의약품 종류를 조회한다.
          * */
         List<Medication> medication =
-                medicationCustomRepository.findThisMonthMedicationByUserId(userId,year,month);
+                medicationCustomRepository.findThisMonthMedicationByUserId(userId,year,month).orElse(null);
 
         if (medication == null || medication.isEmpty()) {
             return ApiResponse.success("사용자가 복용한 의약품이 없습니다.");
