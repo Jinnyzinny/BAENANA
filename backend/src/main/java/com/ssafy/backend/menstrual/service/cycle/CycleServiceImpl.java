@@ -48,6 +48,7 @@ public class CycleServiceImpl implements CycleService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ApiResponse<?> getMenstrualCycle(
             User user
     ) {

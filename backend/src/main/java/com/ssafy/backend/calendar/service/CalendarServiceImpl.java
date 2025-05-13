@@ -31,6 +31,7 @@ public class CalendarServiceImpl implements CalendarService {
     private final MedicationRepository medicationRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public ApiResponse<?> getDailyInfo(
             User user,
             int year,
@@ -157,6 +158,7 @@ public class CalendarServiceImpl implements CalendarService {
      * 개선 고려 사항: AI 모델이나 오차범위를 기입하면 더 좋을 듯?
      * */
     @Override
+    @Transactional(readOnly = true)
     public ApiResponse<?> getBearingPeriod(User user) {
         /*
          * userId를 얻는다.
@@ -188,12 +190,12 @@ public class CalendarServiceImpl implements CalendarService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ApiResponse<?> getMenstrualPrediction(User user) {
         /*
          * userId를 얻는다.
          * */
         Long userId = user.getUserId();
-
         /*
          * 사용자 ID를 기준으로 시작일을 최근에서 과거로 가는 객체 리스트를 뽑아 첫번째 객체를 뽑는다.
          * */

@@ -57,6 +57,7 @@ public class HospitalReservationServiceImpl implements HospitalReservationServic
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ApiResponse<?> getHospitalReservation(
             User user,
             int year,

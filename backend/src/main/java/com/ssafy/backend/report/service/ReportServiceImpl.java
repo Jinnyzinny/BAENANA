@@ -25,6 +25,7 @@ public class ReportServiceImpl implements ReportService {
     private final GetSummary getSummary;
 
     @Override
+    @Transactional(readOnly = true)
     public ApiResponse<?> getAlarm(User user) {
         Long userId = user.getUserId();
         List<MenstrualCycle> menstrualCycle =
@@ -60,6 +61,7 @@ public class ReportServiceImpl implements ReportService {
 
     //    이번달의 월경 출혈량, 스트레스 지수, 이번달 월경 증상등을 반환한다.
     @Override
+    @Transactional(readOnly = true)
     public ApiResponse<?> getSummary(User user) {
         /*
          * userId를 얻는다.
