@@ -1,0 +1,27 @@
+[
+  {
+    "cycle_id": 1,
+    "start_date": "2024-09-25",
+    "end_date": "2024-09-30",
+    "detail": [
+      {
+        "date": "2024-09-25",
+        "bleeding_level": 1,
+        "pain_level": 2,
+        "symptoms": ["두통"]
+      },
+      {
+        "date": "2024-09-25",
+        "bleeding_level": 2,
+        "pain_level": 3,
+        "symptoms": ["두통"]
+      },
+      {
+        "date": "2024-09-27",
+        "bleeding_level": 3,
+        "pain_level": 5,
+        "symptoms": ["복통", "요통"]
+      }
+    ]
+  }
+]

@@ -3,13 +3,13 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Button } from "../../components/common/button";
 import { HeaderLogo } from "../../components/common/headerLogo";
 import { TabMenu } from "../../components/common/tabMenu";
 import { ResultInfo } from "../../components/test/resultInfo";
 import { TestInfo } from "../../components/test/testInfo";
 import { TimerModal } from "../../components/test/timerModal";
 import { TestStackParamList } from "../../navigation/types";
+import { CustomButton } from "../../components/common/customButton";
 
 export function TestInfoScreen() {
   const navigation =
@@ -46,12 +46,12 @@ export function TestInfoScreen() {
             <View className="mx-5 gap-5">
               {selectedMenu === "test" ? <TestInfo /> : <ResultInfo />}
               <View className="gap-3">
-                <Button
+                <CustomButton
                   content="타이머 시작"
                   fill={false}
                   onPress={() => setModalVisible(true)}
                 />
-                <Button
+                <CustomButton
                   content="촬영하러 가기"
                   fill={true}
                   onPress={() => navigation.navigate("Camera")}

@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 export function ScheduleList() {
   return (
     <View
-      className="bg-white rounded-xl h-[40%] p-5 gap-5
+      className="bg-white rounded-xl p-5 gap-5
     "
     >
       <Text className="text-neutral-800 font-bold">4월 주요 일정</Text>
