@@ -10,6 +10,7 @@ import com.ssafy.backend.medication.entity.Medication;
 import com.ssafy.backend.medication.repository.MedicationRepository;
 import com.ssafy.backend.menstrual.entity.MenstrualCycle;
 import com.ssafy.backend.menstrual.entity.MenstrualDailyLog;
+import com.ssafy.backend.menstrual.exception.MenstrualException;
 import com.ssafy.backend.menstrual.repository.MenstrualCycleRepository;
 import com.ssafy.backend.menstrual.repository.MenstrualDailyLogRepository;
 import com.ssafy.backend.user.entity.User;
@@ -154,14 +155,15 @@ public class CalendarServiceImpl implements CalendarService {
                                         ).toList()
                         )
                         .build()
-
         );
     }
 
     public MenstrualCycle getRecentMenstrualCycle(
             Long userId
     ) {
-        return menstrualCycleRepository.findFirstByUser_UserIdOrderByStartDateDesc(userId).orElseThrow();
+        return menstrualCycleRepository.findFirstByUser_UserIdOrderByStartDateDesc(userId).orElseThrow(
+                ()->new MenstrualException("사용자의 주기 정보가 단 하나도 없으므로 반환할 수 없습니다.")
+        );
     }
 
     /*
