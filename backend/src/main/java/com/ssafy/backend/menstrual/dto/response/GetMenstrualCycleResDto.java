@@ -20,10 +20,11 @@ public class GetMenstrualCycleResDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class SymptomDailyDetail {
-        private Long daily_log_id;
-        private String date;
-        private int bleeding_level;
-        private int pain_level;
-        private List<String> symptoms;
+        protected Long daily_log_id;
+        protected String date;
+        protected Integer bleeding_level;
+        protected Integer pain_level;
+        protected Integer stress_level;
+        protected List<String> symptoms;
     }
 }

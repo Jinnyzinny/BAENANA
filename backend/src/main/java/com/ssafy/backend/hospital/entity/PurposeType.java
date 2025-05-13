@@ -8,7 +8,7 @@ public enum PurposeType {
     ULTRASOUND("초음파"),
     OVULATION_CHECK("배란확인"),
     COUNSELING("상담"),
-    ETC("기타");
+    ETC("기타(사용자 입력)");
 
     private final String description;
 

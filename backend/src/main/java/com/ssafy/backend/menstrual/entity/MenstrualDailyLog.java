@@ -25,7 +25,7 @@ public class MenstrualDailyLog {
     @JoinColumn(name = "cycle_id")
     private MenstrualCycle cycle;
 
-    @OneToMany(mappedBy = "menstrualDailyLog")
+    @OneToMany(mappedBy = "menstrualDailyLog", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<SymptomLog> symptomLog;
 
     /*

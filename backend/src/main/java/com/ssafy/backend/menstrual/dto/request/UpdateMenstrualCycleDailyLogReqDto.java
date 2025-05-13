@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -14,6 +15,8 @@ public class UpdateMenstrualCycleDailyLogReqDto {
     LocalDate date;
     Integer bleeding_level;
     Integer pain_level;
+    Integer stress_level;
     Boolean is_start;
     Boolean is_end;
+    List<String> symptoms;
 }
