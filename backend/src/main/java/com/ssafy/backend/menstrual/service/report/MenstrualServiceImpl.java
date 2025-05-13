@@ -50,8 +50,9 @@ public class MenstrualServiceImpl implements MenstrualService {
         Long userId = user.getUserId();
         List<MenstrualCycle> menstrualCycleList =
                 menstrualCycleRepository.findByUser_UserId(userId).orElse(null);
+
         if (menstrualCycleList == null || menstrualCycleList.isEmpty()) {
-            throw new MenstrualException("사용자의 주기 정보가 없습니다");
+            return ApiResponse.success("사용자의 주기 정보가 없습니다");
         }
 
         int cycleSum = 0;
@@ -235,7 +236,11 @@ public class MenstrualServiceImpl implements MenstrualService {
     public ApiResponse<?> getRecentMenstrual(User user) {
         Long userId = user.getUserId();
         List<MenstrualCycle> menstrualCycleList =
-                menstrualCycleRepository.findTop6ByUser_UserIdOrderByStartDateDesc(userId).orElseThrow();
+                menstrualCycleRepository.findTop6ByUser_UserIdOrderByStartDateDesc(userId).orElse(null);
+
+        if(menstrualCycleList == null || menstrualCycleList.isEmpty()) {
+            return ApiResponse.success("사용자의 최근 주기 정보가 없습니다.");
+        }
 
         GetCycleDto cycle = getCycleTerm(menstrualCycleList);
         return ApiResponse.success("사용자의 최근 6개월 주기 정보를 불러옵니다.",
@@ -251,7 +256,11 @@ public class MenstrualServiceImpl implements MenstrualService {
         Long userId = user.getUserId();
 
         List<MenstrualCycle> menstrualCycleList =
-                menstrualCycleRepository.findByUser_UserIdOrderByStartDateDesc(userId).orElseThrow();
+                menstrualCycleRepository.findByUser_UserIdOrderByStartDateDesc(userId).orElse(null);
+
+        if(menstrualCycleList == null || menstrualCycleList.isEmpty()) {
+            return ApiResponse.success("사용자의 주기 정보가 없습니다.");
+        }
 
         GetCycleDto cycle = getCycleTerm(menstrualCycleList);
         return ApiResponse.success(
