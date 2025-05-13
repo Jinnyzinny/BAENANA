@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Slf4j
-@RestControllerAdvice(basePackages = "com.ssafy.backend.menstrual")
+@RestControllerAdvice(basePackages = {"com.ssafy.backend.menstrual","com.ssafy.backend.calendar"})
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class MenstrualExceptionHandler {
 
