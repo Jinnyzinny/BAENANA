@@ -1,8 +1,9 @@
 import { RefObject, useState } from "react";
 import { Image, ScrollView, Text, View } from "react-native";
 import { Modalize } from "react-native-modalize";
-import { DateDropdown } from "../../common/dateDropdown";
+import { useAddPeriod } from "../../../api/quries/period";
 import { CustomButton } from "../../common/customButton";
+import { DateDropdown } from "../../common/dateDropdown";
 
 export function PeriodBottomSheet({
   height,
@@ -25,8 +26,32 @@ export function PeriodBottomSheet({
   const endMonth = selectedDateEnd.getMonth() + 1;
   const endDay = selectedDateEnd.getDate();
 
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
+  const [startDate, setStartDate] = useState<Date | null>(selectedDate);
+  const [endDate, setEndDate] = useState<Date | null>(selectedDateEnd);
+
+  const { mutate: addPeriod } = useAddPeriod();
+
+  function handleSave() {
+    if (startDate && endDate) {
+      const start = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, "0")}-${String(startDate.getDate()).padStart(2, "0")}`;
+      const end = `${endDate.getFullYear()}-${String(endDate.getMonth() + 1).padStart(2, "0")}-${String(endDate.getDate()).padStart(2, "0")}`;
+
+      console.log("월경 시작일:", start);
+      console.log("월경 종료일:", end);
+
+      addPeriod(
+        { startDate: start, endDate: end },
+        {
+          onSuccess: () => {
+            sheetRef.current?.close();
+          },
+          onError: (error) => {
+            console.error("생리 기간 등록 실패:", error);
+          },
+        }
+      );
+    }
+  }
 
   return (
     <Modalize ref={sheetRef} snapPoint={height * 0.488}>
@@ -74,7 +99,7 @@ export function PeriodBottomSheet({
 
           {/* 저장 버튼 */}
           <View className="mt-10">
-            <CustomButton fill={true} content="저장" onPress={() => {}} />
+            <CustomButton fill={true} content="저장" onPress={handleSave} />
           </View>
         </View>
       </ScrollView>

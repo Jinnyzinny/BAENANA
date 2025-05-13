@@ -5,8 +5,8 @@ export type FullDate = Default & {
 };
 
 export type Date = {
-  start_date: string;
   end_date: string;
+  start_date: string;
 };
 
 export type FullDday = Default & {
@@ -14,11 +14,11 @@ export type FullDday = Default & {
 };
 
 export type Dday = {
-  recorded_menstrual: Date;
-  predict_menstrual: Date;
   childbearing_period: string;
   ovulation_day: string;
-  PMS: string;
+  pms: string;
+  predicted_menstrual: Date;
+  recorded_menstrual: Date;
 };
 
 export type Symtom = {
