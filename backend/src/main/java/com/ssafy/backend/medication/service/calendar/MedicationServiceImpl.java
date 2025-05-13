@@ -67,6 +67,7 @@ public class MedicationServiceImpl implements MedicationService {
     @Override
     public ApiResponse<?> getMedication(
             User user,
+            int year,
             int month
     ) {
         /*
@@ -77,7 +78,7 @@ public class MedicationServiceImpl implements MedicationService {
          * 사용자가 복용하는 의약품 종류를 조회한다.
          * */
         List<Medication> medication =
-                medicationCustomRepository.findThisMonthMedicationByUserId(userId,month);
+                medicationCustomRepository.findThisMonthMedicationByUserId(userId,year,month);
 
         if (medication == null || medication.isEmpty()) {
             return ApiResponse.success("사용자가 복용한 의약품이 없습니다.");

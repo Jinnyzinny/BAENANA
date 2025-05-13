@@ -29,12 +29,13 @@ public class HospitalReservationController {
                 request));
     }
 
-    @GetMapping("/{month}")
+    @GetMapping("/{year}/{month}")
     public ResponseEntity<ApiResponse<?>> getHospitalReservation(
             @AuthenticationPrincipal User user,
+            @PathVariable int year,
             @PathVariable int month
     ) {
-        return ResponseEntity.ok(hospitalReservationService.getHospitalReservation(user, month));
+        return ResponseEntity.ok(hospitalReservationService.getHospitalReservation(user, year,month));
     }
 
     @PatchMapping("/{id}")
