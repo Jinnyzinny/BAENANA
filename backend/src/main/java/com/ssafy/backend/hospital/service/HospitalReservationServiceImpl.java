@@ -59,6 +59,7 @@ public class HospitalReservationServiceImpl implements HospitalReservationServic
     @Override
     public ApiResponse<?> getHospitalReservation(
             User user,
+            int year,
             int month
     ) {
         /*
@@ -68,8 +69,8 @@ public class HospitalReservationServiceImpl implements HospitalReservationServic
         /*
         * 이번 달의 첫 날과 마지막날을 얻는다.
         * */
-        LocalDateTime startOfMonth = LocalDate.of(LocalDate.now().getYear(), month, 1).atStartOfDay();
-        LocalDateTime endOfMonth = YearMonth.of(LocalDate.now().getYear(),month).atEndOfMonth().atTime(23,59,59);
+        LocalDateTime startOfMonth = LocalDate.of(year, month, 1).atStartOfDay();
+        LocalDateTime endOfMonth = YearMonth.of(year,month).atEndOfMonth().atTime(23,59,59);
         /*
          * 사용자가 예약한 병원 리스트를 얻는다.
          * */
