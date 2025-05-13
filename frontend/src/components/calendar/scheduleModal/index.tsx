@@ -13,6 +13,10 @@ import {
 import { useGetDaily } from "../../../api/quries/daily";
 import { Daily } from "../../../types/Daily";
 import { FormatDate } from "../../../utils/formatDate";
+import { IsInRange } from "../../../utils/isInRange";
+import { HospitalInfo } from "../hospitalInfo";
+import { MedicineInfo } from "../medicineInfo";
+import { PeriodInfo } from "../periodInfo";
 import { ScheduleButton } from "../scheduleButton";
 
 export function ScheduleModal({
@@ -26,17 +30,15 @@ export function ScheduleModal({
   onClose: () => void;
   handleBottomSheet: (type: "hospital" | "medicine" | "symptom") => void;
 }) {
-  const shouldFetch = visible && !!date;
-
-  const year = shouldFetch ? Number(date.slice(0, 4)) : null;
-  const month = shouldFetch ? Number(date.slice(5, 7)) : null;
-  const day = shouldFetch ? Number(date.slice(8, 10)) : null;
+  const year = date ? Number(date.slice(0, 4)) : null;
+  const month = date ? Number(date.slice(5, 7)) : null;
+  const day = date ? Number(date.slice(8, 10)) : null;
 
   const { data: dailyData, refetch } = useGetDaily(
-    year!,
-    month!,
-    day!,
-    shouldFetch
+    year,
+    month,
+    day,
+    visible && !!date
   );
 
   const [data, setData] = useState<Daily>({
@@ -69,12 +71,14 @@ export function ScheduleModal({
     if (dailyData?.data) {
       setData(dailyData.data);
     }
-  });
+  }, [dailyData]);
 
   useFocusEffect(
     useCallback(() => {
-      refetch();
-    }, [])
+      if (visible && date) {
+        refetch();
+      }
+    }, [visible, date])
   );
 
   return (
@@ -109,33 +113,55 @@ export function ScheduleModal({
                 <View className="px-5 pb-5 gap-2">
                   {/* 토글 - 주기 관련 정보 */}
                   {/* 실제 주기 데이터를 받아와서 그 날짜 안에 있는 경우 */}
-                  {/* {data.prediction &&
+                  {data.prediction &&
                     IsInRange(
                       date,
                       data.menstrual_cycle.start_date,
                       data.menstrual_cycle.end_date
-                    ) && <PeriodInfo data={data} />} */}
-                  <View
-                    className="w-full my-3 bg-neutral-300"
-                    style={{ height: 1 }}
-                  />
+                    ) && (
+                      <>
+                        <PeriodInfo data={data} />
+
+                        <View
+                          className="w-full my-3 bg-neutral-300"
+                          style={{ height: 1 }}
+                        />
+                      </>
+                    )}
 
                   {/* 토글 - 병원 관련 정보 */}
-                  {/* {data.hospital_reservation?.reservation_date && (
-                    <HospitalInfo data={data} />
-                  )} */}
+                  {data.hospital_reservation?.reservation_date && (
+                    <>
+                      <HospitalInfo data={data} />
 
-                  <View
-                    className="w-full my-3 bg-neutral-300"
-                    style={{ height: 1 }}
-                  />
+                      <View
+                        className="w-full my-3 bg-neutral-300"
+                        style={{ height: 1 }}
+                      />
+                    </>
+                  )}
 
                   {/* 토글 - 복용약 관련 정보 */}
-                  {/* {data.medication && <MedicineInfo data={data} />} */}
-                  <View
-                    className="w-full my-3 bg-neutral-300"
-                    style={{ height: 1 }}
-                  />
+                  {data.medication?.start_date && (
+                    <>
+                      <MedicineInfo data={data} />
+                      <View
+                        className="w-full my-3 bg-neutral-300"
+                        style={{ height: 1 }}
+                      />
+                    </>
+                  )}
+
+                  {!(
+                    (data.prediction &&
+                      IsInRange(
+                        date,
+                        data.menstrual_cycle.start_date,
+                        data.menstrual_cycle.end_date
+                      )) ||
+                    data.hospital_reservation?.reservation_date ||
+                    data.medication?.start_date
+                  ) && <View className="py-2" />}
 
                   {/* 버튼 - 병원 예약 / 복용약 알림 / 월경 증상 입력 */}
                   <View className="gap-3">

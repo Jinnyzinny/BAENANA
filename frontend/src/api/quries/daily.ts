@@ -11,9 +11,7 @@ export function useGetDaily(
   return useQuery({
     queryKey: ["daily", year, month, day],
     queryFn: () => {
-      if (year === null || month === null || day === null) {
-        return;
-      }
+      if (year === null || month === null || day === null) return;
       return getDaily(year, month, day);
     },
     enabled: enabled && year !== null && month !== null && day !== null,
