@@ -2,7 +2,6 @@ package com.ssafy.backend.menstrual.service.report;
 
 import com.ssafy.backend.common.ApiResponse;
 import com.ssafy.backend.menstrual.entity.MenstrualCycle;
-import com.ssafy.backend.menstrual.exception.MenstrualException;
 import com.ssafy.backend.menstrual.exception.OvulationTestException;
 import com.ssafy.backend.menstrual.exception.OvulationTestStandardException;
 import com.ssafy.backend.menstrual.repository.MenstrualCycleRepository;
@@ -52,7 +51,7 @@ public class MenstrualServiceImpl implements MenstrualService {
                 menstrualCycleRepository.findByUser_UserId(userId).orElse(null);
 
         if (menstrualCycleList == null || menstrualCycleList.isEmpty()) {
-            return ApiResponse.success("사용자의 주기 정보가 없습니다");
+            return ApiResponse.success("사용자의 주기 정보가 없어 월경 정보(주기,기간)을 제공하는 데 실패했습니다.");
         }
 
         int cycleSum = 0;
@@ -161,9 +160,10 @@ public class MenstrualServiceImpl implements MenstrualService {
          * 검색을 할 주기 시작일을 찾는다.
          * */
         MenstrualCycle menstrualCycle =
-                menstrualCycleRepository.findFirstByUser_UserIdOrderByStartDateDesc(userId).orElseThrow(
-                        () -> new MenstrualException("사용자의 주기 시작일이 존재하지 않습니다.")
-                );
+                menstrualCycleRepository.findFirstByUser_UserIdOrderByStartDateDesc(userId).orElse(null);
+        if (menstrualCycle == null) {
+            return ApiResponse.success("사용자의 주기 시작일이 존재하지 않아 배란 테스트 결과를 제공하는 데 실패했습니다.");
+        }
 
 //        사용자의 가장 최근 검사 결과리스트를 불러온다.
         Map<LocalDate, Double> recentOvulationTest =
@@ -238,7 +238,7 @@ public class MenstrualServiceImpl implements MenstrualService {
         List<MenstrualCycle> menstrualCycleList =
                 menstrualCycleRepository.findTop6ByUser_UserIdOrderByStartDateDesc(userId).orElse(null);
 
-        if(menstrualCycleList == null || menstrualCycleList.isEmpty()) {
+        if (menstrualCycleList == null || menstrualCycleList.isEmpty()) {
             return ApiResponse.success("사용자의 최근 주기 정보가 없습니다.");
         }
 
@@ -258,7 +258,7 @@ public class MenstrualServiceImpl implements MenstrualService {
         List<MenstrualCycle> menstrualCycleList =
                 menstrualCycleRepository.findByUser_UserIdOrderByStartDateDesc(userId).orElse(null);
 
-        if(menstrualCycleList == null || menstrualCycleList.isEmpty()) {
+        if (menstrualCycleList == null || menstrualCycleList.isEmpty()) {
             return ApiResponse.success("사용자의 주기 정보가 없습니다.");
         }
 

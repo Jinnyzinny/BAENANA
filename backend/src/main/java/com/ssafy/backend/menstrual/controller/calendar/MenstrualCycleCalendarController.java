@@ -23,14 +23,14 @@ public class MenstrualCycleCalendarController {
     public ResponseEntity<ApiResponse<?>> addMenstrualCycle(
             @AuthenticationPrincipal User user,
             @RequestBody AddMenstrualCycleReqDto request
-    ){
-        return ResponseEntity.ok(cycleService.addMenstrualCycle(user,request));
+    ) {
+        return ResponseEntity.ok(cycleService.addMenstrualCycle(user, request));
     }
 
     @GetMapping
     public ResponseEntity<ApiResponse<?>> getMenstrualCycle(
             @AuthenticationPrincipal User user
-    ){
+    ) {
         return ResponseEntity.ok(cycleService.getMenstrualCycle(user));
     }
 
@@ -38,7 +38,7 @@ public class MenstrualCycleCalendarController {
     public ResponseEntity<ApiResponse<?>> updateMenstrualCycle(
             @RequestBody UpdateMenstrualCycleReqDto request,
             @PathVariable Long cycle_id
-    ){
-        return ResponseEntity.ok(cycleService.updateMenstrualCycle(request,cycle_id));
+    ) {
+        return ResponseEntity.ok(cycleService.updateMenstrualCycle(request, cycle_id));
     }
 }
