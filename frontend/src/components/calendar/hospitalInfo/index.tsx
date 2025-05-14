@@ -6,8 +6,10 @@ import { CustomButton } from "../../common/customButton";
 import { DateDropdown } from "../../common/dateDropdown";
 import { SelectTag } from "../../common/selectTag";
 import { TimeDropdown } from "../../common/timeDropdown";
-import { deleteHospitalReservation } from "../../../api/hospital";
-import { useDeleteHospitalReservation } from "../../../api/quries/hospital";
+import {
+  useDeleteHospitalReservation,
+  useEditHospitalReservation,
+} from "../../../api/quries/hospital";
 
 export function HospitalInfo({ data }: { data: Daily }) {
   const color: string = "#A3A3A3";
@@ -53,6 +55,7 @@ export function HospitalInfo({ data }: { data: Daily }) {
   );
 
   const { mutate: deleteHospitalReservation } = useDeleteHospitalReservation();
+  const { mutate: editHospitalReservation } = useEditHospitalReservation();
 
   function handleEdit(index: number) {
     const toggleCopy = [...isToggleOpenList];
@@ -67,13 +70,74 @@ export function HospitalInfo({ data }: { data: Daily }) {
     const editCopy = [...isEditList];
     editCopy[index] = false;
     setIsEditList(editCopy);
+
+    const original = data.hospital_reservation[index];
+
+    const hospitalCopy = [...hospitalNameList];
+    hospitalCopy[index] = original.hospital_name;
+    setHospitalNameList(hospitalCopy);
+
+    const dateCopy = [...reservationDateList];
+    dateCopy[index] = null;
+    setReservationDateList(dateCopy);
+
+    const timeCopy = [...reservationTimeList];
+    timeCopy[index] = null;
+    setReservationTimeList(timeCopy);
+
+    const purposeCopy = [...purposeList];
+    const matched = purposeItems.find((i) =>
+      original.purpose.startsWith(i.label)
+    );
+    purposeCopy[index] = matched?.id ?? 0;
+    setPurposeList(purposeCopy);
+
+    const inputCopy = [...purposeInputList];
+    inputCopy[index] = original.purpose.startsWith("기타")
+      ? original.purpose.replace(/^기타:\s?/, "")
+      : "";
+    setPurposeInputList(inputCopy);
   }
 
   function saveEdit(index: number) {
+    const reservation = data.hospital_reservation[index];
+    const id = reservation.reservation_id;
+    const hospitalName = hospitalNameList[index];
+    const date = reservationDateList[index];
+    const time = reservationTimeList[index];
+    const purposeId = purposeList[index];
+    const purposeInput = purposeInputList[index];
+    const purpose =
+      purposeId === 5
+        ? `기타: ${purposeInput}`
+        : purposeItems.find((p) => p.id === purposeId)?.label || "";
+
+    if (!date || !time) {
+      Alert.alert("입력 오류", "예약 날짜와 시간을 모두 입력해주세요.");
+      return;
+    }
+
+    const combinedDate = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      time.getHours(),
+      time.getMinutes()
+    );
+
+    const isoDateString = combinedDate.toISOString().slice(0, 16); // yyyy-MM-ddTHH:mm
+
+    // console.log(id, hospitalName, isoDateString, purpose);
+    editHospitalReservation({
+      id,
+      hospitalName,
+      reservationDate: isoDateString,
+      purpose,
+    });
+
     const editCopy = [...isEditList];
     editCopy[index] = false;
     setIsEditList(editCopy);
-    // 저장 로직 추가 시 여기에
   }
 
   function handleDelete(index: number) {

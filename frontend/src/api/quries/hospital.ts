@@ -86,7 +86,7 @@ export function useEditHospitalReservation() {
   });
 }
 
-// 병원 예약 일정 삭제
+// ✅병원 예약 일정 삭제
 export function useDeleteHospitalReservation() {
   const queryClient = useQueryClient();
 
