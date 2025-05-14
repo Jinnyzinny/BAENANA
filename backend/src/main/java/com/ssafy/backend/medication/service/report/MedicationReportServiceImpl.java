@@ -87,7 +87,7 @@ public class MedicationReportServiceImpl implements MedicationReportService {
                 medicationCustomRepository.findMedicationByUserId(userId).orElse(null);
 
         if (medicationList == null || medicationList.isEmpty()) {
-            return ApiResponse.success("사용자가 복용한 의약품이 없습니다.");
+            return ApiResponse.success("사용자가 복용한 의약품 전체 기록이 없습니다.");
         }
 
         return ApiResponse.success("사용자가 복용한 모든 의약품 리스트를 얻는다.",
