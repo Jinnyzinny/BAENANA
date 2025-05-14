@@ -39,17 +39,17 @@ export function PeriodBottomSheet({
       console.log("월경 시작일:", start);
       console.log("월경 종료일:", end);
 
-      // addPeriod(
-      //   { startDate: start, endDate: end },
-      //   {
-      //     onSuccess: () => {
-      //       sheetRef.current?.close();
-      //     },
-      //     onError: (error) => {
-      //       console.error("생리 기간 등록 실패:", error);
-      //     },
-      //   }
-      // );
+      addPeriod(
+        { startDate: start, endDate: end },
+        {
+          onSuccess: () => {
+            sheetRef.current?.close();
+          },
+          onError: (error) => {
+            console.error("생리 기간 등록 실패:", error);
+          },
+        }
+      );
     }
   }
 
