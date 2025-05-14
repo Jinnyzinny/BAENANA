@@ -121,6 +121,7 @@ public class MedicationServiceImpl implements MedicationService {
 //            medication.setName(request.getName());
 //        }
         if (request.getTime_taken() != null) {
+            medication.getTimeTakenList().clear();
             request.getTime_taken().forEach(
                     time ->
                             medication.getTimeTakenList().add(TimeTaken.builder()
