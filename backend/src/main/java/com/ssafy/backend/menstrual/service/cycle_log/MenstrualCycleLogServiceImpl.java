@@ -4,6 +4,7 @@ import com.ssafy.backend.common.ApiResponse;
 import com.ssafy.backend.common.utils.NullAwareBeanUtils;
 import com.ssafy.backend.menstrual.dto.request.AddMenstrualCycleDailyLogReqDto;
 import com.ssafy.backend.menstrual.dto.request.UpdateMenstrualCycleDailyLogReqDto;
+import com.ssafy.backend.menstrual.entity.MenstrualCycle;
 import com.ssafy.backend.menstrual.entity.MenstrualDailyLog;
 import com.ssafy.backend.menstrual.exception.MenstrualException;
 import com.ssafy.backend.menstrual.repository.MenstrualCycleRepository;
@@ -18,6 +19,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -32,10 +34,19 @@ public class MenstrualCycleLogServiceImpl implements MenstrualCycleLogService {
 
     @Override
     public ApiResponse<?> addMenstrualCycleDailyLog(User user, AddMenstrualCycleDailyLogReqDto request) {
+        MenstrualCycle menstrualCycle =
+                menstrualCycleRepository
+                        .findByStartDateLessThanEqualAndEndDateGreaterThanEqual(request.getDate(), request.getDate())
+                        .orElse(null);
+
+        if(menstrualCycle == null) {
+            return ApiResponse.success("연관된 생리주기 정보가 없습니다.");
+        }
+
         MenstrualDailyLog dailyLog = menstrualDailyLogRepository.save(
                 MenstrualDailyLog.builder()
                         .cycle(
-                                menstrualCycleRepository.findById(request.getCycle_id()).orElseThrow(
+                                menstrualCycleRepository.findById(menstrualCycle.getCycleId()).orElseThrow(
                                         () -> new MenstrualException("주기 정보가 없습니다.")
                                 ))
                         .date(request.getDate())
@@ -83,8 +94,8 @@ public class MenstrualCycleLogServiceImpl implements MenstrualCycleLogService {
         }
         if (request.getSymptoms() != null) {
             System.out.println("================진입은 하냐??==============");
-            Set<SymptomLog> requestSymptomLog=request.getSymptoms().stream().map(
-                    symptom->SymptomLog.builder()
+            Set<SymptomLog> requestSymptomLog = request.getSymptoms().stream().map(
+                    symptom -> SymptomLog.builder()
                             .menstrualDailyLog(dailyLog)
                             .date(request.getDate())
                             .symptomType(SymptomType.fromDescription(symptom))
