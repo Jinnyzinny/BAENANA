@@ -39,22 +39,22 @@ export function PeriodBottomSheet({
       console.log("월경 시작일:", start);
       console.log("월경 종료일:", end);
 
-      addPeriod(
-        { startDate: start, endDate: end },
-        {
-          onSuccess: () => {
-            sheetRef.current?.close();
-          },
-          onError: (error) => {
-            console.error("생리 기간 등록 실패:", error);
-          },
-        }
-      );
+      // addPeriod(
+      //   { startDate: start, endDate: end },
+      //   {
+      //     onSuccess: () => {
+      //       sheetRef.current?.close();
+      //     },
+      //     onError: (error) => {
+      //       console.error("생리 기간 등록 실패:", error);
+      //     },
+      //   }
+      // );
     }
   }
 
   return (
-    <Modalize ref={sheetRef} snapPoint={height * 0.488}>
+    <Modalize ref={sheetRef} snapPoint={height * 0.55}>
       {/* 헤더 */}
       <View className="mx-5 mt-7 mb-5 flex-row items-start justify-start gap-2">
         <Image

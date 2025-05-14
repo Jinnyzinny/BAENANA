@@ -121,7 +121,7 @@ export function MedicineBottomSheet({
   }
 
   return (
-    <Modalize ref={sheetRef} snapPoint={height * 0.843} onOpen={resetForm}>
+    <Modalize ref={sheetRef} snapPoint={height * 0.9} onOpen={resetForm}>
       {/* 헤더 */}
       <View className="mx-5 mt-7 mb-5 flex-row items-start justify-start gap-2">
         <Image

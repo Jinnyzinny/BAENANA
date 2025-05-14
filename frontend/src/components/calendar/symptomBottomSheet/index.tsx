@@ -38,14 +38,14 @@ export function SymptomBottomSheet({
     );
   }
 
-  const { mutate: data } = useAddPeriodSymtom();
+  const { mutate: addPeriodSymtom } = useAddPeriodSymtom();
 
   function handleSave() {}
 
   function resetForm() {}
 
   return (
-    <Modalize ref={sheetRef} snapPoint={height * 0.655} onOpen={resetForm}>
+    <Modalize ref={sheetRef} snapPoint={height * 0.7} onOpen={resetForm}>
       {/* 헤더 */}
       <View className="mx-5 mt-7 mb-5 flex-row items-start justify-start gap-2">
         <Image

@@ -157,6 +157,15 @@ export function ScheduleModal({
                     </>
                   )}
 
+                  {/* 토글이 전부 안 나오는 경우  */}
+                  {!IsInRange(
+                    date,
+                    data.menstrual_cycle.start_date,
+                    data.menstrual_cycle.end_date
+                  ) &&
+                    data.hospital_reservation.length === 0 &&
+                    data.medication.length === 0 && <View className="m-1" />}
+
                   {/* 버튼 - 병원 예약 / 복용약 알림 / 월경 증상 입력 */}
                   <View className="gap-3">
                     <View className="flex-row gap-3">
