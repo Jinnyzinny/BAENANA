@@ -58,10 +58,8 @@ public class CalendarServiceImpl implements CalendarService {
 
 //        해당 일자가 주기 종료일에 포함하지 않는다면 최근 주기로 예측일을 뽑아온다.
         if (menstrualCycle == null) {
+            prediction = true;
             menstrualCycle = getRecentMenstrualCycle(userId).orElse(null);
-            if (menstrualCycle != null) {
-                prediction = true;
-            }
         }
 //        만약 예측일 제공도 불가할 경우 사용자의 주기 정보가 하나도 없는 경우이므로 메시지를 반환합니다.
         if (menstrualCycle == null) {
@@ -77,7 +75,7 @@ public class CalendarServiceImpl implements CalendarService {
                                 searchForDate)
                         .orElse(null);
         /*
-         * 해당 날짜의 병원 예약을 얻어낸다.   
+         * 해당 날짜의 병원 예약을 얻어낸다.
          * */
         List<HospitalReservation> reservation =
                 hospitalreservationRepository
