@@ -66,7 +66,7 @@ public class MenstrualServiceImpl implements MenstrualService {
 
             if (i >= 1) {
                 LocalDate prevStartDate = menstrualCycleList.get(i - 1).getStartDate();
-                int cycle = (int) ChronoUnit.DAYS.between(prevStartDate, startDate);
+                int cycle = (int) ChronoUnit.DAYS.between(startDate, prevStartDate);
                 cycleSum += cycle;
 
                 maxCycle = Math.max(maxCycle, cycle);
@@ -80,7 +80,7 @@ public class MenstrualServiceImpl implements MenstrualService {
 
         List<Integer> periods = menstrualCycleList
                 .stream()
-                .map(cycle -> (int) ChronoUnit.DAYS.between(cycle.getEndDate(), cycle.getStartDate()))
+                .map(cycle -> (int) ChronoUnit.DAYS.between(cycle.getStartDate(), cycle.getEndDate()))
                 .toList();
 
         // 평균 계산
