@@ -21,6 +21,7 @@ public class GetDailyInfoResDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class menstrual_cycle {
+        Long cycle_id;
         String start_date;
         String end_date;
     }
@@ -31,7 +32,8 @@ public class GetDailyInfoResDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class menstrual_daily_log {
-        int bleeding_level;;
+        Long daily_id;
+        int bleeding_level;
         int pain_level;
         List<String> symptom;
     }
@@ -42,6 +44,7 @@ public class GetDailyInfoResDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Hospital_reservation {
+        Long reservation_id;
         String hospital_name;
         String reservation_date;
         String purpose;
@@ -53,6 +56,7 @@ public class GetDailyInfoResDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Medication {
+        Long medication_id;
         String medication_name;
         String start_date;
         String end_date;

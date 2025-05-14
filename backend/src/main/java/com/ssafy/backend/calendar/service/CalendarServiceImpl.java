@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +50,7 @@ public class CalendarServiceImpl implements CalendarService {
          * 그렇게 되면 주기 시작일<=검색일자<=종료일의 주기가 나올 것
          * */
         boolean prediction = false;
-        MenstrualCycle menstrualCycle =
+        List<MenstrualCycle> menstrualCycleList =
                 menstrualCycleRepository
                         .findByUser_UserIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(
                                 userId,
@@ -57,14 +58,15 @@ public class CalendarServiceImpl implements CalendarService {
                                 searchForDate).orElse(null);
 
 //        해당 일자가 주기 종료일에 포함하지 않는다면 최근 주기로 예측일을 뽑아온다.
-        if (menstrualCycle == null) {
+        if (menstrualCycleList == null) {
             prediction = true;
-            menstrualCycle = getRecentMenstrualCycle(userId).orElse(null);
+            menstrualCycleList = getRecentMenstrualCycle(userId).orElse(null);
         }
 //        만약 예측일 제공도 불가할 경우 사용자의 주기 정보가 하나도 없는 경우이므로 메시지를 반환합니다.
-        if (menstrualCycle == null) {
+        if (menstrualCycleList == null || menstrualCycleList.isEmpty()) {
             return ApiResponse.success("사용자의 주기 정보가 단 하나도 없으므로 정보 제공이 불가합니다.");
         }
+        MenstrualCycle menstrualCycle = menstrualCycleList.get(0);
         /*
          * 해당 날짜가 포함된 주기정보의 해당 날짜 세부 정보를 얻어낸다.
          * */
@@ -85,7 +87,8 @@ public class CalendarServiceImpl implements CalendarService {
          * 사용자의 아이디로 해당 날짜에도 복용을 하는 의약품을 조회하고 없다면 null을 반환한다.
          * */
         List<Medication> medication = medicationRepository
-                .findDistinctByUser_UserIdAndEndDateAfter(userId, searchForDate)
+                .findDistinctByUser_UserIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual
+                        (userId,searchForDate, searchForDate)
                 .orElse(null);
         return ApiResponse.success(String.format("%d월 %d일의 일일 정보입니다",
                         searchForDate.getMonthValue(),
@@ -98,6 +101,7 @@ public class CalendarServiceImpl implements CalendarService {
                         .menstrual_cycle(
 //                               주기 정보 제공
                                 GetDailyInfoResDto.menstrual_cycle.builder()
+                                        .cycle_id(menstrualCycle.getCycleId())
                                         .start_date(
                                                 prediction ?
                                                         menstrualCycle.getStartDate().plusDays(28).toString()
@@ -112,6 +116,7 @@ public class CalendarServiceImpl implements CalendarService {
                                 dailyLog == null ?
                                         null :
                                         GetDailyInfoResDto.menstrual_daily_log.builder()
+                                                .daily_id(dailyLog.getDailyId())
 //                                        주기의 출혈량
                                                 .bleeding_level(dailyLog.getBleedingLevel())
 //                                        해당 날짜의 통증 정도
@@ -130,6 +135,7 @@ public class CalendarServiceImpl implements CalendarService {
                                         reservation.stream().map(
                                                         r ->
                                                                 GetDailyInfoResDto.Hospital_reservation.builder()
+                                                                        .reservation_id(r.getReservationId())
 //                                                                      병원 이름
                                                                         .hospital_name(r.getHospitalName())
 //                                                                      예약 날짜
@@ -139,7 +145,6 @@ public class CalendarServiceImpl implements CalendarService {
                                                                         .build())
                                                 .toList()
                         )
-
                         .medication(
                                 /*
                                  * 사용자의 일일 약품 정보가 null이거나 비어있을 수 있다.
@@ -150,6 +155,7 @@ public class CalendarServiceImpl implements CalendarService {
                                         medication.stream().map(
                                                 m ->
                                                         GetDailyInfoResDto.Medication.builder()
+                                                                .medication_id(m.getMedicationId())
 //                                                                약 이름
                                                                 .medication_name(m.getName())
 //                                                                복용 시작 날짜
@@ -169,10 +175,12 @@ public class CalendarServiceImpl implements CalendarService {
         );
     }
 
-    public Optional<MenstrualCycle> getRecentMenstrualCycle(
+    public Optional<List<MenstrualCycle>> getRecentMenstrualCycle(
             Long userId
     ) {
-        return menstrualCycleRepository.findFirstByUser_UserIdOrderByStartDateDesc(userId);
+        List<MenstrualCycle> list = new ArrayList<>();
+        list.add(menstrualCycleRepository.findFirstByUser_UserIdOrderByStartDateDesc(userId).orElse(null));
+        return Optional.of(list);
     }
 
     /*

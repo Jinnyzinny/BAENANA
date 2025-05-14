@@ -15,7 +15,9 @@ public interface MedicationRepository extends JpaRepository<Medication,Long> {
 //    사용자가 복용한 의약품 리스트를 찾는다
     Optional<List<Medication>> findByUser_UserId(Long userUserId);
 
-    Optional<List<Medication>> findDistinctByUser_UserIdAndEndDateAfter(Long userId, LocalDate endDate);
+    Optional<List<Medication>> findDistinctByUser_UserIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(Long userId,LocalDate startDate, LocalDate endDate);
+
+
     Optional<List<Medication>> findDistinctByUser_UserIdAndEndDateBefore(Long userId, LocalDate endDate);
 
     //    Primary Key로 사용자가 복용한 의약품을 찾는다.

@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 @Builder
 public class GetAlarmResDto {
-    private Boolean menstraul_is_normal;
+    private Boolean menstrual_is_normal;
     private String message;
 }

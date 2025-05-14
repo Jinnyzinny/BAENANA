@@ -34,6 +34,15 @@ public class MenstrualCycleCalendarController {
         return ResponseEntity.ok(cycleService.getMenstrualCycle(user));
     }
 
+    @GetMapping("/{year}/{month}")
+    public ResponseEntity<ApiResponse<?>> getMonthlyMenstrualCycle(
+            @AuthenticationPrincipal User user,
+            @PathVariable int year,
+            @PathVariable int month
+    ){
+        return ResponseEntity.ok(cycleService.getMonthlyMenstrualCycle(user,year,month));
+    }
+
     @PatchMapping("/{cycle_id}")
     public ResponseEntity<ApiResponse<?>> updateMenstrualCycle(
             @RequestBody UpdateMenstrualCycleReqDto request,

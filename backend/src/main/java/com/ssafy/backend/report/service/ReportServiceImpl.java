@@ -47,13 +47,13 @@ public class ReportServiceImpl implements ReportService {
         if (maxCycle - minCycle >= 7) {
             return ApiResponse.success("사용자의 월경 주기 정상 여부 결과입니다.",
                     GetAlarmResDto.builder()
-                            .menstraul_is_normal(false)
+                            .menstrual_is_normal(false)
                             .message("최근 월경 주기가 불규칙합니다.")
                             .build());
         } else {
             return ApiResponse.success("사용자의 월경 주기 정상 여부 결과입니다.",
                     GetAlarmResDto.builder()
-                            .menstraul_is_normal(true)
+                            .menstrual_is_normal(true)
                             .message("최근 월경 주기가 규칙적입니다.")
                             .build());
         }
