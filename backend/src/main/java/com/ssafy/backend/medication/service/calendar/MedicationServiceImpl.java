@@ -19,6 +19,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -121,13 +122,15 @@ public class MedicationServiceImpl implements MedicationService {
 //            medication.setName(request.getName());
 //        }
         if (request.getTime_taken() != null) {
+            List<TimeTaken> modifyTimeTakenList=new ArrayList<>();
             request.getTime_taken().forEach(
                     time ->
-                            medication.getTimeTakenList().add(TimeTaken.builder()
+                            modifyTimeTakenList.add(TimeTaken.builder()
                                     .time_taken(time)
                                     .medication(medication)
                                     .build())
             );
+            medication.setTimeTakenList(modifyTimeTakenList);
         }
         if (request.getEnd_date() != null) {
             medication.setEndDate(request.getEnd_date());
