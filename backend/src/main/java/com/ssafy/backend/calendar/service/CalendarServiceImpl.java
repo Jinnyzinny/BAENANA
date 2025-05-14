@@ -99,7 +99,7 @@ public class CalendarServiceImpl implements CalendarService {
 //                               주기 정보 제공
                                 GetDailyInfoResDto.menstrual_cycle.builder()
                                         .start_date(menstrualCycle.getStartDate().toString())
-                                        .end_date(menstrualCycle.getStartDate().toString())
+                                        .end_date(menstrualCycle.getEndDate().toString())
                                         .build()
                         )
                         .menstrual_daily_log(
