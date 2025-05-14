@@ -56,7 +56,7 @@ public class CalendarServiceImpl implements CalendarService {
          * */
         MenstrualCycle menstrualCycle =
                 menstrualCycleRepository
-                        .findFirstByUser_UserIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(
+                        .findFirstByUser_UserIdAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByStartDateDesc(
                                 userId,
                                 searchForDate.with(TemporalAdjusters.lastDayOfMonth()),
                                 searchForDate.with(TemporalAdjusters.firstDayOfMonth())
