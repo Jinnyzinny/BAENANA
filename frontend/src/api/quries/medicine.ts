@@ -37,7 +37,12 @@ export function useAddMedicineReservation() {
       addMedicineReservation(medicineName, startDate, endDate, timeTaken, memo),
     onSuccess: (data) => {
       console.log("☑️복용약 일정 등록 성공: ", data);
-      queryClient.invalidateQueries({ queryKey: ["medicineReservation"] });
+      queryClient.invalidateQueries({ queryKey: ["daily"], exact: false });
+      queryClient.invalidateQueries({ queryKey: ["medicineAlert"] });
+      queryClient.invalidateQueries({
+        queryKey: ["medicineReservation"],
+        exact: false,
+      });
     },
     onError: (error) => {
       console.log("✖️복용약 일정 등록 실패: ", error);
@@ -84,7 +89,12 @@ export function useEditMedicineReservation() {
       ),
     onSuccess: (data) => {
       console.log("☑️복용약 일정 변경 성공: ", data);
-      queryClient.invalidateQueries({ queryKey: ["medicineReservation"] });
+      queryClient.invalidateQueries({ queryKey: ["daily"], exact: false });
+      queryClient.invalidateQueries({ queryKey: ["medicineAlert"] });
+      queryClient.invalidateQueries({
+        queryKey: ["medicineReservation"],
+        exact: false,
+      });
     },
     onError: (error) => {
       console.log("✖️복용약 일정 변경 실패: ", error);
@@ -101,7 +111,12 @@ export function useDeleteMedicineReservation() {
     mutationFn: (id: number) => deleteMedicineReservation(id),
     onSuccess: () => {
       console.log("☑️복용약 일정 삭제 성공");
-      queryClient.invalidateQueries({ queryKey: ["medicineReservation"] });
+      queryClient.invalidateQueries({ queryKey: ["daily"], exact: false });
+      queryClient.invalidateQueries({ queryKey: ["medicineAlert"] });
+      queryClient.invalidateQueries({
+        queryKey: ["medicineReservation"],
+        exact: false,
+      });
     },
     onError: (error) => {
       console.log("✖️복용약 일정 삭제 실패: ", error);

@@ -14,6 +14,10 @@ import { parseTime } from "../../../utils/parseTime";
 import { CustomButton } from "../../common/customButton";
 import { DateDropdown } from "../../common/dateDropdown";
 import { TimeDropdown } from "../../common/timeDropdown";
+import {
+  useDeleteMedicineReservation,
+  useEditMedicineReservation,
+} from "../../../api/quries/medicine";
 
 export function MedicineInfo({ data }: { data: Daily }) {
   const color = "#A3A3A3";
@@ -21,9 +25,9 @@ export function MedicineInfo({ data }: { data: Daily }) {
 
   return (
     <View className="gap-4">
-      {data.medication.map((med, index) => {
-        const initStartDate = parseDate(med.start_date);
-        const initEndDate = parseDate(med.end_date);
+      {data.medication.map((medicine, index) => {
+        const initStartDate = parseDate(medicine.start_date);
+        const initEndDate = parseDate(medicine.end_date);
 
         const startYear = initStartDate.getFullYear();
         const startMonth = initStartDate.getMonth() + 1;
@@ -33,14 +37,14 @@ export function MedicineInfo({ data }: { data: Daily }) {
         const endMonth = initEndDate.getMonth() + 1;
         const endDay = initEndDate.getDate();
 
-        const first = med.injection_time[0]
-          ? parseTime(med.injection_time[0])
+        const first = medicine.injection_time[0]
+          ? parseTime(medicine.injection_time[0])
           : null;
-        const second = med.injection_time[1]
-          ? parseTime(med.injection_time[1])
+        const second = medicine.injection_time[1]
+          ? parseTime(medicine.injection_time[1])
           : null;
-        const third = med.injection_time[2]
-          ? parseTime(med.injection_time[2])
+        const third = medicine.injection_time[2]
+          ? parseTime(medicine.injection_time[2])
           : null;
 
         const firstTime = first
@@ -59,12 +63,19 @@ export function MedicineInfo({ data }: { data: Daily }) {
 
         const [isToggleOpen, setIsToggleOpen] = useState(false);
         const [isEdit, setIsEdit] = useState(false);
-        const [medicineName, setMedicineName] = useState(med.medication_name);
+        const [medicineName, setMedicineName] = useState(
+          medicine.medication_name
+        );
         const [startDate, setStartDate] = useState<Date | null>(initStartDate);
         const [endDate, setEndDate] = useState<Date | null>(initEndDate);
-        const [memo, setMemo] = useState(med.memo);
+        const [memo, setMemo] = useState(medicine.memo);
         const [times, setTimes] = useState(initTimes);
         const idCounter = useRef(initTimes.length + 1);
+
+        const { mutate: editMedicineReservation } =
+          useEditMedicineReservation();
+        const { mutate: deleteMedicineReservation } =
+          useDeleteMedicineReservation();
 
         function addTime() {
           if (times.length < 3) {
@@ -85,23 +96,55 @@ export function MedicineInfo({ data }: { data: Daily }) {
         }
 
         function cancelEdit() {
-          setMedicineName(med.medication_name);
+          setMedicineName(medicine.medication_name);
           setStartDate(initStartDate);
           setEndDate(initEndDate);
-          setMemo(med.memo);
+          setMemo(medicine.memo);
           setTimes(initTimes);
           setIsEdit(false);
         }
 
         function saveEdit() {
+          if (!startDate || !endDate || times.some((t) => !t.time)) {
+            Alert.alert("입력 오류", "모든 날짜와 복용 시간을 입력해주세요.");
+            return;
+          }
+
+          const start = startDate.toISOString().split("T")[0]; // YYYY-MM-DD
+          const end = endDate.toISOString().split("T")[0]; // YYYY-MM-DD
+          const timeTaken = times.map(
+            (t) => t.time!.toTimeString().slice(0, 5) // "HH:mm"
+          );
+
+          // console.log(
+          //   medicine.medication_id,
+          //   medicineName,
+          //   start,
+          //   end,
+          //   timeTaken,
+          //   memo
+          // );
+
+          editMedicineReservation({
+            id: medicine.medication_id,
+            medicineName,
+            startDate: start,
+            endDate: end,
+            timeTaken,
+            memo,
+          });
+
           setIsEdit(false);
-          // 서버 전송 로직 추가
         }
 
         function handleDelete() {
           Alert.alert("삭제", "이 복용약 정보를 삭제하시겠습니까?", [
             { text: "취소", style: "cancel" },
-            { text: "확인", style: "destructive", onPress: () => {} },
+            {
+              text: "확인",
+              style: "destructive",
+              onPress: () => deleteMedicineReservation(medicine.medication_id),
+            },
           ]);
         }
 
@@ -111,7 +154,7 @@ export function MedicineInfo({ data }: { data: Daily }) {
             <View className="flex-row items-center justify-between">
               <View className="flex-row items-center gap-2">
                 <Text className="text-neutral-800 text-lg font-bold">
-                  {medicineName}
+                  {medicine.medication_name}
                 </Text>
                 <View className="pt-1 flex-row items-center gap-1">
                   <TouchableOpacity

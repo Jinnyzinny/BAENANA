@@ -54,7 +54,7 @@ export function useGetHospitalReservation(year: number, month: number) {
   });
 }
 
-// 병원 예약 일정 변경
+// ✅병원 예약 일정 변경
 export function useEditHospitalReservation() {
   const queryClient = useQueryClient();
 
