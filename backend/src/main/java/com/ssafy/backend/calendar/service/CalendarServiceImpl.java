@@ -238,7 +238,7 @@ public class CalendarServiceImpl implements CalendarService {
                         .start_date(
                                 menstrualCycle.getStartDate().plusDays(28).toString())
                         .end_date(
-                                menstrualCycle.getEndDate().plusDays(35).toString())
+                                menstrualCycle.getStartDate().plusDays(35).toString())
                         .build()
         );
     }
