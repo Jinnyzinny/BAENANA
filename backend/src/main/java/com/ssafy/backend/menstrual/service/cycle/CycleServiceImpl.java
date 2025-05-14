@@ -16,6 +16,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -33,8 +35,8 @@ public class CycleServiceImpl implements CycleService {
             AddMenstrualCycleReqDto request
     ) {
         /*
-        * 생리 주기 기록 추가
-        * */
+         * 생리 주기 기록 추가
+         * */
         menstrualCycleRepository.save(
                 MenstrualCycle.builder()
                         .user(userRepository.findById(user.getUserId()).orElseThrow(
@@ -83,6 +85,24 @@ public class CycleServiceImpl implements CycleService {
                                                         .toList()
                                         ).build()
                 ).toList());
+    }
+
+    @Override
+    public ApiResponse<?> getMonthlyMenstrualCycle(User user, int year, int month) {
+        LocalDate startOfMonth = LocalDate.of(year, month, 1);
+        LocalDate endOfMonth = startOfMonth.with(TemporalAdjusters.lastDayOfMonth());
+
+        List<MenstrualCycle> menstrualCycleList
+                = menstrualCycleRepository.findByUser_UserIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(
+                user.getUserId(),
+                endOfMonth,
+                startOfMonth
+        ).orElse(null);
+
+
+        return ApiResponse.success(
+                "월별 생리 주기 정보를 열람한다."
+        );
     }
 
     @Override

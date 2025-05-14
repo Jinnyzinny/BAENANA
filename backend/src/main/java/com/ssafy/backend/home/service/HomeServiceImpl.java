@@ -88,8 +88,9 @@ public class HomeServiceImpl implements HomeService {
         /*
          * 2. 복용 종료일이 오늘 이후인 약들 중 오늘 복용해야할 약물들을 찾는다.
          * */
-        List<Medication> medication = medicationRepository.findDistinctByUser_UserIdAndEndDateAfter(
+        List<Medication> medication = medicationRepository.findDistinctByUser_UserIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(
                 userId,
+                LocalDate.now(),
                 LocalDate.now()
         ).orElse(null);
         /*
