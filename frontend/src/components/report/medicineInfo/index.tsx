@@ -3,20 +3,13 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ChevronRight } from "lucide-react-native";
 import { Text, TouchableOpacity, View } from "react-native";
 import { ReportStackParamList } from "../../../navigation/types";
+import { RecentMedicine } from "../../../types/Report";
 
-export function MedicineInfo() {
+export function MedicineInfo({ data }: { data: RecentMedicine }) {
   const navigation =
     useNavigation<NativeStackNavigationProp<ReportStackParamList>>();
   const size: number = 22;
   const color: string = "#A1A1A1";
-
-  // const { data, refetch } = useGetRecentMedicine();
-
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     refetch();
-  //   }, [])
-  // );
 
   return (
     <View className="p-5 rounded-xl gap-5 bg-white shadow-neutral-300">

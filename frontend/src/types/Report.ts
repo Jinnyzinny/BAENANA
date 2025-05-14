@@ -1,3 +1,4 @@
+import { Default } from "./Default";
 import { Date } from "./Period";
 
 export type PeriodAlert = {
@@ -5,11 +6,19 @@ export type PeriodAlert = {
   message: string;
 };
 
+export type FullPeriodAlert = Default & {
+  data: PeriodAlert;
+};
+
 export type RecentPeriodInfo = {
   cycle: number;
   period: number;
   is_cycle_normal: boolean;
   is_period_normal: boolean;
+};
+
+export type FullRecentPeriodInfo = Default & {
+  data: RecentPeriodInfo;
 };
 
 export type OvulationInfo = {
@@ -23,6 +32,10 @@ export type Ovulation = {
   personal_data: OvulationInfo[];
 };
 
+export type FullOvulation = Default & {
+  data: Ovulation;
+};
+
 export type PeriodInfo = Date & {
   period: number;
 };
@@ -33,6 +46,10 @@ export type RecentPeriod = {
   cycle_record: PeriodInfo[];
 };
 
+export type FullRecentPeriod = Default & {
+  data: RecentPeriod;
+};
+
 export type MedicineInfo = {
   name: string;
 };
@@ -40,6 +57,10 @@ export type MedicineInfo = {
 export type RecentMedicine = {
   today_medicine: MedicineInfo[];
   medicine_record: MedicineInfo[];
+};
+
+export type FullRecentMedicine = Default & {
+  data: RecentMedicine;
 };
 
 export type Report = {
@@ -52,4 +73,8 @@ export type Report = {
     stress: string;
     anomal: boolean;
   };
+};
+
+export type FullReport = Default & {
+  data: Report;
 };

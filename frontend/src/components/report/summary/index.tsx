@@ -1,14 +1,8 @@
 import { Text, View } from "react-native";
+import { Report } from "../../../types/Report";
 
-export function Summary() {
+export function Summary({ data }: { data: Report }) {
   const size: number = 16;
-  // const { data, refetch } = useGetReport();
-
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     refetch();
-  //   }, [])
-  // );
 
   return (
     <View className="p-5 rounded-xl gap-5 bg-white shadow-neutral-300">
