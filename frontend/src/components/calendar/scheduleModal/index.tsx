@@ -15,6 +15,7 @@ import { Daily } from "../../../types/Daily";
 import { FormatDate } from "../../../utils/formatDate";
 import { IsInRange } from "../../../utils/isInRange";
 import { HospitalInfo } from "../hospitalInfo";
+import { MedicineInfo } from "../medicineInfo";
 import { PeriodInfo } from "../periodInfo";
 import { ScheduleButton } from "../scheduleButton";
 
@@ -58,7 +59,23 @@ export function ScheduleModal({
 
   useEffect(() => {
     if (dailyData?.data) {
-      setData(dailyData.data);
+      const corrected: Daily = {
+        date: dailyData.data.date ?? "",
+        prediction: dailyData.data.prediction ?? false,
+        menstrual_cycle: dailyData.data.menstrual_cycle ?? {
+          start_date: "",
+          end_date: "",
+        },
+        menstrual_daily_log: dailyData.data.menstrual_daily_log ?? {
+          bleeding_level: 0,
+          pain_level: 0,
+          symptom: [],
+        },
+        hospital_reservation: dailyData.data.hospital_reservation ?? [],
+        medication: dailyData.data.medication ?? [],
+      };
+
+      setData(corrected);
     }
   }, [dailyData]);
 
@@ -132,7 +149,7 @@ export function ScheduleModal({
                   )}
 
                   {/* 토글 - 복용약 관련 정보 */}
-                  {/* {data.medication?.start_date && (
+                  {data.medication.length > 0 && (
                     <>
                       <MedicineInfo data={data} />
                       <View
@@ -140,18 +157,7 @@ export function ScheduleModal({
                         style={{ height: 1 }}
                       />
                     </>
-                  )} */}
-
-                  {/* {!(
-                    (data.prediction &&
-                      IsInRange(
-                        date,
-                        data.menstrual_cycle.start_date,
-                        data.menstrual_cycle.end_date
-                      )) ||
-                    data.hospital_reservation?.reservation_date ||
-                    data.medication?.start_date
-                  ) && <View className="py-2" />} */}
+                  )}
 
                   {/* 버튼 - 병원 예약 / 복용약 알림 / 월경 증상 입력 */}
                   <View className="gap-3">
