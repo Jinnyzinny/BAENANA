@@ -37,11 +37,7 @@ public class MenstrualCycleLogServiceImpl implements MenstrualCycleLogService {
         MenstrualCycle menstrualCycle =
                 menstrualCycleRepository
                         .findByStartDateLessThanEqualAndEndDateGreaterThanEqual(request.getDate(), request.getDate())
-                        .orElse(null);
-
-        if(menstrualCycle == null) {
-            return ApiResponse.success("연관된 생리주기 정보가 없습니다.");
-        }
+                        .orElseThrow(()->new MenstrualException("연관된 생리주기 정보가 없습니다."));
 
         MenstrualDailyLog dailyLog = menstrualDailyLogRepository.save(
                 MenstrualDailyLog.builder()
