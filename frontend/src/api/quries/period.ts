@@ -68,7 +68,7 @@ export function useEditPeriod() {
     }) => editPeriod(id, cycleId, startDate, endDate),
     onSuccess: (data) => {
       console.log("☑️월경 주기 변경 성공: ", data);
-      queryClient.invalidateQueries({ queryKey: ["period"] });
+      queryClient.invalidateQueries({ queryKey: ["period"], exact: false });
     },
     onError: (error) => {
       console.log("✖️월경 주기 변경 실패: ", error);
@@ -95,12 +95,12 @@ export function useAddPeriodSymtom() {
       painLevel: number;
       isStart: boolean;
       isEnd: boolean;
-      symptom: string[];
+      symptom: number[];
     }) =>
       addPeriodSymtom(date, bleedingLevel, painLevel, isStart, isEnd, symptom),
     onSuccess: (data) => {
       console.log("☑️월경 세부 정보 등록 성공: ", data);
-      queryClient.invalidateQueries({ queryKey: ["period"] });
+      queryClient.invalidateQueries({ queryKey: ["period"], exact: false });
     },
     onError: (error) => {
       console.log("✖️월경 세부 정보 등록 실패: ", error);
@@ -129,7 +129,7 @@ export function useEditPeriodSymtom() {
       painLevel?: number;
       isStart?: boolean;
       isEnd?: boolean;
-      symptom?: string[];
+      symptom?: number[];
     }) =>
       editPeriodSymtom(
         cycleId,
@@ -142,7 +142,7 @@ export function useEditPeriodSymtom() {
       ),
     onSuccess: (data) => {
       console.log("☑️월경 세부 정보 변경 성공: ", data);
-      queryClient.invalidateQueries({ queryKey: ["period"] });
+      queryClient.invalidateQueries({ queryKey: ["period"], exact: false });
     },
     onError: (error) => {
       console.log("✖️월경 세부 정보 변경 실패: ", error);

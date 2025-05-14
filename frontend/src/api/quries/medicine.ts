@@ -59,7 +59,7 @@ export function useGetMedicineReservation(year: number, month: number) {
   });
 }
 
-// 복용약 일정 변경
+// ✅복용약 일정 변경
 export function useEditMedicineReservation() {
   const queryClient = useQueryClient();
 
@@ -103,7 +103,7 @@ export function useEditMedicineReservation() {
   });
 }
 
-// 복용약 일정 삭제
+// ✅복용약 일정 삭제
 export function useDeleteMedicineReservation() {
   const queryClient = useQueryClient();
 

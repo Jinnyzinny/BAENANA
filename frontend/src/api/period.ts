@@ -76,7 +76,7 @@ export async function addPeriodSymtom(
   painLevel: number,
   isStart: boolean,
   isEnd: boolean,
-  symptom: string[]
+  symptom: number[]
 ) {
   try {
     const response = await authClient.post("/calendar/menstrual_cycle/log", {
@@ -103,7 +103,7 @@ export async function editPeriodSymtom(
   painLevel?: number,
   isStart?: boolean,
   isEnd?: boolean,
-  symptom?: string[]
+  symptom?: number[]
 ) {
   try {
     const payload = {

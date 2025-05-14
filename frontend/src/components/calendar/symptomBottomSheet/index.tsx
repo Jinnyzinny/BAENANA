@@ -1,5 +1,12 @@
 import { RefObject, useState } from "react";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Modalize } from "react-native-modalize";
 import { SelectLevel } from "../selectLevel";
 import { CustomButton } from "../../common/customButton";
@@ -40,9 +47,37 @@ export function SymptomBottomSheet({
 
   const { mutate: addPeriodSymtom } = useAddPeriodSymtom();
 
-  function handleSave() {}
+  function handleSave() {
+    if (!selectedDate) {
+      return Alert.alert("날짜 오류", "날짜가 선택되지 않았습니다.");
+    }
 
-  function resetForm() {}
+    console.log(
+      selectedDate,
+      selectedPeriod,
+      selectedStress,
+      false,
+      false,
+      symptom
+    );
+
+    addPeriodSymtom({
+      date: selectedDate,
+      bleedingLevel: selectedPeriod,
+      painLevel: selectedStress,
+      isStart: false,
+      isEnd: false,
+      symptom,
+    });
+
+    sheetRef.current?.close();
+  }
+
+  function resetForm() {
+    setSelectedPeriod(0);
+    setSelectedStress(0);
+    setSymptom([]);
+  }
 
   return (
     <Modalize ref={sheetRef} snapPoint={height * 0.7} onOpen={resetForm}>
