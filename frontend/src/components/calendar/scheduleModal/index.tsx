@@ -14,6 +14,7 @@ import { useGetDaily } from "../../../api/quries/daily";
 import { Daily } from "../../../types/Daily";
 import { FormatDate } from "../../../utils/formatDate";
 import { IsInRange } from "../../../utils/isInRange";
+import { HospitalInfo } from "../hospitalInfo";
 import { PeriodInfo } from "../periodInfo";
 import { ScheduleButton } from "../scheduleButton";
 
@@ -120,18 +121,15 @@ export function ScheduleModal({
                   )}
 
                   {/* 토글 - 병원 관련 정보 */}
-                  {/* {data.hospital_reservation?.reservation_date &&
-                    data.hospital_reservation.reservation_date.startsWith(
-                      date
-                    ) && (
-                      <>
-                        <HospitalInfo data={data} />
-                        <View
-                          className="w-full my-3 bg-neutral-300"
-                          style={{ height: 1 }}
-                        />
-                      </>
-                    )} */}
+                  {data.hospital_reservation.length > 0 && (
+                    <>
+                      <HospitalInfo data={data} />
+                      <View
+                        className="w-full my-3 bg-neutral-300"
+                        style={{ height: 1 }}
+                      />
+                    </>
+                  )}
 
                   {/* 토글 - 복용약 관련 정보 */}
                   {/* {data.medication?.start_date && (
