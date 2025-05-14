@@ -17,11 +17,13 @@ export type Daily = {
     symptom: string[];
   };
   hospital_reservation: {
+    reservation_id: number;
     hospital_name: string;
     reservation_date: string;
     purpose: string;
   }[];
   medication: {
+    medication_id: number;
     medication_name: string;
     start_date: string;
     end_date: string;

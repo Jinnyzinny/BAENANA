@@ -6,6 +6,8 @@ import { CustomButton } from "../../common/customButton";
 import { DateDropdown } from "../../common/dateDropdown";
 import { SelectTag } from "../../common/selectTag";
 import { TimeDropdown } from "../../common/timeDropdown";
+import { deleteHospitalReservation } from "../../../api/hospital";
+import { useDeleteHospitalReservation } from "../../../api/quries/hospital";
 
 export function HospitalInfo({ data }: { data: Daily }) {
   const color: string = "#A3A3A3";
@@ -50,6 +52,8 @@ export function HospitalInfo({ data }: { data: Daily }) {
     )
   );
 
+  const { mutate: deleteHospitalReservation } = useDeleteHospitalReservation();
+
   function handleEdit(index: number) {
     const toggleCopy = [...isToggleOpenList];
     const editCopy = [...isEditList];
@@ -73,13 +77,14 @@ export function HospitalInfo({ data }: { data: Daily }) {
   }
 
   function handleDelete(index: number) {
+    const id = data.hospital_reservation[index].reservation_id;
     Alert.alert("삭제", "입력된 내용을 삭제하시겠습니까?", [
       { text: "취소", style: "cancel" },
       {
         text: "확인",
         style: "destructive",
         onPress: () => {
-          // 삭제 처리 로직
+          deleteHospitalReservation(id);
         },
       },
     ]);

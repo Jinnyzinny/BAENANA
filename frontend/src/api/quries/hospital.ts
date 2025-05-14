@@ -32,7 +32,12 @@ export function useAddHospitalReservation() {
     }) => addHospitalReservation(hospitalName, reservationDate, purpose),
     onSuccess: (data) => {
       console.log("☑️병원 예약 일정 등록 성공: ", data);
-      queryClient.invalidateQueries({ queryKey: ["hospitalReservation"] });
+      queryClient.invalidateQueries({
+        queryKey: ["hospitalReservation"],
+        exact: false,
+      });
+      queryClient.invalidateQueries({ queryKey: ["daily"], exact: false });
+      queryClient.invalidateQueries({ queryKey: ["hospitalAlert"] });
     },
     onError: (error) => {
       console.log("✖️병원 예약 일정 등록 실패: ", error);
@@ -67,7 +72,12 @@ export function useEditHospitalReservation() {
     }) => editHospitalReservation(id, hospitalName, reservationDate, purpose),
     onSuccess: (data) => {
       console.log("☑️병원 예약 일정 변경 성공: ", data);
-      queryClient.invalidateQueries({ queryKey: ["hospitalReservation"] });
+      queryClient.invalidateQueries({
+        queryKey: ["hospitalReservation"],
+        exact: false,
+      });
+      queryClient.invalidateQueries({ queryKey: ["daily"], exact: false });
+      queryClient.invalidateQueries({ queryKey: ["hospitalAlert"] });
     },
     onError: (error) => {
       console.log("✖️병원 예약 일정 변경 실패: ", error);
@@ -84,7 +94,12 @@ export function useDeleteHospitalReservation() {
     mutationFn: (id: number) => deleteHospitalReservation(id),
     onSuccess: () => {
       console.log("☑️병원 예약 일정 삭제 성공");
-      queryClient.invalidateQueries({ queryKey: ["hospitalReservation"] });
+      queryClient.invalidateQueries({
+        queryKey: ["hospitalReservation"],
+        exact: false,
+      });
+      queryClient.invalidateQueries({ queryKey: ["daily"], exact: false });
+      queryClient.invalidateQueries({ queryKey: ["hospitalAlert"] });
     },
     onError: (error) => {
       console.log("✖️병원 예약 일정 삭제 실패: ", error);
