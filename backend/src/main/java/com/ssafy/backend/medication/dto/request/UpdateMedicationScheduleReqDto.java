@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -14,6 +15,6 @@ public class UpdateMedicationScheduleReqDto {
     String name;
     LocalDate start_date;
     LocalDate end_date;
-    LocalTime[] time_taken;
+    List<LocalTime> time_taken;
     String memo;
 }

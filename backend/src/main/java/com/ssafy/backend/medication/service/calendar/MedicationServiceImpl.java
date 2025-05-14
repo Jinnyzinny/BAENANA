@@ -19,6 +19,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -117,6 +118,17 @@ public class MedicationServiceImpl implements MedicationService {
                         () ->
                                 new MedicationException("복용할 약 정보가 존재하지 않습니다."));
         BeanUtils.copyProperties(request, medication, NullAwareBeanUtils.getNullPropertyNames(request));
+//        if(request.getName()!=null){
+//            medication.setName(request.getName());
+//        }
+        if(request.getTime_taken()!=null){
+            medication.setTimeTakenList(request.getTime_taken().stream().map(
+                    time->TimeTaken.builder()
+                            .medication(medication)
+                            .time_taken(time)
+                            .build()
+            ).toList());
+        }
         if (request.getEnd_date() != null) {
             medication.setEndDate(request.getEnd_date());
         }
