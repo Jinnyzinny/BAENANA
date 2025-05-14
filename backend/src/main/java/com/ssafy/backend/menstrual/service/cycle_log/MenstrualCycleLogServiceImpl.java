@@ -6,6 +6,7 @@ import com.ssafy.backend.menstrual.dto.request.AddMenstrualCycleDailyLogReqDto;
 import com.ssafy.backend.menstrual.dto.request.UpdateMenstrualCycleDailyLogReqDto;
 import com.ssafy.backend.menstrual.entity.MenstrualCycle;
 import com.ssafy.backend.menstrual.entity.MenstrualDailyLog;
+import com.ssafy.backend.menstrual.exception.DuplicateDailyLog;
 import com.ssafy.backend.menstrual.exception.MenstrualException;
 import com.ssafy.backend.menstrual.repository.MenstrualCycleRepository;
 import com.ssafy.backend.menstrual.repository.MenstrualDailyLogRepository;
@@ -19,7 +20,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -37,12 +37,11 @@ public class MenstrualCycleLogServiceImpl implements MenstrualCycleLogService {
         MenstrualCycle menstrualCycle =
                 menstrualCycleRepository
                         .findByStartDateLessThanEqualAndEndDateGreaterThanEqual(request.getDate(), request.getDate())
-                        .orElse(null);
+                        .orElseThrow(() -> new MenstrualException("연관된 생리주기 정보가 없습니다."));
 
-        if(menstrualCycle == null) {
-            return ApiResponse.success("연관된 생리주기 정보가 없습니다.");
+        if (menstrualDailyLogRepository.existsByCycle_User_UserIdAndDate(user.getUserId(), request.getDate())) {
+            throw new DuplicateDailyLog("이미 저장된 일자입니다.");
         }
-
         MenstrualDailyLog dailyLog = menstrualDailyLogRepository.save(
                 MenstrualDailyLog.builder()
                         .cycle(

@@ -23,7 +23,7 @@ public interface MenstrualCycleRepository extends JpaRepository<MenstrualCycle,L
     Optional<List<MenstrualCycle>> findByUser_UserIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(Long userId, LocalDate startDate, LocalDate endDate);
 
     /*특정 날짜를 주고 구간 하나  */
-    Optional<MenstrualCycle> findFirstByUser_UserIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(Long userId, LocalDate startDate, LocalDate endDate);
+    Optional<MenstrualCycle> findFirstByUser_UserIdAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByStartDateDesc(Long userId, LocalDate startDate, LocalDate endDate);
 
 
     Optional<MenstrualCycle> findFirstByUser_UserIdOrderByStartDateDesc(Long user_userId);

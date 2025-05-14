@@ -22,5 +22,12 @@ public class MenstrualExceptionHandler {
         log.error("Menstrual Cycle information not found: {}", e.getMessage());
         return ApiResponse.error("MENSTRUAL_NOT_FOUND", HttpStatus.NOT_FOUND, e.getMessage());
     }
+
+    @ExceptionHandler(DuplicateDailyLog.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiResponse<?> handleDuplicateDailyLogException(DuplicateDailyLog e) {
+        log.error("Menstrual Cycle information has already saved: {}", e.getMessage());
+        return ApiResponse.error("Duplicate_Daily_Log :ALREADY SAVED THIS DAY", HttpStatus.NOT_FOUND, e.getMessage());
+    }
 }
 
