@@ -106,32 +106,33 @@ public class CycleServiceImpl implements CycleService {
 
         return ApiResponse.success(
                 "월별 생리 주기 정보를 열람한다.",
-                menstrualCycleList.stream().map(
-                        cycle ->
-                                GetMenstrualCycleResDto.builder()
-                                        .cycle_id(cycle.getCycleId())
-                                        .start_date(cycle.getStartDate().toString())
-                                        .end_date(cycle.getEndDate().toString())
-                                        .detail(
-                                                cycle.getLogs().stream().map(
-                                                        log ->
-                                                                GetMenstrualCycleResDto.SymptomDailyDetail.builder()
-                                                                        .daily_log_id(log.getDailyId())
-                                                                        .date(log.getDate().toString())
-                                                                        .bleeding_level(log.getBleedingLevel())
-                                                                        .pain_level(log.getPainLevel())
-                                                                        .stress_level(log.getStressLevel())
-                                                                        .symptoms(
-                                                                                log.getSymptomLog().stream().map(
-                                                                                        symptomLog -> symptomLog.getSymptomType().toString()
-                                                                                ).toList()
-                                                                        )
-                                                                        .build()
-                                                ).toList()
-                                        )
+                menstrualCycleList.stream().distinct().map(
+                                cycle ->
+                                        GetMenstrualCycleResDto.builder()
+                                                .cycle_id(cycle.getCycleId())
+                                                .start_date(cycle.getStartDate().toString())
+                                                .end_date(cycle.getEndDate().toString())
+                                                .detail(
+                                                        cycle.getLogs().stream().distinct().map(
+                                                                log ->
+                                                                        GetMenstrualCycleResDto.SymptomDailyDetail.builder()
+                                                                                .daily_log_id(log.getDailyId())
+                                                                                .date(log.getDate().toString())
+                                                                                .bleeding_level(log.getBleedingLevel())
+                                                                                .pain_level(log.getPainLevel())
+                                                                                .stress_level(log.getStressLevel())
+                                                                                .symptoms(
+                                                                                        log.getSymptomLog().stream().distinct().map(
+                                                                                                symptomLog -> symptomLog.getSymptomType().getDescription()
+                                                                                        ).toList()
+                                                                                )
 
-                                        .build()
-                ).toList()
+                                                                                .build()
+                                                        ).toList()
+                                                )
+                                                .build()
+                        )
+                        .toList()
         );
     }
 
