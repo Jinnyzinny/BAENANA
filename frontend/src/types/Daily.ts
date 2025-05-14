@@ -20,12 +20,12 @@ export type Daily = {
     hospital_name: string;
     reservation_date: string;
     purpose: string;
-  };
+  }[];
   medication: {
     medication_name: string;
     start_date: string;
     end_date: string;
     injection_time: string[];
     memo: string;
-  };
+  }[];
 };

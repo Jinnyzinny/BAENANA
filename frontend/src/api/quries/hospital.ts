@@ -16,7 +16,7 @@ export function useGetHospitalAlert() {
   });
 }
 
-// 병원 예약 일정 등록
+// ✅병원 예약 일정 등록
 export function useAddHospitalReservation() {
   const queryClient = useQueryClient();
 

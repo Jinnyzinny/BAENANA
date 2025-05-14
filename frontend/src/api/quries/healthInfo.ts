@@ -8,7 +8,7 @@ import {
 // 카테고리 목록 조회
 export function useGetCategory() {
   return useQuery({
-    queryKey: ["Category"],
+    queryKey: ["category"],
     queryFn: () => getCategory(),
   });
 }

@@ -83,7 +83,6 @@ export function useAddPeriodSymtom() {
 
   return useMutation({
     mutationFn: ({
-      cycleId,
       date,
       bleedingLevel,
       painLevel,
@@ -91,7 +90,6 @@ export function useAddPeriodSymtom() {
       isEnd,
       symptom,
     }: {
-      cycleId: number;
       date: string;
       bleedingLevel: number;
       painLevel: number;
@@ -99,15 +97,7 @@ export function useAddPeriodSymtom() {
       isEnd: boolean;
       symptom: string[];
     }) =>
-      addPeriodSymtom(
-        cycleId,
-        date,
-        bleedingLevel,
-        painLevel,
-        isStart,
-        isEnd,
-        symptom
-      ),
+      addPeriodSymtom(date, bleedingLevel, painLevel, isStart, isEnd, symptom),
     onSuccess: (data) => {
       console.log("☑️월경 세부 정보 등록 성공: ", data);
       queryClient.invalidateQueries({ queryKey: ["period"] });
@@ -161,7 +151,7 @@ export function useEditPeriodSymtom() {
   });
 }
 
-// 가임기 조회
+// ✅가임기 조회
 export function useGetChildbearingAge() {
   return useQuery({
     queryKey: ["childbearingAge"],
@@ -169,7 +159,7 @@ export function useGetChildbearingAge() {
   });
 }
 
-// 월경 예정일 조회
+// ✅월경 예정일 조회
 export function useGetPredictedPeriod() {
   return useQuery({
     queryKey: ["predictedPeriod"],

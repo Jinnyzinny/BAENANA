@@ -4,7 +4,7 @@ import authClient from "./client/authClient";
 // FAQ 목록 조회
 export async function getFaqList(): Promise<Faq[]> {
   try {
-    const response = await authClient.get("/api/faq");
+    const response = await authClient.get("/faq");
     console.log("FAQ 목록 조회 성공: ", response.data.data);
     return response.data.data;
   } catch (error: unknown) {
@@ -16,7 +16,7 @@ export async function getFaqList(): Promise<Faq[]> {
 // FAQ 상세 조회
 export async function getFaqDetail(faqId: number): Promise<FaqDetail> {
   try {
-    const response = await authClient.get(`/api/faq/${faqId}`);
+    const response = await authClient.get(`/faq/${faqId}`);
     console.log("FAQ 상세 조회 성공: ", response.data.data);
     return response.data.data;
   } catch (error: unknown) {

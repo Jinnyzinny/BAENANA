@@ -71,7 +71,6 @@ export async function editPeriod(
 
 // 월경 세부 정보 등록
 export async function addPeriodSymtom(
-  cycleId: number,
   date: string,
   bleedingLevel: number,
   painLevel: number,
@@ -81,7 +80,6 @@ export async function addPeriodSymtom(
 ) {
   try {
     const response = await authClient.post("/calendar/menstrual_cycle/log", {
-      cycle_id: cycleId,
       date,
       bleeding_level: bleedingLevel,
       pain_level: painLevel,

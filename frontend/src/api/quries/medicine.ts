@@ -16,7 +16,7 @@ export function useGetMedicineAlert() {
   });
 }
 
-// 복용약 일정 등록
+// ✅복용약 일정 등록
 export function useAddMedicineReservation() {
   const queryClient = useQueryClient();
 
