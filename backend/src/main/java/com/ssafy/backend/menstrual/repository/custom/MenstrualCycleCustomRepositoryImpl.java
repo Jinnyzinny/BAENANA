@@ -82,4 +82,29 @@ public class MenstrualCycleCustomRepositoryImpl implements MenstrualCycleCustomR
                 .distinct()
                 .fetch());
     }
+
+    @Override
+    public Optional<List<MenstrualCycle>> findMonthlyCycle(Long userId, int year, int month) {
+        LocalDate firstDay = LocalDate.of(year, month, 1);
+        LocalDate lastDay = firstDay.with(TemporalAdjusters.lastDayOfMonth());
+
+        QMenstrualDailyLog dl = QMenstrualDailyLog.menstrualDailyLog;
+        QSymptomLog sl = QSymptomLog.symptomLog;
+        QMenstrualCycle mc = QMenstrualCycle.menstrualCycle;
+
+        List<MenstrualCycle> result = queryFactory
+                .selectDistinct(mc)
+                .from(mc)
+                .leftJoin(mc.logs, dl).fetchJoin()
+                .leftJoin(dl.symptomLog, sl).fetchJoin()
+                .where(
+                        mc.user.userId.eq(userId),
+                        mc.startDate.loe(lastDay),   // 시작일이 해당 월의 마지막 날보다 이전
+                        mc.endDate.goe(firstDay)     // 종료일이 해당 월의 첫 날보다 이후
+                )
+                .orderBy(mc.startDate.asc())
+                .fetch();
+
+        return Optional.ofNullable(result.isEmpty() ? null : result);
+    }
 }

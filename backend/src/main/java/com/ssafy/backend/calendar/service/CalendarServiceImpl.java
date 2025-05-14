@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,27 +52,21 @@ public class CalendarServiceImpl implements CalendarService {
         boolean prediction = false;
 
         /*
-         * 검색이 필요한 날짜에 주기가 속하는지 확인한다.
+         * 검색이 필요한 날짜의 달에 주기가 속하는지 확인한다.
          * */
-        List<MenstrualCycle> menstrualCycleList =
+        MenstrualCycle menstrualCycle =
                 menstrualCycleRepository
-                        .findByUser_UserIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(
+                        .findFirstByUser_UserIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(
                                 userId,
-                                searchForDate,
-                                searchForDate).orElse(null);
+                                searchForDate.with(TemporalAdjusters.lastDayOfMonth()),
+                                searchForDate.with(TemporalAdjusters.firstDayOfMonth())
+                        ).orElse(null);
 
-//        해당 일자가 주기에 포함하지 않는다면 최근 주기로 예측일을 뽑아온다.
-        if (menstrualCycleList == null || menstrualCycleList.isEmpty()) {
+//        해당 월에 주기가 없다면 최근 주기로 예측일을 뽑아온다.
+        if (menstrualCycle == null) {
             prediction = true;
-            menstrualCycleList = getRecentMenstrualCycle(userId).orElse(null);
+            menstrualCycle = getRecentMenstrualCycle(userId).orElse(null);
         }
-//        만약 예측일 제공도 불가할 경우 사용자의 주기 정보가 하나도 없는 경우이므로 메시지를 반환합니다.
-//        if (menstrualCycleList == null || menstrualCycleList.isEmpty()) {
-//            return ApiResponse.success("사용자의 주기 정보가 단 하나도 없으므로 정보 제공이 불가합니다.");
-//        }
-        MenstrualCycle menstrualCycle = (menstrualCycleList == null || menstrualCycleList.isEmpty())
-                ? null
-                : menstrualCycleList.get(0);
         /*
          * 해당 날짜가 포함된 주기정보의 해당 날짜 세부 정보를 얻어낸다.
          * */
@@ -183,12 +177,10 @@ public class CalendarServiceImpl implements CalendarService {
         );
     }
 
-    public Optional<List<MenstrualCycle>> getRecentMenstrualCycle(
+    public Optional<MenstrualCycle> getRecentMenstrualCycle(
             Long userId
     ) {
-        List<MenstrualCycle> list = new ArrayList<>();
-        list.add(menstrualCycleRepository.findFirstByUser_UserIdOrderByStartDateDesc(userId).orElse(null));
-        return Optional.of(list);
+        return menstrualCycleRepository.findFirstByUser_UserIdOrderByStartDateDesc(userId);
     }
 
     /*

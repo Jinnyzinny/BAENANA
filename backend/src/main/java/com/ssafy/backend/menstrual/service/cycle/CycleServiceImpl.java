@@ -93,15 +93,45 @@ public class CycleServiceImpl implements CycleService {
         LocalDate endOfMonth = startOfMonth.with(TemporalAdjusters.lastDayOfMonth());
 
         List<MenstrualCycle> menstrualCycleList
-                = menstrualCycleRepository.findByUser_UserIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(
+                = menstrualCycleCustomRepository.findMonthlyCycle(
                 user.getUserId(),
-                endOfMonth,
-                startOfMonth
+                year,
+                month
         ).orElse(null);
+
+        if (menstrualCycleList == null) {
+            return ApiResponse.success("해당 월에는 주기 정보가 존재하지 않습니다.");
+        }
 
 
         return ApiResponse.success(
-                "월별 생리 주기 정보를 열람한다."
+                "월별 생리 주기 정보를 열람한다.",
+                menstrualCycleList.stream().map(
+                        cycle ->
+                                GetMenstrualCycleResDto.builder()
+                                        .cycle_id(cycle.getCycleId())
+                                        .start_date(cycle.getStartDate().toString())
+                                        .end_date(cycle.getEndDate().toString())
+                                        .detail(
+                                                cycle.getLogs().stream().map(
+                                                        log ->
+                                                                GetMenstrualCycleResDto.SymptomDailyDetail.builder()
+                                                                        .daily_log_id(log.getDailyId())
+                                                                        .date(log.getDate().toString())
+                                                                        .bleeding_level(log.getBleedingLevel())
+                                                                        .pain_level(log.getPainLevel())
+                                                                        .stress_level(log.getStressLevel())
+                                                                        .symptoms(
+                                                                                log.getSymptomLog().stream().map(
+                                                                                        symptomLog -> symptomLog.getSymptomType().toString()
+                                                                                ).toList()
+                                                                        )
+                                                                        .build()
+                                                ).toList()
+                                        )
+
+                                        .build()
+                ).toList()
         );
     }
 

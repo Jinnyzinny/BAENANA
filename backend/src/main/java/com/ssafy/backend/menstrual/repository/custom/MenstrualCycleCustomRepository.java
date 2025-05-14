@@ -15,4 +15,6 @@ public interface MenstrualCycleCustomRepository {
     List<MenstrualCycle> findMenstrualCycleByUser(User user);
     Optional<List<MenstrualCycle>> findThisMonthCycles(Long userId);
     Optional<List<MenstrualCycle>> findThreeMonthsCycles(Long userId);
-}
+
+    Optional<List<MenstrualCycle>> findMonthlyCycle(Long userId,int year,int month);
+ }
