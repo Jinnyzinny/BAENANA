@@ -12,7 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -42,7 +44,7 @@ public class MedicationReportServiceImpl implements MedicationReportService {
         /*
          * 반환할 현재 복용중인 약품 리스트를 생성한다.
          */
-        List<GetRecentMedicationResDto.MedicationInfo> todayMedicine = new ArrayList<>();
+        Set<GetRecentMedicationResDto.MedicationInfo> todayMedicine = new HashSet<>();
         /*
          *의약품 기록 리스트를 생성한다.
          */
