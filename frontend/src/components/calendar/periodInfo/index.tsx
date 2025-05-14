@@ -189,7 +189,7 @@ export function PeriodInfo({ data }: { data: Daily }) {
               </Text>
               <View className="mx-5">
                 <SelectLevel
-                  selected={data.menstrual_daily_log.bleeding_level}
+                  selected={data.menstrual_daily_log?.bleeding_level}
                   setSelected={() => {}}
                   contents={["매우 적음", "보통", "매우 많음"]}
                 />
@@ -202,7 +202,7 @@ export function PeriodInfo({ data }: { data: Daily }) {
               </Text>
               <View className="mx-5">
                 <SelectLevel
-                  selected={data.menstrual_daily_log.pain_level}
+                  selected={data.menstrual_daily_log?.pain_level}
                   setSelected={() => {}}
                   contents={["매우 낮음", "보통", "매우 높음"]}
                 />
@@ -217,7 +217,7 @@ export function PeriodInfo({ data }: { data: Daily }) {
                   {symptomItems.slice(0, 4).map((item) => (
                     <TouchableOpacity key={item.id} onPress={() => {}}>
                       <SelectTag
-                        fill={data.menstrual_daily_log.symptom.includes(
+                        fill={data.menstrual_daily_log?.symptom.includes(
                           item.label
                         )}
                         content={item.label}
@@ -230,7 +230,7 @@ export function PeriodInfo({ data }: { data: Daily }) {
                   {symptomItems.slice(4).map((item) => (
                     <TouchableOpacity key={item.id} onPress={() => {}}>
                       <SelectTag
-                        fill={data.menstrual_daily_log.symptom.includes(
+                        fill={data.menstrual_daily_log?.symptom.includes(
                           item.label
                         )}
                         content={item.label}

@@ -1,6 +1,6 @@
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import RNBootSplash from "react-native-bootsplash";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "./global.css";
@@ -17,15 +17,21 @@ export default function App(): React.JSX.Element {
     },
   };
   const isLoggedIn = useLoginStore((state) => state.isLoggedIn);
+  const restoreLogin = useLoginStore((state) => state.restoreLogin);
+  const [isReady, setIsReady] = useState<boolean>(false);
   const queryClient = new QueryClient();
 
   useEffect(() => {
-    const hide = async () => {
+    async function init() {
+      await restoreLogin();
       await new Promise((r) => setTimeout(r, 500));
       RNBootSplash.hide({ fade: true });
-    };
-    hide();
+      setIsReady(true);
+    }
+    init();
   }, []);
+
+  if (!isReady) return <></>;
 
   return (
     <QueryClientProvider client={queryClient}>
