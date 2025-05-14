@@ -50,6 +50,10 @@ public class CalendarServiceImpl implements CalendarService {
          * 그렇게 되면 주기 시작일<=검색일자<=종료일의 주기가 나올 것
          * */
         boolean prediction = false;
+
+        /*
+         * 검색이 필요한 날짜에 주기가 속하는지 확인한다.
+         * */
         List<MenstrualCycle> menstrualCycleList =
                 menstrualCycleRepository
                         .findByUser_UserIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(
@@ -57,16 +61,18 @@ public class CalendarServiceImpl implements CalendarService {
                                 searchForDate,
                                 searchForDate).orElse(null);
 
-//        해당 일자가 주기 종료일에 포함하지 않는다면 최근 주기로 예측일을 뽑아온다.
-        if (menstrualCycleList == null) {
+//        해당 일자가 주기에 포함하지 않는다면 최근 주기로 예측일을 뽑아온다.
+        if (menstrualCycleList == null || menstrualCycleList.isEmpty()) {
             prediction = true;
             menstrualCycleList = getRecentMenstrualCycle(userId).orElse(null);
         }
 //        만약 예측일 제공도 불가할 경우 사용자의 주기 정보가 하나도 없는 경우이므로 메시지를 반환합니다.
-        if (menstrualCycleList == null || menstrualCycleList.isEmpty()) {
-            return ApiResponse.success("사용자의 주기 정보가 단 하나도 없으므로 정보 제공이 불가합니다.");
-        }
-        MenstrualCycle menstrualCycle = menstrualCycleList.get(0);
+//        if (menstrualCycleList == null || menstrualCycleList.isEmpty()) {
+//            return ApiResponse.success("사용자의 주기 정보가 단 하나도 없으므로 정보 제공이 불가합니다.");
+//        }
+        MenstrualCycle menstrualCycle = (menstrualCycleList == null || menstrualCycleList.isEmpty())
+                ? null
+                : menstrualCycleList.get(0);
         /*
          * 해당 날짜가 포함된 주기정보의 해당 날짜 세부 정보를 얻어낸다.
          * */
@@ -88,7 +94,7 @@ public class CalendarServiceImpl implements CalendarService {
          * */
         List<Medication> medication = medicationRepository
                 .findDistinctByUser_UserIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual
-                        (userId,searchForDate, searchForDate)
+                        (userId, searchForDate, searchForDate)
                 .orElse(null);
         return ApiResponse.success(String.format("%d월 %d일의 일일 정보입니다",
                         searchForDate.getMonthValue(),
@@ -99,18 +105,20 @@ public class CalendarServiceImpl implements CalendarService {
                         .date(searchForDate.toString())
                         .prediction(prediction)
                         .menstrual_cycle(
+                                menstrualCycle == null ? null :
 //                               주기 정보 제공
-                                GetDailyInfoResDto.menstrual_cycle.builder()
-                                        .cycle_id(menstrualCycle.getCycleId())
-                                        .start_date(
-                                                prediction ?
-                                                        menstrualCycle.getStartDate().plusDays(28).toString()
-                                                        : menstrualCycle.getStartDate().toString())
-                                        .end_date(
-                                                prediction ?
-                                                        menstrualCycle.getEndDate().plusDays(28).toString()
-                                                        : menstrualCycle.getEndDate().toString())
-                                        .build()
+                                        GetDailyInfoResDto.menstrual_cycle.builder()
+                                                .cycle_id(
+                                                        menstrualCycle.getCycleId())
+                                                .start_date(
+                                                        prediction ?
+                                                                menstrualCycle.getStartDate().plusDays(28).toString()
+                                                                : menstrualCycle.getStartDate().toString())
+                                                .end_date(
+                                                        prediction ?
+                                                                menstrualCycle.getEndDate().plusDays(28).toString()
+                                                                : menstrualCycle.getEndDate().toString())
+                                                .build()
                         )
                         .menstrual_daily_log(
                                 dailyLog == null ?
