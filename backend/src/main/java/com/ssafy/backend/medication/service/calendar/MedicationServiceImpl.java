@@ -19,7 +19,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -80,7 +79,7 @@ public class MedicationServiceImpl implements MedicationService {
          * 사용자가 복용하는 의약품 종류를 조회한다.
          * */
         List<Medication> medication =
-                medicationCustomRepository.findThisMonthMedicationByUserId(userId,year,month).orElse(null);
+                medicationCustomRepository.findThisMonthMedicationByUserId(userId, year, month).orElse(null);
 
         if (medication == null || medication.isEmpty()) {
             return ApiResponse.success("사용자가 복용한 의약품이 없습니다.");
@@ -121,13 +120,14 @@ public class MedicationServiceImpl implements MedicationService {
 //        if(request.getName()!=null){
 //            medication.setName(request.getName());
 //        }
-        if(request.getTime_taken()!=null){
-            medication.setTimeTakenList(request.getTime_taken().stream().map(
-                    time->TimeTaken.builder()
-                            .medication(medication)
-                            .time_taken(time)
-                            .build()
-            ).toList());
+        if (request.getTime_taken() != null) {
+            request.getTime_taken().forEach(
+                    time ->
+                            medication.getTimeTakenList().add(TimeTaken.builder()
+                                    .time_taken(time)
+                                    .medication(medication)
+                                    .build())
+            );
         }
         if (request.getEnd_date() != null) {
             medication.setEndDate(request.getEnd_date());
