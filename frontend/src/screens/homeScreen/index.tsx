@@ -80,14 +80,14 @@ export function HomeScreen() {
             {hospitalData?.data?.reservation && (
               <AlertMessage
                 type="hospital"
-                title="병원 예약이 있어요"
+                title="병원 예약 알림"
                 content={hospitalData.data.reservation as string}
               />
             )}
             {medicineData?.data?.medicine && (
               <AlertMessage
                 type="medicine"
-                title="복용약 알림이 있어요"
+                title="복용약 알림"
                 content={medicineData.data.medicine as string}
               />
             )}

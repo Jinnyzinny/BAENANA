@@ -1,6 +1,7 @@
 import {
   ChevronDown,
   ChevronUp,
+  CircleCheck,
   Hospital,
   Pill,
   TriangleAlert,
@@ -13,12 +14,13 @@ export function AlertMessage({
   title,
   content,
 }: {
-  type: "warn" | "hospital" | "medicine";
+  type: "good" | "warn" | "hospital" | "medicine";
   title: string;
   content: string;
 }) {
   const [isOpened, setIsOpened] = useState<boolean>(true);
   const typeSize: number = 16;
+  const goodColor: string = "#7FD19B";
   const warnColor: string = "#EC6344";
   const hospitalColor: string = "#7FD19B";
   const medicineColor: string = "#A684FF";
@@ -34,7 +36,13 @@ export function AlertMessage({
     <View className="px-5 py-3 rounded-xl bg-white shadow-neutral-300">
       <View className="flex-row justify-between">
         <View className="flex-row items-center gap-2">
-          {type === "warn" ? (
+          {type === "good" ? (
+            <CircleCheck
+              size={typeSize}
+              color={goodColor}
+              strokeWidth={typeStrokeWidth}
+            />
+          ) : type === "warn" ? (
             <TriangleAlert
               size={typeSize}
               color={warnColor}

@@ -1,9 +1,19 @@
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useGetPeriodList } from "../../api/quries/report";
 import { HeaderLogo } from "../../components/common/headerLogo";
 import { BarChart } from "../../components/report/barChart";
 
 export function PeriodScreen() {
+  const { data, refetch } = useGetPeriodList();
+
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, [])
+  );
   return (
     <SafeAreaView edges={["top", "left", "right"]} className="flex-1">
       <HeaderLogo before={true} settings={true} />

@@ -1,7 +1,15 @@
-import { View, Text } from "react-native";
+import { Text, View } from "react-native";
 import { OvulationGraph } from "../ovulationGraph";
 
 export function OvulationInfo() {
+  // const { data, refetch } = useGetOvulationTest();
+
+  // useFocusEffect(() => {
+  //   useCallback(() => {
+  //     refetch();
+  //   }, []);
+  // });
+
   return (
     <View className="p-5 rounded-xl bg-white shadow-neutral-300">
       <View className="gap-1">

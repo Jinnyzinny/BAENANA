@@ -42,7 +42,7 @@ export function useAddPeriod() {
   });
 }
 
-// 월별 월경 주기 조회
+// ✅월별 월경 주기 조회
 export function useGetPeriod(month: number) {
   return useQuery({
     queryKey: ["period", month],

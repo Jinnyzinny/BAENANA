@@ -79,8 +79,6 @@ export function ScheduleModal({
     }
   }, [dailyData]);
 
-  console.log("data 변경 완료: ", data);
-
   useFocusEffect(
     useCallback(() => {
       if (visible && date) {

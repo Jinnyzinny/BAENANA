@@ -6,8 +6,8 @@ export type PeriodAlert = {
 };
 
 export type RecentPeriodInfo = {
-  average_cycle: number;
-  average_period: number;
+  cycle: number;
+  period: number;
   is_cycle_normal: boolean;
   is_period_normal: boolean;
 };

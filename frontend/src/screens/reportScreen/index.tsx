@@ -1,9 +1,11 @@
-import { useRef } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useRef } from "react";
 import { ScrollView, ToastAndroid, View } from "react-native";
 import RNFS from "react-native-fs";
 import RNHTMLtoPDF from "react-native-html-to-pdf";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ViewShot, { captureRef } from "react-native-view-shot";
+import { useGetPeriodAlert, useGetPeriodInfo } from "../../api/quries/report";
 import { AlertMessage } from "../../components/common/alertMessage";
 import { CustomButton } from "../../components/common/customButton";
 import { HeaderLogo } from "../../components/common/headerLogo";
@@ -136,6 +138,19 @@ export function ReportScreen() {
     }
   }
 
+  const { data: periodAlertData, refetch: refetchPeriodAlert } =
+    useGetPeriodAlert();
+
+  const { data: PeriodInfoData, refetch: refetchPeriodInfo } =
+    useGetPeriodInfo();
+
+  useFocusEffect(
+    useCallback(() => {
+      refetchPeriodAlert();
+      refetchPeriodInfo();
+    }, [])
+  );
+
   if (hasPermission === null) {
     return <PermissionCheck name="저장소" />;
   }
@@ -146,11 +161,20 @@ export function ReportScreen() {
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 32 }}>
         <View className="gap-3 mx-5 pb-16">
           {/* 알림 메시지 */}
-          <AlertMessage
-            type="warn"
-            title="최근 월경 주기가 불규칙합니다."
-            content="최근 3개월 월경 주기가 불규칙합니다."
-          />
+          {periodAlertData &&
+            (periodAlertData.menstrual_is_normal ? (
+              <AlertMessage
+                type="warn"
+                title="최근 월경 주기"
+                content={periodAlertData.message}
+              />
+            ) : (
+              <AlertMessage
+                type="good"
+                title="최근 월경 주기"
+                content={periodAlertData.message}
+              />
+            ))}
 
           {/* 첫 번째 캡처 */}
           <ViewShot
@@ -160,8 +184,16 @@ export function ReportScreen() {
             <View className="gap-3">
               {/* 월경 주기 / 월경 기간 */}
               <View className="flex-row gap-3">
-                <BeforePeriod type="warn" title="월경 주기" date={32} />
-                <BeforePeriod type="normal" title="월경 기간" date={6} />
+                <BeforePeriod
+                  type="warn"
+                  title="월경 주기"
+                  date={PeriodInfoData?.cycle ? PeriodInfoData?.cycle : 0}
+                />
+                <BeforePeriod
+                  type="normal"
+                  title="월경 기간"
+                  date={PeriodInfoData?.period ? PeriodInfoData?.period : 0}
+                />
               </View>
 
               {/* 배란테스트 결과 컴포넌트 구현 필요 */}
@@ -188,7 +220,7 @@ export function ReportScreen() {
           </ViewShot>
 
           {/* 이번 달 월경 출혈량 / 최근 복용약 / 이번 달 월경 증상 */}
-          <Summary type1="warn" type2="normal" />
+          <Summary />
           <View />
 
           {/* 버튼 */}

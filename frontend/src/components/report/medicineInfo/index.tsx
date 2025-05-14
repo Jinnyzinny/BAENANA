@@ -10,6 +10,14 @@ export function MedicineInfo() {
   const size: number = 22;
   const color: string = "#A1A1A1";
 
+  // const { data, refetch } = useGetRecentMedicine();
+
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     refetch();
+  //   }, [])
+  // );
+
   return (
     <View className="p-5 rounded-xl gap-5 bg-white shadow-neutral-300">
       <View className="flex-row justify-between">
