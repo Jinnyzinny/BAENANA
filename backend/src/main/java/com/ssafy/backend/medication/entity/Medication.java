@@ -28,7 +28,7 @@ public class Medication {
     @OneToMany(mappedBy = "medication")
     private List<MedicationLog> medicationLogList;
 
-    @OneToMany(mappedBy = "medication")
+    @OneToMany(mappedBy = "medication", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TimeTaken> timeTakenList;
 
     /*
