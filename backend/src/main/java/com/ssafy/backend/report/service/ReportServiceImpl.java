@@ -75,11 +75,11 @@ public class ReportServiceImpl implements ReportService {
                 = menstrualCycleCustomRepository.findThreeMonthsCycles(userId).orElse(null);
 
         if (thisMonthCycleList == null || thisMonthCycleList.isEmpty()) {
-            return ApiResponse.success("최근 1개월 치 정보가 없습니다.");
+            return ApiResponse.success("요약 리포트 정보로 제공할 최근 1개월 치의 주기 정보가 없습니다.");
         }
 
         if (threeMonthsCycleList == null || threeMonthsCycleList.isEmpty()) {
-            return ApiResponse.success("최근 3개월 치 정보가 없습니다.");
+            return ApiResponse.success("요약 리포트 정보로 제공할 최근 3개월 치의 스트레스 정보가 없습니다.");
         }
 
         return ApiResponse.success("사용자의 요약 리포트 API입니다.", GetSummaryResDto.builder()
