@@ -80,7 +80,7 @@ public class MenstrualServiceImpl implements MenstrualService {
 
         List<Integer> periods = menstrualCycleList
                 .stream()
-                .map(cycle -> (int) ChronoUnit.DAYS.between(cycle.getStartDate(), cycle.getEndDate()))
+                .map(cycle -> (int) ChronoUnit.DAYS.between(cycle.getEndDate(), cycle.getStartDate()))
                 .toList();
 
         // 평균 계산
