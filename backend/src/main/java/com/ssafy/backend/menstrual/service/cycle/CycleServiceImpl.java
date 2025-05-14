@@ -89,9 +89,6 @@ public class CycleServiceImpl implements CycleService {
 
     @Override
     public ApiResponse<?> getMonthlyMenstrualCycle(User user, int year, int month) {
-        LocalDate startOfMonth = LocalDate.of(year, month, 1);
-        LocalDate endOfMonth = startOfMonth.with(TemporalAdjusters.lastDayOfMonth());
-
         List<MenstrualCycle> menstrualCycleList
                 = menstrualCycleCustomRepository.findMonthlyCycle(
                 user.getUserId(),
