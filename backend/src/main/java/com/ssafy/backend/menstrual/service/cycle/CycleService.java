@@ -20,4 +20,6 @@ public interface CycleService {
 
     //    사용자의 생리 주기 정보 수정
     ApiResponse<?> updateMenstrualCycle(UpdateMenstrualCycleReqDto request, Long cycle_id);
+
+    ApiResponse<?> deleteMenstrualCycle(User user, Long cycle_id);
 }
