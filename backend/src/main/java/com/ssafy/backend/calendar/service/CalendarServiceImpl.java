@@ -12,6 +12,7 @@ import com.ssafy.backend.menstrual.entity.MenstrualCycle;
 import com.ssafy.backend.menstrual.entity.MenstrualDailyLog;
 import com.ssafy.backend.menstrual.repository.MenstrualCycleRepository;
 import com.ssafy.backend.menstrual.repository.MenstrualDailyLogRepository;
+import com.ssafy.backend.symptomLog.entity.SymptomLog;
 import com.ssafy.backend.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -125,7 +126,7 @@ public class CalendarServiceImpl implements CalendarService {
                                                 .pain_level(dailyLog.getPainLevel())
                                                 .symptom(dailyLog.getSymptomLog()
                                                         .stream()
-                                                        .map(symptomLog -> symptomLog.getSymptomType().getDescription())
+                                                        .map(SymptomLog::getSymptomType)
                                                         .toList()
                                                 )
                                                 .build()

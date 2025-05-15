@@ -6,7 +6,6 @@ import com.ssafy.backend.hospital.dto.request.AddHospitalReservationReqDto;
 import com.ssafy.backend.hospital.dto.request.UpdateHospitalReservationReqDto;
 import com.ssafy.backend.hospital.dto.response.GetHospitalReservationResDto;
 import com.ssafy.backend.hospital.entity.HospitalReservation;
-import com.ssafy.backend.hospital.entity.PurposeType;
 import com.ssafy.backend.hospital.entity.StatusType;
 import com.ssafy.backend.hospital.exception.HospitalReservationException;
 import com.ssafy.backend.hospital.repository.HospitalReservationRepository;
@@ -19,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -68,10 +66,10 @@ public class HospitalReservationServiceImpl implements HospitalReservationServic
          * */
         Long userId = user.getUserId();
         /*
-        * 이번 달의 첫 날과 마지막날을 얻는다.
-        * */
+         * 이번 달의 첫 날과 마지막날을 얻는다.
+         * */
         LocalDateTime startOfMonth = LocalDate.of(year, month, 1).atStartOfDay();
-        LocalDateTime endOfMonth = YearMonth.of(year,month).atEndOfMonth().atTime(23,59,59);
+        LocalDateTime endOfMonth = YearMonth.of(year, month).atEndOfMonth().atTime(23, 59, 59);
         /*
          * 사용자가 예약한 병원 리스트를 얻는다.
          * */
@@ -113,8 +111,8 @@ public class HospitalReservationServiceImpl implements HospitalReservationServic
                 hospitalReservationRepository.findById(id).orElseThrow(() ->
                         new HospitalReservationException("변경할 병원 예약이 존재하지 않습니다."));
         /*
-        * BeanUtils.copyProperties를 이용해서 null값을 제외한 값들을 객체에 DB에서 불러온 객체에 복사한다.
-        * */
+         * BeanUtils.copyProperties를 이용해서 null값을 제외한 값들을 객체에 DB에서 불러온 객체에 복사한다.
+         * */
         BeanUtils.copyProperties(request, hospitalReservation, NullAwareBeanUtils.getNullPropertyNames(request));
 //        Enum을 자바에서만 검증하므로 copyProperties를 통할수 없다
         if (request.getPurpose() != null) {
