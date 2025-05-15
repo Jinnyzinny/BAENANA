@@ -2,6 +2,7 @@ package com.ssafy.backend.report.utils;
 
 import com.ssafy.backend.menstrual.entity.MenstrualCycle;
 import com.ssafy.backend.menstrual.entity.MenstrualDailyLog;
+import com.ssafy.backend.symptomLog.entity.SymptomLog;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -22,7 +23,17 @@ public class GetSummary {
                 bleedingLevel += cycleList.get(i).getLogs().get(day).getBleedingLevel();
             }
         }
-        return String.format("%.2f", (double) bleedingLevel / bleedingDay);
+        if (Math.round((double) bleedingLevel / bleedingDay) <= 1) {
+            return "출혈량이 매우 적습니다.";
+        } else if (Math.round((double) bleedingLevel / bleedingDay) == 2) {
+            return "출혈량이 적습니다.";
+        } else if (Math.round((double) bleedingLevel / bleedingDay) == 3) {
+            return "출혈량이 보통입니다.";
+        } else if (Math.round((double) bleedingLevel / bleedingDay) == 4) {
+            return "출혈량이 많습니다";
+        } else {
+            return "출혈량이 매우 많습니다";
+        }
     }
 
     public List<String> getSymptoms(List<MenstrualCycle> cycleList) {
@@ -30,7 +41,7 @@ public class GetSummary {
                 .flatMap(cycle -> cycle.getLogs().stream())
                 .flatMap(log -> log.getSymptomLog()
                         .stream()
-                        .map(symptom -> symptom.getSymptomType().getDescription())
+                        .map(SymptomLog::getSymptomType)
                 )
                 .distinct() // 중복 제거
                 .collect(Collectors.toList());
