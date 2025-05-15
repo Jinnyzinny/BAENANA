@@ -1,4 +1,5 @@
 import {
+  AllRecentMEdicine,
   FullOvulation,
   FullPeriodAlert,
   FullRecentMedicine,
@@ -81,7 +82,7 @@ export async function getRecentMedicine(): Promise<FullRecentMedicine> {
 }
 
 // 전체 복용약 조회
-export async function getMedicineList(): Promise<FullRecentMedicine> {
+export async function getMedicineList(): Promise<AllRecentMEdicine> {
   try {
     const response = await authClient.get("/report/medication/all");
     console.log("전체 복용약 조회 성공: ", response.data);

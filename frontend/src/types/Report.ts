@@ -64,6 +64,25 @@ export type FullRecentMedicine = Default & {
   data: RecentMedicine;
 };
 
+export type AllRecentMEdicine = Default & {
+  data: {
+    today_medicine: {
+      name: string;
+      start_date: string;
+      end_date: string;
+      time_taken: string[];
+      memo: string;
+    }[];
+    medicine_record: {
+      name: string;
+      start_date: string;
+      end_date: string;
+      time_taken: string[];
+      memo: string;
+    }[];
+  };
+};
+
 export type Report = {
   menstrual: {
     bleeding_level: string;
