@@ -9,10 +9,12 @@ import com.ssafy.backend.menstrual.entity.MenstrualCycle;
 import com.ssafy.backend.menstrual.exception.MenstrualException;
 import com.ssafy.backend.menstrual.repository.MenstrualCycleRepository;
 import com.ssafy.backend.menstrual.repository.custom.MenstrualCycleCustomRepository;
+import com.ssafy.backend.symptomLog.entity.SymptomLog;
 import com.ssafy.backend.user.entity.User;
 import com.ssafy.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,22 +68,22 @@ public class CycleServiceImpl implements CycleService {
                                         .cycle_id(cycle.getCycleId())
                                         .start_date(cycle.getStartDate().toString())
                                         .end_date(cycle.getEndDate().toString())
-//                                        .detail(
-//                                                cycle.getLogs().stream().map(
-//                                                                log ->
-//                                                                        GetMenstrualCycleResDto.SymptomDailyDetail.builder()
-//                                                                                .daily_log_id(log.getDailyId())
-//                                                                                .date(log.getDate().toString())
-//                                                                                .bleeding_level(log.getBleedingLevel())
-//                                                                                .pain_level(log.getPainLevel())
-//                                                                                .stress_level(log.getStressLevel())
-//                                                                                .symptoms(
-//                                                                                        log.getSymptomLog().stream().map(
-//                                                                                                SymptomLog::getSymptomType
-//                                                                                        ).toList()
-//                                                                                ).build())
-//                                                        .toList()
-//                                        )
+                                        .detail(
+                                                cycle.getLogs().stream().map(
+                                                                log ->
+                                                                        GetMenstrualCycleResDto.SymptomDailyDetail.builder()
+                                                                                .daily_log_id(log.getDailyId())
+                                                                                .date(log.getDate().toString())
+                                                                                .bleeding_level(log.getBleedingLevel())
+                                                                                .pain_level(log.getPainLevel())
+                                                                                .stress_level(log.getStressLevel())
+                                                                                .symptoms(
+                                                                                        log.getSymptomLog().stream().map(
+                                                                                                SymptomLog::getSymptomType
+                                                                                        ).toList()
+                                                                                ).build())
+                                                        .toList()
+                                        )
                                         .build()
                 ).toList());
     }
@@ -153,10 +155,11 @@ public class CycleServiceImpl implements CycleService {
 
     @Override
     public ApiResponse<?> deleteMenstrualCycle(User user, Long cycle_id) {
-        menstrualCycleRepository.findById(cycle_id).orElseThrow(() ->
-                new MenstrualException("해당 ID와 일치하는 주기가 없습니다.")
-        );
-        menstrualCycleRepository.deleteById(cycle_id);
-        return ApiResponse.success("성공적으로 해당 주기가 삭제되었습니다.");
+        if (menstrualCycleRepository.existsById(cycle_id)) {
+            menstrualCycleRepository.deleteById(cycle_id);
+            return ApiResponse.success("성공적으로 해당 주기가 삭제되었습니다.");
+        } else {
+            return ApiResponse.error("MENSTRUAL_NOT_FOUND", HttpStatus.NOT_FOUND, "해당 ID와 일치하는 주기 정보가 없습니다");
+        }
     }
 }
