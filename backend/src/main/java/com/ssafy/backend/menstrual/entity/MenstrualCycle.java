@@ -19,18 +19,18 @@ public class MenstrualCycle {
     private Long cycleId;
 
     /*
-    * =====연관 관계=====
-    * */
-    @OneToMany(mappedBy = "cycle")
+     * =====연관 관계=====
+     * */
+    @OneToMany(mappedBy = "cycle", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MenstrualDailyLog> logs;
-
+//
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
     /*
-    * ===== Column =====
-    * */
+     * ===== Column =====
+     * */
     private LocalDate startDate;
     private LocalDate endDate;
 }

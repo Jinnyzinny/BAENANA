@@ -151,4 +151,12 @@ public class CycleServiceImpl implements CycleService {
         }
         return ApiResponse.success("생리 주기 정보가 성공적으로 수정되었습니다.");
     }
+
+    @Override
+    public ApiResponse<?> deleteMenstrualCycle(User user, Long cycle_id) {
+        menstrualCycleRepository.deleteById(cycle_id);
+
+
+        return ApiResponse.success("성공적으로 해당 주기가 삭제되었습니다.");
+    }
 }

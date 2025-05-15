@@ -39,8 +39,8 @@ public class MenstrualCycleCalendarController {
             @AuthenticationPrincipal User user,
             @PathVariable int year,
             @PathVariable int month
-    ){
-        return ResponseEntity.ok(cycleService.getMonthlyMenstrualCycle(user,year,month));
+    ) {
+        return ResponseEntity.ok(cycleService.getMonthlyMenstrualCycle(user, year, month));
     }
 
     @PatchMapping("/{cycle_id}")
@@ -49,5 +49,13 @@ public class MenstrualCycleCalendarController {
             @PathVariable Long cycle_id
     ) {
         return ResponseEntity.ok(cycleService.updateMenstrualCycle(request, cycle_id));
+    }
+
+    @DeleteMapping("/{cycle_id}")
+    public ResponseEntity<ApiResponse<?>> deleteMenstrualCycle(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long cycle_id
+    ) {
+        return ResponseEntity.ok(cycleService.deleteMenstrualCycle(user,cycle_id));
     }
 }
