@@ -320,7 +320,7 @@ public class MenstrualServiceImpl implements MenstrualService {
             LocalDate startDate = cycle.getStartDate();
             LocalDate endDate = cycle.getEndDate();
             int period = (int) ChronoUnit.DAYS.between(startDate,endDate);
-
+//
             Integer cycleTerm = null;
             if (i < menstrualCycleList.size() - 1) {
                 LocalDate nextStartDate = menstrualCycleList.get(i + 1).getStartDate();
