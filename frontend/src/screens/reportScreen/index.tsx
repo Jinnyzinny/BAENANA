@@ -18,9 +18,9 @@ import { CustomButton } from "../../components/common/customButton";
 import { HeaderLogo } from "../../components/common/headerLogo";
 import { PermissionCheck } from "../../components/common/permissionCheck";
 import { BeforePeriod } from "../../components/report/beforePeriod";
-import { CurrentPeriod } from "../../components/report/currentPeriod";
 import { MedicineInfo } from "../../components/report/medicineInfo";
 import { OvulationInfo } from "../../components/report/ovulationInfo";
+import { RecentPeriod } from "../../components/report/recentPeriod";
 import { Summary } from "../../components/report/summary";
 import { useStoragePermission } from "../../hooks/useStoragePermission";
 
@@ -235,7 +235,7 @@ export function ReportScreen() {
           >
             {/* 최근 주기 */}
             {recentPeriodData?.data && (
-              <CurrentPeriod data={recentPeriodData.data} />
+              <RecentPeriod data={recentPeriodData.data} />
             )}
           </ViewShot>
 

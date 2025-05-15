@@ -38,6 +38,7 @@ export type FullOvulation = Default & {
 
 export type PeriodInfo = Date & {
   period: number;
+  cycle: number;
 };
 
 export type RecentPeriod = {
