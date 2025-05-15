@@ -40,6 +40,22 @@ public class MedicationImplCustomRepository implements MedicationCustomRepositor
     }
 
     @Override
+    public Optional<List<Medication>> findThreeMonthMedicationByUserId(Long userId) {
+        /*
+         * 의약품의 복용을 조회하되 중복을 제거하고 최근에서 과거로, 복용시간은 오름차순으로 조회해 약 정보와 복용 시간을 모두 조회할 수 있도록 한다.
+         * */
+        return Optional.of(queryFactory
+                .selectFrom(medication)
+                .leftJoin(medication.timeTakenList, timeTaken).fetchJoin()
+                .where(medication.user.userId.eq(userId)
+                        .and(medication.startDate.goe(LocalDate.now().minusMonths(3)))
+                )
+                .distinct()
+                .orderBy(medication.startDate.asc(), timeTaken.time_taken.asc())
+                .fetch());
+    }
+
+    @Override
     public Optional<List<Medication>> findThisMonthMedicationByUserId(Long userId, int year, int month) {
         LocalDate startOfMonth = LocalDate.of(year, month, 1);
         LocalDate endOfMonth = YearMonth.of(year, month).atEndOfMonth();

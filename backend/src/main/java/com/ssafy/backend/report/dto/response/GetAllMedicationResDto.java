@@ -6,10 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Builder
 public class GetAllMedicationResDto {
+    private Set<each_medication_record> today_medicine;
     private List<each_medication_record> medicine_record;
 
     @Getter
