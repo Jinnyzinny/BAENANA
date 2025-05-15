@@ -27,6 +27,7 @@ import { HospitalReservation } from "../../types/Hospital";
 import { Medicine } from "../../types/Medicine";
 import { SchedulePeriodList } from "../../components/calendar/schedulePeriodList";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Period } from "../../types/Period";
 
 export function CalendarScreen() {
   const [selectedDate, setSelectedDate] = useState<string>("");
@@ -42,8 +43,11 @@ export function CalendarScreen() {
   const [selectedMonth, setSelectedMonth] = useState<number>(month);
 
   // 월별 월경일
-  // const { data: periodData, refetch: refetchPeriod } =
-  //   useGetPeriod(selectedYear, selectedMonth);
+  const [period, setPeriod] = useState<Period[]>([]);
+  const { data: periodData, refetch: refetchPeriod } = useGetPeriod(
+    selectedYear,
+    selectedMonth
+  );
 
   // 월별 병원 예약 일정
   const [hospitalReservation, setHospitalReservation] = useState<
@@ -76,6 +80,8 @@ export function CalendarScreen() {
     useGetPredictedPeriod();
 
   useEffect(() => {
+    // 월경일
+    setPeriod(periodData?.data ?? []);
     // 병원 예약
     setHospitalReservation(hospitalReservationData?.data ?? []);
 
@@ -102,6 +108,7 @@ export function CalendarScreen() {
       setPredictedPeriod({ startDate: "", endDate: "" });
     }
   }, [
+    periodData,
     hospitalReservationData,
     medicineReservationData,
     childbearingAgeData,
@@ -110,6 +117,7 @@ export function CalendarScreen() {
 
   useFocusEffect(
     useCallback(() => {
+      refetchPeriod();
       refetchHospitalReservation();
       refetchMedicineReservation();
       refetchChildbearingAge();
@@ -151,6 +159,7 @@ export function CalendarScreen() {
             selectedMonth={selectedMonth}
             setSelectedYear={setSelectedYear}
             setSelectedMonth={setSelectedMonth}
+            period={period}
             hospitalReservation={hospitalReservation}
             medicineReservation={medicineReservation}
             predictedPeriod={predictedPeriod}
@@ -158,6 +167,7 @@ export function CalendarScreen() {
           />
           {/* 월경 예정일 & 가임기 */}
           <SchedulePeriodList
+            period={period}
             predictedPeriod={predictedPeriod}
             childbearingAge={childbearingAge}
           />

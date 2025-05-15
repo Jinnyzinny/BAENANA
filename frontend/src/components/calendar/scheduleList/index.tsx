@@ -35,8 +35,14 @@ export function ScheduleList({
               key={item.medication_id}
               className="flex-row items-center gap-3"
             >
-              <View className="w-2" />
-              <View className="w-3 h-3 rounded-full bg-yellow-300" />
+              <View className="w-3" />
+              <View
+                style={{
+                  width: 6,
+                  height: 6,
+                }}
+                className="rounded-full bg-yellow-300"
+              />
               <View className="flex-row items-center gap-2">
                 <Text className="text-neutral-600 text-sm font-semibold">
                   {isSameDay
@@ -56,8 +62,14 @@ export function ScheduleList({
             key={item.reservation_id}
             className="flex-row items-center gap-3"
           >
-            <View className="w-2" />
-            <View className="w-3 h-3 rounded-full bg-violet-400" />
+            <View className="w-3" />
+            <View
+              style={{
+                width: 6,
+                height: 6,
+              }}
+              className="rounded-full bg-violet-400"
+            />
             <View className="flex-row items-center gap-2">
               <Text className="text-neutral-600 text-sm font-semibold">
                 {item.reservation_date_time.slice(5, 7)}월{" "}

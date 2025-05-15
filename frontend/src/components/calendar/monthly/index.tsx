@@ -4,6 +4,7 @@ import { getDotDates, getPeriodDates } from "../../../utils/markUtils";
 import { HospitalReservation } from "../../../types/Hospital";
 import { Medicine } from "../../../types/Medicine";
 import { ChevronLeft, ChevronRight } from "lucide-react-native";
+import { Period } from "../../../types/Period";
 
 LocaleConfig.locales["ko"] = {
   monthNames: [
@@ -53,6 +54,7 @@ export function Monthly({
   selectedMonth,
   setSelectedYear,
   setSelectedMonth,
+  period,
   hospitalReservation,
   medicineReservation,
   predictedPeriod,
@@ -62,6 +64,7 @@ export function Monthly({
   selectedMonth: number;
   setSelectedYear: (year: number) => void;
   setSelectedMonth: (month: number) => void;
+  period: Period[];
   hospitalReservation: HospitalReservation[];
   medicineReservation: Medicine[];
   predictedPeriod: { startDate: string; endDate: string };
@@ -75,12 +78,24 @@ export function Monthly({
     }))
   );
 
-  const periodMark = getPeriodDates(
+  let periodMark: Record<string, any> = {};
+  period.forEach((p) => {
+    const mark = getPeriodDates(
+      { start: p.start_date, end: p.end_date },
+      "#C4B4FF", // 진한 배경 (시작/종료)
+      "#FFFFFF", // 진한 텍스트
+      "#DDD6FF", // 연한 배경 (중간)
+      "#525252" // 연한 텍스트
+    );
+    periodMark = { ...periodMark, ...mark };
+  });
+
+  const predictedPeriodMark = getPeriodDates(
     { start: predictedPeriod.startDate, end: predictedPeriod.endDate },
-    "#EDE9FE", // 진한 배경 (시작/종료)
-    "#7008E7", // 진한 텍스트
-    "#F5F3FF", // 연한 배경 (중간)
-    "#A684FF" // 연한 텍스트
+    "#EDE9FE",
+    "#7008E7",
+    "#F5F3FF",
+    "#A684FF"
   );
 
   const childbearingMark = getPeriodDates(
@@ -92,8 +107,9 @@ export function Monthly({
   );
 
   const markedDates: any = {
-    ...periodMark,
+    ...predictedPeriodMark,
     ...childbearingMark,
+    ...periodMark,
   };
 
   Object.keys(dotsMap).forEach((date) => {

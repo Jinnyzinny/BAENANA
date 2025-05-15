@@ -32,3 +32,7 @@ export type Period = Date & {
   cycle_id: number;
   detail: Symtom[];
 };
+
+export type FullPeriod = Default & {
+  data: Period[];
+};

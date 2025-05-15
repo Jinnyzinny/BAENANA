@@ -1,4 +1,4 @@
-import { FullDate, FullDday, Period } from "../types/Period";
+import { FullDate, FullDday, FullPeriod } from "../types/Period";
 import authClient from "./client/authClient";
 
 // 월경 예정일 D-day 조회
@@ -29,13 +29,16 @@ export async function addPeriod(startDate: string, endDate: string) {
 }
 
 // 월별 월경 주기 조회
-export async function getPeriod(year: number, month: number): Promise<Period> {
+export async function getPeriod(
+  year: number,
+  month: number
+): Promise<FullPeriod> {
   try {
     const response = await authClient.get(
       `/calendar/menstrual_cycle/${year}/${month}`
     );
-    console.log("월별 월경 주기 조회 성공: ", response.data.data);
-    return response.data.data;
+    console.log("월별 월경 주기 조회 성공: ", response.data);
+    return response.data;
   } catch (error: unknown) {
     console.error("월별 월경 주기 조회 실패: ", error);
     throw error;
