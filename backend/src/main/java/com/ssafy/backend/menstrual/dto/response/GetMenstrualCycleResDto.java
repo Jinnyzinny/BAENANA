@@ -13,7 +13,7 @@ public class GetMenstrualCycleResDto {
     private Long cycle_id;
     private String start_date;
     private String end_date;
-    private List<SymptomDailyDetail> detail;
+//    private List<SymptomDailyDetail> detail;
 
     @Getter
     @Builder
