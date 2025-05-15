@@ -91,9 +91,9 @@ public class MenstrualCycleLogServiceImpl implements MenstrualCycleLogService {
         if (request.getStress_level() != null) {
             dailyLog.setStressLevel(request.getStress_level());
         }
-        if (request.getSymptoms() != null) {
+        if (request.getSymptom() != null) {
             System.out.println("================진입은 하냐??==============");
-            Set<SymptomLog> requestSymptomLog = request.getSymptoms().stream().map(
+            Set<SymptomLog> requestSymptomLog = request.getSymptom().stream().map(
                     symptom -> SymptomLog.builder()
                             .menstrualDailyLog(dailyLog)
                             .date(request.getDate())
