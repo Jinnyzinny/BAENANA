@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Builder
 public class GetOvulationTestResDto{
-    private int normal;
+    private int type;
     private List<datePerValue> standard;
     private List<datePerValue> personal_data;
 
