@@ -311,26 +311,22 @@ public class MenstrualServiceImpl implements MenstrualService {
     public GetCycleDto getCycleTerm(List<MenstrualCycle> menstrualCycleList) {
         int cycleSum = 0;
         int maxCycle = Integer.MIN_VALUE;
-        for (int i = 1; i < menstrualCycleList.size(); i++) {
-            LocalDate startDate = menstrualCycleList.get(i).getStartDate();
-            LocalDate prevStartDate = menstrualCycleList.get(i - 1).getStartDate();
+        int cycleCount = 0;
 
-            maxCycle = Math.max(maxCycle, (int) ChronoUnit.DAYS.between(prevStartDate, startDate));
-            cycleSum += (int) ChronoUnit.DAYS.between(startDate, prevStartDate);
-        }
         List<GetRecentMenstrualResDto.each_cycle_record> cycleRecord = new ArrayList<>();
 
         for (int i = 0; i < menstrualCycleList.size(); i++) {
             MenstrualCycle cycle = menstrualCycleList.get(i);
             LocalDate startDate = cycle.getStartDate();
             LocalDate endDate = cycle.getEndDate();
-            int period = (int) ChronoUnit.DAYS.between(startDate, endDate);
+            int period = (int) ChronoUnit.DAYS.between(startDate,endDate);
 
-            Integer cycleTerm = null;  // 현재 주기의 시작일과 이전 주기의 시작일 간 차이
-            if (i < menstrualCycleList.size() - 1) {  // 다음 주기가 있을 때만
+            Integer cycleTerm = null;
+            if (i < menstrualCycleList.size() - 1) {
                 LocalDate nextStartDate = menstrualCycleList.get(i + 1).getStartDate();
-                cycleTerm = (int) ChronoUnit.DAYS.between(nextStartDate, startDate);
+                cycleTerm = (int) ChronoUnit.DAYS.between(nextStartDate,startDate);  // 다음 주기의 시작일 - 현재 주기의 시작일
                 cycleSum += cycleTerm;
+                cycleCount++;
                 maxCycle = Math.max(maxCycle, cycleTerm);
             }
 
@@ -338,14 +334,15 @@ public class MenstrualServiceImpl implements MenstrualService {
                     .start_date(startDate.toString())
                     .end_date(endDate.toString())
                     .period(period)
-                    .cycle(cycleTerm==null?0:cycleTerm)  // 주기 값 추가
+                    .cycle(cycleTerm == null ? 0 : cycleTerm)
                     .build());
         }
-        int averageCycle = cycleSum / menstrualCycleList.size();
+
+        int averageCycle = cycleCount == 0 ? 0 : cycleSum / cycleCount;
 
         return GetCycleDto.builder()
                 .averageCycle(averageCycle)
-                .maxCycle(maxCycle)
+                .maxCycle(maxCycle == Integer.MIN_VALUE ? 0 : maxCycle)
                 .cycleRecord(cycleRecord)
                 .build();
     }
