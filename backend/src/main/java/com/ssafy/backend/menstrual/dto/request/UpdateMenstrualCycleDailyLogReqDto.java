@@ -18,5 +18,5 @@ public class UpdateMenstrualCycleDailyLogReqDto {
     Integer stress_level;
     Boolean is_start;
     Boolean is_end;
-    List<String> symptoms;
+    List<String> symptom;
 }
