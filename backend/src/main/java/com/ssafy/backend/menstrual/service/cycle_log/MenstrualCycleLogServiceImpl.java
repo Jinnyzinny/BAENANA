@@ -62,7 +62,7 @@ public class MenstrualCycleLogServiceImpl implements MenstrualCycleLogService {
                         symptom -> SymptomLog.builder()
                                 .menstrualDailyLog(dailyLog)
                                 .date(request.getDate())
-                                .symptomType(SymptomType.fromDescription(symptom))
+                                .symptomType(symptom)
                                 .severity(0)
                                 .memo("")
                                 .build()
@@ -97,7 +97,7 @@ public class MenstrualCycleLogServiceImpl implements MenstrualCycleLogService {
                     symptom -> SymptomLog.builder()
                             .menstrualDailyLog(dailyLog)
                             .date(request.getDate())
-                            .symptomType(SymptomType.fromDescription(symptom))
+                            .symptomType(symptom)
                             .build()
             ).collect(Collectors.toSet());
 

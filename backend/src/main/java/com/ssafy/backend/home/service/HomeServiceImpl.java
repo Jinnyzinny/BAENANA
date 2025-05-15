@@ -8,7 +8,6 @@ import com.ssafy.backend.hospital.entity.HospitalReservation;
 import com.ssafy.backend.hospital.repository.HospitalReservationRepository;
 import com.ssafy.backend.medication.entity.Medication;
 import com.ssafy.backend.medication.repository.MedicationRepository;
-import com.ssafy.backend.medication.repository.custom.MedicationCustomRepository;
 import com.ssafy.backend.menstrual.entity.MenstrualCycle;
 import com.ssafy.backend.menstrual.repository.MenstrualCycleRepository;
 import com.ssafy.backend.user.entity.User;
@@ -28,7 +27,6 @@ public class HomeServiceImpl implements HomeService {
     private final HospitalReservationRepository hospitalreservationRepository;
     private final MenstrualCycleRepository menstrualCycleRepository;
     private final MedicationRepository medicationRepository;
-    private final MedicationCustomRepository medicationCustomRepository;
 
     @Override
     public ApiResponse<?> getRemainDay(User user) {

@@ -21,7 +21,7 @@ public class GetSummaryResDto {
     public static class Menstrual{
         private String bleeding_level;
         private Boolean normal;
-        private List<String> symptom;
+        private String symptom;
     }
     @Getter
     @Builder

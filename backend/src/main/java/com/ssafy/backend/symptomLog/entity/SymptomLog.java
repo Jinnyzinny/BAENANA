@@ -29,8 +29,9 @@ public class SymptomLog {
      * =====Column=====
      * */
     private LocalDate date;
-    @Convert(converter = SymptomTypeConverter.class)
-    private SymptomType symptomType;
+//    @Convert(converter = SymptomTypeConverter.class)
+//    private SymptomType symptomType;
+    private String symptomType;
     private Integer severity;
     private String memo;
 }

@@ -1,16 +1,15 @@
 package com.ssafy.backend.report.controller;
 
 import com.ssafy.backend.common.ApiResponse;
-import com.ssafy.backend.medication.service.report.MedicationReportService;
-import com.ssafy.backend.menstrual.service.report.MenstrualService;
-import com.ssafy.backend.report.dto.request.AddOvulationTestReqDto;
 import com.ssafy.backend.report.service.ReportService;
 import com.ssafy.backend.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController

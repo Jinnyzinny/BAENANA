@@ -9,6 +9,7 @@ import com.ssafy.backend.menstrual.entity.MenstrualCycle;
 import com.ssafy.backend.menstrual.exception.MenstrualException;
 import com.ssafy.backend.menstrual.repository.MenstrualCycleRepository;
 import com.ssafy.backend.menstrual.repository.custom.MenstrualCycleCustomRepository;
+import com.ssafy.backend.symptomLog.entity.SymptomLog;
 import com.ssafy.backend.user.entity.User;
 import com.ssafy.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +17,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -79,7 +78,7 @@ public class CycleServiceImpl implements CycleService {
                                                                                 .stress_level(log.getStressLevel())
                                                                                 .symptoms(
                                                                                         log.getSymptomLog().stream().map(
-                                                                                                symptomLog -> symptomLog.getSymptomType().getDescription()
+                                                                                                SymptomLog::getSymptomType
                                                                                         ).toList()
                                                                                 ).build())
                                                         .toList()
@@ -120,7 +119,7 @@ public class CycleServiceImpl implements CycleService {
                                                                                 .stress_level(log.getStressLevel())
                                                                                 .symptoms(
                                                                                         log.getSymptomLog().stream().distinct().map(
-                                                                                                symptomLog -> symptomLog.getSymptomType().getDescription()
+                                                                                                SymptomLog::getSymptomType
                                                                                         ).toList()
                                                                                 )
 

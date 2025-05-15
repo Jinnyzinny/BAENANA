@@ -38,7 +38,7 @@ public class MedicationReportServiceImpl implements MedicationReportService {
         List<Medication> medicationList =
                 medicationCustomRepository.findMedicationByUserId(userId).orElse(null);
 
-        if(medicationList == null || medicationList.isEmpty()) {
+        if (medicationList == null || medicationList.isEmpty()) {
             return ApiResponse.success("사용자가 최근 복용한 약이 없습니다");
         }
         /*
