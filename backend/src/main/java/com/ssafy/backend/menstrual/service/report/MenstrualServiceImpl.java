@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -68,7 +69,10 @@ public class MenstrualServiceImpl implements MenstrualService {
                 LocalDate prevStartDate = menstrualCycleList.get(i - 1).getStartDate();
                 int cycle = (int) ChronoUnit.DAYS.between(startDate, prevStartDate);
                 cycleSum += cycle;
-
+                if (maxCycle >= 40 || minCycle <= 17) {
+                    //극단 값들은 버린다.
+                    continue;
+                }
                 maxCycle = Math.max(maxCycle, cycle);
                 minCycle = Math.min(minCycle, cycle);
             }
@@ -176,23 +180,37 @@ public class MenstrualServiceImpl implements MenstrualService {
         double distance = Double.MAX_VALUE;
 
         for (int i = 1; i < graphType.length; i++) {
-//            빈 배열 체크
-            if (graphType[i].isEmpty()) {
-                continue;
-            }
-//            DTW 거리 체크
-            double typeDistance = dtwSimilarity.calculateDTW(
-                    graphType[i].stream().mapToDouble(
-                            OvulationTestStandard::getValue
-                    ).toArray(),
-                    recentOvulationTest.values().stream().mapToDouble(
-                            Double::doubleValue
-                    ).toArray());
+            if (graphType[i].isEmpty()) continue;
 
-            if (typeDistance != Double.MAX_VALUE && typeDistance < distance) {
-                type = i;
-                distance = typeDistance;
+            // 1) 기준 그래프 전체 배열, 사용자 그래프 배열 준비
+            double[] standardGraph = graphType[i].stream()
+                    .mapToDouble(OvulationTestStandard::getValue)
+                    .toArray();
+
+            double[] userGraph = recentOvulationTest.entrySet().stream()
+                    .sorted(Map.Entry.comparingByKey())
+                    .mapToDouble(Map.Entry::getValue)
+                    .toArray();
+
+            System.out.println(standardGraph.length+" "+userGraph.length);
+
+            // 2) 슬라이딩 윈도우로 기준 그래프에서 userGraph 길이만큼 잘라가며 DTW 계산
+            int winSize = userGraph.length;
+            double minDistance = Double.MAX_VALUE;
+            for (int offset = 0; offset <= standardGraph.length - winSize; offset++) {
+                double[] window = Arrays.copyOfRange(standardGraph, offset, offset + winSize);
+                double dist = dtwSimilarity.calculateDTW(window, userGraph);
+                if (dist < minDistance) {
+                    minDistance = dist;
+                }
             }
+
+            // 3) 최종 minDistance를 기존 distance 비교에 사용
+            if (minDistance < distance) {
+                type = i;
+                distance = minDistance;
+            }
+
         }
         if (type == Integer.MAX_VALUE) {
 //            예외 처리해야한다.
