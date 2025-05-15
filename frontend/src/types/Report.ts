@@ -67,12 +67,12 @@ export type FullRecentMedicine = Default & {
 export type Report = {
   menstrual: {
     bleeding_level: string;
-    anomal: boolean;
+    normal: boolean;
     symptom: string;
   };
   stress: {
     stress: string;
-    anomal: boolean;
+    normal: boolean;
   };
 };
 
