@@ -3,6 +3,7 @@ package com.ssafy.backend.menstrual.exception;
 
 import com.ssafy.backend.common.ApiResponse;
 import com.ssafy.backend.medication.exception.MedicationException;
+import com.ssafy.backend.menstrual.entity.MenstrualDailyLog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -28,6 +29,13 @@ public class MenstrualExceptionHandler {
     public ApiResponse<?> handleDuplicateDailyLogException(DuplicateDailyLog e) {
         log.error("Menstrual Cycle information has already saved: {}", e.getMessage());
         return ApiResponse.error("Duplicate_Daily_Log :ALREADY SAVED THIS DAY", HttpStatus.NOT_FOUND, e.getMessage());
+    }
+
+    @ExceptionHandler(MenstrualDailyLogException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiResponse<?> handleDailyLogNotFoundException(MenstrualDailyLogException e) {
+        log.error("Menstrual DailyLog Not Found Exception {}", e.getMessage());
+        return ApiResponse.error("Menstrual Daily Log Not Found Exception", HttpStatus.NOT_FOUND, e.getMessage());
     }
 }
 

@@ -34,4 +34,12 @@ public class MenstrualCycleLogCalendarController {
     ){
         return ResponseEntity.ok(menstrualCycleLogService.updateMenstrualCycleDailyLog(user,request,id));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<?>> deleteMenstrualCycleDailyLog(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long id
+    ){
+        return ResponseEntity.ok(menstrualCycleLogService.deleteMenstrualCycleDailyLog(user,id));
+    }
 }
