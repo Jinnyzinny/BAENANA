@@ -36,7 +36,7 @@ public class MedicationReportServiceImpl implements MedicationReportService {
          * userId로 최근 복용한 약을 불러온다.
          */
         List<Medication> medicationList =
-                medicationCustomRepository.findMedicationByUserId(userId).orElse(null);
+                medicationCustomRepository.findThreeMonthMedicationByUserId(userId).orElse(null);
 
         if (medicationList == null || medicationList.isEmpty()) {
             return ApiResponse.success("사용자가 최근 복용한 약이 없습니다");
@@ -54,10 +54,12 @@ public class MedicationReportServiceImpl implements MedicationReportService {
          * 오늘 이후에도 복용을 한다면 현재 복용중인 의약품리스트에도 추가한다.
          * */
         for (Medication medication : medicationList) {
-            medicineRecord.add(
-                    GetRecentMedicationResDto.MedicationInfo.builder()
-                            .name(medication.getName())
-                            .build());
+            if (medication.getEndDate().isBefore(LocalDate.now())) {
+                medicineRecord.add(
+                        GetRecentMedicationResDto.MedicationInfo.builder()
+                                .name(medication.getName())
+                                .build());
+            }
             if (medication.getEndDate().isAfter(LocalDate.now())) {
                 todayMedicine.add(
                         GetRecentMedicationResDto.MedicationInfo.builder()
@@ -90,24 +92,40 @@ public class MedicationReportServiceImpl implements MedicationReportService {
             return ApiResponse.success("사용자가 복용한 의약품 전체 기록이 없습니다.");
         }
 
+        Set<GetAllMedicationResDto.each_medication_record> todayMedicine = new HashSet<>();
+        List<GetAllMedicationResDto.each_medication_record> medicineRecord = new ArrayList<>();
+
+        for (Medication medication : medicationList) {
+            if (medication.getEndDate().isBefore(LocalDate.now())) {
+                medicineRecord.add(
+                        GetAllMedicationResDto.each_medication_record.builder()
+                                .name(medication.getName())
+                                .time_taken(medication.getTimeTakenList().stream().map(
+                                        timeTaken -> timeTaken.getTime_taken().toString()
+                                ).toList())
+                                .start_date(medication.getStartDate().toString())
+                                .end_date(medication.getEndDate().toString())
+                                .build()
+                );
+            }
+            if (medication.getEndDate().isAfter(LocalDate.now())) {
+                todayMedicine.add(
+                        GetAllMedicationResDto.each_medication_record.builder()
+                                .name(medication.getName())
+                                .time_taken(medication.getTimeTakenList().stream().map(
+                                        timeTaken -> timeTaken.getTime_taken().toString()
+                                ).toList())
+                                .start_date(medication.getStartDate().toString())
+                                .end_date(medication.getEndDate().toString())
+                                .build()
+                );
+            }
+        }
+
         return ApiResponse.success("사용자가 복용한 모든 의약품 리스트를 얻는다.",
                 GetAllMedicationResDto.builder()
-                        .medicine_record(
-                                medicationList.stream().map(
-                                        record -> GetAllMedicationResDto.each_medication_record.builder()
-                                                .name(record.getName())
-
-                                                .start_date(
-                                                        record.getStartDate().toString())
-                                                .end_date(
-                                                        record.getEndDate().toString())
-                                                .time_taken(record.getTimeTakenList().stream().map(
-                                                        t -> t.getTime_taken().toString()
-                                                ).toList())
-                                                .memo(record.getDescription())
-                                                .build()
-                                ).toList()
-                        )
+                        .today_medicine(todayMedicine)
+                        .medicine_record(medicineRecord)
                         .build());
     }
 }
