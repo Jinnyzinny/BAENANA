@@ -36,15 +36,20 @@ public class GetSummary {
         }
     }
 
-    public List<String> getSymptoms(List<MenstrualCycle> cycleList) {
-        return cycleList.stream()
+    public String getSymptoms(List<MenstrualCycle> cycleList) {
+        List<String> symptoms = cycleList.stream()
                 .flatMap(cycle -> cycle.getLogs().stream())
-                .flatMap(log -> log.getSymptomLog()
-                        .stream()
-                        .map(SymptomLog::getSymptomType)
-                )
-                .distinct() // 중복 제거
-                .collect(Collectors.toList());
+                .flatMap(log -> log.getSymptomLog().stream())
+                .map(SymptomLog::getSymptomType) // 또는 .name(), toString() 등 필요에 따라
+                .distinct()
+                .toList();
+
+        if (symptoms.isEmpty()) {
+            return "증상이 기록되지 않았습니다.";
+        }
+
+        String joinedSymptoms = String.join(", ", symptoms);
+        return "증상으론 " + joinedSymptoms + "이 있습니다.";
     }
 
     public Boolean getStressNormal(List<MenstrualCycle> cycleList) {
