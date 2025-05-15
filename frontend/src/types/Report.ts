@@ -28,7 +28,7 @@ export type OvulationInfo = {
 
 export type Ovulation = {
   normal: 1 | 2 | 3;
-  spike: OvulationInfo[];
+  standard: OvulationInfo[];
   personal_data: OvulationInfo[];
 };
 

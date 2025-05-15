@@ -23,6 +23,10 @@ import { OvulationInfo } from "../../components/report/ovulationInfo";
 import { RecentPeriod } from "../../components/report/recentPeriod";
 import { Summary } from "../../components/report/summary";
 import { useStoragePermission } from "../../hooks/useStoragePermission";
+import {
+  useGetChildbearingAge,
+  useGetPredictedPeriod,
+} from "../../api/quries/period";
 
 export function ReportScreen() {
   const hasPermission = useStoragePermission();
@@ -162,6 +166,11 @@ export function ReportScreen() {
 
   const { data: reportData, refetch: refetchReport } = useGetReport();
 
+  const { data: childbearingAgeData, refetch: refetchChildbearingAge } =
+    useGetChildbearingAge();
+  const { data: predictedPeriodData, refetch: refetchPredictedPeriod } =
+    useGetPredictedPeriod();
+
   useFocusEffect(
     useCallback(() => {
       refetchPeriodAlert();
@@ -170,6 +179,8 @@ export function ReportScreen() {
       refetchOvulationTest();
       refetchRecentMedicine();
       refetchReport();
+      refetchChildbearingAge();
+      refetchPredictedPeriod();
     }, [])
   );
 
@@ -222,9 +233,14 @@ export function ReportScreen() {
               )}
 
               {/* 배란테스트 결과 */}
-              {ovulationTestData?.data && (
-                <OvulationInfo data={ovulationTestData.data} />
-              )}
+              {ovulationTestData?.data &&
+                childbearingAgeData?.data &&
+                predictedPeriodData?.data && (
+                  <OvulationInfo
+                    ovulationData={ovulationTestData.data}
+                    childbearingAgeData={childbearingAgeData.data}
+                  />
+                )}
             </View>
           </ViewShot>
 

@@ -9,33 +9,40 @@ import Svg, {
   Text as SvgText,
   Circle,
 } from "react-native-svg";
+import { Ovulation } from "../../../types/Report";
 
-export function OvulationGraph() {
+export function OvulationGraph({
+  data,
+  start,
+  middle,
+  end,
+}: {
+  data: Ovulation;
+  start: string;
+  middle: string;
+  end: string;
+}) {
   const graphWidth = 300;
   const graphHeight = 250;
   const padding = 26;
   const xAxisLength = graphWidth - padding * 2;
   const yAxisLength = graphHeight - padding * 2;
-  const numberOfYTicks = 7; // 0 ~ 70
-  const numberOfXTicks = 10; // 날짜 10개
+  const numberOfXTicks = 29; // x축
+  const numberOfYTicks = 7; // y축
 
   // X축 날짜 데이터
-  const xDates = [
-    "4/28",
-    "4/29",
-    "4/30",
-    "5/1",
-    "5/2",
-    "5/3",
-    "5/4",
-    "5/5",
-    "5/6",
-    "5/7",
-  ];
+  const xDates = data.standard.map((item) =>
+    item.date.slice(5, 10).replace("-", "/")
+  );
 
   // Y축 값 데이터
-  const purpleYValues = [10, 30, 25, 40, 35, 50, 45, 20, 25, 15];
-  const yellowYValues = [10, 20, 15, 20, 45, 50, 30, 40, 30, 5];
+  const purpleYValuesMap = new Map(
+    data.personal_data.map((item) => [item.date, item.value])
+  );
+  const purpleYValues = data.standard.map(
+    (item) => purpleYValuesMap.get(item.date) ?? 0
+  );
+  const yellowYValues = data.standard.map((item) => item.value);
 
   const yTickSpacing = yAxisLength / numberOfYTicks;
   const xTickSpacing = (xAxisLength - 1) / (numberOfXTicks - 1);
@@ -69,8 +76,15 @@ export function OvulationGraph() {
   const purpleFillPath = `${purplePath} L ${padding + (numberOfXTicks - 1) * xTickSpacing + 5} ${graphHeight - padding} L ${padding + 5} ${graphHeight - padding} Z`;
   const yellowFillPath = `${yellowPath} L ${padding + (numberOfXTicks - 1) * xTickSpacing + 5} ${graphHeight - padding} L ${padding + 5} ${graphHeight - padding} Z`;
 
-  const fertileIndexes = [3, 5]; // 예상 가임기 인덱스
-  const ovulationIndex = 4; // 예상 배란일 인덱스
+  const startIndex = data.standard.findIndex((item) => item.date === start);
+  const endIndex = data.standard.findIndex((item) => item.date === end);
+
+  const fertileIndexes = [startIndex, endIndex]; // 예상 가임기 인덱스
+  const ovulationIndex = data.standard.findIndex(
+    (item) => item.date === middle
+  ); // 예상 배란일 인덱스
+
+  console.log(startIndex, endIndex, ovulationIndex);
 
   return (
     <View className="items-center gap-3">
@@ -167,7 +181,7 @@ export function OvulationGraph() {
             <Circle
               key={`fertile-${index}`}
               cx={point.x - 3}
-              cy={point.y + 7}
+              cy={point.y}
               r={7}
               fill="#A684FF"
               stroke="white"
@@ -179,7 +193,7 @@ export function OvulationGraph() {
         {/* 예상 배란일 점 */}
         <Circle
           cx={purplePoints[ovulationIndex].x - 3}
-          cy={purplePoints[ovulationIndex].y - 5}
+          cy={purplePoints[ovulationIndex].y}
           r={7}
           fill="#7008E7"
           stroke="white"
@@ -188,6 +202,8 @@ export function OvulationGraph() {
 
         {/* X축 라벨 */}
         {xDates.map((label, i) => {
+          if (i % 4 !== 0) return null; // 4일 간격으로 날짜 나오도록
+
           const x = padding + i * xTickSpacing;
           return (
             <SvgText
