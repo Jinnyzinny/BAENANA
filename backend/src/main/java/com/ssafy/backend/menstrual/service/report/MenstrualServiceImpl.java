@@ -261,7 +261,7 @@ public class MenstrualServiceImpl implements MenstrualService {
 
         return ApiResponse.success("배란 테스트 정보입니다.",
                 GetOvulationTestResDto.builder()
-                        .normal(type)
+                        .type(type)
                         .standard(standardTestList)
                         .personal_data(userTestList)
                         .build());
