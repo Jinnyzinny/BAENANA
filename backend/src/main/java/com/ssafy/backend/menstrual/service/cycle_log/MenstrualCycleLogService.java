@@ -15,4 +15,6 @@ public interface MenstrualCycleLogService {
 
     //    일일 생리 주기 기록을 수정한다. 증상 및 출혈량, 통증 등을 포함
     ApiResponse<?> updateMenstrualCycleDailyLog(User user, UpdateMenstrualCycleDailyLogReqDto request, Long id);
+
+    ApiResponse<?> deleteMenstrualCycleDailyLog(User user, Long id);
 }
