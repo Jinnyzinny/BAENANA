@@ -23,7 +23,7 @@ public class MenstrualCycle {
      * */
     @OneToMany(mappedBy = "cycle", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MenstrualDailyLog> logs;
-
+//
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
