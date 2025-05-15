@@ -99,7 +99,7 @@ public class CycleServiceImpl implements CycleService {
         if (menstrualCycleList == null) {
             return ApiResponse.success("해당 월에는 주기 정보가 존재하지 않습니다.");
         }
-
+        
         return ApiResponse.success(
                 "월별 생리 주기 정보를 열람한다.",
                 menstrualCycleList.stream().distinct().map(
