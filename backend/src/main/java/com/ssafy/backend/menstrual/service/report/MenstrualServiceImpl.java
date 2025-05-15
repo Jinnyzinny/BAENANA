@@ -231,8 +231,7 @@ public class MenstrualServiceImpl implements MenstrualService {
 
         }
         if (type == Integer.MAX_VALUE) {
-//            예외 처리해야한다.
-            throw new OvulationTestStandardException("기준에 일치하는 그래프가 없습니다. 즉 사용자의 데이터가 현저히 부족합니다.");
+            return ApiResponse.success("기준에 일치하는 그래프가 없습니다. 즉 사용자의 데이터가 현저히 부족합니다.");
         }
         /*
          * 이 시점에서 어느 기준 그래프와 가장 유사한지 DTW 거리가 나온다.
@@ -282,7 +281,7 @@ public class MenstrualServiceImpl implements MenstrualService {
         return ApiResponse.success("사용자의 최근 6개월 주기 정보를 불러옵니다.",
                 GetRecentMenstrualResDto.builder()
                         .average_cycle(cycle.getAverageCycle())
-                        .max_cycle(cycle.getMaxCycle())
+                        .max_cycle(cycle.getMaxCycle()==Integer.MIN_VALUE?0:cycle.getMaxCycle())
                         .cycle_record(cycle.getCycleRecord())
                         .build());
     }
@@ -303,7 +302,7 @@ public class MenstrualServiceImpl implements MenstrualService {
                 "사용자의 전체 주기 정보를 불러옵니다.",
                 GetAllMenstrualResDto.builder()
                         .average_cycle(cycle.getAverageCycle())
-                        .max_cycle(cycle.getMaxCycle())
+                        .max_cycle(cycle.getMaxCycle()==Integer.MIN_VALUE?0:cycle.getMaxCycle())
                         .cycle_record(cycle.getCycleRecord())
                         .build()
         );
@@ -321,11 +320,25 @@ public class MenstrualServiceImpl implements MenstrualService {
         }
         List<GetRecentMenstrualResDto.each_cycle_record> cycleRecord = new ArrayList<>();
 
-        for (MenstrualCycle cycle : menstrualCycleList) {
+        for (int i = 0; i < menstrualCycleList.size(); i++) {
+            MenstrualCycle cycle = menstrualCycleList.get(i);
+            LocalDate startDate = cycle.getStartDate();
+            LocalDate endDate = cycle.getEndDate();
+            int period = (int) ChronoUnit.DAYS.between(startDate, endDate);
+
+            Integer cycleTerm = null;  // 현재 주기의 시작일과 이전 주기의 시작일 간 차이
+            if (i < menstrualCycleList.size() - 1) {  // 다음 주기가 있을 때만
+                LocalDate nextStartDate = menstrualCycleList.get(i + 1).getStartDate();
+                cycleTerm = (int) ChronoUnit.DAYS.between(nextStartDate, startDate);
+                cycleSum += cycleTerm;
+                maxCycle = Math.max(maxCycle, cycleTerm);
+            }
+
             cycleRecord.add(GetRecentMenstrualResDto.each_cycle_record.builder()
-                    .start_date(cycle.getStartDate().toString())
-                    .end_date(cycle.getEndDate().toString())
-                    .period((int) ChronoUnit.DAYS.between(cycle.getStartDate(), cycle.getEndDate()))
+                    .start_date(startDate.toString())
+                    .end_date(endDate.toString())
+                    .period(period)
+                    .cycle(cycleTerm==null?0:cycleTerm)  // 주기 값 추가
                     .build());
         }
         int averageCycle = cycleSum / menstrualCycleList.size();

@@ -22,5 +22,6 @@ public class GetRecentMenstrualResDto {
         private String start_date;
         private String end_date;
         private Integer period;
+        private Integer cycle;
     }
 }
