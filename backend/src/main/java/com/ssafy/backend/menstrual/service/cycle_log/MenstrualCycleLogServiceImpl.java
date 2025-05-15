@@ -7,6 +7,7 @@ import com.ssafy.backend.menstrual.dto.request.UpdateMenstrualCycleDailyLogReqDt
 import com.ssafy.backend.menstrual.entity.MenstrualCycle;
 import com.ssafy.backend.menstrual.entity.MenstrualDailyLog;
 import com.ssafy.backend.menstrual.exception.DuplicateDailyLog;
+import com.ssafy.backend.menstrual.exception.MenstrualDailyLogException;
 import com.ssafy.backend.menstrual.exception.MenstrualException;
 import com.ssafy.backend.menstrual.repository.MenstrualCycleRepository;
 import com.ssafy.backend.menstrual.repository.MenstrualDailyLogRepository;
@@ -106,5 +107,14 @@ public class MenstrualCycleLogServiceImpl implements MenstrualCycleLogService {
         }
 
         return ApiResponse.success("생리 주기 정보가 성공적으로 변경되었습니다.");
+    }
+
+    @Override
+    public ApiResponse<?> deleteMenstrualCycleDailyLog(User user, Long id) {
+        menstrualDailyLogRepository.findById(id).orElseThrow(
+                ()->new MenstrualDailyLogException("해당 ID와 연관된 세부 기록이 존재하지 않습니다")
+        );
+         menstrualDailyLogRepository.deleteById(id);
+         return ApiResponse.success("해당 세부 기록이 정상적으로 삭제되었습니다");
     }
 }

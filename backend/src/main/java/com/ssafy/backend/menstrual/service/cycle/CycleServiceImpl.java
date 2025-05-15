@@ -14,7 +14,6 @@ import com.ssafy.backend.user.entity.User;
 import com.ssafy.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -155,11 +154,9 @@ public class CycleServiceImpl implements CycleService {
 
     @Override
     public ApiResponse<?> deleteMenstrualCycle(User user, Long cycle_id) {
-        if (menstrualCycleRepository.existsById(cycle_id)) {
-            menstrualCycleRepository.deleteById(cycle_id);
-            return ApiResponse.success("성공적으로 해당 주기가 삭제되었습니다.");
-        } else {
-            return ApiResponse.error("MENSTRUAL_NOT_FOUND", HttpStatus.NOT_FOUND, "해당 ID와 일치하는 주기 정보가 없습니다");
-        }
+        menstrualCycleRepository.findById(cycle_id).orElseThrow(() ->
+                new MenstrualException("해당 ID와 일치하는 주기 정보가 없습니다"));
+        menstrualCycleRepository.deleteById(cycle_id);
+        return ApiResponse.success("성공적으로 해당 주기가 삭제되었습니다.");
     }
 }
