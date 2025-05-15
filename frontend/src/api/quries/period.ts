@@ -33,7 +33,9 @@ export function useAddPeriod() {
     }) => addPeriod(startDate, endDate),
     onSuccess: (data) => {
       console.log("☑️월경 주기 등록 성공: ", data);
-      queryClient.invalidateQueries({ queryKey: ["period"] });
+      queryClient.invalidateQueries({ queryKey: ["period"], exact: false });
+      queryClient.invalidateQueries({ queryKey: ["childbearingAge"] });
+      queryClient.invalidateQueries({ queryKey: ["predictedPeriod"] });
     },
     onError: (error) => {
       console.log("✖️월경 주기 등록 실패: ", error);

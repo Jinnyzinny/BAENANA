@@ -47,11 +47,12 @@ export function RecentPeriod({ data }: { data: RecentPeriodType }) {
       <FlatList
         data={data.cycle_record}
         keyExtractor={(item, index) => `${item.start_date}-${index}`}
+        scrollEnabled={false}
         renderItem={({ item }) => (
           <BarChart
             startDate={formatDate(item.start_date)}
             endDate={formatDate(item.end_date)}
-            period={item.period}
+            cycle={item.cycle}
             maxPeriod={data.average_cycle}
           />
         )}

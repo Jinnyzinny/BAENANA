@@ -14,7 +14,7 @@ export function PeriodScreen() {
   const formatDate = (date: string) =>
     format(parseISO(date), "yyyy년 MM월 dd일", { locale: ko });
 
-  const averageCycle = data?.data.average_cycle ?? null;
+  const averageCycle = data?.data.average_cycle ?? 0;
   const records = data?.data.cycle_record ?? [];
 
   useFocusEffect(
@@ -36,39 +36,39 @@ export function PeriodScreen() {
               {averageCycle ? (
                 <>
                   <View className="flex-row">
-                    <Text className="text-neutral-600">현재 평균 주기는 </Text>
-                    <Text className="text-violet-700 font-bold">
+                    <Text className="text-neutral-600 text-sm">
+                      현재 평균 주기는{" "}
+                    </Text>
+                    <Text className="text-violet-700 text-sm font-bold">
                       {averageCycle}일
                     </Text>
-                    <Text className="text-neutral-600">입니다.</Text>
+                    <Text className="text-neutral-600 text-sm">입니다.</Text>
                   </View>
                 </>
               ) : (
-                <Text className="text-neutral-400">
+                <Text className="text-neutral-400 text-sm">
                   평균 주기는 다음 월경 주기 입력 후 확인 가능합니다.
                 </Text>
               )}
             </View>
           </View>
           <View className="m-3" />
-          <View className="mx-5 bg-white rounded-xl">
-            <View className="px-5 pt-5 pb-10 gap-3">
-              <FlatList
-                data={records}
-                keyExtractor={(item, index) => `${item.start_date}-${index}`}
-                contentContainerStyle={{ paddingBottom: 32 }}
-                renderItem={({ item }) => (
-                  <View className="mx-5 mb-4 bg-white rounded-xl px-5 pt-5 pb-6">
-                    <BarChart
-                      startDate={formatDate(item.start_date)}
-                      endDate={formatDate(item.end_date)}
-                      period={item.period}
-                      maxPeriod={averageCycle ?? item.period}
-                    />
-                  </View>
-                )}
-              />
-            </View>
+          <View className="mx-5 p-5 bg-white rounded-xl">
+            <FlatList
+              data={records}
+              keyExtractor={(item, index) => `${item.start_date}-${index}`}
+              scrollEnabled={false}
+              renderItem={({ item, index }) => (
+                <View className={index !== records.length - 1 ? "mb-3" : ""}>
+                  <BarChart
+                    startDate={formatDate(item.start_date)}
+                    endDate={formatDate(item.end_date)}
+                    cycle={item.cycle}
+                    maxPeriod={averageCycle}
+                  />
+                </View>
+              )}
+            />
           </View>
         </View>
       </ScrollView>
