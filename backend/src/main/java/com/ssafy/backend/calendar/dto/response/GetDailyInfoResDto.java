@@ -2,7 +2,6 @@ package com.ssafy.backend.calendar.dto.response;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter

@@ -120,7 +120,6 @@ public class MedicationServiceImpl implements MedicationService {
 //        if(request.getName()!=null){
 //            medication.setName(request.getName());
 //        }
-//        
         if (request.getTime_taken() != null) {
             request.getTime_taken().forEach(
                     time ->

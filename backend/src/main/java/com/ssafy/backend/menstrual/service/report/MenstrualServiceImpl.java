@@ -5,7 +5,6 @@ import com.ssafy.backend.menstrual.entity.MenstrualCycle;
 import com.ssafy.backend.menstrual.exception.OvulationTestException;
 import com.ssafy.backend.menstrual.exception.OvulationTestStandardException;
 import com.ssafy.backend.menstrual.repository.MenstrualCycleRepository;
-import com.ssafy.backend.menstrual.repository.MenstrualDailyLogRepository;
 import com.ssafy.backend.ovulation_test.entity.OvulationTest;
 import com.ssafy.backend.ovulation_test.entity.OvulationTestStandard;
 import com.ssafy.backend.ovulation_test.repository.OvulationTestRepository;
@@ -36,7 +35,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MenstrualServiceImpl implements MenstrualService {
     private final MenstrualCycleRepository menstrualCycleRepository;
-    private final MenstrualDailyLogRepository menstrualDailyLogRepository;
 
     private final OvulationTestRepository ovulationTestRepository;
     private final OvulationTestCustomRepository ovulationTestCustomRepository;
@@ -47,20 +45,39 @@ public class MenstrualServiceImpl implements MenstrualService {
 
     @Override
     public ApiResponse<?> getMenstrualInfo(User user) {
+        /*
+         * 사용자의 userId를 얻는다
+         * */
         Long userId = user.getUserId();
-        List<MenstrualCycle> menstrualCycleList =
-                menstrualCycleRepository.findByUser_UserId(userId).orElse(null);
 
+        /*
+         * 사용자의 생리 주기 4개월치 기록을 얻는다
+         * */
+        List<MenstrualCycle> menstrualCycleList =
+                menstrualCycleRepository.findTop4ByUser_UserIdOrderByStartDateDesc(userId).orElse(null);
+
+        /*
+         * 만약 생리 주기 기록이 없을 경우 없다고 메시지를 반환한다.
+         * */
         if (menstrualCycleList == null || menstrualCycleList.isEmpty()) {
             return ApiResponse.success("사용자의 주기 정보가 없어 월경 정보(주기,기간)을 제공하는 데 실패했습니다.");
         }
 
+        /*
+         * 평균을 구할 주기의 합과 기간의 합 변수를 생성한다.
+         * */
         int cycleSum = 0;
         int periodSum = 0;
 
+        /*
+         * 최대 주기 값과 최소 주기 값을 초기화한다.
+         * */
         int maxCycle = Integer.MIN_VALUE;
         int minCycle = Integer.MAX_VALUE;
 
+        /*
+         * 해당 결괏값을 순회하면서 주기값들을 추출한다.
+         * */
         for (int i = 0; i < menstrualCycleList.size(); i++) {
             LocalDate endDate = menstrualCycleList.get(i).getEndDate();
             LocalDate startDate = menstrualCycleList.get(i).getStartDate();
@@ -80,7 +97,6 @@ public class MenstrualServiceImpl implements MenstrualService {
         }
         int avgCycle = cycleSum / menstrualCycleList.size();
         int avgPeriod = periodSum / menstrualCycleList.size();
-
 
         List<Integer> periods = menstrualCycleList
                 .stream()
@@ -103,7 +119,9 @@ public class MenstrualServiceImpl implements MenstrualService {
                 GetMenstrualInfoResDto.builder()
                         .cycle(avgCycle)
                         .period(avgPeriod)
-//                정상 판별 어떻게 할 예정??
+                        /*
+                         *정상 판별 어떻게 할 예정 : 3개월치로 최댓값과 최솟값의 차이를 비교해서 7일 이상이 나면 이상으로 판단.
+                         */
                         .is_cycle_normal(normalCycle)
                         .is_period_normal(normalPeriod)
                         .build());
@@ -192,7 +210,7 @@ public class MenstrualServiceImpl implements MenstrualService {
                     .mapToDouble(Map.Entry::getValue)
                     .toArray();
 
-            System.out.println(standardGraph.length+" "+userGraph.length);
+            System.out.println(standardGraph.length + " " + userGraph.length);
 
             // 2) 슬라이딩 윈도우로 기준 그래프에서 userGraph 길이만큼 잘라가며 DTW 계산
             int winSize = userGraph.length;

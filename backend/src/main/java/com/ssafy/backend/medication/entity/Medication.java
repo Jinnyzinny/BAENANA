@@ -19,8 +19,8 @@ public class Medication {
     private Long medicationId;
 
     /*
-    * =====연관 관계=====
-    * */
+     * =====연관 관계=====
+     * */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -32,8 +32,8 @@ public class Medication {
     private List<TimeTaken> timeTakenList;
 
     /*
-    *  =====Column=====
-    * */
+     *  =====Column=====
+     * */
     private String name;
     private String defaultDose;
     private String description;
