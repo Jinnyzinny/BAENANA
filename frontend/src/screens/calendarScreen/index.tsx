@@ -11,6 +11,7 @@ import { useGetHospitalReservation } from "../../api/quries/hospital";
 import { useGetMedicineReservation } from "../../api/quries/medicine";
 import {
   useGetChildbearingAge,
+  useGetPeriod,
   useGetPredictedPeriod,
 } from "../../api/quries/period";
 import { HospitalBottomSheet } from "../../components/calendar/hospitalBottomSheet";
@@ -39,6 +40,10 @@ export function CalendarScreen() {
   const month = new Date().getMonth() + 1;
   const [selectedYear, setSelectedYear] = useState<number>(year);
   const [selectedMonth, setSelectedMonth] = useState<number>(month);
+
+  // 월별 월경일
+  // const { data: periodData, refetch: refetchPeriod } =
+  //   useGetPeriod(selectedYear, selectedMonth);
 
   // 월별 병원 예약 일정
   const [hospitalReservation, setHospitalReservation] = useState<

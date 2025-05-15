@@ -29,9 +29,11 @@ export async function addPeriod(startDate: string, endDate: string) {
 }
 
 // 월별 월경 주기 조회
-export async function getPeriod(month: number): Promise<Period> {
+export async function getPeriod(year: number, month: number): Promise<Period> {
   try {
-    const response = await authClient.get(`/calendar/menstrual_cycle/${month}`);
+    const response = await authClient.get(
+      `/calendar/menstrual_cycle/${year}/${month}`
+    );
     console.log("월별 월경 주기 조회 성공: ", response.data.data);
     return response.data.data;
   } catch (error: unknown) {
@@ -74,17 +76,13 @@ export async function addPeriodSymtom(
   date: string,
   bleedingLevel: number,
   painLevel: number,
-  isStart: boolean,
-  isEnd: boolean,
-  symptom: number[]
+  symptom: string[]
 ) {
   try {
     const response = await authClient.post("/calendar/menstrual_cycle/log", {
       date,
       bleeding_level: bleedingLevel,
       pain_level: painLevel,
-      is_start: isStart,
-      is_end: isEnd,
       symptom,
     });
     console.log("월경 주기 세부 정보 등록 성공: ", response.data);
@@ -101,17 +99,13 @@ export async function editPeriodSymtom(
   date: string,
   bleedingLevel?: number,
   painLevel?: number,
-  isStart?: boolean,
-  isEnd?: boolean,
-  symptom?: number[]
+  symptom?: string[]
 ) {
   try {
     const payload = {
       date,
       ...(bleedingLevel !== undefined && { bleeding_level: bleedingLevel }),
       ...(painLevel !== undefined && { pain_level: painLevel }),
-      ...(isStart !== undefined && { is_start: isStart }),
-      ...(isEnd !== undefined && { is_end: isEnd }),
       ...(symptom !== undefined && { symptom }),
     };
     const response = await authClient.patch(

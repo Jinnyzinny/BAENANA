@@ -28,7 +28,7 @@ export function SymptomBottomSheet({
   const [selectedStress, setSelectedStress] = useState<0 | 1 | 2 | 3 | 4 | 5>(
     0
   );
-  const [symptom, setSymptom] = useState<number[]>([]);
+  const [symptom, setSymptom] = useState<string[]>([]);
   const symptomItems = [
     { id: 1, label: "복통" },
     { id: 2, label: "두통" },
@@ -38,10 +38,10 @@ export function SymptomBottomSheet({
     { id: 6, label: "우울" },
   ];
 
-  function handleSymptom(id: number) {
+  function handleSymptom(label: string) {
     // 선택된 증상 선택 시 배열에서 삭제, 선택되지 않은 증상 선택 시 배열에 추가
     setSymptom((prev) =>
-      prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
+      prev.includes(label) ? prev.filter((s) => s !== label) : [...prev, label]
     );
   }
 
@@ -52,21 +52,12 @@ export function SymptomBottomSheet({
       return Alert.alert("날짜 오류", "날짜가 선택되지 않았습니다.");
     }
 
-    console.log(
-      selectedDate,
-      selectedPeriod,
-      selectedStress,
-      false,
-      false,
-      symptom
-    );
+    console.log(selectedDate, selectedPeriod, selectedStress, symptom);
 
     addPeriodSymtom({
       date: selectedDate,
       bleedingLevel: selectedPeriod,
       painLevel: selectedStress,
-      isStart: false,
-      isEnd: false,
       symptom,
     });
 
@@ -130,10 +121,10 @@ export function SymptomBottomSheet({
                 {symptomItems.slice(0, 4).map((item) => (
                   <TouchableOpacity
                     key={item.id}
-                    onPress={() => handleSymptom(item.id)}
+                    onPress={() => handleSymptom(item.label)}
                   >
                     <SelectTag
-                      fill={symptom.includes(item.id)}
+                      fill={symptom.includes(item.label)}
                       content={item.label}
                     />
                   </TouchableOpacity>
@@ -145,10 +136,10 @@ export function SymptomBottomSheet({
                 {symptomItems.slice(4).map((item) => (
                   <TouchableOpacity
                     key={item.id}
-                    onPress={() => handleSymptom(item.id)}
+                    onPress={() => handleSymptom(item.label)}
                   >
                     <SelectTag
-                      fill={symptom.includes(item.id)}
+                      fill={symptom.includes(item.label)}
                       content={item.label}
                     />
                   </TouchableOpacity>

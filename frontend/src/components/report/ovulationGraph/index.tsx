@@ -84,8 +84,6 @@ export function OvulationGraph({
     (item) => item.date === middle
   ); // 예상 배란일 인덱스
 
-  console.log(startIndex, endIndex, ovulationIndex);
-
   return (
     <View className="items-center gap-3">
       <Svg width={graphWidth} height={graphHeight}>

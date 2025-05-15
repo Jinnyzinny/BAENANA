@@ -44,11 +44,11 @@ export function useAddPeriod() {
   });
 }
 
-// ✅월별 월경 주기 조회
-export function useGetPeriod(month: number) {
+// 월별 월경 주기 조회
+export function useGetPeriod(year: number, month: number) {
   return useQuery({
-    queryKey: ["period", month],
-    queryFn: () => getPeriod(month),
+    queryKey: ["period", year, month],
+    queryFn: () => getPeriod(year, month),
   });
 }
 
@@ -88,18 +88,13 @@ export function useAddPeriodSymtom() {
       date,
       bleedingLevel,
       painLevel,
-      isStart,
-      isEnd,
       symptom,
     }: {
       date: string;
       bleedingLevel: number;
       painLevel: number;
-      isStart: boolean;
-      isEnd: boolean;
-      symptom: number[];
-    }) =>
-      addPeriodSymtom(date, bleedingLevel, painLevel, isStart, isEnd, symptom),
+      symptom: string[];
+    }) => addPeriodSymtom(date, bleedingLevel, painLevel, symptom),
     onSuccess: (data) => {
       console.log("☑️월경 세부 정보 등록 성공: ", data);
       queryClient.invalidateQueries({ queryKey: ["period"], exact: false });
@@ -121,30 +116,18 @@ export function useEditPeriodSymtom() {
       date,
       bleedingLevel,
       painLevel,
-      isStart,
-      isEnd,
       symptom,
     }: {
       cycleId: number;
       date: string;
       bleedingLevel?: number;
       painLevel?: number;
-      isStart?: boolean;
-      isEnd?: boolean;
-      symptom?: number[];
-    }) =>
-      editPeriodSymtom(
-        cycleId,
-        date,
-        bleedingLevel,
-        painLevel,
-        isStart,
-        isEnd,
-        symptom
-      ),
+      symptom?: string[];
+    }) => editPeriodSymtom(cycleId, date, bleedingLevel, painLevel, symptom),
     onSuccess: (data) => {
       console.log("☑️월경 세부 정보 변경 성공: ", data);
       queryClient.invalidateQueries({ queryKey: ["period"], exact: false });
+      queryClient.invalidateQueries({ queryKey: ["daily"], exact: false });
     },
     onError: (error) => {
       console.log("✖️월경 세부 정보 변경 실패: ", error);

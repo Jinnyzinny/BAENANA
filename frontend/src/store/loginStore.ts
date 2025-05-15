@@ -20,6 +20,7 @@ export const useLoginStore = create<LoginState>()(
     accessToken: null,
     refreshToken: null,
     user: null,
+
     // 로그인 상태 저장(앱 종료 후에도 로그인 유지)
     setLogin: async (auth) => {
       await AsyncStorage.setItem("accessToken", auth.accessToken);
@@ -41,6 +42,7 @@ export const useLoginStore = create<LoginState>()(
         user: null,
       });
     },
+
     // 앱 실행 시 로그인 상태 가져오기
     restoreLogin: async () => {
       const accessToken = await AsyncStorage.getItem("accessToken");

@@ -6,6 +6,7 @@ import { PeriodDate } from "../../../utils/periodDate";
 import { CustomButton } from "../../common/customButton";
 import { SelectTag } from "../../common/selectTag";
 import { SelectLevel } from "../selectLevel";
+import { useEditPeriodSymtom } from "../../../api/quries/period";
 
 export function PeriodInfo({ data }: { data: Daily }) {
   const color: string = "#A3A3A3";
@@ -19,9 +20,9 @@ export function PeriodInfo({ data }: { data: Daily }) {
   const [selectedStress, setSelectedStress] = useState<0 | 1 | 2 | 3 | 4 | 5>(
     data.menstrual_daily_log?.pain_level
   );
-  const [symptom, setSymptom] = useState<string[]>(
-    data.menstrual_daily_log?.symptom
-  );
+  const [symptom, setSymptom] = useState<string[]>([
+    ...(data.menstrual_daily_log?.symptom ?? []),
+  ]);
   const symptomItems = [
     { id: 1, label: "복통" },
     { id: 2, label: "두통" },
@@ -30,6 +31,8 @@ export function PeriodInfo({ data }: { data: Daily }) {
     { id: 5, label: "피로" },
     { id: 6, label: "우울" },
   ];
+
+  const { mutate: editPeriodSymtom } = useEditPeriodSymtom();
 
   function handleSymptom(label: string) {
     // 선택된 증상 선택 시 배열에서 삭제, 선택되지 않은 증상 선택 시 배열에 추가
@@ -40,21 +43,35 @@ export function PeriodInfo({ data }: { data: Daily }) {
 
   // 수정 시 토글 열기, 상태 변경
   function handleEdit() {
+    resetForm();
     setIsEdit(true);
     setIsToggleOpen(true);
   }
 
   // 수정 취소(입력 내용 초기화, 상태 변경)
   function cancelEdit() {
-    setSelectedPeriod(data.menstrual_daily_log?.bleeding_level);
-    setSelectedStress(data.menstrual_daily_log?.pain_level);
-    setSymptom(data.menstrual_daily_log.symptom);
+    resetForm();
     setIsEdit(false);
   }
 
   // 수정 내용 저장(상태 변경)
   function saveEdit() {
+    console.log(symptom);
+    editPeriodSymtom({
+      cycleId: data.menstrual_daily_log.daily_id,
+      date: data.date,
+      bleedingLevel: selectedPeriod,
+      painLevel: selectedStress,
+      symptom: symptom,
+    });
     setIsEdit(false);
+  }
+
+  // 초기화
+  function resetForm() {
+    setSelectedPeriod(data.menstrual_daily_log?.bleeding_level ?? 0);
+    setSelectedStress(data.menstrual_daily_log?.pain_level ?? 0);
+    setSymptom([...(data.menstrual_daily_log?.symptom ?? [])]);
   }
 
   // 삭제
