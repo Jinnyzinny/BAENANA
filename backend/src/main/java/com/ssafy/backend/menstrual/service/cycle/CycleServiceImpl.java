@@ -9,7 +9,6 @@ import com.ssafy.backend.menstrual.entity.MenstrualCycle;
 import com.ssafy.backend.menstrual.exception.MenstrualException;
 import com.ssafy.backend.menstrual.repository.MenstrualCycleRepository;
 import com.ssafy.backend.menstrual.repository.custom.MenstrualCycleCustomRepository;
-import com.ssafy.backend.symptomLog.entity.SymptomLog;
 import com.ssafy.backend.user.entity.User;
 import com.ssafy.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -99,7 +98,7 @@ public class CycleServiceImpl implements CycleService {
         if (menstrualCycleList == null) {
             return ApiResponse.success("해당 월에는 주기 정보가 존재하지 않습니다.");
         }
-        
+
         return ApiResponse.success(
                 "월별 생리 주기 정보를 열람한다.",
                 menstrualCycleList.stream().distinct().map(
@@ -154,9 +153,10 @@ public class CycleServiceImpl implements CycleService {
 
     @Override
     public ApiResponse<?> deleteMenstrualCycle(User user, Long cycle_id) {
+        menstrualCycleRepository.findById(cycle_id).orElseThrow(() ->
+                new MenstrualException("해당 ID와 일치하는 주기가 없습니다.")
+        );
         menstrualCycleRepository.deleteById(cycle_id);
-
-
         return ApiResponse.success("성공적으로 해당 주기가 삭제되었습니다.");
     }
 }
