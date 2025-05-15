@@ -9,6 +9,7 @@ import com.ssafy.backend.menstrual.entity.MenstrualCycle;
 import com.ssafy.backend.menstrual.exception.MenstrualException;
 import com.ssafy.backend.menstrual.repository.MenstrualCycleRepository;
 import com.ssafy.backend.menstrual.repository.custom.MenstrualCycleCustomRepository;
+import com.ssafy.backend.symptomLog.entity.SymptomLog;
 import com.ssafy.backend.user.entity.User;
 import com.ssafy.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -77,7 +78,7 @@ public class CycleServiceImpl implements CycleService {
                                                                                 .stress_level(log.getStressLevel())
                                                                                 .symptoms(
                                                                                         log.getSymptomLog().stream().map(
-                                                                                                symptomLog -> symptomLog.getSymptomType().getDescription()
+                                                                                                SymptomLog::getSymptomType
                                                                                         ).toList()
                                                                                 ).build())
                                                         .toList()
@@ -118,7 +119,7 @@ public class CycleServiceImpl implements CycleService {
                                                                                 .stress_level(log.getStressLevel())
                                                                                 .symptoms(
                                                                                         log.getSymptomLog().stream().distinct().map(
-                                                                                                symptomLog -> symptomLog.getSymptomType().getDescription()
+                                                                                                SymptomLog::getSymptomType
                                                                                         ).toList()
                                                                                 )
 
