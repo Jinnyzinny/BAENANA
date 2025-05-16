@@ -35,17 +35,19 @@ export function HomeScreen() {
     const todayStr = getTodayDateString();
     const today = parseISO(todayStr);
     const start = parseISO(dDayData.data.recorded_menstrual.start_date);
-    const end = parseISO(dDayData.data.PMS);
+    const end = parseISO(dDayData.data.pms);
 
     const totalDays = differenceInCalendarDays(end, start);
     const currentDay = differenceInCalendarDays(today, start);
     const percent = Math.round((currentDay / totalDays) * 100);
 
-    const predictedStart = parseISO(dDayData.data.predict_menstrual.start_date);
+    const predictedStart = parseISO(
+      dDayData.data.predicted_menstrual.start_date
+    );
     const dDayValue = differenceInCalendarDays(predictedStart, today);
 
-    console.log("도넛차트 - 퍼센트: ", Math.max(0, Math.min(percent, 100)));
-    console.log("도넛차트 - D-day: ", dDayValue);
+    console.log("도넛차트 퍼센트: ", Math.max(0, Math.min(percent, 100)));
+    console.log("도넛차트 D-day: ", dDayValue);
 
     return {
       percentage: Math.max(0, Math.min(percent, 100)),
@@ -78,14 +80,14 @@ export function HomeScreen() {
             {hospitalData?.data?.reservation && (
               <AlertMessage
                 type="hospital"
-                title="병원 예약이 있어요"
+                title="병원 예약 알림"
                 content={hospitalData.data.reservation as string}
               />
             )}
             {medicineData?.data?.medicine && (
               <AlertMessage
                 type="medicine"
-                title="복용약 알림이 있어요"
+                title="복용약 알림"
                 content={medicineData.data.medicine as string}
               />
             )}

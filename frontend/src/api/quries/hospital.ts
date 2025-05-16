@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Alert } from "react-native";
 import {
   addHospitalReservation,
   deleteHospitalReservation,
@@ -6,9 +7,8 @@ import {
   getHospitalAlert,
   getHospitalReservation,
 } from "../hospital";
-import { Alert } from "react-native";
 
-// 병원 예약 알림 메시지 조회
+// ✅병원 예약 알림 메시지 조회
 export function useGetHospitalAlert() {
   return useQuery({
     queryKey: ["hospitalAlert"],
@@ -16,7 +16,7 @@ export function useGetHospitalAlert() {
   });
 }
 
-// 병원 예약 일정 등록
+// ✅병원 예약 일정 등록
 export function useAddHospitalReservation() {
   const queryClient = useQueryClient();
 
@@ -32,7 +32,12 @@ export function useAddHospitalReservation() {
     }) => addHospitalReservation(hospitalName, reservationDate, purpose),
     onSuccess: (data) => {
       console.log("☑️병원 예약 일정 등록 성공: ", data);
-      queryClient.invalidateQueries({ queryKey: ["hospitalReservation"] });
+      queryClient.invalidateQueries({
+        queryKey: ["hospitalReservation"],
+        exact: false,
+      });
+      queryClient.invalidateQueries({ queryKey: ["daily"], exact: false });
+      queryClient.invalidateQueries({ queryKey: ["hospitalAlert"] });
     },
     onError: (error) => {
       console.log("✖️병원 예약 일정 등록 실패: ", error);
@@ -41,15 +46,15 @@ export function useAddHospitalReservation() {
   });
 }
 
-// 월별 병원 예약 일정 조회
-export function useGetHospitalReservation(month: number) {
+// ✅월별 병원 예약 일정 조회
+export function useGetHospitalReservation(year: number, month: number) {
   return useQuery({
-    queryKey: ["hospitalReservation", month],
-    queryFn: () => getHospitalReservation(month),
+    queryKey: ["hospitalReservation", year, month],
+    queryFn: () => getHospitalReservation(year, month),
   });
 }
 
-// 병원 예약 일정 변경
+// ✅병원 예약 일정 변경
 export function useEditHospitalReservation() {
   const queryClient = useQueryClient();
 
@@ -67,7 +72,12 @@ export function useEditHospitalReservation() {
     }) => editHospitalReservation(id, hospitalName, reservationDate, purpose),
     onSuccess: (data) => {
       console.log("☑️병원 예약 일정 변경 성공: ", data);
-      queryClient.invalidateQueries({ queryKey: ["hospitalReservation"] });
+      queryClient.invalidateQueries({
+        queryKey: ["hospitalReservation"],
+        exact: false,
+      });
+      queryClient.invalidateQueries({ queryKey: ["daily"], exact: false });
+      queryClient.invalidateQueries({ queryKey: ["hospitalAlert"] });
     },
     onError: (error) => {
       console.log("✖️병원 예약 일정 변경 실패: ", error);
@@ -76,7 +86,7 @@ export function useEditHospitalReservation() {
   });
 }
 
-// 병원 예약 일정 삭제
+// ✅병원 예약 일정 삭제
 export function useDeleteHospitalReservation() {
   const queryClient = useQueryClient();
 
@@ -84,7 +94,12 @@ export function useDeleteHospitalReservation() {
     mutationFn: (id: number) => deleteHospitalReservation(id),
     onSuccess: () => {
       console.log("☑️병원 예약 일정 삭제 성공");
-      queryClient.invalidateQueries({ queryKey: ["hospitalReservation"] });
+      queryClient.invalidateQueries({
+        queryKey: ["hospitalReservation"],
+        exact: false,
+      });
+      queryClient.invalidateQueries({ queryKey: ["daily"], exact: false });
+      queryClient.invalidateQueries({ queryKey: ["hospitalAlert"] });
     },
     onError: (error) => {
       console.log("✖️병원 예약 일정 삭제 실패: ", error);

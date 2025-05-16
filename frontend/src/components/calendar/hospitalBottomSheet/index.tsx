@@ -1,11 +1,12 @@
 import { RefObject, useState } from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { Modalize } from "react-native-modalize";
 import { TextInput } from "react-native-gesture-handler";
-import { DateDropdown } from "../../common/dateDropdown";
-import { TimeDropdown } from "../../common/timeDropdown";
+import { Modalize } from "react-native-modalize";
+import { useAddHospitalReservation } from "../../../api/quries/hospital";
 import { CustomButton } from "../../common/customButton";
+import { DateDropdown } from "../../common/dateDropdown";
 import { SelectTag } from "../../common/selectTag";
+import { TimeDropdown } from "../../common/timeDropdown";
 
 export function HospitalBottomSheet({
   height,
@@ -20,10 +21,15 @@ export function HospitalBottomSheet({
   const year = Number(selectedDate?.slice(0, 4));
   const month = Number(selectedDate?.slice(5, 7));
   const day = Number(selectedDate?.slice(8, 10));
-  const [reservationDate, setReservationDate] = useState<Date | null>(null);
-  const [reservationTime, setReservationTime] = useState<Date | null>(null);
+  const [reservationDate, setReservationDate] = useState<Date>(
+    new Date(year, month - 1, day)
+  );
+  const [reservationTime, setReservationTime] = useState<Date>(
+    new Date(0, 0, 0, 9, 0)
+  );
 
-  const [purpose, setPurpose] = useState<number>(0);
+  const [purpose, setPurpose] = useState<string>("");
+
   const purposeItems = [
     { id: 1, label: "검진" },
     { id: 2, label: "초음파" },
@@ -32,9 +38,45 @@ export function HospitalBottomSheet({
     { id: 5, label: "기타" },
   ];
   const [purposeInput, setPurposeInput] = useState<string>("");
+  const { mutate: addHospitalReservation } = useAddHospitalReservation();
+
+  function handleSave() {
+    if (hospitalName && reservationDate && reservationTime) {
+      const datePart = reservationDate.toISOString().split("T")[0];
+      const timePart = reservationTime.toTimeString().slice(0, 5);
+      const formattedDateTime = `${datePart}T${timePart}`;
+
+      const finalPurpose = purpose === "기타" ? purposeInput : purpose;
+
+      console.log("병원 이름: ", hospitalName);
+      console.log("예약 일시: ", formattedDateTime);
+      console.log("목적: ", finalPurpose);
+
+      addHospitalReservation(
+        {
+          hospitalName,
+          reservationDate: formattedDateTime,
+          purpose: finalPurpose,
+        },
+        {
+          onSuccess: () => {
+            sheetRef.current?.close();
+          },
+        }
+      );
+    }
+  }
+
+  function resetForm() {
+    setHospitalName("");
+    setReservationDate(new Date(year, month - 1, day));
+    setReservationTime(new Date(0, 0, 0, 9, 0));
+    setPurpose("");
+    setPurposeInput("");
+  }
 
   return (
-    <Modalize ref={sheetRef} snapPoint={height * 0.76}>
+    <Modalize ref={sheetRef} snapPoint={height * 0.8} onOpen={resetForm}>
       {/* 헤더 */}
       <View className="mx-5 mt-7 mb-5 flex-row items-start justify-start gap-2">
         <Image
@@ -106,12 +148,12 @@ export function HospitalBottomSheet({
                   <TouchableOpacity
                     key={item.id}
                     onPress={() => {
-                      setPurpose(item.id);
+                      setPurpose(item.label);
                       setPurposeInput("");
                     }}
                   >
                     <SelectTag
-                      fill={purpose === item.id}
+                      fill={purpose === item.label}
                       content={item.label}
                     />
                   </TouchableOpacity>
@@ -123,10 +165,10 @@ export function HospitalBottomSheet({
                 {purposeItems.slice(4).map((item) => (
                   <TouchableOpacity
                     key={item.id}
-                    onPress={() => setPurpose(item.id)}
+                    onPress={() => setPurpose(item.label)}
                   >
                     <SelectTag
-                      fill={purpose === item.id}
+                      fill={purpose === item.label}
                       content={item.label}
                     />
                   </TouchableOpacity>
@@ -134,7 +176,7 @@ export function HospitalBottomSheet({
               </View>
 
               {/* 입력창 */}
-              {purpose === 5 && (
+              {purpose === "기타" && (
                 <View className="flex-1 mx-5 border-b border-neutral-400 relative justify-center">
                   {purposeInput === "" && (
                     <Text
@@ -156,7 +198,7 @@ export function HospitalBottomSheet({
 
           {/* 저장 버튼 */}
           <View className="mt-10">
-            <CustomButton fill={true} content="저장" onPress={() => {}} />
+            <CustomButton fill={true} content="저장" onPress={handleSave} />
           </View>
         </View>
       </ScrollView>

@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Alert } from "react-native";
 import {
   addMedicineReservation,
   deleteMedicineReservation,
@@ -6,9 +7,8 @@ import {
   getMedicineAlert,
   getMedicineReservation,
 } from "../medicine";
-import { Alert } from "react-native";
 
-// 복용약 알림 메시지 조회
+// ✅복용약 알림 메시지 조회
 export function useGetMedicineAlert() {
   return useQuery({
     queryKey: ["medicineAlert"],
@@ -16,7 +16,7 @@ export function useGetMedicineAlert() {
   });
 }
 
-// 복용약 일정 등록
+// ✅복용약 일정 등록
 export function useAddMedicineReservation() {
   const queryClient = useQueryClient();
 
@@ -37,7 +37,12 @@ export function useAddMedicineReservation() {
       addMedicineReservation(medicineName, startDate, endDate, timeTaken, memo),
     onSuccess: (data) => {
       console.log("☑️복용약 일정 등록 성공: ", data);
-      queryClient.invalidateQueries({ queryKey: ["medicineReservation"] });
+      queryClient.invalidateQueries({ queryKey: ["daily"], exact: false });
+      queryClient.invalidateQueries({ queryKey: ["medicineAlert"] });
+      queryClient.invalidateQueries({
+        queryKey: ["medicineReservation"],
+        exact: false,
+      });
     },
     onError: (error) => {
       console.log("✖️복용약 일정 등록 실패: ", error);
@@ -46,15 +51,15 @@ export function useAddMedicineReservation() {
   });
 }
 
-// 월별 복용약 일정 조회
-export function useGetMedicineReservation(month: number) {
+// ✅월별 복용약 일정 조회
+export function useGetMedicineReservation(year: number, month: number) {
   return useQuery({
-    queryKey: ["medicineReservation"],
-    queryFn: () => getMedicineReservation(month),
+    queryKey: ["medicineReservation", year, month],
+    queryFn: () => getMedicineReservation(year, month),
   });
 }
 
-// 복용약 일정 변경
+// ✅복용약 일정 변경
 export function useEditMedicineReservation() {
   const queryClient = useQueryClient();
 
@@ -84,7 +89,12 @@ export function useEditMedicineReservation() {
       ),
     onSuccess: (data) => {
       console.log("☑️복용약 일정 변경 성공: ", data);
-      queryClient.invalidateQueries({ queryKey: ["medicineReservation"] });
+      queryClient.invalidateQueries({ queryKey: ["daily"], exact: false });
+      queryClient.invalidateQueries({ queryKey: ["medicineAlert"] });
+      queryClient.invalidateQueries({
+        queryKey: ["medicineReservation"],
+        exact: false,
+      });
     },
     onError: (error) => {
       console.log("✖️복용약 일정 변경 실패: ", error);
@@ -93,7 +103,7 @@ export function useEditMedicineReservation() {
   });
 }
 
-// 복용약 일정 삭제
+// ✅복용약 일정 삭제
 export function useDeleteMedicineReservation() {
   const queryClient = useQueryClient();
 
@@ -101,7 +111,12 @@ export function useDeleteMedicineReservation() {
     mutationFn: (id: number) => deleteMedicineReservation(id),
     onSuccess: () => {
       console.log("☑️복용약 일정 삭제 성공");
-      queryClient.invalidateQueries({ queryKey: ["medicineReservation"] });
+      queryClient.invalidateQueries({ queryKey: ["daily"], exact: false });
+      queryClient.invalidateQueries({ queryKey: ["medicineAlert"] });
+      queryClient.invalidateQueries({
+        queryKey: ["medicineReservation"],
+        exact: false,
+      });
     },
     onError: (error) => {
       console.log("✖️복용약 일정 삭제 실패: ", error);

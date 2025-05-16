@@ -1,19 +1,32 @@
-import { useRef } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useRef } from "react";
 import { ScrollView, ToastAndroid, View } from "react-native";
 import RNFS from "react-native-fs";
 import RNHTMLtoPDF from "react-native-html-to-pdf";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ViewShot, { captureRef } from "react-native-view-shot";
+import {
+  useGetOvulationTest,
+  useGetPeriodAlert,
+  useGetPeriodInfo,
+  useGetRecentMedicine,
+  useGetRecentPeriod,
+  useGetReport,
+} from "../../api/quries/report";
 import { AlertMessage } from "../../components/common/alertMessage";
 import { CustomButton } from "../../components/common/customButton";
 import { HeaderLogo } from "../../components/common/headerLogo";
 import { PermissionCheck } from "../../components/common/permissionCheck";
 import { BeforePeriod } from "../../components/report/beforePeriod";
-import { CurrentPeriod } from "../../components/report/currentPeriod";
 import { MedicineInfo } from "../../components/report/medicineInfo";
 import { OvulationInfo } from "../../components/report/ovulationInfo";
+import { RecentPeriod } from "../../components/report/recentPeriod";
 import { Summary } from "../../components/report/summary";
 import { useStoragePermission } from "../../hooks/useStoragePermission";
+import {
+  useGetChildbearingAge,
+  useGetPredictedPeriod,
+} from "../../api/quries/period";
 
 export function ReportScreen() {
   const hasPermission = useStoragePermission();
@@ -136,6 +149,41 @@ export function ReportScreen() {
     }
   }
 
+  const { data: periodAlertData, refetch: refetchPeriodAlert } =
+    useGetPeriodAlert();
+
+  const { data: periodInfoData, refetch: refetchPeriodInfo } =
+    useGetPeriodInfo();
+
+  const { data: recentPeriodData, refetch: refetchRecentPeriod } =
+    useGetRecentPeriod();
+
+  const { data: ovulationTestData, refetch: refetchOvulationTest } =
+    useGetOvulationTest();
+
+  const { data: recentMedicineData, refetch: refetchRecentMedicine } =
+    useGetRecentMedicine();
+
+  const { data: reportData, refetch: refetchReport } = useGetReport();
+
+  const { data: childbearingAgeData, refetch: refetchChildbearingAge } =
+    useGetChildbearingAge();
+  const { data: predictedPeriodData, refetch: refetchPredictedPeriod } =
+    useGetPredictedPeriod();
+
+  useFocusEffect(
+    useCallback(() => {
+      refetchPeriodAlert();
+      refetchPeriodInfo();
+      refetchRecentPeriod();
+      refetchOvulationTest();
+      refetchRecentMedicine();
+      refetchReport();
+      refetchChildbearingAge();
+      refetchPredictedPeriod();
+    }, [])
+  );
+
   if (hasPermission === null) {
     return <PermissionCheck name="저장소" />;
   }
@@ -146,11 +194,13 @@ export function ReportScreen() {
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 32 }}>
         <View className="gap-3 mx-5 pb-16">
           {/* 알림 메시지 */}
-          <AlertMessage
-            type="warn"
-            title="최근 월경 주기가 불규칙합니다."
-            content="최근 3개월 월경 주기가 불규칙합니다."
-          />
+          {periodAlertData?.data && periodAlertData?.data.message && (
+            <AlertMessage
+              type={periodAlertData.data.menstrual_is_normal ? "good" : "warn"}
+              title="최근 월경 주기"
+              content={periodAlertData.data.message}
+            />
+          )}
 
           {/* 첫 번째 캡처 */}
           <ViewShot
@@ -159,13 +209,38 @@ export function ReportScreen() {
           >
             <View className="gap-3">
               {/* 월경 주기 / 월경 기간 */}
-              <View className="flex-row gap-3">
-                <BeforePeriod type="warn" title="월경 주기" date={32} />
-                <BeforePeriod type="normal" title="월경 기간" date={6} />
-              </View>
+              {periodInfoData?.data && (
+                <View className="flex-row gap-3">
+                  <BeforePeriod
+                    type="warn"
+                    title="월경 주기"
+                    date={
+                      periodInfoData?.data.cycle
+                        ? periodInfoData?.data.cycle
+                        : 0
+                    }
+                  />
+                  <BeforePeriod
+                    type="normal"
+                    title="월경 기간"
+                    date={
+                      periodInfoData?.data.period
+                        ? periodInfoData?.data.period
+                        : 0
+                    }
+                  />
+                </View>
+              )}
 
-              {/* 배란테스트 결과 컴포넌트 구현 필요 */}
-              <OvulationInfo />
+              {/* 배란테스트 결과 */}
+              {ovulationTestData?.data &&
+                childbearingAgeData?.data &&
+                predictedPeriodData?.data && (
+                  <OvulationInfo
+                    ovulationData={ovulationTestData.data}
+                    childbearingAgeData={childbearingAgeData.data}
+                  />
+                )}
             </View>
           </ViewShot>
 
@@ -175,7 +250,9 @@ export function ReportScreen() {
             options={{ format: "jpg", quality: 1.0 }}
           >
             {/* 최근 주기 */}
-            <CurrentPeriod />
+            {recentPeriodData?.data && (
+              <RecentPeriod data={recentPeriodData.data} />
+            )}
           </ViewShot>
 
           {/* 세 번째 캡처 */}
@@ -184,11 +261,13 @@ export function ReportScreen() {
             options={{ format: "jpg", quality: 1.0 }}
           >
             {/* 최근 복용약 */}
-            <MedicineInfo />
+            {recentMedicineData?.data && (
+              <MedicineInfo data={recentMedicineData.data} />
+            )}
           </ViewShot>
 
           {/* 이번 달 월경 출혈량 / 최근 복용약 / 이번 달 월경 증상 */}
-          <Summary type1="warn" type2="normal" />
+          {reportData?.data && <Summary data={reportData.data} />}
           <View />
 
           {/* 버튼 */}

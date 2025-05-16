@@ -1,9 +1,17 @@
 import { RefObject, useState } from "react";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Modalize } from "react-native-modalize";
-import { SelectLevel } from "../selectLevel";
+import { useAddPeriodSymptom } from "../../../api/quries/period";
 import { CustomButton } from "../../common/customButton";
 import { SelectTag } from "../../common/selectTag";
+import { SelectLevel } from "../selectLevel";
 
 export function SymptomBottomSheet({
   height,
@@ -20,7 +28,7 @@ export function SymptomBottomSheet({
   const [selectedStress, setSelectedStress] = useState<0 | 1 | 2 | 3 | 4 | 5>(
     0
   );
-  const [symptom, setSymptom] = useState<number[]>([]);
+  const [symptom, setSymptom] = useState<string[]>([]);
   const symptomItems = [
     { id: 1, label: "복통" },
     { id: 2, label: "두통" },
@@ -30,15 +38,40 @@ export function SymptomBottomSheet({
     { id: 6, label: "우울" },
   ];
 
-  function handleSymptom(id: number) {
+  function handleSymptom(label: string) {
     // 선택된 증상 선택 시 배열에서 삭제, 선택되지 않은 증상 선택 시 배열에 추가
     setSymptom((prev) =>
-      prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
+      prev.includes(label) ? prev.filter((s) => s !== label) : [...prev, label]
     );
   }
 
+  const { mutate: addPeriodSymptom } = useAddPeriodSymptom();
+
+  function handleSave() {
+    if (!selectedDate) {
+      return Alert.alert("날짜 오류", "날짜가 선택되지 않았습니다.");
+    }
+
+    console.log(selectedDate, selectedPeriod, selectedStress, symptom);
+
+    addPeriodSymptom({
+      date: selectedDate,
+      bleedingLevel: selectedPeriod,
+      painLevel: selectedStress,
+      symptom,
+    });
+
+    sheetRef.current?.close();
+  }
+
+  function resetForm() {
+    setSelectedPeriod(0);
+    setSelectedStress(0);
+    setSymptom([]);
+  }
+
   return (
-    <Modalize ref={sheetRef} snapPoint={height * 0.655}>
+    <Modalize ref={sheetRef} snapPoint={height * 0.7} onOpen={resetForm}>
       {/* 헤더 */}
       <View className="mx-5 mt-7 mb-5 flex-row items-start justify-start gap-2">
         <Image
@@ -88,10 +121,10 @@ export function SymptomBottomSheet({
                 {symptomItems.slice(0, 4).map((item) => (
                   <TouchableOpacity
                     key={item.id}
-                    onPress={() => handleSymptom(item.id)}
+                    onPress={() => handleSymptom(item.label)}
                   >
                     <SelectTag
-                      fill={symptom.includes(item.id)}
+                      fill={symptom.includes(item.label)}
                       content={item.label}
                     />
                   </TouchableOpacity>
@@ -103,10 +136,10 @@ export function SymptomBottomSheet({
                 {symptomItems.slice(4).map((item) => (
                   <TouchableOpacity
                     key={item.id}
-                    onPress={() => handleSymptom(item.id)}
+                    onPress={() => handleSymptom(item.label)}
                   >
                     <SelectTag
-                      fill={symptom.includes(item.id)}
+                      fill={symptom.includes(item.label)}
                       content={item.label}
                     />
                   </TouchableOpacity>
@@ -117,7 +150,7 @@ export function SymptomBottomSheet({
 
           {/* 저장 버튼 */}
           <View className="mt-10">
-            <CustomButton fill={true} content="저장" onPress={() => {}} />
+            <CustomButton fill={true} content="저장" onPress={handleSave} />
           </View>
         </View>
       </ScrollView>

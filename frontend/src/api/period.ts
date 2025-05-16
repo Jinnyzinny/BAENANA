@@ -1,4 +1,4 @@
-import { Date, FullDday, Period } from "../types/Period";
+import { FullDate, FullDday, FullPeriod } from "../types/Period";
 import authClient from "./client/authClient";
 
 // 월경 예정일 D-day 조회
@@ -29,11 +29,16 @@ export async function addPeriod(startDate: string, endDate: string) {
 }
 
 // 월별 월경 주기 조회
-export async function getPeriod(month: number): Promise<Period> {
+export async function getPeriod(
+  year: number,
+  month: number
+): Promise<FullPeriod> {
   try {
-    const response = await authClient.get(`/calendar/menstrual_cycle/${month}`);
-    console.log("월별 월경 주기 조회 성공: ", response.data.data);
-    return response.data.data;
+    const response = await authClient.get(
+      `/calendar/menstrual_cycle/${year}/${month}`
+    );
+    console.log("월별 월경 주기 조회 성공: ", response.data);
+    return response.data;
   } catch (error: unknown) {
     console.error("월별 월경 주기 조회 실패: ", error);
     throw error;
@@ -70,23 +75,17 @@ export async function editPeriod(
 }
 
 // 월경 세부 정보 등록
-export async function addPeriodSymtom(
-  cycleId: number,
+export async function addPeriodSymptom(
   date: string,
   bleedingLevel: number,
   painLevel: number,
-  isStart: boolean,
-  isEnd: boolean,
   symptom: string[]
 ) {
   try {
     const response = await authClient.post("/calendar/menstrual_cycle/log", {
-      cycle_id: cycleId,
       date,
       bleeding_level: bleedingLevel,
       pain_level: painLevel,
-      is_start: isStart,
-      is_end: isEnd,
       symptom,
     });
     console.log("월경 주기 세부 정보 등록 성공: ", response.data);
@@ -98,13 +97,11 @@ export async function addPeriodSymtom(
 }
 
 // 월경 세부 정보 변경
-export async function editPeriodSymtom(
+export async function editPeriodSymptom(
   cycleId: number,
   date: string,
   bleedingLevel?: number,
   painLevel?: number,
-  isStart?: boolean,
-  isEnd?: boolean,
   symptom?: string[]
 ) {
   try {
@@ -112,8 +109,6 @@ export async function editPeriodSymtom(
       date,
       ...(bleedingLevel !== undefined && { bleeding_level: bleedingLevel }),
       ...(painLevel !== undefined && { pain_level: painLevel }),
-      ...(isStart !== undefined && { is_start: isStart }),
-      ...(isEnd !== undefined && { is_end: isEnd }),
       ...(symptom !== undefined && { symptom }),
     };
     const response = await authClient.patch(
@@ -128,12 +123,26 @@ export async function editPeriodSymtom(
   }
 }
 
+// 월경 세부 정보 삭제
+export async function deletePeriodSymptom(cycleId: number) {
+  try {
+    const response = await authClient.delete(
+      `/calendar/menstrual_cycle/log/${cycleId}`
+    );
+    console.log("월경 세부 정보 삭제 성공: ", response.data);
+    return response.data;
+  } catch (error: unknown) {
+    console.error("월경 세부 정보 삭제 실패: ", error);
+    throw error;
+  }
+}
+
 // 가임기 조회
-export async function getChildbearingAge(): Promise<Date> {
+export async function getChildbearingAge(): Promise<FullDate> {
   try {
     const response = await authClient.get("/calendar/bearing_period");
-    console.log("가임기 조회 성공: ", response.data.data);
-    return response.data.data;
+    console.log("가임기 조회 성공: ", response.data);
+    return response.data;
   } catch (error: unknown) {
     console.error("가임기 조회 실패: ", error);
     throw error;
@@ -141,11 +150,11 @@ export async function getChildbearingAge(): Promise<Date> {
 }
 
 // 월경 예정일 조회
-export async function getPredictedPeriod(): Promise<Date> {
+export async function getPredictedPeriod(): Promise<FullDate> {
   try {
     const response = await authClient.get("/calendar/menstrual_prediction");
-    console.log("월경 예정일 조회 성공: ", response.data.data);
-    return response.data.data;
+    console.log("월경 예정일 조회 성공: ", response.data);
+    return response.data;
   } catch (error: unknown) {
     console.error("월경 예정일 조회 실패: ", error);
     throw error;

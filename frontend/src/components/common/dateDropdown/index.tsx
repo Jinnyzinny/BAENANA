@@ -1,5 +1,5 @@
 import { ChevronDown } from "lucide-react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import DatePicker from "react-native-date-picker";
 
@@ -18,6 +18,12 @@ export function DateDropdown({
 }) {
   const [date, setDate] = useState(new Date(year, month - 1, day));
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const newDate = new Date(year, month - 1, day);
+    setDate(newDate);
+    onChange(newDate);
+  }, [year, month, day]);
 
   return (
     <View className="flex-1 pb-3 border-b border-neutral-400">

@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useEffect } from "react";
 import { Text, View } from "react-native";
 import Svg, { Circle, Defs, LinearGradient, Stop } from "react-native-svg";
 import { ChartTag } from "../chartTag";
@@ -7,7 +7,6 @@ import Animated, {
   useAnimatedProps,
   withTiming,
 } from "react-native-reanimated";
-import { useFocusEffect } from "@react-navigation/native";
 
 // 애니메이션이 가능한 Circle로 래핑
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
@@ -25,12 +24,9 @@ export function DonutChart({
   const progress = useSharedValue(0);
 
   // 애니메이션 재시작
-  useFocusEffect(
-    useCallback(() => {
-      progress.value = 0;
-      progress.value = withTiming(percentage, { duration: 1200 });
-    }, [])
-  );
+  useEffect(() => {
+    progress.value = withTiming(percentage, { duration: 1200 });
+  }, [percentage]);
 
   // AnimatedProps 정의
   const animatedProps = useAnimatedProps(() => {

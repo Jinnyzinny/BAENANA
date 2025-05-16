@@ -1,8 +1,12 @@
 import { Default } from "./Default";
 
+export type FullDate = Default & {
+  data: Date;
+};
+
 export type Date = {
-  start_date: string;
   end_date: string;
+  start_date: string;
 };
 
 export type FullDday = Default & {
@@ -10,14 +14,14 @@ export type FullDday = Default & {
 };
 
 export type Dday = {
-  recorded_menstrual: Date;
-  predict_menstrual: Date;
   childbearing_period: string;
   ovulation_day: string;
-  PMS: string;
+  pms: string;
+  predicted_menstrual: Date;
+  recorded_menstrual: Date;
 };
 
-export type Symtom = {
+export type Symptom = {
   date: string;
   bleeding_level: 0 | 1 | 2 | 3 | 4 | 5;
   pain_level: 0 | 1 | 2 | 3 | 4 | 5;
@@ -26,5 +30,9 @@ export type Symtom = {
 
 export type Period = Date & {
   cycle_id: number;
-  detail: Symtom[];
+  detail: Symptom[];
+};
+
+export type FullPeriod = Default & {
+  data: Period[];
 };

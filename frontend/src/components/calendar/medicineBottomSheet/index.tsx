@@ -1,11 +1,19 @@
 import { RefObject, useRef, useState } from "react";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Modalize } from "react-native-modalize";
 import { TextInput } from "react-native-gesture-handler";
 import { DateDropdown } from "../../common/dateDropdown";
 import { TimeDropdown } from "../../common/timeDropdown";
 import { CustomButton } from "../../common/customButton";
 import { Minus, Plus } from "lucide-react-native";
+import { useAddMedicineReservation } from "../../../api/quries/medicine";
 
 export function MedicineBottomSheet({
   height,
@@ -40,6 +48,64 @@ export function MedicineBottomSheet({
     }
   }
 
+  const { mutate: addMedicineReservation } = useAddMedicineReservation();
+
+  // 복용약 일정 저장
+  function handleSave() {
+    if (!medicineName) {
+      Alert.alert("입력 오류", "복용약 이름을 입력해주세요.");
+      return;
+    }
+
+    if (!startDate || !endDate) {
+      Alert.alert("입력 오류", "시작일과 종료일을 모두 입력해주세요.");
+      return;
+    }
+
+    const formatStartDate = startDate.toISOString().slice(0, 10); // yyyy-MM-dd
+    const formatEndDate = endDate.toISOString().slice(0, 10);
+
+    const timeTaken = reservationTimes
+      .map((item) => item.time?.toISOString().slice(11, 16)) // HH:mm
+      .filter((t): t is string => !!t);
+
+    if (timeTaken.length === 0) {
+      Alert.alert("입력 오류", "복용 시간을 한 개 이상 설정해주세요.");
+      return;
+    }
+
+    console.log("복용약 이름: ", medicineName);
+    console.log("복용 시작일: ", formatStartDate);
+    console.log("복용 종료일: ", formatEndDate);
+    console.log("시간: ", timeTaken);
+    console.log("메모: ", memo);
+
+    addMedicineReservation(
+      {
+        medicineName,
+        startDate: formatStartDate,
+        endDate: formatEndDate,
+        timeTaken,
+        memo,
+      },
+      {
+        onSuccess: () => {
+          sheetRef.current?.close();
+        },
+      }
+    );
+  }
+
+  // 입력 폼 초기화
+  function resetForm() {
+    setMedicineName("");
+    setStartDate(null);
+    setEndDate(null);
+    setReservationTimes([{ id: 1, time: null }]);
+    idCounter.current = 2;
+    setMemo("");
+  }
+
   // 복용약 시간 삭제
   function removeReservationTime(id: number) {
     if (reservationTimes.length > 1) {
@@ -55,7 +121,7 @@ export function MedicineBottomSheet({
   }
 
   return (
-    <Modalize ref={sheetRef} snapPoint={height * 0.843}>
+    <Modalize ref={sheetRef} snapPoint={height * 0.9} onOpen={resetForm}>
       {/* 헤더 */}
       <View className="mx-5 mt-7 mb-5 flex-row items-start justify-start gap-2">
         <Image
@@ -176,7 +242,7 @@ export function MedicineBottomSheet({
 
           {/* 저장 버튼 */}
           <View className="mt-10">
-            <CustomButton fill={true} content="저장" onPress={() => {}} />
+            <CustomButton fill={true} content="저장" onPress={handleSave} />
           </View>
         </View>
       </ScrollView>

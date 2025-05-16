@@ -1,11 +1,15 @@
 import { ChevronDown, ChevronUp, SquarePen, Trash2 } from "lucide-react-native";
-import { Alert, Text, TouchableOpacity, View } from "react-native";
-import { SelectLevel } from "../selectLevel";
-import { SelectTag } from "../../common/selectTag";
 import { useState } from "react";
+import { Alert, Text, TouchableOpacity, View } from "react-native";
+import {
+  useDeletePeriodSymptom,
+  useEditPeriodSymptom,
+} from "../../../api/quries/period";
 import { Daily } from "../../../types/Daily";
-import { CustomButton } from "../../common/customButton";
 import { PeriodDate } from "../../../utils/periodDate";
+import { CustomButton } from "../../common/customButton";
+import { SelectTag } from "../../common/selectTag";
+import { SelectLevel } from "../selectLevel";
 
 export function PeriodInfo({ data }: { data: Daily }) {
   const color: string = "#A3A3A3";
@@ -14,12 +18,14 @@ export function PeriodInfo({ data }: { data: Daily }) {
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
   const [selectedPeriod, setSelectedPeriod] = useState<0 | 1 | 2 | 3 | 4 | 5>(
-    data.bleeding_level
+    data.menstrual_daily_log?.bleeding_level
   );
   const [selectedStress, setSelectedStress] = useState<0 | 1 | 2 | 3 | 4 | 5>(
-    data.pain_level
+    data.menstrual_daily_log?.pain_level
   );
-  const [symptom, setSymptom] = useState<number[]>(data.symptom);
+  const [symptom, setSymptom] = useState<string[]>([
+    ...(data.menstrual_daily_log?.symptom ?? []),
+  ]);
   const symptomItems = [
     { id: 1, label: "복통" },
     { id: 2, label: "두통" },
@@ -29,30 +35,47 @@ export function PeriodInfo({ data }: { data: Daily }) {
     { id: 6, label: "우울" },
   ];
 
-  function handleSymptom(id: number) {
+  const { mutate: editPeriodSymptom } = useEditPeriodSymptom();
+  const { mutate: deletePeriodSymptom } = useDeletePeriodSymptom();
+
+  function handleSymptom(label: string) {
     // 선택된 증상 선택 시 배열에서 삭제, 선택되지 않은 증상 선택 시 배열에 추가
     setSymptom((prev) =>
-      prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
+      prev.includes(label) ? prev.filter((s) => s !== label) : [...prev, label]
     );
   }
 
   // 수정 시 토글 열기, 상태 변경
   function handleEdit() {
+    resetForm();
     setIsEdit(true);
     setIsToggleOpen(true);
   }
 
   // 수정 취소(입력 내용 초기화, 상태 변경)
   function cancelEdit() {
-    setSelectedPeriod(data.bleeding_level);
-    setSelectedStress(data.pain_level);
-    setSymptom(data.symptom);
+    resetForm();
     setIsEdit(false);
   }
 
   // 수정 내용 저장(상태 변경)
   function saveEdit() {
+    console.log(symptom);
+    editPeriodSymptom({
+      cycleId: data.menstrual_daily_log.daily_id,
+      date: data.date,
+      bleedingLevel: selectedPeriod,
+      painLevel: selectedStress,
+      symptom: symptom,
+    });
     setIsEdit(false);
+  }
+
+  // 초기화
+  function resetForm() {
+    setSelectedPeriod(data.menstrual_daily_log?.bleeding_level ?? 0);
+    setSelectedStress(data.menstrual_daily_log?.pain_level ?? 0);
+    setSymptom([...(data.menstrual_daily_log?.symptom ?? [])]);
   }
 
   // 삭제
@@ -65,7 +88,7 @@ export function PeriodInfo({ data }: { data: Daily }) {
       {
         text: "확인",
         style: "destructive",
-        onPress: () => {},
+        onPress: () => deletePeriodSymptom(data.menstrual_daily_log.daily_id),
       },
     ]);
   }
@@ -76,7 +99,7 @@ export function PeriodInfo({ data }: { data: Daily }) {
       <View className="flex-row items-center justify-between">
         <View className="flex-row items-center gap-2">
           <Text className="text-neutral-800 text-lg font-bold">
-            {PeriodDate(data.start_date, data.date)}
+            {PeriodDate(data.menstrual_cycle.start_date, data.date)}
           </Text>
           <View className="pt-1 flex-row items-center gap-1">
             {/* 수정 버튼 */}
@@ -139,10 +162,10 @@ export function PeriodInfo({ data }: { data: Daily }) {
                   {symptomItems.slice(0, 4).map((item) => (
                     <TouchableOpacity
                       key={item.id}
-                      onPress={() => handleSymptom(item.id)}
+                      onPress={() => handleSymptom(item.label)}
                     >
                       <SelectTag
-                        fill={symptom.includes(item.id)}
+                        fill={symptom.includes(item.label)}
                         content={item.label}
                       />
                     </TouchableOpacity>
@@ -153,10 +176,10 @@ export function PeriodInfo({ data }: { data: Daily }) {
                   {symptomItems.slice(4).map((item) => (
                     <TouchableOpacity
                       key={item.id}
-                      onPress={() => handleSymptom(item.id)}
+                      onPress={() => handleSymptom(item.label)}
                     >
                       <SelectTag
-                        fill={symptom.includes(item.id)}
+                        fill={symptom.includes(item.label)}
                         content={item.label}
                       />
                     </TouchableOpacity>
@@ -187,7 +210,7 @@ export function PeriodInfo({ data }: { data: Daily }) {
               </Text>
               <View className="mx-5">
                 <SelectLevel
-                  selected={data.bleeding_level}
+                  selected={data.menstrual_daily_log?.bleeding_level}
                   setSelected={() => {}}
                   contents={["매우 적음", "보통", "매우 많음"]}
                 />
@@ -200,7 +223,7 @@ export function PeriodInfo({ data }: { data: Daily }) {
               </Text>
               <View className="mx-5">
                 <SelectLevel
-                  selected={data.pain_level}
+                  selected={data.menstrual_daily_log?.pain_level}
                   setSelected={() => {}}
                   contents={["매우 낮음", "보통", "매우 높음"]}
                 />
@@ -215,7 +238,9 @@ export function PeriodInfo({ data }: { data: Daily }) {
                   {symptomItems.slice(0, 4).map((item) => (
                     <TouchableOpacity key={item.id} onPress={() => {}}>
                       <SelectTag
-                        fill={data.symptom.includes(item.id)}
+                        fill={data.menstrual_daily_log?.symptom.includes(
+                          item.label
+                        )}
                         content={item.label}
                       />
                     </TouchableOpacity>
@@ -226,7 +251,9 @@ export function PeriodInfo({ data }: { data: Daily }) {
                   {symptomItems.slice(4).map((item) => (
                     <TouchableOpacity key={item.id} onPress={() => {}}>
                       <SelectTag
-                        fill={data.symptom.includes(item.id)}
+                        fill={data.menstrual_daily_log?.symptom.includes(
+                          item.label
+                        )}
                         content={item.label}
                       />
                     </TouchableOpacity>

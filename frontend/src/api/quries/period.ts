@@ -2,16 +2,17 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Alert } from "react-native";
 import {
   addPeriod,
-  addPeriodSymtom,
+  addPeriodSymptom,
+  deletePeriodSymptom,
   editPeriod,
-  editPeriodSymtom,
+  editPeriodSymptom,
   getChildbearingAge,
   getDday,
   getPeriod,
   getPredictedPeriod,
 } from "../period";
 
-// 월경 예정일 D-day 조회
+// ✅월경 예정일 D-day 조회
 export function useGetDday() {
   return useQuery({
     queryKey: ["dDay"],
@@ -19,7 +20,7 @@ export function useGetDday() {
   });
 }
 
-// 월경 주기 등록
+// ✅월경 주기 등록
 export function useAddPeriod() {
   const queryClient = useQueryClient();
 
@@ -33,7 +34,9 @@ export function useAddPeriod() {
     }) => addPeriod(startDate, endDate),
     onSuccess: (data) => {
       console.log("☑️월경 주기 등록 성공: ", data);
-      queryClient.invalidateQueries({ queryKey: ["period"] });
+      queryClient.invalidateQueries({ queryKey: ["period"], exact: false });
+      queryClient.invalidateQueries({ queryKey: ["childbearingAge"] });
+      queryClient.invalidateQueries({ queryKey: ["predictedPeriod"] });
     },
     onError: (error) => {
       console.log("✖️월경 주기 등록 실패: ", error);
@@ -43,10 +46,10 @@ export function useAddPeriod() {
 }
 
 // 월별 월경 주기 조회
-export function useGetPeriod(month: number) {
+export function useGetPeriod(year: number, month: number) {
   return useQuery({
-    queryKey: ["period", month],
-    queryFn: () => getPeriod(month),
+    queryKey: ["period", year, month],
+    queryFn: () => getPeriod(year, month),
   });
 }
 
@@ -68,7 +71,7 @@ export function useEditPeriod() {
     }) => editPeriod(id, cycleId, startDate, endDate),
     onSuccess: (data) => {
       console.log("☑️월경 주기 변경 성공: ", data);
-      queryClient.invalidateQueries({ queryKey: ["period"] });
+      queryClient.invalidateQueries({ queryKey: ["period"], exact: false });
     },
     onError: (error) => {
       console.log("✖️월경 주기 변경 실패: ", error);
@@ -78,39 +81,24 @@ export function useEditPeriod() {
 }
 
 // 월경 세부 정보 등록
-export function useAddPeriodSymtom() {
+export function useAddPeriodSymptom() {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: ({
-      cycleId,
       date,
       bleedingLevel,
       painLevel,
-      isStart,
-      isEnd,
       symptom,
     }: {
-      cycleId: number;
       date: string;
       bleedingLevel: number;
       painLevel: number;
-      isStart: boolean;
-      isEnd: boolean;
       symptom: string[];
-    }) =>
-      addPeriodSymtom(
-        cycleId,
-        date,
-        bleedingLevel,
-        painLevel,
-        isStart,
-        isEnd,
-        symptom
-      ),
+    }) => addPeriodSymptom(date, bleedingLevel, painLevel, symptom),
     onSuccess: (data) => {
       console.log("☑️월경 세부 정보 등록 성공: ", data);
-      queryClient.invalidateQueries({ queryKey: ["period"] });
+      queryClient.invalidateQueries({ queryKey: ["period"], exact: false });
     },
     onError: (error) => {
       console.log("✖️월경 세부 정보 등록 실패: ", error);
@@ -120,7 +108,7 @@ export function useAddPeriodSymtom() {
 }
 
 // 월경 세부 정보 변경
-export function useEditPeriodSymtom() {
+export function useEditPeriodSymptom() {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -129,30 +117,18 @@ export function useEditPeriodSymtom() {
       date,
       bleedingLevel,
       painLevel,
-      isStart,
-      isEnd,
       symptom,
     }: {
       cycleId: number;
       date: string;
       bleedingLevel?: number;
       painLevel?: number;
-      isStart?: boolean;
-      isEnd?: boolean;
       symptom?: string[];
-    }) =>
-      editPeriodSymtom(
-        cycleId,
-        date,
-        bleedingLevel,
-        painLevel,
-        isStart,
-        isEnd,
-        symptom
-      ),
+    }) => editPeriodSymptom(cycleId, date, bleedingLevel, painLevel, symptom),
     onSuccess: (data) => {
       console.log("☑️월경 세부 정보 변경 성공: ", data);
-      queryClient.invalidateQueries({ queryKey: ["period"] });
+      queryClient.invalidateQueries({ queryKey: ["period"], exact: false });
+      queryClient.invalidateQueries({ queryKey: ["daily"], exact: false });
     },
     onError: (error) => {
       console.log("✖️월경 세부 정보 변경 실패: ", error);
@@ -161,7 +137,25 @@ export function useEditPeriodSymtom() {
   });
 }
 
-// 가임기 조회
+// 월경 세부 정보 삭제
+export function useDeletePeriodSymptom() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (cycleId: number) => deletePeriodSymptom(cycleId),
+    onSuccess: (data) => {
+      console.log("☑️월경 세부 정보 삭제 성공: ", data);
+      queryClient.invalidateQueries({ queryKey: ["period"], exact: false });
+      queryClient.invalidateQueries({ queryKey: ["daily"], exact: false });
+    },
+    onError: (error) => {
+      console.log("✖️월경 세부 정보 삭제 실패: ", error);
+      Alert.alert("월경 세부 정보 변경 실패", "잠시 후 다시 시도해주세요.");
+    },
+  });
+}
+
+// ✅가임기 조회
 export function useGetChildbearingAge() {
   return useQuery({
     queryKey: ["childbearingAge"],
@@ -169,7 +163,7 @@ export function useGetChildbearingAge() {
   });
 }
 
-// 월경 예정일 조회
+// ✅월경 예정일 조회
 export function useGetPredictedPeriod() {
   return useQuery({
     queryKey: ["predictedPeriod"],

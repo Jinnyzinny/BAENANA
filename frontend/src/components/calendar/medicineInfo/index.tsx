@@ -6,321 +6,338 @@ import {
   SquarePen,
   Trash2,
 } from "lucide-react-native";
-import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useRef, useState } from "react";
+import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Daily } from "../../../types/Daily";
-import { CustomButton } from "../../common/customButton";
-import { TimeDropdown } from "../../common/timeDropdown";
-import { DateDropdown } from "../../common/dateDropdown";
 import { parseDate } from "../../../utils/parseDate";
 import { parseTime } from "../../../utils/parseTime";
+import { CustomButton } from "../../common/customButton";
+import { DateDropdown } from "../../common/dateDropdown";
+import { TimeDropdown } from "../../common/timeDropdown";
+import {
+  useDeleteMedicineReservation,
+  useEditMedicineReservation,
+} from "../../../api/quries/medicine";
 
 export function MedicineInfo({ data }: { data: Daily }) {
-  const color: string = "#A3A3A3";
-  const size: number = 18;
-  const [isToggleOpen, setIsToggleOpen] = useState<boolean>(false); // 토글 상태(t/f)
-  const [isEdit, setIsEdit] = useState<boolean>(false); // 편집 상태(t/f)
-
-  // 약 이름
-  const [medicineName, setMedicineName] = useState<string>(
-    data.medication.name
-  );
-
-  // 복용일(시작, 종료) - 초기값
-  const initStartDate = parseDate(data.medication.start_date);
-  const initEndDate = parseDate(data.medication.end_date);
-
-  // 복용일 - 초기값
-  const startYear: number = initStartDate.getFullYear(); // 연도
-  const startMonth: number = initStartDate.getMonth() + 1; // 월
-  const startDay: number = initStartDate.getDate(); // 일
-
-  const endYear: number = initEndDate.getFullYear(); // 연도
-  const endMonth: number = initEndDate.getMonth() + 1; // 월
-  const endDay: number = initEndDate.getDate(); // 일
-
-  // 복용일(시작, 종료) - 수정
-  const [startDate, setStartDate] = useState<Date | null>(initStartDate);
-  const [endDate, setEndDate] = useState<Date | null>(initEndDate);
-
-  // 복용 시간 - 초기값
-  const injectionTimes = data.medication.injection_time;
-  const first = injectionTimes[0] ? parseTime(injectionTimes[0]) : null;
-  const second = injectionTimes[1] ? parseTime(injectionTimes[1]) : null;
-  const third = injectionTimes[2] ? parseTime(injectionTimes[2]) : null;
-  const firstTime = first ? new Date(0, 0, 0, first.hour, first.minute) : null;
-  const secondTime = second
-    ? new Date(0, 0, 0, second.hour, second.minute)
-    : null;
-  const thirdTime = third ? new Date(0, 0, 0, third.hour, third.minute) : null;
-  const initReservationTimes = [
-    firstTime && { id: 1, time: firstTime },
-    secondTime && { id: 2, time: secondTime },
-    thirdTime && { id: 3, time: thirdTime },
-  ].filter(Boolean) as { id: number; time: Date | null }[];
-  console.log("💉 injectionTimes:", injectionTimes);
-  console.log("⏱️ initReservationTimes:", initReservationTimes);
-
-  // 복용 시간(배열)
-  const [reservationTimes, setReservationTimes] =
-    useState<{ id: number; time: Date | null }[]>(initReservationTimes);
-
-  const idCounter = useRef(initReservationTimes.length + 1);
-
-  // 메모
-  const [memo, setMemo] = useState<string>(data.medication.memo);
-
-  // 복용 시간 추가: 최대 3개까지 가능하도록 설정
-  function addReservationTime() {
-    if (reservationTimes.length < 3) {
-      setReservationTimes([
-        ...reservationTimes,
-        { id: idCounter.current++, time: null },
-      ]);
-    }
-  }
-
-  // 복용약 시간 삭제
-  function removeReservationTime(id: number) {
-    if (reservationTimes.length > 1) {
-      setReservationTimes((prev) => prev.filter((item) => item.id !== id));
-    }
-  }
-
-  // 복용약 시간 변경
-  function handleTimeChange(id: number, date: Date) {
-    setReservationTimes((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, time: date } : item))
-    );
-  }
-
-  // 수정 시 토글 열기, 상태 변경
-  function handleEdit() {
-    setIsEdit(true);
-    setIsToggleOpen(true);
-  }
-
-  // 수정 취소(입력 내용 초기화, 상태 변경)
-  function cancelEdit() {
-    setMedicineName(data.medication.name);
-    setStartDate(parseDate(data.medication.start_date));
-    setEndDate(parseDate(data.medication.end_date));
-    setReservationTimes(initReservationTimes);
-    setMemo(data.medication.memo);
-    setIsEdit(false);
-  }
-
-  // 수정 내용 저장(상태 변경)
-  function saveEdit() {
-    setIsEdit(false);
-  }
-
-  // 삭제
-  function handleDelete() {
-    Alert.alert("삭제", "입력된 내용을 삭제하시겠습니까?", [
-      {
-        text: "취소",
-        style: "cancel",
-      },
-      {
-        text: "확인",
-        style: "destructive",
-        onPress: () => {},
-      },
-    ]);
-  }
+  const color = "#A3A3A3";
+  const size = 18;
 
   return (
-    <View className="gap-3">
-      {/* 헤더 - 제목 / 수정 / 삭제 / 토글 */}
-      <View className="flex-row items-center justify-between">
-        <View className="flex-row items-center gap-2">
-          <Text className="text-neutral-800 text-lg font-bold">
-            {data.medication.name}
-          </Text>
-          <View className="pt-1 flex-row items-center gap-1">
-            {/* 수정 버튼 */}
-            <TouchableOpacity onPress={handleEdit}>
-              <SquarePen color={color} size={size - 2} />
-            </TouchableOpacity>
-            {/* 삭제 버튼 */}
-            <TouchableOpacity onPress={handleDelete}>
-              <Trash2 color={color} size={size - 2} />
-            </TouchableOpacity>
-          </View>
-        </View>
-        {/* 토글 */}
-        <TouchableOpacity onPress={() => setIsToggleOpen(!isToggleOpen)}>
-          {isToggleOpen ? (
-            <ChevronUp color={color} size={size} />
-          ) : (
-            <ChevronDown color={color} size={size} />
-          )}
-        </TouchableOpacity>
-      </View>
+    <View className="gap-4">
+      {data.medication.map((medicine, index) => {
+        const initStartDate = parseDate(medicine.start_date);
+        const initEndDate = parseDate(medicine.end_date);
 
-      {/* 본문 */}
-      {isToggleOpen &&
-        (isEdit ? (
-          // 수정 중인 경우
-          <>
-            {/* 복용약 이름 입력 */}
-            <View className="gap-3">
-              <Text className="text-neutral-800 text-sm font-bold ">
-                복용약 이름
-              </Text>
-              <View className="mx-5 border-b border-neutral-400">
-                <View className="relative justify-center h-12">
-                  {medicineName === "" && (
-                    <Text className="absolute left-3 text-neutral-400 font-bold text-lg">
-                      복용약 이름을 입력해주세요.
-                    </Text>
-                  )}
-                  <TextInput
-                    className="pl-3 h-12 font-bold text-lg"
-                    value={medicineName}
-                    onChangeText={setMedicineName}
-                  />
-                </View>
-              </View>
-            </View>
+        const startYear = initStartDate.getFullYear();
+        const startMonth = initStartDate.getMonth() + 1;
+        const startDay = initStartDate.getDate();
 
-            {/* 복용 시작일 */}
-            <View className="gap-3">
-              <Text className="text-neutral-800 text-sm font-bold ">
-                복용 시작일
-              </Text>
-              <View className="flex-row mx-5 items-center justify-between">
-                <DateDropdown
-                  year={startYear}
-                  month={startMonth}
-                  day={startDay}
-                  title="복용 시작일"
-                  onChange={setStartDate}
-                />
-              </View>
-            </View>
+        const endYear = initEndDate.getFullYear();
+        const endMonth = initEndDate.getMonth() + 1;
+        const endDay = initEndDate.getDate();
 
-            {/* 복용 종료일 */}
-            <View className="gap-3">
-              <Text className="text-neutral-800 text-sm font-bold ">
-                복용 종료일
-              </Text>
-              <View className="flex-row mx-5 items-center justify-between">
-                <DateDropdown
-                  year={endYear}
-                  month={endMonth}
-                  day={endDay}
-                  title="복용 종료일"
-                  onChange={setEndDate}
-                />
-              </View>
-            </View>
+        const first = medicine.injection_time[0]
+          ? parseTime(medicine.injection_time[0])
+          : null;
+        const second = medicine.injection_time[1]
+          ? parseTime(medicine.injection_time[1])
+          : null;
+        const third = medicine.injection_time[2]
+          ? parseTime(medicine.injection_time[2])
+          : null;
 
-            {/* 복용 시간 */}
-            <View className="gap-3">
-              <Text className="text-neutral-800 text-sm font-bold ">
-                복용 시간
-              </Text>
-              {reservationTimes.map((item, index) => (
-                <View
-                  key={item.id}
-                  className="mx-5 flex-row justify-center items-center gap-3"
-                >
-                  <TimeDropdown
-                    title="복용 시간"
-                    hour={item.time?.getHours() ?? 9}
-                    minute={item.time?.getMinutes() ?? 0}
-                    onChange={(date) => handleTimeChange(item.id, date)}
-                  />
-                  {reservationTimes.length < 3 &&
-                    index === reservationTimes.length - 1 && (
-                      <TouchableOpacity onPress={addReservationTime}>
-                        <View className="p-1 bg-violet-400 rounded-full">
-                          <Plus color="#FFFFFF" size={12} strokeWidth={3} />
-                        </View>
-                      </TouchableOpacity>
-                    )}
-                  {reservationTimes.length > 1 && (
-                    <TouchableOpacity
-                      onPress={() => removeReservationTime(item.id)}
-                    >
-                      <View className="p-1 bg-violet-400 rounded-full">
-                        <Minus color="#FFFFFF" size={12} strokeWidth={3} />
-                      </View>
-                    </TouchableOpacity>
-                  )}
-                </View>
-              ))}
-            </View>
+        const firstTime = first
+          ? new Date(0, 0, 0, first.hour, first.minute)
+          : null;
+        const secondTime = second
+          ? new Date(0, 0, 0, second.hour, second.minute)
+          : null;
+        const thirdTime = third
+          ? new Date(0, 0, 0, third.hour, third.minute)
+          : null;
 
-            {/* 메모 */}
-            <View className="gap-3">
-              <Text className="text-neutral-800 text-sm font-bold">메모</Text>
-              <View className="mx-5 flex-1 border-b border-neutral-400">
-                {memo === "" && (
-                  <Text
-                    className="absolute text-neutral-400 text-sm"
-                    style={{ left: 4, top: 10 }}
-                  >
-                    메모할 사항을 입력해주세요 (선택)
-                  </Text>
-                )}
-                <TextInput
-                  value={memo}
-                  onChangeText={setMemo}
-                  className="text-sm"
-                />
-              </View>
-            </View>
-            <View className="pt-5 flex-row gap-3">
-              <View className="flex-1">
-                <CustomButton
-                  fill={false}
-                  content="취소"
-                  onPress={cancelEdit}
-                />
-              </View>
-              <View className="flex-1">
-                <CustomButton fill={true} content="저장" onPress={saveEdit} />
-              </View>
-            </View>
-          </>
-        ) : (
-          // 수정하지 않는 경우
-          <>
-            {/* 복용 시간 */}
-            <View className="gap-3">
-              <Text className="text-neutral-800 text-sm font-bold ">
-                복용 시간
-              </Text>
-              {initReservationTimes.map((item, index) => (
-                <Text
-                  key={item.id}
-                  className="mx-5 text-lg font-bold text-violet-400"
-                >
-                  {index + 1}.{" "}
-                  {item.time?.toLocaleTimeString("ko-KR", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
+        const initTimes = [firstTime, secondTime, thirdTime]
+          .filter(Boolean)
+          .map((t, i) => ({ id: i + 1, time: t }));
+
+        const [isToggleOpen, setIsToggleOpen] = useState(false);
+        const [isEdit, setIsEdit] = useState(false);
+        const [medicineName, setMedicineName] = useState(
+          medicine.medication_name
+        );
+        const [startDate, setStartDate] = useState<Date | null>(initStartDate);
+        const [endDate, setEndDate] = useState<Date | null>(initEndDate);
+        const [memo, setMemo] = useState(medicine.memo);
+        const [times, setTimes] = useState(initTimes);
+        const idCounter = useRef(initTimes.length + 1);
+
+        const { mutate: editMedicineReservation } =
+          useEditMedicineReservation();
+        const { mutate: deleteMedicineReservation } =
+          useDeleteMedicineReservation();
+
+        function addTime() {
+          if (times.length < 3) {
+            setTimes([...times, { id: idCounter.current++, time: null }]);
+          }
+        }
+
+        function removeTime(id: number) {
+          if (times.length > 1) {
+            setTimes((prev) => prev.filter((t) => t.id !== id));
+          }
+        }
+
+        function handleTimeChange(id: number, date: Date) {
+          setTimes((prev) =>
+            prev.map((t) => (t.id === id ? { ...t, time: date } : t))
+          );
+        }
+
+        function cancelEdit() {
+          setMedicineName(medicine.medication_name);
+          setStartDate(initStartDate);
+          setEndDate(initEndDate);
+          setMemo(medicine.memo);
+          setTimes(initTimes);
+          setIsEdit(false);
+        }
+
+        function saveEdit() {
+          if (!startDate || !endDate || times.some((t) => !t.time)) {
+            Alert.alert("입력 오류", "모든 날짜와 복용 시간을 입력해주세요.");
+            return;
+          }
+
+          const start = startDate.toISOString().split("T")[0]; // YYYY-MM-DD
+          const end = endDate.toISOString().split("T")[0]; // YYYY-MM-DD
+          const timeTaken = times.map(
+            (t) => t.time!.toTimeString().slice(0, 5) // "HH:mm"
+          );
+
+          // console.log(
+          //   medicine.medication_id,
+          //   medicineName,
+          //   start,
+          //   end,
+          //   timeTaken,
+          //   memo
+          // );
+
+          editMedicineReservation({
+            id: medicine.medication_id,
+            medicineName,
+            startDate: start,
+            endDate: end,
+            timeTaken,
+            memo,
+          });
+
+          setIsEdit(false);
+        }
+
+        function handleDelete() {
+          Alert.alert("삭제", "이 복용약 정보를 삭제하시겠습니까?", [
+            { text: "취소", style: "cancel" },
+            {
+              text: "확인",
+              style: "destructive",
+              onPress: () => deleteMedicineReservation(medicine.medication_id),
+            },
+          ]);
+        }
+
+        return (
+          <View key={index} className="gap-3">
+            {/* 헤더 */}
+            <View className="flex-row items-center justify-between">
+              <View className="flex-row items-center gap-2">
+                <Text className="text-neutral-800 text-lg font-bold">
+                  {medicine.medication_name}
                 </Text>
-              ))}
-            </View>
-
-            {/* 메모 */}
-            {data.medication.memo && (
-              <View className="gap-3">
-                <Text className="text-neutral-800 text-sm font-bold">메모</Text>
-                <View className="mx-5 flex-1 border-b border-neutral-400">
-                  <Text className="text-neutral-800 text-sm pl-1 pb-3">
-                    {data.medication.memo}
-                  </Text>
+                <View className="pt-1 flex-row items-center gap-1">
+                  <TouchableOpacity
+                    onPress={() => {
+                      setIsEdit(true);
+                      setIsToggleOpen(true);
+                    }}
+                  >
+                    <SquarePen color={color} size={size - 2} />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={handleDelete}>
+                    <Trash2 color={color} size={size - 2} />
+                  </TouchableOpacity>
                 </View>
               </View>
-            )}
-          </>
-        ))}
+              <TouchableOpacity onPress={() => setIsToggleOpen(!isToggleOpen)}>
+                {isToggleOpen ? (
+                  <ChevronUp color={color} size={size} />
+                ) : (
+                  <ChevronDown color={color} size={size} />
+                )}
+              </TouchableOpacity>
+            </View>
+
+            {isToggleOpen &&
+              (isEdit ? (
+                <>
+                  {/* 복용약 이름 */}
+                  <View className="gap-3">
+                    <Text className="text-neutral-800 text-sm font-bold">
+                      복용약 이름
+                    </Text>
+                    <View className="mx-5 border-b border-neutral-400">
+                      <TextInput
+                        className="pl-3 h-12 font-bold text-lg"
+                        placeholder="복용약 이름을 입력해주세요."
+                        value={medicineName}
+                        onChangeText={setMedicineName}
+                      />
+                    </View>
+                  </View>
+
+                  {/* 시작일 */}
+                  <View className="gap-3">
+                    <Text className="text-neutral-800 text-sm font-bold">
+                      복용 시작일
+                    </Text>
+                    <View className="mx-5">
+                      <DateDropdown
+                        title="복용 시작일"
+                        year={startYear}
+                        month={startMonth}
+                        day={startDay}
+                        onChange={setStartDate}
+                      />
+                    </View>
+                  </View>
+
+                  {/* 종료일 */}
+                  <View className="gap-3">
+                    <Text className="text-neutral-800 text-sm font-bold">
+                      복용 종료일
+                    </Text>
+                    <View className="mx-5">
+                      <DateDropdown
+                        title="복용 종료일"
+                        year={endYear}
+                        month={endMonth}
+                        day={endDay}
+                        onChange={setEndDate}
+                      />
+                    </View>
+                  </View>
+
+                  {/* 복용 시간 */}
+                  <View className="gap-3">
+                    <Text className="text-neutral-800 text-sm font-bold">
+                      복용 시간
+                    </Text>
+                    {times.map((item, i) => (
+                      <View
+                        key={item.id}
+                        className="mx-5 flex-row items-center gap-3"
+                      >
+                        <TimeDropdown
+                          title="복용 시간"
+                          hour={item.time?.getHours() ?? 9}
+                          minute={item.time?.getMinutes() ?? 0}
+                          onChange={(d) => handleTimeChange(item.id, d)}
+                        />
+                        {times.length < 3 && i === times.length - 1 && (
+                          <TouchableOpacity onPress={addTime}>
+                            <View className="p-1 bg-violet-400 rounded-full">
+                              <Plus color="#FFFFFF" size={12} strokeWidth={3} />
+                            </View>
+                          </TouchableOpacity>
+                        )}
+                        {times.length > 1 && (
+                          <TouchableOpacity onPress={() => removeTime(item.id)}>
+                            <View className="p-1 bg-violet-400 rounded-full">
+                              <Minus
+                                color="#FFFFFF"
+                                size={12}
+                                strokeWidth={3}
+                              />
+                            </View>
+                          </TouchableOpacity>
+                        )}
+                      </View>
+                    ))}
+                  </View>
+
+                  {/* 메모 */}
+                  <View className="gap-3">
+                    <Text className="text-neutral-800 text-sm font-bold">
+                      메모
+                    </Text>
+                    <View className="mx-5 border-b border-neutral-400">
+                      <TextInput
+                        className="text-sm"
+                        placeholder="메모할 사항을 입력해주세요 (선택)"
+                        value={memo}
+                        onChangeText={setMemo}
+                      />
+                    </View>
+                  </View>
+
+                  <View className="pt-5 flex-row gap-3">
+                    <View className="flex-1">
+                      <CustomButton
+                        fill={false}
+                        content="취소"
+                        onPress={cancelEdit}
+                      />
+                    </View>
+                    <View className="flex-1">
+                      <CustomButton
+                        fill={true}
+                        content="저장"
+                        onPress={saveEdit}
+                      />
+                    </View>
+                  </View>
+                </>
+              ) : (
+                <>
+                  {/* 복용 시간 */}
+                  <View className="gap-3">
+                    <Text className="text-neutral-800 text-sm font-bold">
+                      복용 시간
+                    </Text>
+                    {times.map((item, i) => (
+                      <Text
+                        key={item.id}
+                        className="mx-5 text-lg font-bold text-violet-400"
+                      >
+                        {i + 1}.{" "}
+                        {item.time?.toLocaleTimeString("ko-KR", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </Text>
+                    ))}
+                  </View>
+
+                  {/* 메모 */}
+                  {memo && (
+                    <View className="gap-3">
+                      <Text className="text-neutral-800 text-sm font-bold">
+                        메모
+                      </Text>
+                      <View className="mx-5 border-b border-neutral-400">
+                        <Text className="text-neutral-800 text-sm pl-1 pb-3">
+                          {memo}
+                        </Text>
+                      </View>
+                    </View>
+                  )}
+                </>
+              ))}
+          </View>
+        );
+      })}
     </View>
   );
 }

@@ -1,3 +1,4 @@
+import { Default } from "./Default";
 import { Date } from "./Period";
 
 export type PeriodAlert = {
@@ -5,11 +6,19 @@ export type PeriodAlert = {
   message: string;
 };
 
+export type FullPeriodAlert = Default & {
+  data: PeriodAlert;
+};
+
 export type RecentPeriodInfo = {
-  average_cycle: number;
-  average_period: number;
+  cycle: number;
+  period: number;
   is_cycle_normal: boolean;
   is_period_normal: boolean;
+};
+
+export type FullRecentPeriodInfo = Default & {
+  data: RecentPeriodInfo;
 };
 
 export type OvulationInfo = {
@@ -19,18 +28,27 @@ export type OvulationInfo = {
 
 export type Ovulation = {
   normal: 1 | 2 | 3;
-  spike: OvulationInfo[];
+  standard: OvulationInfo[];
   personal_data: OvulationInfo[];
+};
+
+export type FullOvulation = Default & {
+  data: Ovulation;
 };
 
 export type PeriodInfo = Date & {
   period: number;
+  cycle: number;
 };
 
 export type RecentPeriod = {
   average_cycle: number;
   max_cycle: number;
   cycle_record: PeriodInfo[];
+};
+
+export type FullRecentPeriod = Default & {
+  data: RecentPeriod;
 };
 
 export type MedicineInfo = {
@@ -42,14 +60,41 @@ export type RecentMedicine = {
   medicine_record: MedicineInfo[];
 };
 
+export type FullRecentMedicine = Default & {
+  data: RecentMedicine;
+};
+
+export type AllRecentMEdicine = Default & {
+  data: {
+    today_medicine: {
+      name: string;
+      start_date: string;
+      end_date: string;
+      time_taken: string[];
+      memo: string;
+    }[];
+    medicine_record: {
+      name: string;
+      start_date: string;
+      end_date: string;
+      time_taken: string[];
+      memo: string;
+    }[];
+  };
+};
+
 export type Report = {
   menstrual: {
     bleeding_level: string;
-    anomal: boolean;
+    normal: boolean;
     symptom: string;
   };
   stress: {
     stress: string;
-    anomal: boolean;
+    normal: boolean;
   };
+};
+
+export type FullReport = Default & {
+  data: Report;
 };

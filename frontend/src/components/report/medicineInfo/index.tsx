@@ -1,10 +1,11 @@
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ChevronRight } from "lucide-react-native";
-import { Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { ReportStackParamList } from "../../../navigation/types";
+import { RecentMedicine } from "../../../types/Report";
 
-export function MedicineInfo() {
+export function MedicineInfo({ data }: { data: RecentMedicine }) {
   const navigation =
     useNavigation<NativeStackNavigationProp<ReportStackParamList>>();
   const size: number = 22;
@@ -19,7 +20,9 @@ export function MedicineInfo() {
             <Text className="text-neutral-600 text-sm">
               현재 복용 중인 약은{" "}
             </Text>
-            <Text className="text-violet-700 text-sm font-bold">1개</Text>
+            <Text className="text-violet-700 text-sm font-bold">
+              {data?.today_medicine.length}개
+            </Text>
             <Text className="text-neutral-600 text-sm">입니다.</Text>
           </View>
         </View>
@@ -27,22 +30,32 @@ export function MedicineInfo() {
           <ChevronRight size={size} color={color} />
         </TouchableOpacity>
       </View>
-      {/* 반복문 사용해서 복용약 보여줄 예정 */}
-      <View className="gap-2">
-        <Text className="text-neutral-600 text-sm">오가루트란주 주사</Text>
-      </View>
+      <FlatList
+        data={data?.today_medicine}
+        scrollEnabled={false}
+        keyExtractor={(_, index) => `today-${index}`}
+        renderItem={({ item }) => (
+          <Text className="text-neutral-600 text-sm">{item.name}</Text>
+        )}
+      />
       <View className="w-full h-0.5 bg-neutral-100" />
       <View className="flex-row">
         <Text className="text-neutral-600 text-sm">
           최근 3개월 복용했던 약은{" "}
         </Text>
-        <Text className="text-violet-700 text-sm font-bold">2개</Text>
+        <Text className="text-violet-700 text-sm font-bold">
+          {data?.medicine_record.length}개
+        </Text>
         <Text className="text-neutral-600 text-sm">입니다.</Text>
       </View>
-      <View className="gap-2">
-        <Text className="text-neutral-600 text-sm">고날-에프펜</Text>
-        <Text className="text-neutral-600 text-sm">타이레놀</Text>
-      </View>
+      <FlatList
+        data={data?.medicine_record}
+        scrollEnabled={false}
+        keyExtractor={(_, index) => `today-${index}`}
+        renderItem={({ item }) => (
+          <Text className="text-neutral-600 text-sm">{item.name}</Text>
+        )}
+      />
     </View>
   );
 }
