@@ -21,8 +21,11 @@ export async function addInquiry(title: string, questionContent: string) {
 export async function getInquiryList(): Promise<Inquiry[]> {
   try {
     const response = await authClient.get("/inquiries/my");
-    console.log("[사용자] 문의사항 목록 조회 성공: ", response.data.data);
-    return response.data.data;
+    console.log(
+      "[사용자] 문의사항 목록 조회 성공: ",
+      response.data.data.content
+    );
+    return response.data.data.content;
   } catch (error: unknown) {
     console.error("[사용자] 문의사항 목록 조회 실패: ", error);
     throw error;

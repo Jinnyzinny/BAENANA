@@ -37,7 +37,7 @@ export function WithdrawModal({
       visible={visible}
       transparent
       statusBarTranslucent
-      animationType="slide"
+      animationType="fade"
     >
       <TouchableWithoutFeedback onPress={onClose}>
         <View className="flex-1 justify-center items-center bg-black/50">
