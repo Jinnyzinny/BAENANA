@@ -36,7 +36,7 @@ export function NoticeList({
         <View className="gap-2">
           <View className="flex-row items-center justify-between">
             <Text className="text-neutral-600 text-sm">
-              {data.createdAt.slice(0, 10).replace("-", ".")}{" "}
+              {data.createdAt.slice(0, 10).replaceAll("-", ".")}{" "}
               {data.createdAt.slice(11, 16)}
             </Text>
           </View>

@@ -55,7 +55,7 @@ export function InquiryList({
         <View className="gap-2">
           <View className="flex-row items-center justify-between">
             <Text className="text-neutral-600 text-sm">
-              {data.questionDate.slice(0, 10).replace("-", ".")}{" "}
+              {data.questionDate.slice(0, 10).replaceAll("-", ".")}{" "}
               {data.questionDate.slice(11, 16)}
             </Text>
 
@@ -96,7 +96,7 @@ export function InquiryList({
             <View className="gap-2 mb-5">
               <View className="flex-row items-center justify-between">
                 <Text className="text-neutral-600 text-sm">
-                  {data.answerDate.slice(0, 10).replace("-", ".")}{" "}
+                  {data.answerDate.slice(0, 10).replaceAll("-", ".")}{" "}
                   {data.answerDate.slice(11, 16)}
                 </Text>
               </View>
