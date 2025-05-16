@@ -36,7 +36,7 @@ async function refreshingToken(): Promise<AxiosResponse> {
   console.log("리프레시 토큰 요청 시도: ", refreshToken);
   try {
     const response = await authClient.post("/auth/refresh", {
-      refresh_token: refreshToken,
+      refreshToken: refreshToken,
     });
     console.log("☑️리프레시 토큰 요청 성공:", response.data);
     return response;
