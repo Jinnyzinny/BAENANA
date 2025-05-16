@@ -6,8 +6,8 @@ import { useAddInquiry, useGetInquiryList } from "../../api/quries/inquiry";
 import { CustomButton } from "../../components/common/customButton";
 import { HeaderLogo } from "../../components/common/headerLogo";
 import { TabMenu } from "../../components/common/tabMenu";
-import { Form } from "../../components/settings/form";
-import { InquiryList } from "../../components/settings/inquiryList";
+import { Form } from "../../components/common/form";
+import { InquiryList } from "../../components/inquiry/inquiryList";
 
 export function InquriyScreen() {
   const [selectedMenu, setSelectedMenu] = useState<string>("inquriy");

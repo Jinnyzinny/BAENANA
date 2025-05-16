@@ -4,27 +4,6 @@ import { ChevronRight } from "lucide-react-native";
 import { Text, TouchableOpacity, View } from "react-native";
 import { SettingsStackParamList } from "../../../navigation/types";
 
-const dummyNotice = [
-  {
-    id: 1,
-    type: "업데이트",
-    title: "iOS 업데이트 관련",
-    date: "2025.04.25",
-  },
-  {
-    id: 2,
-    type: "업데이트",
-    title: "안드로이드 업데이트 관련",
-    date: "2025.04.24",
-  },
-  {
-    id: 3,
-    type: "보안",
-    title: "안드로이드 보안 관련",
-    date: "2025.04.23",
-  },
-];
-
 export function Notice() {
   const navigation =
     useNavigation<NativeStackNavigationProp<SettingsStackParamList>>();
@@ -38,16 +17,6 @@ export function Notice() {
         <TouchableOpacity onPress={() => navigation.navigate("Notice")}>
           <ChevronRight size={size} color={color} />
         </TouchableOpacity>
-      </View>
-      <View className="gap-1">
-        {dummyNotice.map((item) => (
-          <View key={item.id} className="flex-row gap-3">
-            <Text className="text-sm text-neutral-600">{item.date}</Text>
-            <Text className="text-sm text-neutral-600">
-              [{item.type}] {item.title}
-            </Text>
-          </View>
-        ))}
       </View>
     </View>
   );
