@@ -75,7 +75,7 @@ export async function editPeriod(
 }
 
 // 월경 세부 정보 등록
-export async function addPeriodSymtom(
+export async function addPeriodSymptom(
   date: string,
   bleedingLevel: number,
   painLevel: number,
@@ -97,7 +97,7 @@ export async function addPeriodSymtom(
 }
 
 // 월경 세부 정보 변경
-export async function editPeriodSymtom(
+export async function editPeriodSymptom(
   cycleId: number,
   date: string,
   bleedingLevel?: number,
@@ -119,6 +119,20 @@ export async function editPeriodSymtom(
     return response.data;
   } catch (error: unknown) {
     console.error("월경 주기 세부 정보 변경 실패: ", error);
+    throw error;
+  }
+}
+
+// 월경 세부 정보 삭제
+export async function deletePeriodSymptom(cycleId: number) {
+  try {
+    const response = await authClient.delete(
+      `/calendar/menstrual_cycle/log/${cycleId}`
+    );
+    console.log("월경 세부 정보 삭제 성공: ", response.data);
+    return response.data;
+  } catch (error: unknown) {
+    console.error("월경 세부 정보 삭제 실패: ", error);
     throw error;
   }
 }

@@ -49,6 +49,7 @@ export function ScheduleModal({
       end_date: "",
     },
     menstrual_daily_log: {
+      daily_id: 0,
       bleeding_level: 0,
       pain_level: 0,
       symptom: [],

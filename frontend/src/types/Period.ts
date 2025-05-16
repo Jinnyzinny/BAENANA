@@ -21,7 +21,7 @@ export type Dday = {
   recorded_menstrual: Date;
 };
 
-export type Symtom = {
+export type Symptom = {
   date: string;
   bleeding_level: 0 | 1 | 2 | 3 | 4 | 5;
   pain_level: 0 | 1 | 2 | 3 | 4 | 5;
@@ -30,7 +30,7 @@ export type Symtom = {
 
 export type Period = Date & {
   cycle_id: number;
-  detail: Symtom[];
+  detail: Symptom[];
 };
 
 export type FullPeriod = Default & {

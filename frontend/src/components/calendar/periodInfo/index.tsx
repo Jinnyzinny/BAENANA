@@ -1,12 +1,15 @@
 import { ChevronDown, ChevronUp, SquarePen, Trash2 } from "lucide-react-native";
 import { useState } from "react";
 import { Alert, Text, TouchableOpacity, View } from "react-native";
+import {
+  useDeletePeriodSymptom,
+  useEditPeriodSymptom,
+} from "../../../api/quries/period";
 import { Daily } from "../../../types/Daily";
 import { PeriodDate } from "../../../utils/periodDate";
 import { CustomButton } from "../../common/customButton";
 import { SelectTag } from "../../common/selectTag";
 import { SelectLevel } from "../selectLevel";
-import { useEditPeriodSymtom } from "../../../api/quries/period";
 
 export function PeriodInfo({ data }: { data: Daily }) {
   const color: string = "#A3A3A3";
@@ -32,7 +35,8 @@ export function PeriodInfo({ data }: { data: Daily }) {
     { id: 6, label: "우울" },
   ];
 
-  const { mutate: editPeriodSymtom } = useEditPeriodSymtom();
+  const { mutate: editPeriodSymptom } = useEditPeriodSymptom();
+  const { mutate: deletePeriodSymptom } = useDeletePeriodSymptom();
 
   function handleSymptom(label: string) {
     // 선택된 증상 선택 시 배열에서 삭제, 선택되지 않은 증상 선택 시 배열에 추가
@@ -57,7 +61,7 @@ export function PeriodInfo({ data }: { data: Daily }) {
   // 수정 내용 저장(상태 변경)
   function saveEdit() {
     console.log(symptom);
-    editPeriodSymtom({
+    editPeriodSymptom({
       cycleId: data.menstrual_daily_log.daily_id,
       date: data.date,
       bleedingLevel: selectedPeriod,
@@ -84,7 +88,7 @@ export function PeriodInfo({ data }: { data: Daily }) {
       {
         text: "확인",
         style: "destructive",
-        onPress: () => {},
+        onPress: () => deletePeriodSymptom(data.menstrual_daily_log.daily_id),
       },
     ]);
   }

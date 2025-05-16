@@ -2,9 +2,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Alert } from "react-native";
 import {
   addPeriod,
-  addPeriodSymtom,
+  addPeriodSymptom,
+  deletePeriodSymptom,
   editPeriod,
-  editPeriodSymtom,
+  editPeriodSymptom,
   getChildbearingAge,
   getDday,
   getPeriod,
@@ -80,7 +81,7 @@ export function useEditPeriod() {
 }
 
 // 월경 세부 정보 등록
-export function useAddPeriodSymtom() {
+export function useAddPeriodSymptom() {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -94,7 +95,7 @@ export function useAddPeriodSymtom() {
       bleedingLevel: number;
       painLevel: number;
       symptom: string[];
-    }) => addPeriodSymtom(date, bleedingLevel, painLevel, symptom),
+    }) => addPeriodSymptom(date, bleedingLevel, painLevel, symptom),
     onSuccess: (data) => {
       console.log("☑️월경 세부 정보 등록 성공: ", data);
       queryClient.invalidateQueries({ queryKey: ["period"], exact: false });
@@ -107,7 +108,7 @@ export function useAddPeriodSymtom() {
 }
 
 // 월경 세부 정보 변경
-export function useEditPeriodSymtom() {
+export function useEditPeriodSymptom() {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -123,7 +124,7 @@ export function useEditPeriodSymtom() {
       bleedingLevel?: number;
       painLevel?: number;
       symptom?: string[];
-    }) => editPeriodSymtom(cycleId, date, bleedingLevel, painLevel, symptom),
+    }) => editPeriodSymptom(cycleId, date, bleedingLevel, painLevel, symptom),
     onSuccess: (data) => {
       console.log("☑️월경 세부 정보 변경 성공: ", data);
       queryClient.invalidateQueries({ queryKey: ["period"], exact: false });
@@ -131,6 +132,24 @@ export function useEditPeriodSymtom() {
     },
     onError: (error) => {
       console.log("✖️월경 세부 정보 변경 실패: ", error);
+      Alert.alert("월경 세부 정보 변경 실패", "잠시 후 다시 시도해주세요.");
+    },
+  });
+}
+
+// 월경 세부 정보 삭제
+export function useDeletePeriodSymptom() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (cycleId: number) => deletePeriodSymptom(cycleId),
+    onSuccess: (data) => {
+      console.log("☑️월경 세부 정보 삭제 성공: ", data);
+      queryClient.invalidateQueries({ queryKey: ["period"], exact: false });
+      queryClient.invalidateQueries({ queryKey: ["daily"], exact: false });
+    },
+    onError: (error) => {
+      console.log("✖️월경 세부 정보 삭제 실패: ", error);
       Alert.alert("월경 세부 정보 변경 실패", "잠시 후 다시 시도해주세요.");
     },
   });

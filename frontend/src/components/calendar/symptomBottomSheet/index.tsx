@@ -8,10 +8,10 @@ import {
   View,
 } from "react-native";
 import { Modalize } from "react-native-modalize";
-import { SelectLevel } from "../selectLevel";
+import { useAddPeriodSymptom } from "../../../api/quries/period";
 import { CustomButton } from "../../common/customButton";
 import { SelectTag } from "../../common/selectTag";
-import { useAddPeriodSymtom } from "../../../api/quries/period";
+import { SelectLevel } from "../selectLevel";
 
 export function SymptomBottomSheet({
   height,
@@ -45,7 +45,7 @@ export function SymptomBottomSheet({
     );
   }
 
-  const { mutate: addPeriodSymtom } = useAddPeriodSymtom();
+  const { mutate: addPeriodSymptom } = useAddPeriodSymptom();
 
   function handleSave() {
     if (!selectedDate) {
@@ -54,7 +54,7 @@ export function SymptomBottomSheet({
 
     console.log(selectedDate, selectedPeriod, selectedStress, symptom);
 
-    addPeriodSymtom({
+    addPeriodSymptom({
       date: selectedDate,
       bleedingLevel: selectedPeriod,
       painLevel: selectedStress,
