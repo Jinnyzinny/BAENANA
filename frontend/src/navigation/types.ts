@@ -30,6 +30,6 @@ export type SettingsStackParamList = {
   SettingsList: undefined;
   HealthInfo: undefined;
   Notice: undefined;
-  FAQ: undefined;
+  Faq: undefined;
   Inquriy: undefined;
 };

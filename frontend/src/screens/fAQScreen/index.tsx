@@ -1,11 +1,11 @@
-import { ScrollView, Text, View } from "react-native";
+import { FlatList, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { HeaderLogo } from "../../components/common/headerLogo";
-import { useState } from "react";
-import { TabMenu } from "../../components/common/tabMenu";
+import { FaqList } from "../../components/faq/faqList";
+import { useGetFaqList } from "../../api/quries/faq";
 
-export function FAQScreen() {
-  const [selectedMenu, setSelectedMenu] = useState<string>("calendar");
+export function FaqScreen() {
+  const { data } = useGetFaqList();
 
   return (
     <SafeAreaView>
@@ -22,17 +22,19 @@ export function FAQScreen() {
             </Text>
           </View>
           <View className="m-1" />
-          <TabMenu
-            tabs={[
-              { key: "calendar", label: "캘린더" },
-              { key: "alert", label: "알림" },
-              { key: "login", label: "계정" },
-              { key: "etc", label: "기타" },
-            ]}
-            onSelect={(key) => {
-              setSelectedMenu(key);
-            }}
-          />
+
+          {/* 자주묻는 질문 */}
+          {data && (
+            <FlatList
+              data={data}
+              scrollEnabled={false}
+              renderItem={({ item, index }) => (
+                <View className={index === data.length ? "" : "pb-3"}>
+                  <FaqList faqId={item.faqId} question={item.question} />
+                </View>
+              )}
+            />
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>

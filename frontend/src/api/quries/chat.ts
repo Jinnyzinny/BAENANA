@@ -38,7 +38,7 @@ export function useAddChat() {
     },
     onError: (error) => {
       console.log("✖️챗봇 채팅 실패: ", error);
-      Alert.alert("FAQ 작성 실패", "잠시 후 다시 시도해주세요.");
+      Alert.alert("챗봇 채팅 실패", "잠시 후 다시 시도해주세요.");
     },
   });
 }
