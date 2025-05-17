@@ -26,7 +26,7 @@ export async function getChatList(): Promise<ChatList[]> {
 }
 
 // 채팅 내역 조회 (세션 기준)
-export async function getChat(sessionId: number): Promise<Chat[]> {
+export async function getChat(sessionId: string): Promise<Chat[]> {
   try {
     const response = await authClient.get(
       `/chat/sessions/${sessionId}/messages`
@@ -43,7 +43,7 @@ export async function getChat(sessionId: number): Promise<Chat[]> {
 export async function addChat(
   inputType: string,
   content: string,
-  sessionId: number
+  sessionId: string
 ) {
   try {
     const response = await authClient.post("/chat", {

@@ -22,10 +22,16 @@ export function useGetChatList() {
 }
 
 // 채팅 내역 조회 (세션 기준)
-export function useGetChat(sessionId: number) {
+// 세션 목록에서 채팅을 조회하기 위해 props 추가
+// sessionId가 null이면 비활성화
+export function useGetChat(sessionId: string | null, isEnabled: boolean) {
   return useQuery({
     queryKey: ["chat", sessionId],
-    queryFn: () => getChat(sessionId),
+    queryFn: () => {
+      if (!sessionId) throw new Error("Invalid sessionId");
+      return getChat(sessionId);
+    },
+    enabled: isEnabled && !!sessionId,
   });
 }
 
@@ -41,7 +47,7 @@ export function useAddChat() {
     }: {
       inputType: string;
       content: string;
-      sessionId: number;
+      sessionId: string;
     }) => addChat(inputType, content, sessionId),
     onSuccess: (data) => {
       console.log("☑️챗봇 채팅 성공: ", data);

@@ -12,9 +12,11 @@ type ChatbotDrawerNavigation = DrawerNavigationProp<
 export function Chatting({
   message,
   setMessage,
+  onSend,
 }: {
   message: string;
   setMessage: (message: string) => void;
+  onSend: () => void;
 }) {
   const navigation = useNavigation<ChatbotDrawerNavigation>();
 
@@ -32,7 +34,10 @@ export function Chatting({
           value={message}
           onChangeText={setMessage}
         />
-        <TouchableOpacity className="px-3 py-2 rounded-xl bg-violet-500">
+        <TouchableOpacity
+          onPress={onSend}
+          className="px-3 py-2 rounded-xl bg-violet-500"
+        >
           <CornerDownRight color={"#FFFFFF"} size={18} />
         </TouchableOpacity>
       </View>

@@ -23,7 +23,7 @@ export type ReportStackParamList = {
 };
 
 export type ChatbotDrawerParamList = {
-  Chat: { chatId?: string } | undefined;
+  Chat: { sessionId?: string } | undefined;
 };
 
 export type SettingsStackParamList = {

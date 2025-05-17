@@ -1,7 +1,13 @@
 import { Text, TouchableOpacity, View } from "react-native";
 import { Button } from "../../../types/Chat";
 
-export function ChatButton({ items }: { items: Button[] }) {
+export function ChatButton({
+  items,
+  onPress,
+}: {
+  items: Button[];
+  onPress?: (buttonId: string) => void;
+}) {
   return (
     <View className="overflow-hidden rounded-xl">
       {items.map((item, index) => {
@@ -21,7 +27,7 @@ export function ChatButton({ items }: { items: Button[] }) {
         return (
           <TouchableOpacity
             key={index}
-            onPress={() => {}}
+            onPress={() => onPress?.(item.id)}
             className={`p-2 ${bgColor} ${borderRadiusClass}`}
           >
             <Text className="text-center text-xs text-neutral-600 font-medium">

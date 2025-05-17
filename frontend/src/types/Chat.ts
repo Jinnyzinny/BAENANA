@@ -23,3 +23,9 @@ export type Chat = {
   message: string;
   createdAt: string;
 };
+
+export type ChatData = {
+  userMessage?: string | null;
+  message: string;
+  buttons?: { id: string; text: string }[];
+};

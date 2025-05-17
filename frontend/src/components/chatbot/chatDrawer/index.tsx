@@ -35,7 +35,7 @@ export function ChatDrawer(props: DrawerContentComponentProps) {
                       key={item.lastTime}
                       onPress={() => {
                         props.navigation.navigate("Chat", {
-                          chatId: item.sessionId,
+                          sessionId: item.sessionId,
                         });
                         props.navigation.closeDrawer();
                       }}
