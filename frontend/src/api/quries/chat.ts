@@ -3,10 +3,12 @@ import { Alert } from "react-native";
 import { addChat, getChat, getChatList, getSessionId } from "../chat";
 
 // 세션 id 조회(새로운 채팅 생성)
-export function useGetSessionId() {
+// 불필요하게 여러 번 조회하지 않기 위해 props 추가
+export function useGetSessionId(isEnabled: boolean) {
   return useQuery({
     queryKey: ["sessionId"],
     queryFn: () => getSessionId(),
+    enabled: isEnabled,
   });
 }
 
@@ -15,6 +17,7 @@ export function useGetChatList() {
   return useQuery({
     queryKey: ["chatList"],
     queryFn: () => getChatList(),
+    enabled: false,
   });
 }
 

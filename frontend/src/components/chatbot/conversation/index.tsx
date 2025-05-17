@@ -14,7 +14,7 @@ export function Conversation({
           source={require("../../../assets/images/mascot.png")}
           className="w-12 h-12"
         />
-        <View className="w-1/2">
+        <View className="flex-1">
           <View
             className={`rounded-xl p-3 ${bot ? "bg-yellow-100" : "bg-violet-200"}`}
           >

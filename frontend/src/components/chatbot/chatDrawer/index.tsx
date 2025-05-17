@@ -1,14 +1,23 @@
 import {
   DrawerContentComponentProps,
   DrawerContentScrollView,
+  useDrawerStatus,
 } from "@react-navigation/drawer";
 import { ArrowLeftFromLine } from "lucide-react-native";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { FormatTime } from "../../../utils/formatTime";
 import { useGetChatList } from "../../../api/quries/chat";
+import { useEffect } from "react";
 
 export function ChatDrawer(props: DrawerContentComponentProps) {
-  const { data } = useGetChatList();
+  const drawerStatus = useDrawerStatus();
+  const { data, refetch } = useGetChatList();
+
+  useEffect(() => {
+    if (drawerStatus === "open") {
+      refetch();
+    }
+  }, [drawerStatus]);
 
   return (
     <View className="flex-1 ">

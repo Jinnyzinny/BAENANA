@@ -1,12 +1,12 @@
-import { ChatList, SessionId } from "../types/Chat";
+import { Chat, ChatList, SessionId } from "../types/Chat";
 import authClient from "./client/authClient";
 
 // 세션 id 조회(새로운 채팅 생성)
 export async function getSessionId(): Promise<SessionId> {
   try {
     const response = await authClient.get("/chat/init");
-    console.log("세션 id 조회 성공: ", response.data.data);
-    return response.data.data;
+    console.log("세션 id 조회 성공: ", response.data);
+    return response.data;
   } catch (error: unknown) {
     console.error("세션 id 조회 실패: ", error);
     throw error;
@@ -26,7 +26,7 @@ export async function getChatList(): Promise<ChatList[]> {
 }
 
 // 채팅 내역 조회 (세션 기준)
-export async function getChat(sessionId: number) {
+export async function getChat(sessionId: number): Promise<Chat[]> {
   try {
     const response = await authClient.get(
       `/chat/sessions/${sessionId}/messages`

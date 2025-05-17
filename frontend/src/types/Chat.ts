@@ -17,3 +17,9 @@ export type ChatList = {
   lastMessage: string;
   lastTime: string;
 };
+
+export type Chat = {
+  sender: string;
+  message: string;
+  createdAt: string;
+};
