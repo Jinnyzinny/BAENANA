@@ -5,6 +5,7 @@ import { Chatting } from "../../components/chatbot/chatting";
 import { Conversation } from "../../components/chatbot/conversation";
 import { HeaderLogo } from "../../components/common/headerLogo";
 import { ChatbotDrawerParamList } from "../../navigation/chatbotDrawerNavigator";
+import { useState } from "react";
 
 const dummyChats = [
   {
@@ -37,6 +38,7 @@ const dummyChats = [
 type ChatbotScreenRouteProp = RouteProp<ChatbotDrawerParamList, "Chat">;
 
 export function ChatbotScreen() {
+  const [isInit, setIsInit] = useState<boolean>(true);
   const { params } = useRoute<ChatbotScreenRouteProp>();
   const chatId = params?.chatId;
 

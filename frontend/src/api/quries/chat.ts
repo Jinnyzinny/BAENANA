@@ -1,6 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Alert } from "react-native";
-import { addChat, getChat, getChatList } from "../chat";
+import { addChat, getChat, getChatList, getSessionId } from "../chat";
+
+// 세션 id 조회(새로운 채팅 생성)
+export function useGetSessionId() {
+  return useQuery({
+    queryKey: ["sessionId"],
+    queryFn: () => getSessionId(),
+  });
+}
 
 // 세션 목록 조회
 export function useGetChatList() {
