@@ -18,10 +18,28 @@ export function SchedulePeriodList({
       {/* 월경일 */}
       {(period ?? []).map((p, index) => (
         <View className="flex-row items-center gap-3" key={index}>
-          <View className="flex-row items-center">
-            <View className="w-3 h-3 rounded-full bg-violet-300 z-10" />
-            <View className="-ml-1 w-4 h-3 bg-violet-200 z-0" />
-            <View className="-ml-1 w-3 h-3 rounded-full bg-violet-300 z-10" />
+          <View className="flex-row items-center gap-1">
+            <View
+              className="rounded-full bg-violet-300"
+              style={{
+                width: 8,
+                height: 8,
+              }}
+            />
+            <View
+              className="rounded-full bg-violet-200"
+              style={{
+                width: 8,
+                height: 8,
+              }}
+            />
+            <View
+              className="rounded-full bg-violet-300"
+              style={{
+                width: 8,
+                height: 8,
+              }}
+            />
           </View>
           <View className="flex-row items-center gap-2">
             <Text className="text-neutral-600 text-sm font-semibold">
@@ -36,10 +54,28 @@ export function SchedulePeriodList({
       {/* 가임기 */}
       {childbearingAge.startDate && childbearingAge.endDate && (
         <View className="flex-row items-center gap-3">
-          <View className="flex-row items-center">
-            <View className="w-3 h-3 rounded-full bg-yellow-100 z-10" />
-            <View className="-ml-1 w-4 h-3 bg-yellow-50 z-0" />
-            <View className="-ml-1 w-3 h-3 rounded-full bg-yellow-100 z-10" />
+          <View className="flex-row items-center gap-1">
+            <View
+              className="rounded-full bg-yellow-100"
+              style={{
+                width: 8,
+                height: 8,
+              }}
+            />
+            <View
+              className="rounded-full bg-yellow-50"
+              style={{
+                width: 8,
+                height: 8,
+              }}
+            />
+            <View
+              className="rounded-full bg-yellow-100"
+              style={{
+                width: 8,
+                height: 8,
+              }}
+            />
           </View>
           <View className="flex-row items-center gap-2">
             <Text className="text-neutral-600 text-sm  font-semibold">
@@ -56,10 +92,28 @@ export function SchedulePeriodList({
       {/* 월경 예정일 */}
       {predictedPeriod.startDate && predictedPeriod.endDate && (
         <View className="flex-row items-center gap-3">
-          <View className="flex-row items-center">
-            <View className="w-3 h-3 rounded-full bg-violet-100 z-10" />
-            <View className="-ml-1 w-4 h-3 bg-violet-50 z-0" />
-            <View className="-ml-1 w-3 h-3 rounded-full bg-violet-100 z-10" />
+          <View className="flex-row items-center gap-1">
+            <View
+              className="rounded-full bg-violet-100"
+              style={{
+                width: 8,
+                height: 8,
+              }}
+            />
+            <View
+              className="rounded-full bg-violet-50"
+              style={{
+                width: 8,
+                height: 8,
+              }}
+            />
+            <View
+              className="rounded-full bg-violet-100"
+              style={{
+                width: 8,
+                height: 8,
+              }}
+            />
           </View>
           <View className="flex-row items-center gap-2">
             <Text className="text-neutral-600 text-sm font-semibold">

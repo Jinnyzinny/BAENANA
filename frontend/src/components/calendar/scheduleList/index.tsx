@@ -35,7 +35,7 @@ export function ScheduleList({
               key={item.medication_id}
               className="flex-row items-center gap-3"
             >
-              <View className="w-3" />
+              <View className="w-4" />
               <View
                 style={{
                   width: 6,
@@ -62,7 +62,7 @@ export function ScheduleList({
             key={item.reservation_id}
             className="flex-row items-center gap-3"
           >
-            <View className="w-3" />
+            <View className="w-4" />
             <View
               style={{
                 width: 6,
