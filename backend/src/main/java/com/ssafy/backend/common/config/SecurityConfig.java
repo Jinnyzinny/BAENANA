@@ -72,6 +72,9 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/api/auth/**"),
                                 new AntPathRequestMatcher("/public/**"),
 
+                                // 테스트용 토큰 발급 엔드포인트 추가
+                                new AntPathRequestMatcher("/auth/test-token"),
+
                                 // 공지사항 공개 경로
                                 new AntPathRequestMatcher("/api/notifications", "GET"),
                                 new AntPathRequestMatcher("/api/notifications/*", "GET"),
