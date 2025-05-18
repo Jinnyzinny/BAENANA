@@ -97,6 +97,13 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/api/inquiries/{inquiryId}", "DELETE")
                         ).authenticated()
 
+                        // 챗봇 관련 API 엔드포인트 추가
+                        .requestMatchers(
+                                new AntPathRequestMatcher("/api/chat/init", "GET"),
+                                new AntPathRequestMatcher("/api/chat", "POST"),
+                                new AntPathRequestMatcher("/api/chat/reset", "POST")
+                        ).authenticated()
+
                         .anyRequest().authenticated()
                 )
 
