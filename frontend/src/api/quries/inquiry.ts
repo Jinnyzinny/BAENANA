@@ -124,9 +124,12 @@ export function useAddAdminInquiry() {
       inquiryId: number;
       answerContent: string;
     }) => addAdminInquiry(inquiryId, answerContent),
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       console.log("☑️[관리자] 문의사항 답변 등록 성공: ", data);
       queryClient.invalidateQueries({ queryKey: ["adminInquiryList"] });
+      queryClient.invalidateQueries({
+        queryKey: ["adminInquiryDetail", variables.inquiryId],
+      });
     },
     onError: (error) => {
       console.log("✖️[관리자] 문의사항 답변 등록 실패: ", error);
@@ -147,9 +150,12 @@ export function useEditAdminInquiry() {
       inquiryId: number;
       answerContent: string;
     }) => editAdminInquiry(inquiryId, answerContent),
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       console.log("☑️[관리자] 문의사항 답변 변경 성공: ", data);
       queryClient.invalidateQueries({ queryKey: ["adminInquiryList"] });
+      queryClient.invalidateQueries({
+        queryKey: ["adminInquiryDetail", variables.inquiryId],
+      });
     },
     onError: (error) => {
       console.log("✖️[관리자] 문의사항 답변 변경 실패: ", error);

@@ -12,7 +12,7 @@ import {
   useGetInquiryDetail,
 } from "../../../api/quries/inquiry";
 
-export function InquiryList({
+export function UserInquiryCard({
   inquiryId,
   title,
   status,
@@ -102,7 +102,7 @@ export function InquiryList({
               </View>
 
               <Text className="text-neutral-600 text-sm">
-                {data.answerDate}
+                {data.answerContent}
               </Text>
             </View>
           )}

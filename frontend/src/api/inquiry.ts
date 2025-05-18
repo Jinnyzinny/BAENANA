@@ -83,8 +83,11 @@ export async function deleteInquiry(inquiryId: number) {
 export async function getAdminInquiryList(): Promise<AdminInquiry[]> {
   try {
     const response = await authClient.get("/inquiries/admin");
-    console.log("[관리자] 문의사항 목록 조회 성공: ", response.data.data);
-    return response.data.data;
+    console.log(
+      "[관리자] 문의사항 목록 조회 성공: ",
+      response.data.data.content
+    );
+    return response.data.data.content;
   } catch (error: unknown) {
     console.error("[관리자] 문의사항 목록 조회 실패: ", error);
     throw error;
@@ -113,7 +116,7 @@ export async function addAdminInquiry(
   try {
     const response = await authClient.post(
       `/inquiries/admin/${inquiryId}/answer`,
-      answerContent
+      { answerContent }
     );
     console.log("[관리자] 문의사항 답변 등록 성공: ", response.data);
     return response.data;
@@ -131,7 +134,7 @@ export async function editAdminInquiry(
   try {
     const response = await authClient.patch(
       `/inquiries/admin/${inquiryId}/answer`,
-      answerContent
+      { answerContent }
     );
     console.log("[관리자] 문의사항 답변 변경 성공: ", response.data);
     return response.data;
