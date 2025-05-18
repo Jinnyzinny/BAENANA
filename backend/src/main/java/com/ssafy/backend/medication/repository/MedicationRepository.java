@@ -18,4 +18,6 @@ public interface MedicationRepository extends JpaRepository<Medication,Long> {
     Optional<List<Medication>> findDistinctByUser_UserIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(Long userId,LocalDate startDate, LocalDate endDate);
     //    Primary Key로 사용자가 복용한 의약품을 찾는다.
     Optional<Medication> findByMedicationId(Long id);
+
+    Optional<List<Medication>> findDistinctByUser_UserIdAndEndDateAfter(Long userId, LocalDate endDate);
 }
