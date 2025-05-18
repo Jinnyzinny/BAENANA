@@ -234,7 +234,7 @@ public class RagServiceClient {
 
                                 List<String> symptoms = new ArrayList<>();
                                 dailyLog.getSymptomLog().forEach(symptom ->
-                                        symptoms.add(symptom.getSymptomType().getDescription())
+                                        symptoms.add(symptom.getSymptomType())
                                 );
 
                                 symptomData.put("symptoms", symptoms);
