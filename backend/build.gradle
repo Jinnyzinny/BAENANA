@@ -70,8 +70,11 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
-	// https://mvnrepository.com/artifact/org.apache.commons/commons-math3
-	implementation 'org.apache.commons:commons-math3:3.6.1'
+//	// https://mvnrepository.com/artifact/org.apache.commons/commons-math3
+//	implementation 'org.apache.commons:commons-math3:3.6.1'
+
+//	서버 자원 모니터링을 위한 프로메테우스 의존성 설치
+	implementation 'io.micrometer:micrometer-registry-prometheus'
 }
 
 tasks.named('test') {

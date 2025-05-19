@@ -67,6 +67,7 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers(
+                                new AntPathRequestMatcher("/actuator/prometheus"),
                                 new AntPathRequestMatcher("/"),
                                 new AntPathRequestMatcher("/auth/success"),
                                 new AntPathRequestMatcher("/api/auth/**"),
