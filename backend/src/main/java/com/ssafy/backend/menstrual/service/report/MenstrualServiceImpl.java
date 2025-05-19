@@ -3,7 +3,6 @@ package com.ssafy.backend.menstrual.service.report;
 import com.ssafy.backend.common.ApiResponse;
 import com.ssafy.backend.menstrual.entity.MenstrualCycle;
 import com.ssafy.backend.menstrual.exception.OvulationTestException;
-import com.ssafy.backend.menstrual.exception.OvulationTestStandardException;
 import com.ssafy.backend.menstrual.repository.MenstrualCycleRepository;
 import com.ssafy.backend.ovulation_test.entity.OvulationTest;
 import com.ssafy.backend.ovulation_test.entity.OvulationTestStandard;
@@ -24,10 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Service
@@ -54,12 +50,13 @@ public class MenstrualServiceImpl implements MenstrualService {
          * 사용자의 생리 주기 4개월치 기록을 얻는다
          * */
         List<MenstrualCycle> menstrualCycleList =
-                menstrualCycleRepository.findTop4ByUser_UserIdOrderByStartDateDesc(userId).orElse(null);
+                menstrualCycleRepository.findTop4ByUser_UserIdOrderByStartDateDesc(userId).orElse(Collections.emptyList());
 
+        menstrualCycleList.removeIf(Objects::isNull);
         /*
          * 만약 생리 주기 기록이 없을 경우 없다고 메시지를 반환한다.
          * */
-        if (menstrualCycleList == null || menstrualCycleList.isEmpty()) {
+        if (menstrualCycleList.isEmpty()) {
             return ApiResponse.success("사용자의 주기 정보가 없어 월경 정보(주기,기간)을 제공하는 데 실패했습니다.");
         }
 
@@ -281,7 +278,7 @@ public class MenstrualServiceImpl implements MenstrualService {
         return ApiResponse.success("사용자의 최근 6개월 주기 정보를 불러옵니다.",
                 GetRecentMenstrualResDto.builder()
                         .average_cycle(cycle.getAverageCycle())
-                        .max_cycle(cycle.getMaxCycle()==Integer.MIN_VALUE?0:cycle.getMaxCycle())
+                        .max_cycle(cycle.getMaxCycle() == Integer.MIN_VALUE ? 0 : cycle.getMaxCycle())
                         .cycle_record(cycle.getCycleRecord())
                         .build());
     }
@@ -302,7 +299,7 @@ public class MenstrualServiceImpl implements MenstrualService {
                 "사용자의 전체 주기 정보를 불러옵니다.",
                 GetAllMenstrualResDto.builder()
                         .average_cycle(cycle.getAverageCycle())
-                        .max_cycle(cycle.getMaxCycle()==Integer.MIN_VALUE?0:cycle.getMaxCycle())
+                        .max_cycle(cycle.getMaxCycle() == Integer.MIN_VALUE ? 0 : cycle.getMaxCycle())
                         .cycle_record(cycle.getCycleRecord())
                         .build()
         );
@@ -319,12 +316,12 @@ public class MenstrualServiceImpl implements MenstrualService {
             MenstrualCycle cycle = menstrualCycleList.get(i);
             LocalDate startDate = cycle.getStartDate();
             LocalDate endDate = cycle.getEndDate();
-            int period = (int) ChronoUnit.DAYS.between(startDate,endDate);
+            int period = (int) ChronoUnit.DAYS.between(startDate, endDate);
 //
             Integer cycleTerm = null;
             if (i < menstrualCycleList.size() - 1) {
                 LocalDate nextStartDate = menstrualCycleList.get(i + 1).getStartDate();
-                cycleTerm = (int) ChronoUnit.DAYS.between(nextStartDate,startDate);  // 다음 주기의 시작일 - 현재 주기의 시작일
+                cycleTerm = (int) ChronoUnit.DAYS.between(nextStartDate, startDate);  // 다음 주기의 시작일 - 현재 주기의 시작일
                 cycleSum += cycleTerm;
                 cycleCount++;
                 maxCycle = Math.max(maxCycle, cycleTerm);
