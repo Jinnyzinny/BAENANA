@@ -10,27 +10,17 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@Table(indexes = {
-        @Index(name = "session", columnList = "session_id")
-})
+@Table(indexes = {@Index(name = "session", columnList = "session_id")})
 public class ChatMessages {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long chatId;
-
-    /*
-     * ===== 연관 관계 =====
-     * */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    /*
-     * ===== Column =====
-     * */
-
     private String sender;
     private String message;
     private LocalDateTime createdAt;
     private String sessionId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 }
