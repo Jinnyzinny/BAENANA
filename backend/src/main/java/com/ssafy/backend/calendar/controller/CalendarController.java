@@ -35,7 +35,7 @@ public class CalendarController {
     ) {
         return ResponseEntity.ok(calendarService.getBearingPeriod(user));
     }
-//
+    
     @GetMapping("/menstrual_prediction")
     public ResponseEntity<ApiResponse<?>> getMenstrualPrediction(
             @AuthenticationPrincipal User user
