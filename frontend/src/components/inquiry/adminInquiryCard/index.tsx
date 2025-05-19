@@ -7,14 +7,13 @@ import {
   Trash2,
 } from "lucide-react-native";
 import { useState } from "react";
-import { Alert, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
 import {
   useAddAdminInquiry,
   useDeleteAdminInquiry,
   useEditAdminInquiry,
   useGetAdminInquiryDetail,
 } from "../../../api/quries/inquiry";
-import { TextInput } from "react-native-gesture-handler";
 
 export function AdminInquiryCard({
   inquiryId,
@@ -155,7 +154,10 @@ export function AdminInquiryCard({
             {data.questionContent}
           </Text>
 
-          <View className="w-full h-[1px] my-5 bg-neutral-100" />
+          <View
+            className="w-full h-[1px] bg-neutral-100"
+            style={{ marginVertical: 20 }}
+          />
 
           {/* 관리자 답변 */}
 
@@ -186,7 +188,7 @@ export function AdminInquiryCard({
           )}
 
           {isOpen && (
-            <View>
+            <>
               <TextInput
                 value={content}
                 onChangeText={setContent}
@@ -211,7 +213,7 @@ export function AdminInquiryCard({
                   </TouchableOpacity>
                 </View>
               </View>
-            </View>
+            </>
           )}
 
           {/* 관리자 답변 후 */}

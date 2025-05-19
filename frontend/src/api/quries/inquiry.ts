@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Alert } from "react-native";
 import {
   addAdminInquiry,
   addInquiry,
@@ -11,7 +12,6 @@ import {
   getInquiryDetail,
   getInquiryList,
 } from "../inquiry";
-import { Alert } from "react-native";
 
 // 사용자
 // [사용자] 문의사항 등록
@@ -67,9 +67,12 @@ export function useEditInquiry() {
       title?: string;
       questionContent?: string;
     }) => editInquiry(inquiryId, title, questionContent),
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       console.log("☑️[사용자] 문의사항 변경 성공: ", data);
       queryClient.invalidateQueries({ queryKey: ["inquiryList"] });
+      queryClient.invalidateQueries({
+        queryKey: ["inquiryDetail", variables.inquiryId],
+      });
     },
     onError: (error) => {
       console.log("✖️[사용자] 문의사항 변경 실패: ", error);

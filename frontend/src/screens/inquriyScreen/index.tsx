@@ -1,9 +1,9 @@
 import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { HeaderLogo } from "../../components/common/headerLogo";
+import { AdminInquriy } from "../../components/inquiry/adminInquriy";
 import { UserInquriy } from "../../components/inquiry/userInquriy";
 import { useLoginStore } from "../../store/loginStore";
-import { AdminInquriy } from "../../components/inquiry/adminInquriy";
 
 export function InquriyScreen() {
   const { user } = useLoginStore();

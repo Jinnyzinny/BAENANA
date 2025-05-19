@@ -1,9 +1,9 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { FaqScreen } from "../../screens/fAQScreen";
 import { HealthInfoScreen } from "../../screens/healthInfoScreen";
-import { SettingsScreen } from "../../screens/settingsScreen";
-import { NoticeScreen } from "../../screens/noticeScreen";
-import { FaqScreen } from "../../screens/faqScreen";
 import { InquriyScreen } from "../../screens/inquriyScreen";
+import { NoticeScreen } from "../../screens/noticeScreen";
+import { SettingsScreen } from "../../screens/settingsScreen";
 
 export function SettingsStackNavigator() {
   const Stack = createNativeStackNavigator();
