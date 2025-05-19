@@ -87,6 +87,13 @@ public class ChatController {
      */
     @PostMapping
     public ResponseEntity<ApiResponse<?>> chat(@RequestBody ChatMessageRequest request, @AuthenticationPrincipal User user) {
+        // user null 체크: 인증 실패 시 401 반환
+        if (user == null) {
+            log.warn("인증되지 않은 사용자 요청: sessionId={}", request.getSessionId());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(ApiResponse.error("UNAUTHORIZED", HttpStatus.UNAUTHORIZED, "인증 정보가 유효하지 않습니다."));
+        }
+
         log.info("챗봇 대화 요청: userId={}, sessionId={}", user.getUserId(), request.getSessionId());
 
         try {
