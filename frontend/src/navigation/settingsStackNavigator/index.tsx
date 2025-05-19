@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { FaqScreen } from "../../screens/fAQScreen";
+import { FaqScreen } from "../../screens/faqScreen";
 import { HealthInfoScreen } from "../../screens/healthInfoScreen";
 import { InquriyScreen } from "../../screens/inquriyScreen";
 import { NoticeScreen } from "../../screens/noticeScreen";

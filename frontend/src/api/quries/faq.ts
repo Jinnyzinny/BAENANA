@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { addFaq, deleteFaq, editFaq, getFaqDetail, getFaqList } from "../faq";
 import { Alert } from "react-native";
+import { addFaq, deleteFaq, editFaq, getFaqDetail, getFaqList } from "../faq";
 
 // Faq 목록 조회
 export function useGetFaqList() {
@@ -51,9 +51,12 @@ export function useEditFaq() {
       question?: string;
       answer?: string;
     }) => editFaq(faqId, question, answer),
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       console.log("☑️Faq 변경 성공: ", data);
       queryClient.invalidateQueries({ queryKey: ["faqList"] });
+      queryClient.invalidateQueries({
+        queryKey: ["faqDetail", variables.faqId],
+      });
     },
     onError: (error) => {
       console.log("✖️Faq 변경 실패: ", error);

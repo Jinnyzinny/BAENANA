@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Alert } from "react-native";
 import {
   addNotice,
   deleteNotice,
@@ -6,7 +7,6 @@ import {
   getNoticeDetail,
   getNoticeList,
 } from "../notice";
-import { Alert } from "react-native";
 
 // 공지사항 목록 조회
 export function useGetNoticeList() {
@@ -56,9 +56,12 @@ export function useEditNotice() {
       title?: string;
       content?: string;
     }) => editNotice(noticeId, title, content),
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       console.log("☑️공지사항 변경 성공: ", data);
       queryClient.invalidateQueries({ queryKey: ["noticeList"] });
+      queryClient.invalidateQueries({
+        queryKey: ["noticeDetail", variables.noticeId],
+      });
     },
     onError: (error) => {
       console.log("✖️공지사항 변경 실패: ", error);

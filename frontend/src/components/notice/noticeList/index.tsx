@@ -6,6 +6,7 @@ import {
   useEditNotice,
   useGetNoticeDetail,
 } from "../../../api/quries/notice";
+import { useLoginStore } from "../../../store/loginStore";
 
 export function NoticeList({
   noticeId,
@@ -20,6 +21,7 @@ export function NoticeList({
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [editTitle, setEditTitle] = useState<string>(title);
   const [editContent, setEditContent] = useState<string>("");
+  const { user } = useLoginStore();
 
   const { data } = useGetNoticeDetail(noticeId);
   const { mutate: editNotice } = useEditNotice();
@@ -115,7 +117,7 @@ export function NoticeList({
               {data.createdAt.slice(0, 10).replaceAll("-", ".")}{" "}
               {data.createdAt.slice(11, 16)}
             </Text>
-            {!isEdit && (
+            {user?.role === "ADMIN" && !isEdit && (
               <View className="pt-1 flex-row items-center gap-1">
                 {/* 수정 버튼 */}
                 <TouchableOpacity onPress={handleEdit}>
