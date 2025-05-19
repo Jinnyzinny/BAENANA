@@ -5,8 +5,8 @@ import authClient from "./client/authClient";
 export async function getSessionId(): Promise<SessionId> {
   try {
     const response = await authClient.get("/chat/init");
-    console.log("세션 id 조회 성공: ", response.data);
-    return response.data;
+    console.log("세션 id 조회 성공: ", response.data.data);
+    return response.data.data;
   } catch (error: unknown) {
     console.error("세션 id 조회 실패: ", error);
     throw error;

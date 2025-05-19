@@ -6,7 +6,7 @@ export function ChatButton({
   onPress,
 }: {
   items: Button[];
-  onPress?: (buttonId: string) => void;
+  onPress?: (buttonId: string, buttonText: string) => void;
 }) {
   return (
     <View className="overflow-hidden rounded-xl">
@@ -15,7 +15,6 @@ export function ChatButton({
         const isLast = index === items.length - 1;
         const isSingle = items.length === 1;
 
-        const bgColor = index % 2 === 0 ? "bg-violet-100" : "bg-yellow-100";
         const borderRadiusClass = isSingle
           ? "rounded-xl"
           : isFirst
@@ -27,10 +26,10 @@ export function ChatButton({
         return (
           <TouchableOpacity
             key={index}
-            onPress={() => onPress?.(item.id)}
-            className={`p-2 ${bgColor} ${borderRadiusClass}`}
+            onPress={() => onPress?.(item.id, item.text)}
+            className={`p-3 bg-yellow-100 ${index !== items.length - 1 && "border-b border-neutral-400"} ${borderRadiusClass}`}
           >
-            <Text className="text-center text-xs text-neutral-600 font-medium">
+            <Text className="text-center text-sm text-neutral-600">
               {item.text}
             </Text>
           </TouchableOpacity>

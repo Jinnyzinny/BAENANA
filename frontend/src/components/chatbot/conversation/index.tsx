@@ -1,4 +1,4 @@
-import { View, Text, Image } from "react-native";
+import { Image, Text, View } from "react-native";
 import { ChatButton } from "../chatButton";
 
 export function Conversation({
@@ -10,7 +10,7 @@ export function Conversation({
   bot: boolean;
   content: string;
   buttons?: { id: string; text: string }[];
-  onChatButtonPress?: (buttonId: string) => void;
+  onChatButtonPress?: (buttonId: string, buttonText: string) => void;
 }) {
   // 챗봇 답변인 경우
   if (bot) {
@@ -34,7 +34,7 @@ export function Conversation({
           </View>
         </View>
         {buttons && buttons.length > 0 && (
-          <View className="ml-12">
+          <View style={{ marginLeft: 40 }}>
             <ChatButton items={buttons} onPress={onChatButtonPress} />
           </View>
         )}
@@ -44,10 +44,8 @@ export function Conversation({
 
   // 사용자 입력 메시지
   return (
-    <View className="flex-1 self-end">
-      <View className="rounded-xl p-3 bg-violet-200">
-        <Text className="text-neutral-800 text-sm">{content}</Text>
-      </View>
+    <View className="rounded-xl p-3 bg-violet-200">
+      <Text className="text-neutral-800 text-sm">{content}</Text>
     </View>
   );
 }

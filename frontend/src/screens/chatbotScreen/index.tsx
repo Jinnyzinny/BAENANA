@@ -1,13 +1,13 @@
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { ScrollView, View } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import { KeyboardAvoidingView, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useAddChat, useGetChat, useGetSessionId } from "../../api/quries/chat";
 import { Chatting } from "../../components/chatbot/chatting";
 import { Conversation } from "../../components/chatbot/conversation";
 import { HeaderLogo } from "../../components/common/headerLogo";
 import { ChatbotDrawerParamList } from "../../navigation/chatbotDrawerNavigator";
-import { useEffect, useState } from "react";
-import { useAddChat, useGetChat, useGetSessionId } from "../../api/quries/chat";
-import { ChatData } from "../../types/Chat";
+import { Button, ChatData } from "../../types/Chat";
 
 type ChatbotScreenRouteProp = RouteProp<ChatbotDrawerParamList, "Chat">;
 
@@ -15,19 +15,29 @@ export function ChatbotScreen() {
   const [chatList, setChatList] = useState<ChatData[]>([]);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [message, setMessage] = useState<string>("");
-  const [selectedButton, setSelectedButton] = useState<string | null>(null);
+  const [selectedButton, setSelectedButton] = useState<Button | null>(null);
+  const [responseTrigger, setResponseTrigger] = useState(0);
+  const scrollRef = useRef<ScrollView>(null);
 
-  const { mutate: addChat } = useAddChat();
+  const responseQueue = useRef<
+    {
+      index: number;
+      message: string;
+      buttons?: ChatData["buttons"];
+    }[]
+  >([]);
 
   const { params } = useRoute<ChatbotScreenRouteProp>();
   const { data: previousChats, isSuccess: isChatLoaded } = useGetChat(
     sessionId,
     !!sessionId && !!params?.sessionId
   );
+  const { mutate: addChat } = useAddChat();
 
   // drawer에서 세션을 선택한 경우
   useEffect(() => {
     if (params?.sessionId) {
+      console.log("sessionId: ", sessionId);
       setSessionId(params.sessionId);
     }
   }, [params]);
@@ -68,6 +78,7 @@ export function ChatbotScreen() {
 
   // sessionId 조회 성공 시 sessionId 업데이트
   useEffect(() => {
+    console.log("sessionId: ", sessionId);
     if (isSuccess && data?.sessionId) {
       setSessionId(data.sessionId);
 
@@ -79,6 +90,24 @@ export function ChatbotScreen() {
       ]);
     }
   }, [isSuccess, data]);
+
+  // 사용자가 채팅을 버튼 또는 내용을 입력한 경우
+  useEffect(() => {
+    if (responseQueue.current.length === 0) return;
+
+    setChatList((prev) => {
+      const updated = [...prev];
+      for (const res of responseQueue.current) {
+        updated[res.index] = {
+          ...updated[res.index],
+          message: res.message,
+          buttons: res.buttons,
+        };
+      }
+      responseQueue.current = [];
+      return updated;
+    });
+  }, [responseTrigger]);
 
   // 메시지를 전송하는 경우
   function handleSend() {
@@ -95,9 +124,9 @@ export function ChatbotScreen() {
       return next;
     });
 
-    // console.log("inputType: text");
-    // console.log("content: ", message);
-    // console.log("sessionId: ", sessionId);
+    console.log("inputType: text");
+    console.log("content: ", message);
+    console.log("sessionId: ", sessionId);
 
     // 챗봇 응답 후
     addChat(
@@ -108,15 +137,12 @@ export function ChatbotScreen() {
       },
       {
         onSuccess: (response) => {
-          setChatList((prev) => {
-            const updated = [...prev];
-            updated[tempIndex] = {
-              ...updated[tempIndex],
-              message: response.message,
-              buttons: response.buttons,
-            };
-            return updated;
+          responseQueue.current.push({
+            index: tempIndex,
+            message: response.message,
+            buttons: response.buttons,
           });
+          setResponseTrigger((prev) => prev + 1);
         },
       }
     );
@@ -126,7 +152,8 @@ export function ChatbotScreen() {
   useEffect(() => {
     if (!selectedButton || !sessionId) return;
 
-    const buttonText = selectedButton;
+    const buttonId = selectedButton.id;
+    const buttonText = selectedButton.text;
     setSelectedButton(null);
 
     // 챗봇 응답 전
@@ -140,24 +167,25 @@ export function ChatbotScreen() {
       return next;
     });
 
+    console.log("inputType: button");
+    console.log("content: ", buttonText);
+    console.log("sessionId: ", sessionId);
+
     // 챗봇 응답 후
     addChat(
       {
         inputType: "button",
-        content: buttonText,
+        content: buttonId,
         sessionId,
       },
       {
         onSuccess: (res) => {
-          setChatList((prev) => {
-            const updated = [...prev];
-            updated[tempIndex] = {
-              ...updated[tempIndex],
-              message: res.message,
-              buttons: res.buttons,
-            };
-            return updated;
+          responseQueue.current.push({
+            index: tempIndex,
+            message: res.message,
+            buttons: res.buttons,
           });
+          setResponseTrigger((prev) => prev + 1);
         },
       }
     );
@@ -165,25 +193,33 @@ export function ChatbotScreen() {
 
   return (
     <SafeAreaView className="flex-1" edges={["top"]}>
-      <View className="flex-1 justify-between">
-        {/* 상단: 헤더 + 채팅 목록 */}
-        <View>
+      <KeyboardAvoidingView className="flex-1" keyboardVerticalOffset={0}>
+        <View className="flex-1 justify-between">
+          {/* 상단: 헤더 + 채팅 목록 */}
           <HeaderLogo before={false} settings={true} />
-          <ScrollView className="px-5">
-            <View className="gap-3 pb-4">
+          <ScrollView
+            ref={scrollRef}
+            className="px-5"
+            onContentSizeChange={() => {
+              scrollRef.current?.scrollToEnd({ animated: true });
+            }}
+          >
+            <View className="gap-3">
               {chatList.map((chat, index) => (
-                <View key={index} className="mr-20 gap-3">
+                <View key={index} className="gap-3">
                   {chat.userMessage && (
-                    <View className="ml-20">
+                    <View style={{ marginLeft: 100 }}>
                       <Conversation bot={false} content={chat.userMessage} />
                     </View>
                   )}
-                  <View className="mr-20">
+                  <View style={{ marginRight: 50 }}>
                     <Conversation
                       bot={true}
                       content={chat.message}
                       buttons={chat.buttons}
-                      onChatButtonPress={(id) => setSelectedButton(id)}
+                      onChatButtonPress={(id, text) =>
+                        setSelectedButton({ id, text })
+                      }
                     />
                   </View>
                 </View>
@@ -193,14 +229,14 @@ export function ChatbotScreen() {
         </View>
 
         {/* 하단 입력창 */}
-        <View className="px-5 bg-violet-100 ">
+        <View className="px-5 bg-violet-100">
           <Chatting
             message={message}
             setMessage={setMessage}
             onSend={handleSend}
           />
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
