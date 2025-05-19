@@ -93,6 +93,7 @@ export function UserInquiryCard({
       },
     ]);
   }
+
   return (
     <View className="p-5 bg-white rounded-xl gap-5">
       {/* 헤더 */}
