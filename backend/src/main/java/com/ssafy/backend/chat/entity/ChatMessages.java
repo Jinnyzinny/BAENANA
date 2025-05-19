@@ -21,13 +21,15 @@ public class ChatMessages {
     private String sessionId;
 
     // 추가: 입력 유형 (text 또는 button)
+    @Column(name = "input_type")
     private String inputType;
 
     // 추가: 버튼 데이터 (JSON 형태로 저장)
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "button_data", columnDefinition = "TEXT")
     private String buttonData;
 
     // 추가: 메시지 소스 (rule 또는 rag)
+    @Column(name = "source")
     private String source;
 
     @ManyToOne(fetch = FetchType.LAZY)
