@@ -7,7 +7,6 @@ import com.ssafy.backend.chat.dto.MessageDto;
 import com.ssafy.backend.chat.service.ChatService;
 import com.ssafy.backend.chatbot.dto.ButtonDto;
 import com.ssafy.backend.chatbot.dto.ChatBotResponse;
-import com.ssafy.backend.chatbot.dto.ChatRequest;
 import com.ssafy.backend.chatbot.service.ChatBotService;
 import com.ssafy.backend.common.ApiResponse;
 import com.ssafy.backend.user.entity.User;
@@ -94,30 +93,20 @@ public class ChatController {
                     .body(ApiResponse.error("UNAUTHORIZED", HttpStatus.UNAUTHORIZED, "인증 정보가 유효하지 않습니다."));
         }
 
-        log.info("챗봇 대화 요청: userId={}, sessionId={}", user.getUserId(), request.getSessionId());
+        log.info("챗봇 대화 요청: userId={}, sessionId={}, message={}", user.getUserId(), request.getSessionId(), request.getMessage());
 
         try {
-            // ChatMessageRequest에서 입력 유형과 내용 가져오기
-            String inputType = request.getInputType() != null ? request.getInputType() : "text";
-            String content = request.getMessage(); // ChatMessageRequest에서 메시지 내용 가져오기
-            String sessionId = request.getSessionId();
-
-            // 입력 유형에 따른 분기 처리
-            if ("button".equals(inputType)) {
-                // 버튼 클릭 처리
-                ChatBotResponse buttonResponse = chatBotService.handleButtonClick(user, content);
-                return ResponseEntity.ok(ApiResponse.success("버튼 클릭이 처리되었습니다.", HttpStatus.OK, buttonResponse));
-            } else {
-                // 텍스트 메시지 처리
-                ChatRequest chatRequest = ChatRequest.builder()
-                        .inputType("text")
-                        .content(content)
-                        .sessionId(sessionId)
-                        .build();
-
-                ChatBotResponse textResponse = chatBotService.handleTextMessage(user, chatRequest);
-                return ResponseEntity.ok(ApiResponse.success("텍스트 메시지가 처리되었습니다.", HttpStatus.OK, textResponse));
+            // 요청 유효성 검사
+            if (request.getMessage() == null || request.getMessage().isEmpty()) {
+                log.warn("메시지 또는 버튼 ID가 비어 있음: userId={}", user.getUserId());
+                return ResponseEntity.badRequest().body(
+                        ApiResponse.error("INVALID_REQUEST", HttpStatus.BAD_REQUEST, "메시지 또는 버튼 ID가 비어 있습니다.")
+                );
             }
+
+            // 채팅 서비스를 통한 메시지 처리 및 저장
+            ChatResponse response = chatService.sendMessage(user, request);
+            return ResponseEntity.ok(ApiResponse.success("메시지가 처리되었습니다.", HttpStatus.OK, response));
         } catch (Exception e) {
             log.error("챗봇 처리 중 오류 발생", e);
             return ResponseEntity.ok(ApiResponse.error("ERROR", HttpStatus.INTERNAL_SERVER_ERROR, "챗봇 처리 중 오류가 발생했습니다: " + e.getMessage()));

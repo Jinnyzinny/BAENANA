@@ -86,6 +86,9 @@ public class ChatBotServiceImpl implements ChatBotService {
 
             // 메인 버튼(Navigation 유형) 처리 - 서브 버튼 목록 반환
             if ("Navigation".equals(buttonInfo.getType()) && subButtons.containsKey(buttonId)) {
+                // 서브메뉴 생성 시 세션 ID 요청에서 가져오기
+                log.info("서브메뉴 응답 생성: buttonId={}, type={}, subButtons={}",
+                        buttonId, buttonInfo.getType(), subButtons.get(buttonId).size());
                 return createSubMenuResponse(user, buttonId, buttonInfo.getText());
             }
 
@@ -100,7 +103,7 @@ public class ChatBotServiceImpl implements ChatBotService {
 
         } catch (Exception e) {
             log.error("버튼 클릭 처리 중 오류 발생", e);
-            return createErrorResponse("요청 처리 중 오류가 발생했습니다.");
+            return createErrorResponse("요청 처리 중 오류가 발생했습니다: " + e.getMessage());
         }
     }
 
@@ -109,7 +112,7 @@ public class ChatBotServiceImpl implements ChatBotService {
         try {
             log.info("텍스트 메시지 처리: userId={}, message={}", user.getUserId(), request.getContent());
 
-            // 세션 ID 설정
+            // 세션 ID 설정 - 클라이언트가 전송한 세션 ID 유지
             if (request.getSessionId() == null || request.getSessionId().isEmpty()) {
                 request.setSessionId(generateSessionId(user));
             }
@@ -126,7 +129,7 @@ public class ChatBotServiceImpl implements ChatBotService {
 
         } catch (Exception e) {
             log.error("텍스트 메시지 처리 중 오류 발생", e);
-            return createErrorResponse("요청 처리 중 오류가 발생했습니다.");
+            return createErrorResponse("요청 처리 중 오류가 발생했습니다: " + e.getMessage());
         }
     }
 
@@ -154,22 +157,35 @@ public class ChatBotServiceImpl implements ChatBotService {
 
     @Override
     public ButtonDto getButtonInfo(String buttonId) {
+        // 디버깅용 로그 추가
+        log.debug("버튼 정보 조회: buttonId={}", buttonId);
+
         // 메인 버튼에서 검색
         for (ButtonDto button : mainButtons) {
+            log.debug("메인 버튼 검색: id={}, text={}, type={}", button.getId(), button.getText(), button.getType());
             if (button.getId().equals(buttonId)) {
+                log.info("메인 버튼 정보 찾음: id={}, text={}, type={}", button.getId(), button.getText(), button.getType());
                 return button;
             }
         }
 
         // 서브 버튼에서 검색
-        for (List<ButtonDto> buttons : subButtons.values()) {
+        for (Map.Entry<String, List<ButtonDto>> entry : subButtons.entrySet()) {
+            String mainId = entry.getKey();
+            List<ButtonDto> buttons = entry.getValue();
+
             for (ButtonDto button : buttons) {
+                log.debug("서브 버튼 검색: id={}, text={}, type={}, parentId={}",
+                        button.getId(), button.getText(), button.getType(), button.getParentId());
                 if (button.getId().equals(buttonId)) {
+                    log.info("서브 버튼 정보 찾음: id={}, text={}, type={}, parentId={}",
+                            button.getId(), button.getText(), button.getType(), button.getParentId());
                     return button;
                 }
             }
         }
 
+        log.warn("버튼 정보를 찾을 수 없음: buttonId={}", buttonId);
         return null;
     }
 
@@ -365,10 +381,11 @@ public class ChatBotServiceImpl implements ChatBotService {
      * AI 서비스 요청 생성
      */
     private ChatRequest createChatRequest(User user, String buttonId, Map<String, Object> userData) {
+        // 세션 ID를 생성하지 않고 클라이언트에서 제공한 ID 사용 (혹은 새로 생성)
         return ChatRequest.builder()
                 .inputType("button")
                 .content(buttonId)
-                .sessionId(generateSessionId(user))
+                .sessionId(generateSessionId(user))  // 여기서는 새 세션 ID 생성
                 .userData(userData)
                 .build();
     }
@@ -378,7 +395,7 @@ public class ChatBotServiceImpl implements ChatBotService {
      */
     private ChatBotResponse createMainMenuResponse(User user) {
         return ChatBotResponse.builder()
-                .sessionId(generateSessionId(user))
+                .sessionId(generateSessionId(user))  // 여기서는 새 세션 ID 생성
                 .message("메인 메뉴입니다. 원하시는 항목을 선택해주세요.")
                 .source("rule")
                 .buttons(mainButtons)
@@ -394,7 +411,7 @@ public class ChatBotServiceImpl implements ChatBotService {
         List<ButtonDto> buttons = subButtons.get(mainButtonId);
 
         return ChatBotResponse.builder()
-                .sessionId(generateSessionId(user))
+                .sessionId(generateSessionId(user))  // 여기서는 새 세션 ID 생성
                 .message(buttonText + "을 위해 원하시는 항목을 선택해주세요.")
                 .source("rule")
                 .buttons(buttons)
