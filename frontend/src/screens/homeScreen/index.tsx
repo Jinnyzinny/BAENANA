@@ -1,7 +1,13 @@
 import { useFocusEffect } from "@react-navigation/native";
 import { differenceInCalendarDays, parseISO } from "date-fns";
 import { useCallback, useMemo, useRef } from "react";
-import { InteractionManager, useWindowDimensions, View } from "react-native";
+import {
+  Image,
+  InteractionManager,
+  Text,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import { Modalize } from "react-native-modalize";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGetHospitalAlert } from "../../api/quries/hospital";
@@ -93,20 +99,56 @@ export function HomeScreen() {
             )}
           </View>
 
-          {/* 도넛 차트 */}
-          <View className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-            <DonutChart percentage={percentage} dDay={dDay} />
-          </View>
-          {/* 버튼 */}
-          <View className="w-full absolute bottom-16 -translate-y-1/2">
-            <View className="mx-24">
-              <CustomButton
-                fill={false}
-                content="월경일 입력"
-                onPress={handlePeriodOpen}
-              />
-            </View>
-          </View>
+          {percentage || dDay ? (
+            <>
+              <View className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                <DonutChart percentage={percentage} dDay={dDay} />
+              </View>
+              <View className="w-full absolute bottom-16 -translate-y-1/2">
+                <View className="mx-24">
+                  <CustomButton
+                    fill={false}
+                    content="월경일 입력"
+                    onPress={handlePeriodOpen}
+                  />
+                </View>
+              </View>
+            </>
+          ) : (
+            <>
+              <View
+                className="flex-1 items-center gap-3"
+                style={{ marginVertical: 150 }}
+              >
+                <Image
+                  source={require("../..//assets/images/mascot_find.png")}
+                  style={{ width: 110, height: 120 }}
+                />
+                <View className="items-center gap-1">
+                  <Text className="text-neutral-600 text-sm mt-5">
+                    배나나에 궁금한 점이 있다면
+                  </Text>
+                  <View className="flex-row">
+                    <Text className="text-violet-700 font-bold text-sm">
+                      "월경일 입력"
+                    </Text>
+                    <Text className="text-neutral-600 text-sm">
+                      을 눌러서 정보를 입력해주세요.
+                    </Text>
+                  </View>
+                </View>
+                <View className="w-full absolute bottom-4 -translate-y-1/2">
+                  <View className="mx-24">
+                    <CustomButton
+                      fill={false}
+                      content="월경일 입력"
+                      onPress={handlePeriodOpen}
+                    />
+                  </View>
+                </View>
+              </View>
+            </>
+          )}
         </View>
       </SafeAreaView>
       <PeriodBottomSheet height={height} sheetRef={sheetRef} period={6} />
