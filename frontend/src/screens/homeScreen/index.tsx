@@ -99,22 +99,20 @@ export function HomeScreen() {
             )}
           </View>
 
-          {percentage || dDay ? (
-            <>
-              <View className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                <DonutChart percentage={percentage} dDay={dDay} />
-              </View>
-              <View className="w-full absolute bottom-16 -translate-y-1/2">
-                <View className="mx-24">
-                  <CustomButton
-                    fill={false}
-                    content="월경일 입력"
-                    onPress={handlePeriodOpen}
-                  />
-                </View>
-              </View>
-            </>
-          ) : (
+          <View className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+            <DonutChart percentage={percentage} dDay={dDay} />
+          </View>
+          <View className="w-full absolute bottom-16 -translate-y-1/2">
+            <View className="mx-24">
+              <CustomButton
+                fill={false}
+                content="월경일 입력"
+                onPress={handlePeriodOpen}
+              />
+            </View>
+          </View>
+
+          {!percentage && !dDay && (
             <>
               <View
                 className="flex-1 items-center gap-3"
@@ -126,7 +124,7 @@ export function HomeScreen() {
                 />
                 <View className="items-center gap-1">
                   <Text className="text-neutral-600 text-sm mt-5">
-                    배나나에 궁금한 점이 있다면
+                    배나나에 입력된 정보가 없어요.
                   </Text>
                   <View className="flex-row">
                     <Text className="text-violet-700 font-bold text-sm">

@@ -1,10 +1,14 @@
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback, useRef } from "react";
-import { ScrollView, ToastAndroid, View } from "react-native";
+import { Image, ScrollView, Text, ToastAndroid, View } from "react-native";
 import RNFS from "react-native-fs";
 import RNHTMLtoPDF from "react-native-html-to-pdf";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ViewShot, { captureRef } from "react-native-view-shot";
+import {
+  useGetChildbearingAge,
+  useGetPredictedPeriod,
+} from "../../api/quries/period";
 import {
   useGetOvulationTest,
   useGetPeriodAlert,
@@ -23,10 +27,6 @@ import { OvulationInfo } from "../../components/report/ovulationInfo";
 import { RecentPeriod } from "../../components/report/recentPeriod";
 import { Summary } from "../../components/report/summary";
 import { useStoragePermission } from "../../hooks/useStoragePermission";
-import {
-  useGetChildbearingAge,
-  useGetPredictedPeriod,
-} from "../../api/quries/period";
 
 export function ReportScreen() {
   const hasPermission = useStoragePermission();
@@ -270,12 +270,59 @@ export function ReportScreen() {
           {reportData?.data && <Summary data={reportData.data} />}
           <View />
 
+          {/* 입력된 정보가 없는 경우 */}
+          {!periodAlertData?.data?.message &&
+            !periodInfoData?.data &&
+            !ovulationTestData?.data &&
+            !recentPeriodData?.data &&
+            !recentMedicineData?.data &&
+            !reportData?.data &&
+            !childbearingAgeData?.data &&
+            !predictedPeriodData?.data && (
+              <>
+                <View
+                  className="flex-1 items-center gap-3"
+                  style={{ marginVertical: 150 }}
+                >
+                  <Image
+                    source={require("../..//assets/images/mascot_monocle.png")}
+                    style={{ width: 100, height: 110 }}
+                  />
+                  <View className="items-center gap-1">
+                    <Text className="text-neutral-600 text-sm mt-5">
+                      배나나에 입력된 정보가 없어요.
+                    </Text>
+                    <View className="flex-row">
+                      <Text className="text-neutral-600 text-sm">
+                        월경 관련 일정을{" "}
+                      </Text>
+                      <Text className="text-violet-700 font-bold text-sm">
+                        캘린더
+                      </Text>
+                      <Text className="text-neutral-600 text-sm">
+                        에서 등록해주세요.
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              </>
+            )}
+
           {/* 버튼 */}
-          <CustomButton
-            fill={true}
-            content="PDF로 저장"
-            onPress={handleCaptureToPdf}
-          />
+          {(!!periodAlertData?.data?.message ||
+            !!periodInfoData?.data ||
+            !!ovulationTestData?.data ||
+            !!recentPeriodData?.data ||
+            !!recentMedicineData?.data ||
+            !!reportData?.data ||
+            !!childbearingAgeData?.data ||
+            !!predictedPeriodData?.data) && (
+            <CustomButton
+              fill={true}
+              content="PDF로 저장"
+              onPress={handleCaptureToPdf}
+            />
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>

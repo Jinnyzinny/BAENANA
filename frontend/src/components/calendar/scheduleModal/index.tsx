@@ -180,12 +180,19 @@ export function ScheduleModal({
                       onPress={() => handleBottomSheet("medicine")}
                     />
                   </View>
-                  <View className="flex-row">
-                    <ScheduleButton
-                      type="period"
-                      onPress={() => handleBottomSheet("symptom")}
-                    />
-                  </View>
+
+                  {/* 선택한 날짜가 주기에 해당하는 경우 증상 입력 */}
+                  {!data.prediction &&
+                    IsInRange(
+                      date,
+                      data.menstrual_cycle.start_date,
+                      data.menstrual_cycle.end_date
+                    ) && (
+                      <ScheduleButton
+                        type="period"
+                        onPress={() => handleBottomSheet("symptom")}
+                      />
+                    )}
                 </View>
               </View>
             </ScrollView>

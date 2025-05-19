@@ -104,7 +104,7 @@ export function TimerModal({
                         x2="0"
                         y2="1.1"
                       >
-                        <Stop offset="0%" stopColor="#FFF7B4" />
+                        <Stop offset="0%" stopColor="#DDD6FF" />
                         <Stop offset="100%" stopColor="#A684FF" />
                       </LinearGradient>
                     </Defs>
