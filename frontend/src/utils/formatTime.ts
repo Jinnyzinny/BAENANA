@@ -1,9 +1,19 @@
 import { formatDistance } from "date-fns";
 import { ko } from "date-fns/locale";
 
+function parseKoreanTime(time: string): Date {
+  const [datePart, timePart] = time.split(" ");
+  const [year, month, day] = datePart.split("-").map(Number);
+  const [hour, minute, second] = timePart.split(":").map(Number);
+
+  // 한국 시간 = UTC 기준 - 9시간
+  const utcTime = Date.UTC(year, month - 1, day, hour - 9, minute, second);
+  return new Date(utcTime);
+}
+
 export function FormatTime(time: string) {
   const now = new Date();
-  const givenTime = new Date(time);
+  const givenTime = parseKoreanTime(time);
 
   const isFuture = givenTime > now;
   const formatted = formatDistance(
