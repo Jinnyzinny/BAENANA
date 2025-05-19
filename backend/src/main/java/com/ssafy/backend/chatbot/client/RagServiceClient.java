@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -86,16 +85,23 @@ public class RagServiceClient {
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
             // 원본 요청 내용에서 FastAPI용 프롬프트 생성
-            ObjectNode promptData = createPromptForAI(request);
+            Map<String, Object> promptData = createPromptForAI(request);
 
-            HttpEntity<ObjectNode> entity = new HttpEntity<>(promptData, headers);
+            HttpEntity<Map<String, Object>> entity = new HttpEntity<>(promptData, headers);
 
             log.info("RAG 서비스 요청: {}", promptData);
             ResponseEntity<ChatBotResponse> response = restTemplate.postForEntity(ragServiceUrl, entity, ChatBotResponse.class);
 
             if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
                 log.info("RAG 서비스 응답 성공: {}", response.getBody());
-                return response.getBody();
+
+                // 세션 ID 유지
+                ChatBotResponse responseBody = response.getBody();
+                if (request.getSessionId() != null && !request.getSessionId().isEmpty()) {
+                    responseBody.setSessionId(request.getSessionId());
+                }
+
+                return responseBody;
             } else {
                 log.error("RAG 서비스 응답 실패: 상태 코드={}", response.getStatusCode().value());
                 return createFallbackResponse(request);
@@ -112,8 +118,8 @@ public class RagServiceClient {
      * @param request 챗봇 요청 객체
      * @return AI 모델용 프롬프트 객체
      */
-    private ObjectNode createPromptForAI(ChatRequest request) {
-        ObjectNode promptData = objectMapper.createObjectNode();
+    private Map<String, Object> createPromptForAI(ChatRequest request) {
+        Map<String, Object> promptData = new HashMap<>();
 
         // 1. 사용자 질문 설정 (버튼 ID면 매핑 질문으로 변환, 텍스트면 그대로 사용)
         String question;
@@ -131,13 +137,42 @@ public class RagServiceClient {
             promptData.put("user_id", "unknown");
         }
 
-        // 3. 사용자 정보 변환 및 설정
+        // 3. 사용자 정보 변환 및 설정 - JSON 문자열로 변환
         if (request.getUserData() != null && !request.getUserData().isEmpty()) {
-            ObjectNode userInfoNode = createUserInfoNode(request.getUserData(), request.getContent());
-            promptData.set("user_info", userInfoNode);
+            try {
+                // 테스트기 가이드 관련 버튼인 경우 데이터를 전송하지 않음
+                if (isTestGuideButton(request.getContent())) {
+                    promptData.put("user_info", "{}");
+                } else {
+                    // 사용자 데이터를 한국어로 변환
+                    ObjectNode userInfoNode = createUserInfoNode(request.getUserData(), request.getContent());
+
+                    // ObjectNode를 JSON 문자열로 변환 (이스케이프 처리 포함)
+                    String userInfoJson = objectMapper.writeValueAsString(userInfoNode);
+
+                    // 문자열로 변환된 JSON을 user_info에 설정
+                    promptData.put("user_info", userInfoJson);
+                }
+            } catch (Exception e) {
+                log.error("사용자 정보 변환 중 오류 발생", e);
+                promptData.put("user_info", "{}");
+            }
+        } else {
+            promptData.put("user_info", "{}");
         }
 
         return promptData;
+    }
+
+    /**
+     * 테스트기 가이드 관련 버튼인지 확인
+     */
+    private boolean isTestGuideButton(String buttonId) {
+        return buttonId != null && (
+                buttonId.equals("ovulation_test_usage") ||
+                        buttonId.equals("ovulation_test_caution") ||
+                        buttonId.equals("pregnancy_test_usage") ||
+                        buttonId.equals("pregnancy_test_caution"));
     }
 
     /**
@@ -151,11 +186,7 @@ public class RagServiceClient {
         ObjectNode userInfoNode = objectMapper.createObjectNode();
 
         // 테스트기 가이드 관련 버튼인 경우 데이터를 전송하지 않음
-        if (buttonId != null && (
-                buttonId.equals("ovulation_test_usage") ||
-                        buttonId.equals("ovulation_test_caution") ||
-                        buttonId.equals("pregnancy_test_usage") ||
-                        buttonId.equals("pregnancy_test_caution"))) {
+        if (isTestGuideButton(buttonId)) {
             return userInfoNode; // 빈 객체 반환
         }
 
