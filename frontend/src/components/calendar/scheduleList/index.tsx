@@ -82,6 +82,13 @@ export function ScheduleList({
             </View>
           </View>
         ))}
+
+      {/* 정보가 입력되지 않은 경우 */}
+      {medicineReservation.length === 0 && hospitalReservation.length == 0 && (
+        <Text className="text-neutral-400 text-sm">
+          입력된 정보가 없습니다.
+        </Text>
+      )}
     </View>
   );
 }

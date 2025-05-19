@@ -126,6 +126,17 @@ export function SchedulePeriodList({
           </View>
         </View>
       )}
+
+      {/* 정보가 입력되지 않은 경우 */}
+      {period.length === 0 &&
+        !childbearingAge.startDate &&
+        !childbearingAge.endDate &&
+        !predictedPeriod.startDate &&
+        !predictedPeriod.endDate && (
+          <Text className="text-neutral-400 text-sm">
+            입력된 정보가 없습니다.
+          </Text>
+        )}
     </View>
   );
 }

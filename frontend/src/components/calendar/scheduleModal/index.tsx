@@ -159,7 +159,7 @@ export function ScheduleModal({
                 )}
 
                 {/* 토글이 전부 안 나오는 경우  */}
-                {!data.prediction &&
+                {data.prediction &&
                   !IsInRange(
                     date,
                     data.menstrual_cycle.start_date,
