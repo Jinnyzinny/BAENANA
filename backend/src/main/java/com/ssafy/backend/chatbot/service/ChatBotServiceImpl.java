@@ -191,6 +191,12 @@ public class ChatBotServiceImpl implements ChatBotService {
         // 기본 사용자 정보 수집
         userData.putAll(collectBasicUserData(user));
 
+        // 테스트기 가이드 관련 버튼인 경우 추가 데이터 수집하지 않음
+        if (isTestGuideButton(buttonInfo.getId())) {
+            log.info("테스트기 가이드 관련 버튼: {}, 추가 데이터 수집하지 않음", buttonInfo.getId());
+            return userData;
+        }
+
         // 버튼 ID에 따라 필요한 데이터 수집
         switch (buttonInfo.getId()) {
             // 호르몬 패턴 분석 관련 버튼
@@ -220,17 +226,19 @@ public class ChatBotServiceImpl implements ChatBotService {
             case "nutrition_tips":
                 collectHealthData(userData, user);
                 break;
-
-            // 테스트기 관련 버튼
-            case "ovulation_test_usage":
-            case "ovulation_test_caution":
-            case "pregnancy_test_usage":
-            case "pregnancy_test_caution":
-                collectTestData(userData, user);
-                break;
         }
 
         return userData;
+    }
+
+    /**
+     * 테스트기 가이드 관련 버튼인지 확인
+     */
+    private boolean isTestGuideButton(String buttonId) {
+        return buttonId.equals("ovulation_test_usage") ||
+                buttonId.equals("ovulation_test_caution") ||
+                buttonId.equals("pregnancy_test_usage") ||
+                buttonId.equals("pregnancy_test_caution");
     }
 
     /**
@@ -350,21 +358,6 @@ public class ChatBotServiceImpl implements ChatBotService {
             }
         } catch (Exception e) {
             log.error("건강 데이터 수집 중 오류 발생", e);
-        }
-    }
-
-    /**
-     * 테스트기 관련 데이터 수집
-     */
-    private void collectTestData(Map<String, Object> userData, User user) {
-        try {
-            // 배란 테스트 결과 수집
-            ApiResponse<?> ovulationTestResponse = menstrualService.getOvulationTest(user);
-            if (ovulationTestResponse.getData() != null) {
-                userData.put("ovulationTest", ovulationTestResponse.getData());
-            }
-        } catch (Exception e) {
-            log.error("테스트 데이터 수집 중 오류 발생", e);
         }
     }
 
