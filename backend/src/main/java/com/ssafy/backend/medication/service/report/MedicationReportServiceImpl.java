@@ -108,7 +108,7 @@ public class MedicationReportServiceImpl implements MedicationReportService {
                                 .build()
                 );
             }
-            if (medication.getEndDate().isAfter(LocalDate.now())) {
+            if (medication.getEndDate().isAfter(LocalDate.now().minusDays(1))) {
                 todayMedicine.add(
                         GetAllMedicationResDto.each_medication_record.builder()
                                 .name(medication.getName())
