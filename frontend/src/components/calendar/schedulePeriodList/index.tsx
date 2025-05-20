@@ -1,4 +1,6 @@
-import { Text, View } from "react-native";
+import { SquarePen, Trash2 } from "lucide-react-native";
+import { Alert, Text, TouchableOpacity, View } from "react-native";
+import { useDeletePeriod } from "../../../api/quries/period";
 import { Period } from "../../../types/Period";
 
 export function SchedulePeriodList({
@@ -10,6 +12,25 @@ export function SchedulePeriodList({
   predictedPeriod: Record<"startDate" | "endDate", string>;
   childbearingAge: Record<"startDate" | "endDate", string>;
 }) {
+  const color: string = "#A3A3A3";
+  const size: number = 18;
+
+  const { mutate: deletePeriod } = useDeletePeriod();
+
+  function handleEdit() {}
+  function handleDelete(cycleId: number) {
+    Alert.alert("삭제", "입력된 내용을 삭제하시겠습니까?", [
+      { text: "취소", style: "cancel" },
+      {
+        text: "확인",
+        style: "destructive",
+        onPress: () => {
+          deletePeriod(cycleId);
+        },
+      },
+    ]);
+  }
+
   return (
     <View className="bg-white rounded-xl p-5 gap-5">
       {/* 헤더 */}
@@ -41,12 +62,24 @@ export function SchedulePeriodList({
               }}
             />
           </View>
-          <View className="flex-row items-center gap-2">
-            <Text className="text-neutral-600 text-sm font-semibold">
-              {p.start_date.slice(5, 7)}월 {p.start_date.slice(8, 10)}일 ~{" "}
-              {p.end_date.slice(5, 7)}월 {p.end_date.slice(8, 10)}일
-            </Text>
-            <Text className="text-neutral-800 text-sm">월경일</Text>
+          <View className="flex-1">
+            <View className="flex-row items-center justify-between">
+              <View className="flex-row items-center gap-2">
+                <Text className="text-neutral-600 text-sm font-semibold">
+                  {p.start_date.slice(5, 7)}월 {p.start_date.slice(8, 10)}일 ~{" "}
+                  {p.end_date.slice(5, 7)}월 {p.end_date.slice(8, 10)}일
+                </Text>
+                <Text className="text-neutral-800 text-sm">월경일</Text>
+              </View>
+              <View className="pt-1 flex-row items-center gap-1">
+                <TouchableOpacity onPress={() => handleEdit()}>
+                  <SquarePen color={color} size={size - 2} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => handleDelete(p.cycle_id)}>
+                  <Trash2 color={color} size={size - 2} />
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
         </View>
       ))}

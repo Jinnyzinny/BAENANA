@@ -3,6 +3,7 @@ import { Alert } from "react-native";
 import {
   addPeriod,
   addPeriodSymptom,
+  deletePeriod,
   deletePeriodSymptom,
   editPeriod,
   editPeriodSymptom,
@@ -80,6 +81,24 @@ export function useEditPeriod() {
   });
 }
 
+// 월경 주기 삭제
+export function useDeletePeriod() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (cycleId: number) => deletePeriod(cycleId),
+    onSuccess: (data) => {
+      console.log("☑️월경 주기 삭제 성공: ", data);
+      queryClient.invalidateQueries({ queryKey: ["period"], exact: false });
+      queryClient.invalidateQueries({ queryKey: ["daily"], exact: false });
+    },
+    onError: (error) => {
+      console.log("✖️월경 주기 삭제 실패: ", error);
+      Alert.alert("월경 주기 삭제 실패", "잠시 후 다시 시도해주세요.");
+    },
+  });
+}
+
 // 월경 세부 정보 등록
 export function useAddPeriodSymptom() {
   const queryClient = useQueryClient();
@@ -150,7 +169,7 @@ export function useDeletePeriodSymptom() {
     },
     onError: (error) => {
       console.log("✖️월경 세부 정보 삭제 실패: ", error);
-      Alert.alert("월경 세부 정보 변경 실패", "잠시 후 다시 시도해주세요.");
+      Alert.alert("월경 세부 정보 삭제 실패", "잠시 후 다시 시도해주세요.");
     },
   });
 }

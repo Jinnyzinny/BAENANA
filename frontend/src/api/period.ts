@@ -74,6 +74,20 @@ export async function editPeriod(
   }
 }
 
+// 월경 주기 삭제
+export async function deletePeriod(cycleId: number) {
+  try {
+    const response = await authClient.delete(
+      `/calendar/menstrual_cycle/${cycleId}`
+    );
+    console.log("월경 주기 삭제 성공: ", response.data);
+    return response.data;
+  } catch (error: unknown) {
+    console.error("월경 주기 삭제 실패: ", error);
+    throw error;
+  }
+}
+
 // 월경 세부 정보 등록
 export async function addPeriodSymptom(
   date: string,
