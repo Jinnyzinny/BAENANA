@@ -169,7 +169,10 @@ public class ChatService {
         chat.setUser(user);
         chat.setSessionId(sessionId);
         chat.setSender(sender);
-        chat.setMessage(message);
+
+        // message가 null인 경우 기본값으로 대체
+        chat.setMessage(message != null ? message : "");
+
         chat.setCreatedAt(time);
         chat.setInputType(inputType);
         chat.setButtonData(buttonData);
