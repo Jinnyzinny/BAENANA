@@ -50,13 +50,15 @@ public class MenstrualServiceImpl implements MenstrualService {
          * 사용자의 생리 주기 4개월치 기록을 얻는다
          * */
         List<MenstrualCycle> menstrualCycleList =
-                menstrualCycleRepository.findTop4ByUser_UserIdOrderByStartDateDesc(userId).orElse(Collections.emptyList());
+                menstrualCycleRepository
+                        .findTop4ByUser_UserIdOrderByStartDateDesc(userId)
+                        .orElse(Collections.emptyList());
 
         menstrualCycleList.removeIf(Objects::isNull);
         /*
          * 만약 생리 주기 기록이 없을 경우 없다고 메시지를 반환한다.
          * */
-        if (menstrualCycleList.isEmpty()) {
+        if (menstrualCycleList.size() < 2) {
             return ApiResponse.success("사용자의 주기 정보가 없어 월경 정보(주기,기간)을 제공하는 데 실패했습니다.");
         }
 
@@ -65,6 +67,8 @@ public class MenstrualServiceImpl implements MenstrualService {
          * */
         int cycleSum = 0;
         int periodSum = 0;
+        int cycleCount = 0;
+        int periodCount = 0;
 
         /*
          * 최대 주기 값과 최소 주기 값을 초기화한다.
@@ -82,6 +86,7 @@ public class MenstrualServiceImpl implements MenstrualService {
             if (i >= 1) {
                 LocalDate prevStartDate = menstrualCycleList.get(i - 1).getStartDate();
                 int cycle = (int) ChronoUnit.DAYS.between(startDate, prevStartDate);
+                cycleCount++;
                 cycleSum += cycle;
                 if (maxCycle >= 40 || minCycle <= 17) {
                     //극단 값들은 버린다.
@@ -90,10 +95,11 @@ public class MenstrualServiceImpl implements MenstrualService {
                 maxCycle = Math.max(maxCycle, cycle);
                 minCycle = Math.min(minCycle, cycle);
             }
+            periodCount++;
             periodSum += (int) ChronoUnit.DAYS.between(startDate, endDate);
         }
-        int avgCycle = cycleSum / menstrualCycleList.size();
-        int avgPeriod = periodSum / menstrualCycleList.size();
+        int avgCycle = cycleSum / cycleCount;
+        int avgPeriod = periodSum / periodCount;
 
         List<Integer> periods = menstrualCycleList
                 .stream()
