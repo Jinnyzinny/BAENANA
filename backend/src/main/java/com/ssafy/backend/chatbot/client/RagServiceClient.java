@@ -5,9 +5,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.ssafy.backend.chatbot.dto.ButtonDto;
 import com.ssafy.backend.chatbot.dto.ChatBotResponse;
 import com.ssafy.backend.chatbot.dto.ChatRequest;
 import com.ssafy.backend.chatbot.dto.RagServiceResponseDto;
+import com.ssafy.backend.chatbot.service.ChatBotService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +34,7 @@ public class RagServiceClient {
 
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
+    private final ChatBotService chatBotService;
 
     @Value("${rag.service.url}")
     private String ragServiceUrl;
@@ -139,6 +142,23 @@ public class RagServiceClient {
             answer = "응답을 처리할 수 없습니다. 다시 시도해주세요.";
         }
 
+        // 버튼 ID 추출 (request.getContent()에서 가져옴)
+        String buttonId = request.getContent();
+
+        // 버튼 정보 찾기
+        ButtonDto buttonInfo = chatBotService.getButtonInfo(buttonId);
+
+        // 버튼 목록 준비
+        List<ButtonDto> buttons;
+
+        // 버튼 ID가 서브 버튼인 경우, 해당 버튼의 부모 ID를 찾아 같은 서브 버튼 목록 반환
+        if (buttonInfo != null && buttonInfo.getParentId() != null) {
+            buttons = chatBotService.getSubButtons(buttonInfo.getParentId());
+        } else {
+            // 기본적으로 메인 버튼 목록 반환
+            buttons = chatBotService.getMainButtons();
+        }
+
         // 지표 정보 로깅 (선택사항)
         if (ragResponse.getMetrics() != null && !ragResponse.getMetrics().isEmpty()) {
             log.info("RAG 응답 지표: {}", ragResponse.getMetrics());
@@ -149,7 +169,8 @@ public class RagServiceClient {
                 .sessionId(request.getSessionId())
                 .message(answer)
                 .source("rag")  // FastAPI 서버는 RAG 기반이므로
-                .buttons(Collections.emptyList())  // 기본적으로 빈 버튼 목록
+                //.buttons(Collections.emptyList())  // 기본적으로 빈 버튼 목록
+                .buttons(buttons)  // 적절한 버튼 목록 추가
                 .userMessage(request.getContent())
                 .createdAt(LocalDateTime.now().format(DATE_FORMATTER))
                 .build();

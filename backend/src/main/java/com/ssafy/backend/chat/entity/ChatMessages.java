@@ -16,6 +16,8 @@ public class ChatMessages {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long chatId;
     private String sender;
+    // 메시지 필드를 TEXT 타입으로 변경
+    @Column(columnDefinition = "TEXT")
     private String message;
     private LocalDateTime createdAt;
     private String sessionId;
