@@ -4,10 +4,10 @@ import {
   useDrawerStatus,
 } from "@react-navigation/drawer";
 import { ArrowLeftFromLine } from "lucide-react-native";
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
-import { FormatTime } from "../../../utils/formatTime";
-import { useGetChatList } from "../../../api/quries/chat";
 import { useEffect } from "react";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { useGetChatList } from "../../../api/quries/chat";
+import { FormatTime } from "../../../utils/formatTime";
 
 export function ChatDrawer(props: DrawerContentComponentProps) {
   const drawerStatus = useDrawerStatus();
@@ -22,15 +22,15 @@ export function ChatDrawer(props: DrawerContentComponentProps) {
   return (
     <View className="flex-1 ">
       <DrawerContentScrollView {...props}>
-        <View className="p-3 gap-5">
+        <View className="p-3 gap-10">
           <Text className="text-neutral-800 font-bold text-lg">채팅 목록</Text>
-          <View className="gap-3">
-            {data && (
-              <FlatList
-                data={data}
-                scrollEnabled={false}
-                renderItem={({ item }) => (
-                  <View>
+          {data && (
+            <FlatList
+              data={data}
+              scrollEnabled={false}
+              renderItem={({ item, index }) => (
+                <View className={`${index < data.length - 1 ? "pb-4" : ""}`}>
+                  <View className="flex-row items-center justify-between">
                     <TouchableOpacity
                       key={item.lastTime}
                       onPress={() => {
@@ -40,24 +40,22 @@ export function ChatDrawer(props: DrawerContentComponentProps) {
                         props.navigation.closeDrawer();
                       }}
                     >
-                      <View className="flex-row items-center justify-between">
-                        <Text className="text-neutral-800">
-                          {item.lastMessage}
-                        </Text>
-                        <Text className="text-neutral-800">
-                          {FormatTime(item.lastTime)}
-                        </Text>
-                      </View>
+                      <Text className="text-neutral-800">
+                        {item.lastMessage}
+                      </Text>
                     </TouchableOpacity>
+                    <Text className="text-neutral-400">
+                      {FormatTime(item.lastTime)}
+                    </Text>
                   </View>
-                )}
-              />
-            )}
-          </View>
+                </View>
+              )}
+            />
+          )}
         </View>
       </DrawerContentScrollView>
       <TouchableOpacity
-        className="px-5 py-10 self-end"
+        className="px-7 py-10 self-end"
         onPress={() => props.navigation.closeDrawer()}
       >
         <ArrowLeftFromLine color={"#737373"} size={22} />

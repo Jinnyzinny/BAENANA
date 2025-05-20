@@ -219,7 +219,7 @@ export function ChatbotScreen() {
               {chatList.map((chat, index) => (
                 <View key={index} className="gap-3">
                   {chat.userMessage && (
-                    <View style={{ marginLeft: 80 }}>
+                    <View style={{ marginLeft: 120 }}>
                       <Conversation bot={false} content={chat.userMessage} />
                     </View>
                   )}

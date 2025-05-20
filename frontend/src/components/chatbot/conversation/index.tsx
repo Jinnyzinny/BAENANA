@@ -15,7 +15,7 @@ export function Conversation({
   // 챗봇 답변인 경우
   if (bot) {
     return (
-      <View className="gap-3">
+      <View className="gap-2">
         <View className="flex-row items-start">
           <Image
             source={require("../../../assets/images/mascot.png")}
