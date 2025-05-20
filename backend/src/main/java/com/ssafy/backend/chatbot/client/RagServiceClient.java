@@ -559,12 +559,15 @@ public class RagServiceClient {
      * 폴백 응답 생성
      */
     private ChatBotResponse createFallbackResponse(ChatRequest request) {
+        // content가 null인 경우 빈 문자열로 대체
+        String userMessage = request.getContent() != null ? request.getContent() : "";
+
         return ChatBotResponse.builder()
                 .sessionId(request.getSessionId())
                 .message("죄송합니다. 현재 AI 서비스에 접속할 수 없습니다. 잠시 후 다시 시도해주세요.")
                 .source("rule")
                 .buttons(Collections.emptyList())
-                .userMessage(request.getContent())
+                .userMessage(userMessage)  // NULL 대신 빈 문자열 사용
                 .createdAt(LocalDateTime.now().format(DATE_FORMATTER))
                 .build();
     }
