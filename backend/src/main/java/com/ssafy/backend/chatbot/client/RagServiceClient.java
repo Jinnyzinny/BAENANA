@@ -144,14 +144,12 @@ public class RagServiceClient {
                 if (isTestGuideButton(request.getContent())) {
                     promptData.put("user_info", "{}");
                 } else {
-                    // 사용자 데이터를 한국어로 변환
+                // 수정 후 코드
+                // 사용자 데이터를 한국어로 변환
                     ObjectNode userInfoNode = createUserInfoNode(request.getUserData(), request.getContent());
 
-                    // ObjectNode를 JSON 문자열로 변환 (이스케이프 처리 포함)
-                    String userInfoJson = objectMapper.writeValueAsString(userInfoNode);
-
-                    // 문자열로 변환된 JSON을 user_info에 설정
-                    promptData.put("user_info", userInfoJson);
+                // ObjectNode를 직접 전달 (문자열 변환 없이)
+                    promptData.put("user_info", userInfoNode);
                 }
             } catch (Exception e) {
                 log.error("사용자 정보 변환 중 오류 발생", e);
