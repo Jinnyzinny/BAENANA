@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ssafy.backend.chatbot.dto.ChatBotResponse;
 import com.ssafy.backend.chatbot.dto.ChatRequest;
+import com.ssafy.backend.chatbot.dto.RagServiceResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -99,27 +100,92 @@ public class RagServiceClient {
 
             HttpEntity<Map<String, Object>> entity = new HttpEntity<>(promptData, headers);
 
-            log.info("RAG 서비스 요청: {}", promptData);
-            ResponseEntity<ChatBotResponse> response = restTemplate.postForEntity(ragServiceUrl, entity, ChatBotResponse.class);
+            // 먼저 String으로 응답 받아서 확인 (디버깅 용도)
+            ResponseEntity<String> rawResponse = restTemplate.postForEntity(ragServiceUrl, entity, String.class);
+            log.info("RAG 서비스 원본 JSON 응답: {}", rawResponse.getBody());
 
-            if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
-                log.info("RAG 서비스 응답 성공: {}", response.getBody());
+            if (rawResponse.getStatusCode().is2xxSuccessful() && rawResponse.getBody() != null) {
+                try {
+                    // JSON을 RagServiceResponseDto로 변환
+                    RagServiceResponseDto ragResponse = objectMapper.readValue(
+                            rawResponse.getBody(), RagServiceResponseDto.class);
 
-                // 세션 ID 유지
-                ChatBotResponse responseBody = response.getBody();
-                if (request.getSessionId() != null && !request.getSessionId().isEmpty()) {
-                    responseBody.setSessionId(request.getSessionId());
+                    log.info("변환된 RAG 응답: {}", ragResponse);
+
+                    // DTO에서 ChatBotResponse로 변환
+                    ChatBotResponse chatBotResponse = convertToChatBotResponse(ragResponse, request);
+                    return chatBotResponse;
+                } catch (Exception e) {
+                    log.error("JSON 응답 파싱 중 오류 발생", e);
+                    return createFallbackResponse(request);
                 }
-
-                return responseBody;
             } else {
-                log.error("RAG 서비스 응답 실패: 상태 코드={}", response.getStatusCode().value());
+                log.error("RAG 서비스 응답 실패: 상태 코드={}", rawResponse.getStatusCode().value());
                 return createFallbackResponse(request);
             }
         } catch (Exception e) {
             log.error("RAG 서비스 요청 중 오류 발생", e);
             return createFallbackResponse(request);
         }
+    }
+
+    /**
+     * RagServiceResponseDto를 ChatBotResponse로 변환
+     */
+    private ChatBotResponse convertToChatBotResponse(RagServiceResponseDto ragResponse, ChatRequest request) {
+        // 답변 내용 확인 및 기본값 설정
+        String answer = ragResponse.getAnswer();
+        if (answer == null || answer.trim().isEmpty()) {
+            answer = "응답을 처리할 수 없습니다. 다시 시도해주세요.";
+        }
+
+        // 지표 정보 로깅 (선택사항)
+        if (ragResponse.getMetrics() != null && !ragResponse.getMetrics().isEmpty()) {
+            log.info("RAG 응답 지표: {}", ragResponse.getMetrics());
+        }
+
+        // ChatBotResponse 객체 생성
+        return ChatBotResponse.builder()
+                .sessionId(request.getSessionId())
+                .message(answer)
+                .source("rag")  // FastAPI 서버는 RAG 기반이므로
+                .buttons(Collections.emptyList())  // 기본적으로 빈 버튼 목록
+                .userMessage(request.getContent())
+                .createdAt(LocalDateTime.now().format(DATE_FORMATTER))
+                .build();
+    }
+    /**
+     * JSON 응답을 ChatBotResponse 객체로 변환
+     */
+    private ChatBotResponse convertJsonToChatBotResponse(String json, ChatRequest request) {
+        try {
+            // JSON 응답 파싱
+            JsonNode rootNode = objectMapper.readTree(json);
+
+            // 응답에서 필요한 필드 추출 (FastAPI 응답 형식에 맞춤)
+            String answer = getNodeTextValue(rootNode, "answer");
+
+            // ChatBotResponse 객체 생성
+            return ChatBotResponse.builder()
+                    .sessionId(request.getSessionId())
+                    .message(answer != null ? answer : "응답을 처리할 수 없습니다.")
+                    .source("rag")  // FastAPI 서버는 RAG 기반이므로
+                    .buttons(Collections.emptyList())  // 기본적으로 빈 버튼 목록
+                    .userMessage(request.getContent())
+                    .createdAt(LocalDateTime.now().format(DATE_FORMATTER))
+                    .build();
+        } catch (Exception e) {
+            log.error("JSON 변환 중 오류: {}", e.getMessage(), e);
+            return createFallbackResponse(request);
+        }
+    }
+
+    /**
+     * JsonNode에서 텍스트 값을 안전하게 추출하는 유틸리티 메서드
+     */
+    private String getNodeTextValue(JsonNode node, String fieldName) {
+        JsonNode fieldNode = node.get(fieldName);
+        return (fieldNode != null && !fieldNode.isNull()) ? fieldNode.asText() : null;
     }
 
     /**
@@ -559,7 +625,7 @@ public class RagServiceClient {
      * 폴백 응답 생성
      */
     private ChatBotResponse createFallbackResponse(ChatRequest request) {
-        // content가 null인 경우 빈 문자열로 대체
+        // 사용자 메시지가 null인 경우 빈 문자열로 대체
         String userMessage = request.getContent() != null ? request.getContent() : "";
 
         return ChatBotResponse.builder()
@@ -567,7 +633,7 @@ public class RagServiceClient {
                 .message("죄송합니다. 현재 AI 서비스에 접속할 수 없습니다. 잠시 후 다시 시도해주세요.")
                 .source("rule")
                 .buttons(Collections.emptyList())
-                .userMessage(userMessage)  // NULL 대신 빈 문자열 사용
+                .userMessage(userMessage)
                 .createdAt(LocalDateTime.now().format(DATE_FORMATTER))
                 .build();
     }
