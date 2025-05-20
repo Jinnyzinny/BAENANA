@@ -51,8 +51,8 @@ export async function addChat(
       content,
       sessionId,
     });
-    console.log("챗봇 채팅 성공: ", response.data.data);
-    return response.data.data;
+    console.log("챗봇 채팅 성공: ", response.data);
+    return response.data;
   } catch (error: unknown) {
     console.error("챗봇 채팅 실패: ", error);
     throw error;

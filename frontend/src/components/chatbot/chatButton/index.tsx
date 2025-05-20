@@ -25,7 +25,7 @@ export function ChatButton({
 
         return (
           <TouchableOpacity
-            key={index}
+            key={item.id}
             onPress={() => onPress?.(item.id, item.text)}
             className={`p-3 bg-yellow-100 ${index !== items.length - 1 && "border-b border-neutral-400"} ${borderRadiusClass}`}
           >

@@ -85,7 +85,9 @@ export function ChatbotScreen() {
       setChatList([
         {
           message: data.message,
-          buttons: data.buttons,
+          buttons: data.buttons
+            ? data.buttons.map((b) => ({ ...b }))
+            : undefined,
         },
       ]);
     }
@@ -101,7 +103,7 @@ export function ChatbotScreen() {
         updated[res.index] = {
           ...updated[res.index],
           message: res.message,
-          buttons: res.buttons,
+          buttons: res.buttons ? res.buttons.map((b) => ({ ...b })) : undefined,
         };
       }
       responseQueue.current = [];
@@ -137,10 +139,14 @@ export function ChatbotScreen() {
       },
       {
         onSuccess: (response) => {
+          const botMessage = response.data.messages.find(
+            (msg: any) => msg.sender === "bot"
+          );
+
           responseQueue.current.push({
             index: tempIndex,
-            message: response.message,
-            buttons: response.buttons,
+            message: botMessage?.message || "",
+            buttons: botMessage?.buttons || undefined,
           });
           setResponseTrigger((prev) => prev + 1);
         },
@@ -179,11 +185,15 @@ export function ChatbotScreen() {
         sessionId,
       },
       {
-        onSuccess: (res) => {
+        onSuccess: (response) => {
+          const botMessage = response.data.messages.find(
+            (msg: any) => msg.sender === "bot"
+          );
+
           responseQueue.current.push({
             index: tempIndex,
-            message: res.message,
-            buttons: res.buttons,
+            message: botMessage?.message || "",
+            buttons: botMessage?.buttons || undefined,
           });
           setResponseTrigger((prev) => prev + 1);
         },
@@ -199,6 +209,7 @@ export function ChatbotScreen() {
           <HeaderLogo before={false} settings={true} />
           <ScrollView
             ref={scrollRef}
+            contentContainerStyle={{ flexGrow: 1, paddingBottom: 32 }}
             className="px-5"
             onContentSizeChange={() => {
               scrollRef.current?.scrollToEnd({ animated: true });
@@ -208,11 +219,11 @@ export function ChatbotScreen() {
               {chatList.map((chat, index) => (
                 <View key={index} className="gap-3">
                   {chat.userMessage && (
-                    <View style={{ marginLeft: 100 }}>
+                    <View style={{ marginLeft: 80 }}>
                       <Conversation bot={false} content={chat.userMessage} />
                     </View>
                   )}
-                  <View style={{ marginRight: 50 }}>
+                  <View style={{ marginRight: 80 }}>
                     <Conversation
                       bot={true}
                       content={chat.message}

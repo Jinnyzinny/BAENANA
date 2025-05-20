@@ -112,7 +112,7 @@ export function HomeScreen() {
             </View>
           </View>
 
-          {!percentage && !dDay && (
+          {percentage === 0 && dDay === 0 && (
             <>
               <View
                 className="flex-1 items-center gap-3"
