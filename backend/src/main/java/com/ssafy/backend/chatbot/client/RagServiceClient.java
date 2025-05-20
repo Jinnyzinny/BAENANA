@@ -1,5 +1,7 @@
 package com.ssafy.backend.chatbot.client;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -35,6 +37,10 @@ public class RagServiceClient {
 
     @Value("${rag.service.health-check-url}")
     private String healthCheckUrl;
+
+    // 사용자 정보 비활성화 옵션 (기본값: false)
+    @Value("${rag.service.disable-user-info:false}")
+    private boolean disableUserInfo;
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -87,6 +93,10 @@ public class RagServiceClient {
             // 원본 요청 내용에서 FastAPI용 프롬프트 생성
             Map<String, Object> promptData = createPromptForAI(request);
 
+            // 디버깅: 실제 전송되는 요청 확인
+            String requestBodyJson = objectMapper.writeValueAsString(promptData);
+            log.info("RAG 서비스 요청 JSON: {}", requestBodyJson);
+
             HttpEntity<Map<String, Object>> entity = new HttpEntity<>(promptData, headers);
 
             log.info("RAG 서비스 요청: {}", promptData);
@@ -137,29 +147,56 @@ public class RagServiceClient {
             promptData.put("user_id", "unknown");
         }
 
-        // 3. 사용자 정보 변환 및 설정 - JSON 문자열로 변환
-        if (request.getUserData() != null && !request.getUserData().isEmpty()) {
-            try {
-                // 테스트기 가이드 관련 버튼인 경우 데이터를 전송하지 않음
-                if (isTestGuideButton(request.getContent())) {
-                    promptData.put("user_info", "{}");
-                } else {
-                // 수정 후 코드
-                // 사용자 데이터를 한국어로 변환
+        // 3. 사용자 정보 설정 - user_info 비활성화 옵션 확인
+        if (!disableUserInfo) {
+            // 테스트기 가이드 관련 버튼인 경우 기본 객체 제공
+            if (isTestGuideButton(request.getContent())) {
+                // 빈 Map이 아닌 기본값 Map 제공
+                Map<String, Object> defaultUserInfo = new HashMap<>();
+                defaultUserInfo.put("default", true);
+                promptData.put("user_info", defaultUserInfo);
+            } else if (request.getUserData() != null && !request.getUserData().isEmpty()) {
+                try {
+                    // 사용자 데이터를 한국어로 변환
                     ObjectNode userInfoNode = createUserInfoNode(request.getUserData(), request.getContent());
 
-                // ObjectNode를 직접 전달 (문자열 변환 없이)
-                    promptData.put("user_info", userInfoNode);
+                    // ObjectNode를 Map으로 변환하여 직접 전달 (문자열 변환 없이)
+                    Map<String, Object> userInfoMap = convertUserInfoNodeToMap(userInfoNode);
+                    promptData.put("user_info", userInfoMap);
+                } catch (Exception e) {
+                    log.error("사용자 정보 변환 중 오류 발생", e);
+                    // 기본 객체 제공
+                    Map<String, Object> defaultMap = new HashMap<>();
+                    defaultMap.put("error", "사용자 정보 변환 실패");
+                    promptData.put("user_info", defaultMap);
                 }
-            } catch (Exception e) {
-                log.error("사용자 정보 변환 중 오류 발생", e);
-                promptData.put("user_info", "{}");
+            } else {
+                // 기본 객체 제공
+                Map<String, Object> defaultMap = new HashMap<>();
+                defaultMap.put("empty", true);
+                promptData.put("user_info", defaultMap);
             }
         } else {
-            promptData.put("user_info", "{}");
+            // user_info 비활성화된 경우 빈 맵 제공 (생략하지 않음)
+            promptData.put("user_info", Collections.emptyMap());
         }
 
         return promptData;
+    }
+
+    /**
+     * ObjectNode를 Map으로 변환
+     */
+    private Map<String, Object> convertUserInfoNodeToMap(ObjectNode node) {
+        try {
+            // ObjectNode를 Map으로 변환
+            return objectMapper.convertValue(node, new TypeReference<Map<String, Object>>() {});
+        } catch (Exception e) {
+            log.error("ObjectNode를 Map으로 변환 중 오류 발생", e);
+            Map<String, Object> defaultMap = new HashMap<>();
+            defaultMap.put("default", true);
+            return defaultMap;
+        }
     }
 
     /**
@@ -185,7 +222,8 @@ public class RagServiceClient {
 
         // 테스트기 가이드 관련 버튼인 경우 데이터를 전송하지 않음
         if (isTestGuideButton(buttonId)) {
-            return userInfoNode; // 빈 객체 반환
+            userInfoNode.put("default", true);
+            return userInfoNode; // 기본값이 있는 객체 반환
         }
 
         // 요약 정보 변환
@@ -456,6 +494,12 @@ public class RagServiceClient {
             }
 
             userInfoNode.set("주요_일정", remainDayNode);
+        }
+
+        // 노드가 비어있는지 확인하고 기본 값 추가
+        if (userInfoNode.isEmpty()) {
+            userInfoNode.put("default", true);
+            userInfoNode.put("created_at", LocalDateTime.now().toString());
         }
 
         return userInfoNode;
