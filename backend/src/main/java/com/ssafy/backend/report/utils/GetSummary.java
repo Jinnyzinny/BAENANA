@@ -49,7 +49,7 @@ public class GetSummary {
         }
 
         String joinedSymptoms = String.join(", ", symptoms);
-        return "증상으론 " + joinedSymptoms + "이 있습니다.";
+        return joinedSymptoms + " 증상이 있었습니다.";
     }
 
     public Boolean getStressNormal(List<MenstrualCycle> cycleList) {
