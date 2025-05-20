@@ -46,7 +46,7 @@ public class ChatBotServiceImpl implements ChatBotService {
      * - 순환 참조를 방지하기 위해 필요한 경우 @Lazy 사용
      */
     public ChatBotServiceImpl(
-            RagServiceClient ragServiceClient,
+            @Lazy RagServiceClient ragServiceClient,
             @Lazy ReportService reportService,
             @Lazy MenstrualService menstrualService,
             @Lazy CalendarService calendarService,
