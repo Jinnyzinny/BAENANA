@@ -35,8 +35,8 @@ export function HomeScreen() {
   }
 
   // 도넛차트 - 퍼센트, D-day 계산
-  const { percentage, dDay } = useMemo(() => {
-    if (!dDayData?.data) return { percentage: 0, dDay: 0 };
+  const { percentage, dDay, isValid } = useMemo(() => {
+    if (!dDayData?.data) return { percentage: 0, dDay: 0, isValid: false };
 
     const todayStr = getTodayDateString();
     const today = parseISO(todayStr);
@@ -58,6 +58,7 @@ export function HomeScreen() {
     return {
       percentage: Math.max(0, Math.min(percent, 100)),
       dDay: dDayValue,
+      isValid: true,
     };
   }, [dDayData]);
 
@@ -112,7 +113,7 @@ export function HomeScreen() {
             </View>
           </View>
 
-          {percentage === 0 && dDay === 0 && (
+          {isValid && percentage === 0 && dDay === 0 && (
             <>
               <View
                 className="flex-1 items-center gap-3"
