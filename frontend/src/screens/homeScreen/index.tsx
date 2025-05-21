@@ -77,6 +77,48 @@ export function HomeScreen() {
     }, [])
   );
 
+  if (!dDayData?.data) {
+    return (
+      <>
+        <SafeAreaView className="flex-1 relative">
+          <HeaderLogo before={false} settings={true} />
+          <View
+            className="flex-1 relative mx-5 items-center gap-3"
+            style={{ marginVertical: 150 }}
+          >
+            <Image
+              source={require("../..//assets/images/mascot_find.png")}
+              style={{ width: 110, height: 120 }}
+            />
+            <View className="items-center gap-1">
+              <Text className="text-neutral-600 text-sm mt-5">
+                배나나에 입력된 정보가 없어요.
+              </Text>
+              <View className="flex-row">
+                <Text className="text-violet-700 font-bold text-sm">
+                  "월경일 입력"
+                </Text>
+                <Text className="text-neutral-600 text-sm">
+                  을 눌러서 정보를 입력해주세요.
+                </Text>
+              </View>
+            </View>
+            <View className="w-full absolute bottom-4 -translate-y-1/2">
+              <View className="mx-24">
+                <CustomButton
+                  fill={false}
+                  content="월경일 입력"
+                  onPress={handlePeriodOpen}
+                />
+              </View>
+            </View>
+          </View>
+        </SafeAreaView>
+        <PeriodBottomSheet height={height} sheetRef={sheetRef} period={6} />
+      </>
+    );
+  }
+
   return (
     <>
       <SafeAreaView className="flex-1 relative">
