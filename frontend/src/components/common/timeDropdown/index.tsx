@@ -1,6 +1,6 @@
 import { ChevronDown } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { InteractionManager, Text, TouchableOpacity, View } from "react-native";
 import DatePicker from "react-native-date-picker";
 
 export function TimeDropdown({
@@ -37,7 +37,11 @@ export function TimeDropdown({
   return (
     <View className="flex-1 pb-3 border-b border-neutral-400">
       <TouchableOpacity
-        onPress={() => setOpen(true)}
+        onPress={() => {
+          InteractionManager.runAfterInteractions(() => {
+            setOpen(true);
+          });
+        }}
         className="flex-row mx-3 items-center justify-between"
       >
         <Text className="text-lg font-bold text-violet-400">

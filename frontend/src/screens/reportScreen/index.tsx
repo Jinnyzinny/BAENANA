@@ -212,7 +212,9 @@ export function ReportScreen() {
               {periodInfoData?.data && (
                 <View className="flex-row gap-3">
                   <BeforePeriod
-                    type="warn"
+                    type={
+                      periodInfoData.data.is_cycle_normal ? "normal" : "warn"
+                    }
                     title="월경 주기"
                     date={
                       periodInfoData?.data.cycle
@@ -221,7 +223,9 @@ export function ReportScreen() {
                     }
                   />
                   <BeforePeriod
-                    type="normal"
+                    type={
+                      periodInfoData.data.is_period_normal ? "normal" : "warn"
+                    }
                     title="월경 기간"
                     date={
                       periodInfoData?.data.period

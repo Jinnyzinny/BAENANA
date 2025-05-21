@@ -1,4 +1,4 @@
-import { SquarePen, Trash2 } from "lucide-react-native";
+import { Trash2 } from "lucide-react-native";
 import { Alert, Text, TouchableOpacity, View } from "react-native";
 import { useDeletePeriod } from "../../../api/quries/period";
 import { Period } from "../../../types/Period";
@@ -17,7 +17,6 @@ export function SchedulePeriodList({
 
   const { mutate: deletePeriod } = useDeletePeriod();
 
-  function handleEdit() {}
   function handleDelete(cycleId: number) {
     Alert.alert("삭제", "입력된 내용을 삭제하시겠습니까?", [
       { text: "취소", style: "cancel" },
@@ -72,9 +71,6 @@ export function SchedulePeriodList({
                 <Text className="text-neutral-800 text-sm">월경일</Text>
               </View>
               <View className="pt-1 flex-row items-center gap-1">
-                <TouchableOpacity onPress={() => handleEdit()}>
-                  <SquarePen color={color} size={size - 2} />
-                </TouchableOpacity>
                 <TouchableOpacity onPress={() => handleDelete(p.cycle_id)}>
                   <Trash2 color={color} size={size - 2} />
                 </TouchableOpacity>
