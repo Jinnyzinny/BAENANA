@@ -116,8 +116,8 @@ public class MenstrualServiceImpl implements MenstrualService {
         // 표준편차 계산
         double stddev = Math.sqrt(variance);
 
-        boolean normalCycle = maxCycle - minCycle >= 7;
-        boolean normalPeriod = stddev > 2;
+        boolean normalCycle = maxCycle - minCycle <= 7;
+        boolean normalPeriod = stddev < 2;
         return ApiResponse.success("사용자의 주기 정보입니다",
                 GetMenstrualInfoResDto.builder()
                         .cycle(avgCycle)
