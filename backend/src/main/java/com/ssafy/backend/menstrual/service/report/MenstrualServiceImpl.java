@@ -86,12 +86,12 @@ public class MenstrualServiceImpl implements MenstrualService {
             if (i >= 1) {
                 LocalDate prevStartDate = menstrualCycleList.get(i - 1).getStartDate();
                 int cycle = (int) ChronoUnit.DAYS.between(startDate, prevStartDate);
-                cycleCount++;
-                cycleSum += cycle;
-                if (maxCycle >= 40 || minCycle <= 17) {
+                if (cycle >= 40 || cycle <= 17) {
                     //극단 값들은 버린다.
                     continue;
                 }
+                cycleCount++;
+                cycleSum += cycle;
                 maxCycle = Math.max(maxCycle, cycle);
                 minCycle = Math.min(minCycle, cycle);
             }
