@@ -67,7 +67,13 @@ export function MedicineBottomSheet({
     const formatEndDate = FormatDateKST(endDate);
 
     const timeTaken = reservationTimes
-      .map((item) => item.time?.toISOString().slice(11, 16)) // HH:mm
+      .map((item) => {
+        if (!item.time) return null;
+
+        const kstDate = new Date(item.time.getTime() + 9 * 60 * 60 * 1000);
+
+        return kstDate.toISOString().slice(11, 16);
+      })
       .filter((t): t is string => !!t);
 
     if (timeTaken.length === 0) {

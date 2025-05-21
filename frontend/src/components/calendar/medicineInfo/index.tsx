@@ -113,9 +113,10 @@ export function MedicineInfo({ data }: { data: Daily }) {
 
           const formatStartDate = FormatDateKST(startDate);
           const formatEndDate = FormatDateKST(endDate);
-          const timeTaken = times.map(
-            (t) => t.time!.toTimeString().slice(0, 5) // "HH:mm"
-          );
+          const timeTaken = times.map((t) => {
+            const kstTime = new Date(t.time!.getTime() + 9 * 60 * 60 * 1000);
+            return kstTime.toISOString().slice(11, 16); // "HH:mm"
+          });
 
           // console.log(
           //   medicine.medication_id,
@@ -307,18 +308,25 @@ export function MedicineInfo({ data }: { data: Daily }) {
                     <Text className="text-neutral-800 text-sm font-bold">
                       복용 시간
                     </Text>
-                    {times.map((item, i) => (
-                      <Text
-                        key={item.id}
-                        className="mx-5 text-lg font-bold text-violet-400"
-                      >
-                        {i + 1}.{" "}
-                        {item.time?.toLocaleTimeString("ko-KR", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </Text>
-                    ))}
+                    {times.map((item, i) => {
+                      const hours = item.time
+                        ?.getHours()
+                        .toString()
+                        .padStart(2, "0");
+                      const minutes = item.time
+                        ?.getMinutes()
+                        .toString()
+                        .padStart(2, "0");
+
+                      return (
+                        <Text
+                          key={item.id}
+                          className="mx-5 text-lg font-bold text-violet-400"
+                        >
+                          {i + 1}. {hours}:{minutes}
+                        </Text>
+                      );
+                    })}
                   </View>
 
                   {/* 메모 */}
