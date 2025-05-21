@@ -1,15 +1,16 @@
 import { ChevronDown, ChevronUp, SquarePen, Trash2 } from "lucide-react-native";
 import { useState } from "react";
 import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { Daily } from "../../../types/Daily";
-import { CustomButton } from "../../common/customButton";
-import { DateDropdown } from "../../common/dateDropdown";
-import { SelectTag } from "../../common/selectTag";
-import { TimeDropdown } from "../../common/timeDropdown";
 import {
   useDeleteHospitalReservation,
   useEditHospitalReservation,
 } from "../../../api/quries/hospital";
+import { Daily } from "../../../types/Daily";
+import { FormatDateTimeKST } from "../../../utils/formatTime";
+import { CustomButton } from "../../common/customButton";
+import { DateDropdown } from "../../common/dateDropdown";
+import { SelectTag } from "../../common/selectTag";
+import { TimeDropdown } from "../../common/timeDropdown";
 
 export function HospitalInfo({ data }: { data: Daily }) {
   const color: string = "#A3A3A3";
@@ -117,21 +118,12 @@ export function HospitalInfo({ data }: { data: Daily }) {
       return;
     }
 
-    const combinedDate = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate(),
-      time.getHours(),
-      time.getMinutes()
-    );
-
-    const isoDateString = combinedDate.toISOString().slice(0, 16); // yyyy-MM-ddTHH:mm
-
-    // console.log(id, hospitalName, isoDateString, purpose);
+    const formattedDateTime = FormatDateTimeKST(date, time);
+    // console.log(id, hospitalName, formattedDateTime, purpose);
     editHospitalReservation({
       id,
       hospitalName,
-      reservationDate: isoDateString,
+      reservationDate: formattedDateTime,
       purpose,
     });
 

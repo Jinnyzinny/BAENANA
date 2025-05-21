@@ -3,6 +3,7 @@ import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { Modalize } from "react-native-modalize";
 import { useAddHospitalReservation } from "../../../api/quries/hospital";
+import { FormatDateTimeKST } from "../../../utils/formatTime";
 import { CustomButton } from "../../common/customButton";
 import { DateDropdown } from "../../common/dateDropdown";
 import { SelectTag } from "../../common/selectTag";
@@ -42,9 +43,10 @@ export function HospitalBottomSheet({
 
   function handleSave() {
     if (hospitalName && reservationDate && reservationTime) {
-      const datePart = reservationDate.toISOString().split("T")[0];
-      const timePart = reservationTime.toTimeString().slice(0, 5);
-      const formattedDateTime = `${datePart}T${timePart}`;
+      const formattedDateTime = FormatDateTimeKST(
+        reservationDate,
+        reservationTime
+      );
 
       const finalPurpose = purpose === "기타" ? purposeInput : purpose;
 

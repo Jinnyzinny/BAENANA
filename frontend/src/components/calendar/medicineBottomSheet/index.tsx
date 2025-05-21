@@ -1,3 +1,4 @@
+import { Minus, Plus } from "lucide-react-native";
 import { RefObject, useRef, useState } from "react";
 import {
   Alert,
@@ -7,13 +8,13 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Modalize } from "react-native-modalize";
 import { TextInput } from "react-native-gesture-handler";
+import { Modalize } from "react-native-modalize";
+import { useAddMedicineReservation } from "../../../api/quries/medicine";
+import { FormatDateKST } from "../../../utils/formatDate";
+import { CustomButton } from "../../common/customButton";
 import { DateDropdown } from "../../common/dateDropdown";
 import { TimeDropdown } from "../../common/timeDropdown";
-import { CustomButton } from "../../common/customButton";
-import { Minus, Plus } from "lucide-react-native";
-import { useAddMedicineReservation } from "../../../api/quries/medicine";
 
 export function MedicineBottomSheet({
   height,
@@ -62,8 +63,8 @@ export function MedicineBottomSheet({
       return;
     }
 
-    const formatStartDate = startDate.toISOString().slice(0, 10); // yyyy-MM-dd
-    const formatEndDate = endDate.toISOString().slice(0, 10);
+    const formatStartDate = FormatDateKST(startDate);
+    const formatEndDate = FormatDateKST(endDate);
 
     const timeTaken = reservationTimes
       .map((item) => item.time?.toISOString().slice(11, 16)) // HH:mm

@@ -10,3 +10,8 @@ export function FormatDate(dateString: string | null) {
 
   return `${year}.${month}.${day} (${dayOfWeek})`;
 }
+
+export function FormatDateKST(date: Date): string {
+  const localDate = new Date(date.getTime() + 9 * 60 * 60 * 1000);
+  return localDate.toISOString().slice(0, 10);
+}

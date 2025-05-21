@@ -31,3 +31,15 @@ export function FormatTime(time: string) {
 
   return formatted;
 }
+
+export function FormatDateTimeKST(date: Date, time: Date): string {
+  const localDateTime = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+    time.getHours(),
+    time.getMinutes()
+  );
+
+  return localDateTime.toISOString().slice(0, 16);
+}
