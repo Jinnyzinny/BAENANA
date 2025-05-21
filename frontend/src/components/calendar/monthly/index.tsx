@@ -1,10 +1,10 @@
+import { ChevronLeft, ChevronRight } from "lucide-react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
-import { View, Text, TouchableOpacity } from "react-native";
-import { getDotDates, getPeriodDates } from "../../../utils/markUtils";
 import { HospitalReservation } from "../../../types/Hospital";
 import { Medicine } from "../../../types/Medicine";
-import { ChevronLeft, ChevronRight } from "lucide-react-native";
 import { Period } from "../../../types/Period";
+import { getDotDates, getPeriodDates } from "../../../utils/markUtils";
 
 LocaleConfig.locales["ko"] = {
   monthNames: [
@@ -86,7 +86,7 @@ export function Monthly({
       "#C4B4FF", // 진한 배경 (시작 & 종료)
       "#FFFFFF", // 진한 텍스트
       "#DDD6FF", // 연한 배경 (중간)
-      "#525252" // 연한 텍스트
+      "#A684FF" // 연한 텍스트
     );
     periodMark = { ...periodMark, ...mark };
   });

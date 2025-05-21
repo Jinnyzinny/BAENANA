@@ -294,13 +294,13 @@ export function ReportScreen() {
                     </Text>
                     <View className="flex-row">
                       <Text className="text-neutral-600 text-sm">
-                        월경 관련 일정을{" "}
+                        캘린더에서{" "}
                       </Text>
                       <Text className="text-violet-700 font-bold text-sm">
-                        캘린더
+                        "월경일 정보"
                       </Text>
                       <Text className="text-neutral-600 text-sm">
-                        에서 등록해주세요.
+                        를 입력해주세요.
                       </Text>
                     </View>
                   </View>

@@ -22,9 +22,7 @@ export function Conversation({
             className="w-12 h-12"
           />
           <View className="flex-1">
-            <View
-              className={`rounded-xl p-3 ${bot ? "bg-yellow-100" : "bg-violet-200"}`}
-            >
+            <View className="rounded-xl p-3 bg-violet-100">
               {content.split("\n").map((line, index) => (
                 <Text key={index} className="text-neutral-800 text-sm">
                   {line}
@@ -44,7 +42,7 @@ export function Conversation({
 
   // 사용자 입력 메시지
   return (
-    <View className="rounded-xl p-3 bg-violet-200">
+    <View className="rounded-xl p-3 bg-yellow-100">
       <Text className="text-neutral-800 text-sm">{content}</Text>
     </View>
   );
