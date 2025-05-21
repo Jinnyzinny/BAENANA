@@ -43,6 +43,14 @@ export function ChatbotScreen() {
   }, [params]);
 
   useEffect(() => {
+    if (params?.sessionId === null) {
+      setSessionId(null);
+    } else if (params?.sessionId) {
+      setSessionId(params.sessionId);
+    }
+  }, [params?.sessionId]);
+
+  useEffect(() => {
     if (isChatLoaded && previousChats && params?.sessionId) {
       // 대화 내역 초기화
       const parsed: ChatData[] = [];
