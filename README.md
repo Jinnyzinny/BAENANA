@@ -112,7 +112,7 @@
 ### [API 명세서](https://lab.ssafy.com/s12-final/S12P31S205/-/blob/master/exec/%ED%8F%AC%ED%8C%85_%EB%A9%94%EB%89%B4%EC%96%BC.pdf)
 
 ## ERD
-
+![image](/uploads/41cf793137e2df8d953eaf7929db25ce/image.png)
 
 ### [포팅메뉴얼](https://lab.ssafy.com/s12-final/S12P31S205/-/blob/master/exec/%ED%8F%AC%ED%8C%85_%EB%A9%94%EB%89%B4%EC%96%BC.pdf)
 
