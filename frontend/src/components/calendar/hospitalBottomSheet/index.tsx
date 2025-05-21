@@ -1,5 +1,12 @@
 import { RefObject, useState } from "react";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { Modalize } from "react-native-modalize";
 import { useAddHospitalReservation } from "../../../api/quries/hospital";
@@ -42,6 +49,10 @@ export function HospitalBottomSheet({
   const { mutate: addHospitalReservation } = useAddHospitalReservation();
 
   function handleSave() {
+    if (!hospitalName) {
+      Alert.alert("입력 오류", "병원 이름을 입력해주세요.");
+    }
+
     if (hospitalName && reservationDate && reservationTime) {
       const formattedDateTime = FormatDateTimeKST(
         reservationDate,
