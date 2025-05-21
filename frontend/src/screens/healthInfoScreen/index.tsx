@@ -55,8 +55,8 @@ export function HealthInfoScreen() {
             {/* 메뉴 */}
             <TabMenu
               tabs={[
-                { key: "period", label: "월경 정보" },
-                { key: "ovulation", label: "배란 정보" },
+                { key: "period", label: "월경 & 임신" },
+                { key: "ovulation", label: "배란" },
               ]}
               onSelect={(key) => {
                 setSelectedMenu(key);

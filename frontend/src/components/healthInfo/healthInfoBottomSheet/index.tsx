@@ -2,6 +2,7 @@ import { RefObject } from "react";
 import { ActivityIndicator, Image, ScrollView, Text, View } from "react-native";
 import { Modalize } from "react-native-modalize";
 import { useGetHealthInfoDetail } from "../../../api/quries/healthInfo";
+import { CustomButton } from "../../common/customButton";
 
 export function HealthInfoBottomSheet({
   height,
@@ -14,6 +15,8 @@ export function HealthInfoBottomSheet({
 }) {
   const { data, isFetching } = useGetHealthInfoDetail(selectedId);
 
+  const [content1, content2] = data?.content?.split("\n") ?? ["", ""];
+
   if (!selectedId) return null;
 
   return (
@@ -24,7 +27,11 @@ export function HealthInfoBottomSheet({
           source={require("../../../assets/images/mascot.png")}
           className="w-10 h-10"
         />
-        <Text className="text-lg font-bold self-center">
+        <Text
+          numberOfLines={2}
+          ellipsizeMode="tail"
+          className="mr-12 text-lg font-bold self-center"
+        >
           {isFetching ? "로딩 중" : data?.title}
         </Text>
       </View>
@@ -35,18 +42,25 @@ export function HealthInfoBottomSheet({
           {isFetching ? (
             <ActivityIndicator size="large" />
           ) : (
-            <>
+            <View className="items-center gap-5">
               <Image
                 source={
                   data?.imageUrl
                     ? { uri: data.imageUrl }
                     : require("../../../assets/images/default_image.png")
                 }
-                className="w-full h-60 rounded-lg"
+                className="w-60 h-60 rounded-lg"
               />
-              <Text>{data?.content}</Text>
-            </>
+              <Text className="text-neutral-800">{content1}</Text>
+              <Text className="text-neutral-800">{content2}</Text>
+            </View>
           )}
+          <View className="m-5" />
+          <CustomButton
+            fill={false}
+            content="확인"
+            onPress={() => sheetRef.current?.close()}
+          />
         </View>
       </ScrollView>
     </Modalize>
