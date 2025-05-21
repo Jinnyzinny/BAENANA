@@ -35,6 +35,7 @@ export function useAddPeriod() {
     }) => addPeriod(startDate, endDate),
     onSuccess: (data) => {
       console.log("☑️월경 주기 등록 성공: ", data);
+      queryClient.invalidateQueries({ queryKey: ["dDay"] });
       queryClient.invalidateQueries({ queryKey: ["period"], exact: false });
       queryClient.invalidateQueries({ queryKey: ["childbearingAge"] });
       queryClient.invalidateQueries({ queryKey: ["predictedPeriod"] });
@@ -72,6 +73,7 @@ export function useEditPeriod() {
     }) => editPeriod(id, cycleId, startDate, endDate),
     onSuccess: (data) => {
       console.log("☑️월경 주기 변경 성공: ", data);
+      queryClient.invalidateQueries({ queryKey: ["dDay"] });
       queryClient.invalidateQueries({ queryKey: ["period"], exact: false });
     },
     onError: (error) => {
@@ -89,6 +91,9 @@ export function useDeletePeriod() {
     mutationFn: (cycleId: number) => deletePeriod(cycleId),
     onSuccess: (data) => {
       console.log("☑️월경 주기 삭제 성공: ", data);
+      queryClient.invalidateQueries({ queryKey: ["dDay"] });
+      queryClient.invalidateQueries({ queryKey: ["childbearingAge"] });
+      queryClient.invalidateQueries({ queryKey: ["predictedPeriod"] });
       queryClient.invalidateQueries({ queryKey: ["period"], exact: false });
       queryClient.invalidateQueries({ queryKey: ["daily"], exact: false });
     },
