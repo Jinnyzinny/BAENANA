@@ -115,6 +115,9 @@ public class HospitalReservationServiceImpl implements HospitalReservationServic
          * */
         BeanUtils.copyProperties(request, hospitalReservation, NullAwareBeanUtils.getNullPropertyNames(request));
 //        Enum을 자바에서만 검증하므로 copyProperties를 통할수 없다
+        if(request.getHospital_name()!=null){
+            hospitalReservation.setHospitalName(request.getHospital_name());
+        }
         if(request.getReservation_date()!=null){
             hospitalReservation.setReservationDate(request.getReservation_date());
         }
