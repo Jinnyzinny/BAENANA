@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Alert } from "react-native";
+import { Alert, ToastAndroid } from "react-native";
 import {
   addNotice,
   deleteNotice,
@@ -8,7 +8,7 @@ import {
   getNoticeList,
 } from "../notice";
 
-// 공지사항 목록 조회
+// [GET] 공지사항 목록 조회
 export function useGetNoticeList() {
   return useQuery({
     queryKey: ["noticeList"],
@@ -16,7 +16,7 @@ export function useGetNoticeList() {
   });
 }
 
-// 공지사항 상세 조회
+// [GET] 공지사항 상세 조회
 export function useGetNoticeDetail(noticeId: number) {
   return useQuery({
     queryKey: ["noticeDetail", noticeId],
@@ -24,7 +24,9 @@ export function useGetNoticeDetail(noticeId: number) {
   });
 }
 
-// [관리자] 공지사항 등록
+// 관리자
+
+// [POST] 공지사항 등록
 export function useAddNotice() {
   const queryClient = useQueryClient();
 
@@ -33,6 +35,11 @@ export function useAddNotice() {
       addNotice(title, content),
     onSuccess: (data) => {
       console.log("☑️공지사항 등록 성공: ", data);
+      ToastAndroid.showWithGravity(
+        "공지사항이 성공적으로 등록되었습니다.",
+        ToastAndroid.SHORT,
+        ToastAndroid.TOP
+      );
       queryClient.invalidateQueries({ queryKey: ["noticeList"] });
     },
     onError: (error) => {
@@ -42,7 +49,7 @@ export function useAddNotice() {
   });
 }
 
-// [관리자] 공지사항 변경
+// [PATCH] 공지사항 변경
 export function useEditNotice() {
   const queryClient = useQueryClient();
 
@@ -58,6 +65,11 @@ export function useEditNotice() {
     }) => editNotice(noticeId, title, content),
     onSuccess: (data, variables) => {
       console.log("☑️공지사항 변경 성공: ", data);
+      ToastAndroid.showWithGravity(
+        "공지사항이 성공적으로 변경되었습니다.",
+        ToastAndroid.SHORT,
+        ToastAndroid.TOP
+      );
       queryClient.invalidateQueries({ queryKey: ["noticeList"] });
       queryClient.invalidateQueries({
         queryKey: ["noticeDetail", variables.noticeId],
@@ -70,7 +82,7 @@ export function useEditNotice() {
   });
 }
 
-// [관리자] 공지사항 삭제
+// [DELETE] 공지사항 삭제
 export function useDeleteNotice() {
   const queryClient = useQueryClient();
 
@@ -78,6 +90,11 @@ export function useDeleteNotice() {
     mutationFn: ({ noticeId }: { noticeId: number }) => deleteNotice(noticeId),
     onSuccess: () => {
       console.log("☑️공지사항 삭제 성공");
+      ToastAndroid.showWithGravity(
+        "공지사항이 성공적으로 삭제되었습니다.",
+        ToastAndroid.SHORT,
+        ToastAndroid.TOP
+      );
       queryClient.invalidateQueries({ queryKey: ["noticeList"] });
     },
     onError: (error) => {

@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Alert } from "react-native";
 import { addChat, getChat, getChatList, getSessionId } from "../chat";
 
-// 세션 id 조회(새로운 채팅 생성)
+// [GET] 세션 id 조회(새로운 채팅 생성)
 // 불필요하게 여러 번 조회하지 않기 위해 props 추가
 export function useGetSessionId(isEnabled: boolean) {
   return useQuery({
@@ -12,7 +12,7 @@ export function useGetSessionId(isEnabled: boolean) {
   });
 }
 
-// 세션 목록 조회
+// [GET] 세션 목록 조회
 export function useGetChatList() {
   return useQuery({
     queryKey: ["chatList"],
@@ -21,21 +21,24 @@ export function useGetChatList() {
   });
 }
 
-// 채팅 내역 조회 (세션 기준)
+// [GET] 채팅 내역 조회 (세션 기준)
 // 세션 목록에서 채팅을 조회하기 위해 props 추가
 // sessionId가 null이면 비활성화
 export function useGetChat(sessionId: string | null, isEnabled: boolean) {
   return useQuery({
     queryKey: ["chat", sessionId],
     queryFn: () => {
-      if (!sessionId) throw new Error("Invalid sessionId");
+      if (!sessionId) {
+        console.log("채팅 sessionId: null");
+        return null;
+      }
       return getChat(sessionId);
     },
     enabled: isEnabled && !!sessionId,
   });
 }
 
-// 챗봇 채팅
+// [POST] 챗봇 채팅
 export function useAddChat() {
   const queryClient = useQueryClient();
 

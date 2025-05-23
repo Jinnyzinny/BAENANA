@@ -1,8 +1,8 @@
 import { Faq, FaqDetail } from "../types/Faq";
 import authClient from "./client/authClient";
 
-// Faq 목록 조회
-export async function getFaqList(): Promise<Faq[]> {
+// [GET] Faq 목록 조회
+export async function getFaqList(): Promise<Faq[] | null> {
   try {
     const response = await authClient.get("/faq");
     console.log("Faq 목록 조회 성공: ", response.data.data);
@@ -13,8 +13,8 @@ export async function getFaqList(): Promise<Faq[]> {
   }
 }
 
-// Faq 상세 조회
-export async function getFaqDetail(faqId: number): Promise<FaqDetail> {
+// [GET] Faq 상세 조회
+export async function getFaqDetail(faqId: number): Promise<FaqDetail | null> {
   try {
     const response = await authClient.get(`/faq/${faqId}`);
     console.log("Faq 상세 조회 성공: ", response.data.data);
@@ -25,7 +25,9 @@ export async function getFaqDetail(faqId: number): Promise<FaqDetail> {
   }
 }
 
-// [관리자] Faq 작성
+// 관리자
+
+// [POST] Faq 작성
 export async function addFaq(question: string, answer: string) {
   try {
     const response = await authClient.post("/faq/admin", { question, answer });
@@ -37,7 +39,7 @@ export async function addFaq(question: string, answer: string) {
   }
 }
 
-// [관리자] Faq 변경
+// [PATCH] Faq 변경
 export async function editFaq(
   faqId: number,
   question?: string,
@@ -59,7 +61,7 @@ export async function editFaq(
   }
 }
 
-// [관리자] Faq 삭제
+// [DELETE] Faq 삭제
 export async function deleteFaq(faqId: number) {
   try {
     const response = await authClient.delete(`/faq/admin/${faqId}`);

@@ -10,7 +10,7 @@ import {
   getReport,
 } from "../report";
 
-// ✅월경 알림 메시지 조회
+// [GET] 월경 알림 메시지 조회
 export function useGetPeriodAlert() {
   return useQuery({
     queryKey: ["periodAlert"],
@@ -18,7 +18,7 @@ export function useGetPeriodAlert() {
   });
 }
 
-// ✅월경 정보(주기 & 기간) 조회
+// [GET] 월경 정보(주기 & 기간) 조회
 export function useGetPeriodInfo() {
   return useQuery({
     queryKey: ["periodInfo"],
@@ -26,7 +26,7 @@ export function useGetPeriodInfo() {
   });
 }
 
-// ✅배란테스트 결과 조회
+// [GET] 배란테스트 결과 조회
 export function useGetOvulationTest() {
   return useQuery({
     queryKey: ["ovulationTest"],
@@ -34,7 +34,7 @@ export function useGetOvulationTest() {
   });
 }
 
-// ✅최근 6개월 간 월경 주기 조회
+// [GET] 최근 6개월 간 월경 주기 조회
 export function useGetRecentPeriod() {
   return useQuery({
     queryKey: ["recentPeriod"],
@@ -42,7 +42,7 @@ export function useGetRecentPeriod() {
   });
 }
 
-// ✅전체 월경 주기 조회
+// [GET] 전체 월경 주기 조회
 export function useGetPeriodList() {
   return useQuery({
     queryKey: ["periodList"],
@@ -50,7 +50,7 @@ export function useGetPeriodList() {
   });
 }
 
-// ✅최근 3개월 간 복용약 조회
+// [GET] 최근 3개월 간 복용약 조회
 export function useGetRecentMedicine() {
   return useQuery({
     queryKey: ["recentMedicine"],
@@ -58,7 +58,7 @@ export function useGetRecentMedicine() {
   });
 }
 
-// ✅전체 복용약 조회
+// [GET] 전체 복용약 조회
 export function useGetMedicineList() {
   return useQuery({
     queryKey: ["medicineList"],
@@ -66,7 +66,7 @@ export function useGetMedicineList() {
   });
 }
 
-// ✅요약 리포트 조회
+// [GET] 요약 리포트 조회
 export function useGetReport() {
   return useQuery({
     queryKey: ["report"],

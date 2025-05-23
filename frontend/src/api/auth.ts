@@ -2,8 +2,8 @@ import { Auth } from "../types/Auth";
 import authClient from "./client/authClient";
 import { client } from "./client/client";
 
-// 카카오 로그인 (카카오에서 받아온 AccessToken 백엔드로 전송)
-export async function kakaoLogin(accessToken: string): Promise<Auth> {
+// [POST] 카카오 로그인 (카카오에서 받아온 AccessToken 백엔드로 전송)
+export async function kakaoLogin(accessToken: string): Promise<Auth | null> {
   try {
     const response = await client.post("/auth/kakao", { accessToken });
     console.log("카카오 로그인 성공: ", response.data.data);
@@ -14,7 +14,7 @@ export async function kakaoLogin(accessToken: string): Promise<Auth> {
   }
 }
 
-// 회원 탈퇴
+// [DELETE] 회원 탈퇴
 export async function withdraw() {
   try {
     const response = await authClient.delete("/users/me");
@@ -22,20 +22,6 @@ export async function withdraw() {
     return response.data;
   } catch (error: unknown) {
     console.error("회원 탈퇴 실패: ", error);
-    return null;
-  }
-}
-
-// 사용자 알림 설정 변경
-export async function userAlarm(allowAlarm: boolean) {
-  try {
-    const response = await authClient.patch("/users/me/alarm", {
-      allow_alarm: allowAlarm,
-    });
-    console.log("사용자 알림 설정 변경 성공: ", response.data);
-    return response.data;
-  } catch (error: unknown) {
-    console.log("사용자 알림 설정 변경 실패: ", error);
     return null;
   }
 }

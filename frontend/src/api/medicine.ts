@@ -1,8 +1,8 @@
 import { FullMedicine, MedicineAlert } from "../types/Medicine";
 import authClient from "./client/authClient";
 
-// 복용약 알림 메시지 조회
-export async function getMedicineAlert(): Promise<MedicineAlert> {
+// [GET] 복용약 알림 메시지 조회
+export async function getMedicineAlert(): Promise<MedicineAlert | null> {
   try {
     const response = await authClient.get("/home//medicine");
     console.log("복용약 알림 메시지 조회 성공: ", response.data);
@@ -13,7 +13,24 @@ export async function getMedicineAlert(): Promise<MedicineAlert> {
   }
 }
 
-// 복용약 일정 등록
+// [GET] 월별 복용약 일정 조회
+export async function getMedicineReservation(
+  year: number,
+  month: number
+): Promise<FullMedicine | null> {
+  try {
+    const response = await authClient.get(
+      `/calendar/medication/${year}/${month}`
+    );
+    console.log("월별 복용약 일정 조회 성공: ", response.data);
+    return response.data;
+  } catch (error: unknown) {
+    console.error("월별 복용약 일정 조회 실패: ", error);
+    return null;
+  }
+}
+
+// [POST] 복용약 일정 등록
 export async function addMedicineReservation(
   medicineName: string,
   startDate: string,
@@ -37,24 +54,7 @@ export async function addMedicineReservation(
   }
 }
 
-// 월별 복용약 일정 조회
-export async function getMedicineReservation(
-  year: number,
-  month: number
-): Promise<FullMedicine> {
-  try {
-    const response = await authClient.get(
-      `/calendar/medication/${year}/${month}`
-    );
-    console.log("월별 복용약 일정 조회 성공: ", response.data);
-    return response.data;
-  } catch (error: unknown) {
-    console.error("월별 복용약 일정 조회 실패: ", error);
-    return null;
-  }
-}
-
-// 복용약 일정 변경
+// [PATCH] 복용약 일정 변경
 export async function editMedicineReservation(
   id: number,
   medicineName?: string,
@@ -87,7 +87,7 @@ export async function editMedicineReservation(
   }
 }
 
-// 복용약 일정 삭제
+// [DELETE] 복용약 일정 삭제
 export async function deleteMedicineReservation(id: number) {
   try {
     const response = await authClient.delete(`/calendar/medication/${id}`);

@@ -1,8 +1,8 @@
 import { FullDate, FullDday, FullPeriod } from "../types/Period";
 import authClient from "./client/authClient";
 
-// 월경 예정일 D-day 조회
-export async function getDday(): Promise<FullDday> {
+// [GET] 월경 예정일 D-day 조회
+export async function getDday(): Promise<FullDday | null> {
   try {
     const response = await authClient.get("/home/remain_day");
     console.log("월경 예정일 D-day 조회 성공", response.data);
@@ -13,7 +13,48 @@ export async function getDday(): Promise<FullDday> {
   }
 }
 
-// 월경 주기 등록
+// [GET] 월별 월경 주기 조회
+export async function getPeriod(
+  year: number,
+  month: number
+): Promise<FullPeriod | null> {
+  try {
+    const response = await authClient.get(
+      `/calendar/menstrual_cycle/${year}/${month}`
+    );
+    console.log("월별 월경 주기 조회 성공: ", response.data);
+    return response.data;
+  } catch (error: unknown) {
+    console.error("월별 월경 주기 조회 실패: ", error);
+    return null;
+  }
+}
+
+// [GET] 가임기 조회
+export async function getChildbearingAge(): Promise<FullDate | null> {
+  try {
+    const response = await authClient.get("/calendar/bearing_period");
+    console.log("가임기 조회 성공: ", response.data);
+    return response.data;
+  } catch (error: unknown) {
+    console.error("가임기 조회 실패: ", error);
+    return null;
+  }
+}
+
+// [GET] 월경 예정일 조회
+export async function getPredictedPeriod(): Promise<FullDate | null> {
+  try {
+    const response = await authClient.get("/calendar/menstrual_prediction");
+    console.log("월경 예정일 조회 성공: ", response.data);
+    return response.data;
+  } catch (error: unknown) {
+    console.error("월경 예정일 조회 실패: ", error);
+    return null;
+  }
+}
+
+// [POST] 월경 주기 등록
 export async function addPeriod(startDate: string, endDate: string) {
   try {
     const response = await authClient.post("/calendar/menstrual_cycle", {
@@ -28,24 +69,7 @@ export async function addPeriod(startDate: string, endDate: string) {
   }
 }
 
-// 월별 월경 주기 조회
-export async function getPeriod(
-  year: number,
-  month: number
-): Promise<FullPeriod> {
-  try {
-    const response = await authClient.get(
-      `/calendar/menstrual_cycle/${year}/${month}`
-    );
-    console.log("월별 월경 주기 조회 성공: ", response.data);
-    return response.data;
-  } catch (error: unknown) {
-    console.error("월별 월경 주기 조회 실패: ", error);
-    return null;
-  }
-}
-
-// 월경 주기 변경
+// [PATCH] 월경 주기 변경
 export async function editPeriod(
   id: number,
   cycleId: number,
@@ -74,7 +98,7 @@ export async function editPeriod(
   }
 }
 
-// 월경 주기 삭제
+// [DELETE] 월경 주기 삭제
 export async function deletePeriod(cycleId: number) {
   try {
     const response = await authClient.delete(
@@ -88,7 +112,7 @@ export async function deletePeriod(cycleId: number) {
   }
 }
 
-// 월경 세부 정보 등록
+// [POST] 월경 세부 정보 등록
 export async function addPeriodSymptom(
   date: string,
   bleedingLevel: number,
@@ -110,7 +134,7 @@ export async function addPeriodSymptom(
   }
 }
 
-// 월경 세부 정보 변경
+// [PATCH] 월경 세부 정보 변경
 export async function editPeriodSymptom(
   cycleId: number,
   date: string,
@@ -137,7 +161,7 @@ export async function editPeriodSymptom(
   }
 }
 
-// 월경 세부 정보 삭제
+// [DELETE] 월경 세부 정보 삭제
 export async function deletePeriodSymptom(cycleId: number) {
   try {
     const response = await authClient.delete(
@@ -147,30 +171,6 @@ export async function deletePeriodSymptom(cycleId: number) {
     return response.data;
   } catch (error: unknown) {
     console.error("월경 세부 정보 삭제 실패: ", error);
-    return null;
-  }
-}
-
-// 가임기 조회
-export async function getChildbearingAge(): Promise<FullDate> {
-  try {
-    const response = await authClient.get("/calendar/bearing_period");
-    console.log("가임기 조회 성공: ", response.data);
-    return response.data;
-  } catch (error: unknown) {
-    console.error("가임기 조회 실패: ", error);
-    return null;
-  }
-}
-
-// 월경 예정일 조회
-export async function getPredictedPeriod(): Promise<FullDate> {
-  try {
-    const response = await authClient.get("/calendar/menstrual_prediction");
-    console.log("월경 예정일 조회 성공: ", response.data);
-    return response.data;
-  } catch (error: unknown) {
-    console.error("월경 예정일 조회 실패: ", error);
     return null;
   }
 }

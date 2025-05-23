@@ -5,7 +5,7 @@ import {
   getHealthInfoDetail,
 } from "../healthInfo";
 
-// 카테고리 목록 조회
+// [GET] 카테고리 목록 조회
 export function useGetCategory() {
   return useQuery({
     queryKey: ["category"],
@@ -13,7 +13,7 @@ export function useGetCategory() {
   });
 }
 
-// ✅카테고리별 건강 정보 조회
+// [GET] 카테고리별 건강 정보 조회
 export function useGetCategoryHealthInfo(categoryId: number) {
   return useQuery({
     queryKey: ["healthInfoCategory", categoryId],
@@ -21,13 +21,14 @@ export function useGetCategoryHealthInfo(categoryId: number) {
   });
 }
 
-// ✅건강 정보 상세 조회
+// [GET] 건강 정보 상세 조회
 export function useGetHealthInfoDetail(id: number | null) {
   return useQuery({
     queryKey: ["healthInfoDetail", id],
     queryFn: async () => {
       if (id === null) {
-        throw new Error("건강 정보 id: null");
+        console.log("건강 정보 id: null");
+        return null;
       }
       return getHealthInfoDetail(id);
     },

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getDaily } from "../daily";
 
-// ✅일일 정보 조회
+// [GET] 일일 정보 조회
 export function useGetDaily(
   year: number | null,
   month: number | null,

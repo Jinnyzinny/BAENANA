@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Alert } from "react-native";
+import { Alert, ToastAndroid } from "react-native";
 import { addFaq, deleteFaq, editFaq, getFaqDetail, getFaqList } from "../faq";
 
-// Faq 목록 조회
+// [GET] Faq 목록 조회
 export function useGetFaqList() {
   return useQuery({
     queryKey: ["faqList"],
@@ -11,7 +11,7 @@ export function useGetFaqList() {
   });
 }
 
-// Faq 상세 조회
+// [GET] Faq 상세 조회
 export function useGetFaqDetail(faqId: number) {
   return useQuery({
     queryKey: ["faqDetail", faqId],
@@ -19,7 +19,8 @@ export function useGetFaqDetail(faqId: number) {
   });
 }
 
-// [관리자] Faq 작성
+// 관리자
+// [POST] Faq 작성
 export function useAddFaq() {
   const queryClient = useQueryClient();
 
@@ -28,6 +29,11 @@ export function useAddFaq() {
       addFaq(question, answer),
     onSuccess: (data) => {
       console.log("☑️Faq 작성 성공: ", data);
+      ToastAndroid.showWithGravity(
+        "Faq가 성공적으로 등록되었습니다.",
+        ToastAndroid.SHORT,
+        ToastAndroid.TOP
+      );
       queryClient.invalidateQueries({ queryKey: ["faqList"] });
     },
     onError: (error) => {
@@ -37,7 +43,7 @@ export function useAddFaq() {
   });
 }
 
-// [관리자] Faq 변경
+// [PATCH] Faq 변경
 export function useEditFaq() {
   const queryClient = useQueryClient();
 
@@ -53,6 +59,11 @@ export function useEditFaq() {
     }) => editFaq(faqId, question, answer),
     onSuccess: (data, variables) => {
       console.log("☑️Faq 변경 성공: ", data);
+      ToastAndroid.showWithGravity(
+        "Faq가 성공적으로 변경되었습니다.",
+        ToastAndroid.SHORT,
+        ToastAndroid.TOP
+      );
       queryClient.invalidateQueries({ queryKey: ["faqList"] });
       queryClient.invalidateQueries({
         queryKey: ["faqDetail", variables.faqId],
@@ -65,7 +76,7 @@ export function useEditFaq() {
   });
 }
 
-// [관리자] Faq 삭제
+// [DELETE] Faq 삭제
 export function useDeleteFaq() {
   const queryClient = useQueryClient();
 
@@ -73,6 +84,11 @@ export function useDeleteFaq() {
     mutationFn: (faqId: number) => deleteFaq(faqId),
     onSuccess: () => {
       console.log("☑️Faq 삭제 성공");
+      ToastAndroid.showWithGravity(
+        "Faq가 성공적으로 삭제되었습니다.",
+        ToastAndroid.SHORT,
+        ToastAndroid.TOP
+      );
       queryClient.invalidateQueries({ queryKey: ["faqList"] });
     },
     onError: (error) => {

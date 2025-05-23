@@ -1,8 +1,8 @@
 import { Chat, ChatList, SessionId } from "../types/Chat";
 import authClient from "./client/authClient";
 
-// 세션 id 조회(새로운 채팅 생성)
-export async function getSessionId(): Promise<SessionId> {
+// [GET] 세션 id 조회(새로운 채팅 생성)
+export async function getSessionId(): Promise<SessionId | null> {
   try {
     const response = await authClient.get("/chat/init");
     console.log("세션 id 조회 성공: ", response.data.data);
@@ -13,8 +13,8 @@ export async function getSessionId(): Promise<SessionId> {
   }
 }
 
-// 세션 목록 조회
-export async function getChatList(): Promise<ChatList[]> {
+// [GET] 세션 목록 조회
+export async function getChatList(): Promise<ChatList[] | null> {
   try {
     const response = await authClient.get("/chat/sessions");
     console.log("세션 목록 조회 성공: ", response.data.data);
@@ -25,8 +25,8 @@ export async function getChatList(): Promise<ChatList[]> {
   }
 }
 
-// 채팅 내역 조회 (세션 기준)
-export async function getChat(sessionId: string): Promise<Chat[]> {
+// [GET] 채팅 내역 조회 (세션 기준)
+export async function getChat(sessionId: string): Promise<Chat[] | null> {
   try {
     const response = await authClient.get(
       `/chat/sessions/${sessionId}/messages`
@@ -39,7 +39,7 @@ export async function getChat(sessionId: string): Promise<Chat[]> {
   }
 }
 
-// 챗봇 채팅
+// [POST] 챗봇 채팅
 export async function addChat(
   inputType: string,
   content: string,
