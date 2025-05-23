@@ -9,7 +9,7 @@ export async function getFaqList(): Promise<Faq[]> {
     return response.data.data;
   } catch (error: unknown) {
     console.error("Faq 목록 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -21,7 +21,7 @@ export async function getFaqDetail(faqId: number): Promise<FaqDetail> {
     return response.data.data;
   } catch (error: unknown) {
     console.error("Faq 상세 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -33,7 +33,7 @@ export async function addFaq(question: string, answer: string) {
     return response.data;
   } catch (error: unknown) {
     console.error("[관리자] Faq 작성 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -55,7 +55,7 @@ export async function editFaq(
     return response.data;
   } catch (error: unknown) {
     console.error("[관리자] Faq 변경 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -67,6 +67,6 @@ export async function deleteFaq(faqId: number) {
     return response.data;
   } catch (error: unknown) {
     console.error("[관리자] Faq 삭제 실패: ", error);
-    throw error;
+    return null;
   }
 }

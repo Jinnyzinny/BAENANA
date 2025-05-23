@@ -13,7 +13,7 @@ export async function addInquiry(title: string, questionContent: string) {
     return response.data;
   } catch (error: unknown) {
     console.error("[사용자] 문의사항 등록 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -28,7 +28,7 @@ export async function getInquiryList(): Promise<Inquiry[]> {
     return response.data.data.content;
   } catch (error: unknown) {
     console.error("[사용자] 문의사항 목록 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -42,7 +42,7 @@ export async function getInquiryDetail(
     return response.data.data;
   } catch (error: unknown) {
     console.error("[사용자] 문의사항 상세 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -62,7 +62,7 @@ export async function editInquiry(
     return response.data;
   } catch (error: unknown) {
     console.error("[사용자] 문의사항 변경 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -74,7 +74,7 @@ export async function deleteInquiry(inquiryId: number) {
     return response.data;
   } catch (error: unknown) {
     console.error("[사용자] 문의사항 삭제 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -90,7 +90,7 @@ export async function getAdminInquiryList(): Promise<AdminInquiry[]> {
     return response.data.data.content;
   } catch (error: unknown) {
     console.error("[관리자] 문의사항 목록 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -104,7 +104,7 @@ export async function getAdminInquiryDetail(
     return response.data.data;
   } catch (error: unknown) {
     console.error("[관리자] 문의사항 상세 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -122,7 +122,7 @@ export async function addAdminInquiry(
     return response.data;
   } catch (error: unknown) {
     console.error("[관리자] 문의사항 답변 등록 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -140,7 +140,7 @@ export async function editAdminInquiry(
     return response.data;
   } catch (error: unknown) {
     console.error("[관리자] 문의사항 답변 변경 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -154,6 +154,6 @@ export async function deleteAdminInquiry(inquiryId: number) {
     return response.data;
   } catch (error: unknown) {
     console.error("[관리자] 문의사항 답변 삭제 실패: ", error);
-    throw error;
+    return null;
   }
 }

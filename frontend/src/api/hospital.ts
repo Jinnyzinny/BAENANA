@@ -9,7 +9,7 @@ export async function getHospitalAlert(): Promise<HospitalAlert> {
     return response.data;
   } catch (error: unknown) {
     console.error("병원 예약 알림 메시지 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -29,7 +29,7 @@ export async function addHospitalReservation(
     return response.data;
   } catch (error: unknown) {
     console.error("병원 예약 일정 등록 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -44,7 +44,7 @@ export async function getHospitalReservation(
     return response.data;
   } catch (error: unknown) {
     console.error("월별 병원 예약 일정 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -68,7 +68,7 @@ export async function editHospitalReservation(
     return response.data;
   } catch (error: unknown) {
     console.error("병원 예약 일정 변경 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -80,6 +80,6 @@ export async function deleteHospitalReservation(id: number) {
     return response.data;
   } catch (error: unknown) {
     console.error("병원 예약 일정 삭제 실패: ", error);
-    throw error;
+    return null;
   }
 }

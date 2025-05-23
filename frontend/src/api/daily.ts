@@ -15,6 +15,6 @@ export async function getDaily(
     return response.data;
   } catch (error: unknown) {
     console.error("일일 정보 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }

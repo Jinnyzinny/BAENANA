@@ -17,7 +17,7 @@ export async function getPeriodAlert(): Promise<FullPeriodAlert> {
     return response.data;
   } catch (error: unknown) {
     console.error("월경 알림 메시지 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -29,7 +29,7 @@ export async function getPeriodInfo(): Promise<FullRecentPeriodInfo> {
     return response.data;
   } catch (error: unknown) {
     console.error("월경 정보(주기 & 기간) 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -41,7 +41,7 @@ export async function getOvulationTest(): Promise<FullOvulation> {
     return response.data;
   } catch (error: unknown) {
     console.error("배란테스트 결과 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -53,7 +53,7 @@ export async function getRecentPeriod(): Promise<FullRecentPeriod> {
     return response.data;
   } catch (error: unknown) {
     console.error("최근 6개월 간 월경 주기 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -65,7 +65,7 @@ export async function getPeriodList(): Promise<FullRecentPeriod> {
     return response.data;
   } catch (error: unknown) {
     console.error("전체 월경 주기 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -77,7 +77,7 @@ export async function getRecentMedicine(): Promise<FullRecentMedicine> {
     return response.data;
   } catch (error: unknown) {
     console.error("최근 3개월 간 복용약 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -89,7 +89,7 @@ export async function getMedicineList(): Promise<AllRecentMEdicine> {
     return response.data;
   } catch (error: unknown) {
     console.error("전체 복용약 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -101,6 +101,6 @@ export async function getReport(): Promise<FullReport> {
     return response.data;
   } catch (error: unknown) {
     console.error("요약 리포트 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }

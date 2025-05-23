@@ -43,7 +43,7 @@ async function refreshingToken(): Promise<AxiosResponse> {
     return response;
   } catch (error) {
     console.log("✖️리프레시 토큰 요청 실패:", error);
-    throw error;
+    return null;
   }
 }
 

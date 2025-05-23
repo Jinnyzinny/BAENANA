@@ -10,7 +10,7 @@ export async function kakaoLogin(accessToken: string): Promise<Auth> {
     return response.data.data;
   } catch (error: unknown) {
     console.error("카카오 로그인 실패", error);
-    throw error;
+    return null;
   }
 }
 
@@ -22,7 +22,7 @@ export async function withdraw() {
     return response.data;
   } catch (error: unknown) {
     console.error("회원 탈퇴 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -36,6 +36,6 @@ export async function userAlarm(allowAlarm: boolean) {
     return response.data;
   } catch (error: unknown) {
     console.log("사용자 알림 설정 변경 실패: ", error);
-    throw error;
+    return null;
   }
 }

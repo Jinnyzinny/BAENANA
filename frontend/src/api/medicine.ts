@@ -9,7 +9,7 @@ export async function getMedicineAlert(): Promise<MedicineAlert> {
     return response.data;
   } catch (error: unknown) {
     console.error("복용약 알림 메시지 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -33,7 +33,7 @@ export async function addMedicineReservation(
     return response.data;
   } catch (error: unknown) {
     console.error("복용약 일정 등록 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -50,7 +50,7 @@ export async function getMedicineReservation(
     return response.data;
   } catch (error: unknown) {
     console.error("월별 복용약 일정 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -83,7 +83,7 @@ export async function editMedicineReservation(
     return response.data;
   } catch (error: unknown) {
     console.error("복용약 일정 변경 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -95,6 +95,6 @@ export async function deleteMedicineReservation(id: number) {
     return response.data;
   } catch (error: unknown) {
     console.error("복용약 일정 삭제 실패: ", error);
-    throw error;
+    return null;
   }
 }

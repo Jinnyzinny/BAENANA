@@ -9,7 +9,7 @@ export async function getDday(): Promise<FullDday> {
     return response.data;
   } catch (error: unknown) {
     console.error("월경 예정일 D-day 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -24,7 +24,7 @@ export async function addPeriod(startDate: string, endDate: string) {
     return response.data;
   } catch (error: unknown) {
     console.error("월경 주기 등록 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -41,7 +41,7 @@ export async function getPeriod(
     return response.data;
   } catch (error: unknown) {
     console.error("월별 월경 주기 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -70,7 +70,7 @@ export async function editPeriod(
     return response.data;
   } catch (error: unknown) {
     console.error("월경 주기 변경 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -84,7 +84,7 @@ export async function deletePeriod(cycleId: number) {
     return response.data;
   } catch (error: unknown) {
     console.error("월경 주기 삭제 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -106,7 +106,7 @@ export async function addPeriodSymptom(
     return response.data;
   } catch (error: unknown) {
     console.error("월경 주기 세부 정보 등록 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -133,7 +133,7 @@ export async function editPeriodSymptom(
     return response.data;
   } catch (error: unknown) {
     console.error("월경 주기 세부 정보 변경 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -147,7 +147,7 @@ export async function deletePeriodSymptom(cycleId: number) {
     return response.data;
   } catch (error: unknown) {
     console.error("월경 세부 정보 삭제 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -159,7 +159,7 @@ export async function getChildbearingAge(): Promise<FullDate> {
     return response.data;
   } catch (error: unknown) {
     console.error("가임기 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -171,6 +171,6 @@ export async function getPredictedPeriod(): Promise<FullDate> {
     return response.data;
   } catch (error: unknown) {
     console.error("월경 예정일 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }

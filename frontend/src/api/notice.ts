@@ -9,7 +9,7 @@ export async function getNoticeList(): Promise<Notice[]> {
     return response.data.data;
   } catch (error: unknown) {
     console.error("공지사항 목록 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -21,7 +21,7 @@ export async function getNoticeDetail(noticeId: number): Promise<NoticeDetail> {
     return response.data.data;
   } catch (error: unknown) {
     console.error("공지사항 상세 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -36,7 +36,7 @@ export async function addNotice(title: string, content: string) {
     return response.data;
   } catch (error: unknown) {
     console.error("[관리자] 공지사항 등록 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -59,7 +59,7 @@ export async function editNotice(
     return response.data;
   } catch (error: unknown) {
     console.error("[관리자] 공지사항 변경 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -73,6 +73,6 @@ export async function deleteNotice(noticeId: number) {
     return response.data;
   } catch (error: unknown) {
     console.error("[관리자] 공지사항 삭제 실패: ", error);
-    throw error;
+    return null;
   }
 }

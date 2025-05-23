@@ -9,7 +9,7 @@ export async function getSessionId(): Promise<SessionId> {
     return response.data.data;
   } catch (error: unknown) {
     console.error("세션 id 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -21,7 +21,7 @@ export async function getChatList(): Promise<ChatList[]> {
     return response.data.data;
   } catch (error: unknown) {
     console.error("세션 목록 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -35,7 +35,7 @@ export async function getChat(sessionId: string): Promise<Chat[]> {
     return response.data.data;
   } catch (error: unknown) {
     console.error("채팅 내역 조회 (세션 기준) 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -55,6 +55,6 @@ export async function addChat(
     return response.data;
   } catch (error: unknown) {
     console.error("챗봇 채팅 실패: ", error);
-    throw error;
+    return null;
   }
 }

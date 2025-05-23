@@ -9,7 +9,7 @@ export async function getCategory(): Promise<Category[]> {
     return response.data.data;
   } catch (error: unknown) {
     console.error("카테고리 목록 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -26,7 +26,7 @@ export async function getCategoryHealthInfo(
     return response.data.data.content;
   } catch (error: unknown) {
     console.error("카테고리별 건강 정보 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
@@ -38,6 +38,6 @@ export async function getHealthInfoDetail(id: number): Promise<HealthInfo> {
     return response.data.data;
   } catch (error: unknown) {
     console.error("건강 정보 상세 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }
