@@ -38,6 +38,9 @@ public class HospitalReservation {
 //    public void setPurposeTypeByDescription(String description) {
 //        this.purpose = PurposeType.fromDescription(description);
 //    }
+    public void setHospitalName(String hospitalName) {
+        this.hospitalName = hospitalName;
+    }
     public void setReservationDate(LocalDateTime reservationDate) {
         this.reservationDate = reservationDate;
     }

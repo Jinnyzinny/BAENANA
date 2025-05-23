@@ -16,6 +16,7 @@ import com.ssafy.backend.user.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -120,6 +121,9 @@ public class MedicationServiceImpl implements MedicationService {
 //        if(request.getName()!=null){
 //            medication.setName(request.getName());
 //        }
+        if(request.getName()!=null) {
+            medication.setName(request.getName());
+        }
         if (request.getTime_taken() != null) {
             request.getTime_taken().forEach(
                     time ->
