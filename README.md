@@ -86,11 +86,11 @@
 
 ### Infra
 
-![amazonec2](https://img.shields.io/badge/amazon%20ec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white)
-![nginx](https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white)
-![docker](https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
-![ubuntu](https://img.shields.io/badge/ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)
-![putty](https://img.shields.io/badge/putty-0078d7?style=for-the-badge&logo=visual%20studio&logoColor=white)
+![AWS EC2](https://img.shields.io/badge/aws%20ec2-FF9900?style=for-the-badge&logo=amazon-ec2&logoColor=white)
+![Nginx](https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white)
+![Docker](https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Ubuntu](https://img.shields.io/badge/ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)
+![Putty](https://img.shields.io/badge/putty-0078d7?style=for-the-badge&logo=visual%20studio&logoColor=white)
 <img src="https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=Jenkins&logoColor=white">
 
 ### Frontend
@@ -106,9 +106,26 @@
 ![springsecurity](https://img.shields.io/badge/spring%20security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white)
 ![jwt](https://img.shields.io/badge/jwt-000000?style=for-the-badge&logo=jwt&logoColor=white)
 ![mysql](https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
-![Spring Actuator]
-![Prometheus]
-![Grafana]
+![Spring Actuator](https://img.shields.io/badge/Spring%20Actuator-000000?style=for-the-badge&logo=jwt&logoColor=white)
+![Prometheus](https://img.shields.io/badge/prometheus-E6522C?style=for-the-badge&logo=prometheus&logoColor=white)
+![Grafana](https://img.shields.io/badge/grafana-F46800?style=for-the-badge&logo=grafana&logoColor=white)
+
+### AI
+
+![Python](https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/fastapi-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![Pydantic](https://img.shields.io/badge/pydantic-0A223A?style=for-the-badge&logo=pydantic&logoColor=white)
+![Uvicorn](https://img.shields.io/badge/uvicorn-0A223A?style=for-the-badge&logo=uvicorn&logoColor=white)
+![llama.cpp](https://img.shields.io/badge/llama.cpp-3C1379?style=for-the-badge&logo=uvicorn&logoColor=white)
+![SentenceTransformers](https://img.shields.io/badge/sentence%20transformers-00599C?style=for-the-badge&logo=python&logoColor=white)
+![RAG](https://img.shields.io/badge/rag-FF6F00?style=for-the-badge&logo=question&logoColor=white)
+![ChromaDB](https://img.shields.io/badge/chromadb-E6522C?style=for-the-badge&logo=database&logoColor=white)
+![Langchain TextSplitter](https://img.shields.io/badge/langchain%20textsplitter-0FA958?style=for-the-badge&logo=python&logoColor=white)
+![Cosine Similarity](https://img.shields.io/badge/cosine%20similarity-5A189A?style=for-the-badge&logo=python&logoColor=white)
+![python-docx](https://img.shields.io/badge/python--docx-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![pandas](https://img.shields.io/badge/pandas-150458?style=for-the-badge&logo=pandas&logoColor=white)
+
+
 
 ## 서비스 아키텍처
 
@@ -132,7 +149,7 @@
 
 ### [포팅메뉴얼](https://lab.ssafy.com/s12-final/S12P31S205/-/blob/master/exec/%ED%8F%AC%ED%8C%85_%EB%A9%94%EB%89%B4%EC%96%BC.pdf)
 
-## [발표자료](https://lab.ssafy.com/s12-final/S12P31S205/-/blob/master/exec/%ED%8F%AC%ED%8C%85_%EB%A9%94%EB%89%B4%EC%96%BC.pdf)
+## [발표자료](/uploads/97b6e4a82c826ebe23552daece741908/12기_자율PJT_발표자료_S205.pdf)
 
 ## 팀 구성원
 
@@ -141,6 +158,6 @@
 | **FE**        | 최이화 |                                                     |
 | **FE**        | 김태열 |                                                     |
 | **BE**        | 이진형 | API 설계, 개발, 유지보수 및 DB 관리, 서버 모니터링, |
-| **AI**        | 박가연 |                                                     |
+| **AI**        | 박가연 | RAG 챗봇 개발, FastAPI 서버 및 Docker 배포, 사용자 정보 기반 프롬프트 설계, 응답 유사도 평가 지표 설계 |
 | **AI, BE**    | 김민경 |                                                     |
 | **INFRA, BE** | 지수인 | 회원, 채팅, 건강 정보 관리 구현 및 인프라 세팅      |
