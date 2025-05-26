@@ -140,9 +140,10 @@ export function ReportScreen() {
       console.log("실제 다운로드 폴더 경로:", finalPath);
 
       // 7. 저장 완료 알림
-      ToastAndroid.show(
+      ToastAndroid.showWithGravity(
         "PDF가 Downloads 폴더에 저장되었습니다.",
-        ToastAndroid.SHORT
+        ToastAndroid.SHORT,
+        ToastAndroid.TOP
       );
     } catch (error) {
       console.error("PDF 생성 중 오류 발생: ", error);

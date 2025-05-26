@@ -105,7 +105,7 @@ export function useDeleteHospitalReservation() {
     onSuccess: () => {
       console.log("☑️병원 예약 일정 삭제 성공");
       ToastAndroid.showWithGravity(
-        "병원 예약 일정이 성공적으로 변경되었습니다.",
+        "병원 예약 일정이 성공적으로 삭제되었습니다.",
         ToastAndroid.SHORT,
         ToastAndroid.TOP
       );
