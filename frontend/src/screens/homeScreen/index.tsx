@@ -31,7 +31,10 @@ export function HomeScreen() {
   // 오늘 날짜 문자열("yyyy-MM-dd")로 변경
   function getTodayDateString(): string {
     const today = new Date();
-    return today.toISOString().split("T")[0];
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
   }
 
   // 도넛차트 - 퍼센트, D-day 계산

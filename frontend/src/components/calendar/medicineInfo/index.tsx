@@ -113,8 +113,9 @@ export function MedicineInfo({ data }: { data: Daily }) {
           const formatStartDate = formatDateKST(startDate);
           const formatEndDate = formatDateKST(endDate);
           const timeTaken = times.map((t) => {
-            const kstTime = new Date(t.time!.getTime() + 9 * 60 * 60 * 1000);
-            return kstTime.toISOString().slice(11, 16); // "HH:mm"
+            const hours = String(t.time!.getHours()).padStart(2, "0");
+            const minutes = String(t.time!.getMinutes()).padStart(2, "0");
+            return `${hours}:${minutes}`;
           });
 
           // console.log(

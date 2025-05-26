@@ -70,9 +70,10 @@ export function MedicineBottomSheet({
       .map((item) => {
         if (!item.time) return null;
 
-        const kstDate = new Date(item.time.getTime());
+        const hours = String(item.time.getHours()).padStart(2, "0");
+        const minutes = String(item.time.getMinutes()).padStart(2, "0");
 
-        return kstDate.toISOString().slice(11, 16);
+        return `${hours}:${minutes}`;
       })
       .filter((t): t is string => !!t);
 
