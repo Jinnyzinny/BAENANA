@@ -33,7 +33,7 @@ export function useGetInquiryDetail(inquiryId: number) {
 
 // [POST] 문의사항 등록
 export function useAddInquiry() {
-  useApiMutation({
+  return useApiMutation({
     mutationFn: ({
       title,
       questionContent,
@@ -49,7 +49,7 @@ export function useAddInquiry() {
 
 // [PATCH] 문의사항 변경
 export function useEditInquiry() {
-  useApiMutation({
+  return useApiMutation({
     mutationFn: ({
       inquiryId,
       title,
@@ -70,7 +70,7 @@ export function useEditInquiry() {
 
 // [DELETE] 문의사항 삭제
 export function useDeleteInquiry() {
-  useApiMutation({
+  return useApiMutation({
     mutationFn: (inquiryId: number) => deleteInquiry(inquiryId),
     keysToInvalidate: [["inquiryList"]],
     successMessage: "문의사항이 성공적으로 삭제되었습니다.",
@@ -97,7 +97,7 @@ export function useGetAdminInquiryDetail(inquiryId: number) {
 
 // [POST] 문의사항 답변 등록
 export function useAddAdminInquiry() {
-  useApiMutation({
+  return useApiMutation({
     mutationFn: ({
       inquiryId,
       answerContent,
@@ -116,7 +116,7 @@ export function useAddAdminInquiry() {
 
 // [PATCH] 문의사항 답변 변경
 export function useEditAdminInquiry() {
-  useApiMutation({
+  return useApiMutation({
     mutationFn: ({
       inquiryId,
       answerContent,
@@ -135,7 +135,7 @@ export function useEditAdminInquiry() {
 
 // [DELETE] 문의사항 답변 삭제
 export function useDeleteAdminInquiry() {
-  useApiMutation({
+  return useApiMutation({
     mutationFn: (inquiryId: number) => deleteAdminInquiry(inquiryId),
     keysToInvalidate: [["adminInquiryList"]],
     successMessage: "답변이 성공적으로 삭제되었습니다.",

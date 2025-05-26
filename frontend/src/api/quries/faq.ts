@@ -22,7 +22,7 @@ export function useGetFaqDetail(faqId: number) {
 // 관리자
 // [POST] Faq 작성
 export function useAddFaq() {
-  useApiMutation({
+  return useApiMutation({
     mutationFn: ({ question, answer }: { question: string; answer: string }) =>
       addFaq(question, answer),
     keysToInvalidate: [["faqList"]],
@@ -33,7 +33,7 @@ export function useAddFaq() {
 
 // [PATCH] Faq 변경
 export function useEditFaq() {
-  useApiMutation({
+  return useApiMutation({
     mutationFn: ({
       faqId,
       question,
@@ -51,7 +51,7 @@ export function useEditFaq() {
 
 // [DELETE] Faq 삭제
 export function useDeleteFaq() {
-  useApiMutation({
+  return useApiMutation({
     mutationFn: (faqId: number) => deleteFaq(faqId),
     keysToInvalidate: [["faqList"]],
     successMessage: "Faq가 성공적으로 삭제되었습니다.",

@@ -47,7 +47,7 @@ export function useGetPredictedPeriod() {
 
 // [POST] 월경 주기 등록
 export function useAddPeriod() {
-  useApiMutation({
+  return useApiMutation({
     mutationFn: ({
       startDate,
       endDate,
@@ -69,7 +69,7 @@ export function useAddPeriod() {
 
 // [PATCH] 월경 주기 변경
 export function useEditPeriod() {
-  useApiMutation({
+  return useApiMutation({
     mutationFn: ({
       id,
       cycleId,
@@ -95,7 +95,7 @@ export function useEditPeriod() {
 
 // [DELETE] 월경 주기 삭제
 export function useDeletePeriod() {
-  useApiMutation({
+  return useApiMutation({
     mutationFn: (cycleId: number) => deletePeriod(cycleId),
     keysToInvalidate: [
       ["dDay"],
@@ -111,7 +111,7 @@ export function useDeletePeriod() {
 
 // [POST] 월경 세부 정보 등록
 export function useAddPeriodSymptom() {
-  useApiMutation({
+  return useApiMutation({
     mutationFn: ({
       date,
       bleedingLevel,
@@ -131,7 +131,7 @@ export function useAddPeriodSymptom() {
 
 // [PATCH] 월경 세부 정보 변경
 export function useEditPeriodSymptom() {
-  useApiMutation({
+  return useApiMutation({
     mutationFn: ({
       cycleId,
       date,
@@ -153,7 +153,7 @@ export function useEditPeriodSymptom() {
 
 // [DELETE] 월경 세부 정보 삭제
 export function useDeletePeriodSymptom() {
-  useApiMutation({
+  return useApiMutation({
     mutationFn: (cycleId: number) => deletePeriodSymptom(cycleId),
     keysToInvalidate: [["period"], ["daily"]],
     successMessage: "월경 세부 정보가 성공적으로 삭제되었습니다.",

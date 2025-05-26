@@ -106,7 +106,7 @@ export function HomeScreen() {
           </View>
 
           {showEmptyState && (
-            <View className="flex-1 items-center gap-3 mt-28">
+            <View className="flex-1 items-center gap-3 mt-48">
               <Image
                 source={require("../../assets/images/mascot_find.png")}
                 style={{ width: 110, height: 120 }}

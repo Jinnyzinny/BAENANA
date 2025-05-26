@@ -26,7 +26,7 @@ export function useGetMedicineReservation(year: number, month: number) {
 
 // [POST] 복용약 일정 등록
 export function useAddMedicineReservation() {
-  useApiMutation({
+  return useApiMutation({
     mutationFn: ({
       medicineName,
       startDate,
@@ -49,7 +49,7 @@ export function useAddMedicineReservation() {
 
 // [PATCH] 복용약 일정 변경
 export function useEditMedicineReservation() {
-  useApiMutation({
+  return useApiMutation({
     mutationFn: ({
       id,
       medicineName,
@@ -81,7 +81,7 @@ export function useEditMedicineReservation() {
 
 // [DELETE] 복용약 일정 삭제
 export function useDeleteMedicineReservation() {
-  useApiMutation({
+  return useApiMutation({
     mutationFn: (id: number) => deleteMedicineReservation(id),
     keysToInvalidate: [["daily"], ["medicineAlert"], ["medicineReservation"]],
     successMessage: "복용약 일정이 성공적으로 삭제되었습니다.",

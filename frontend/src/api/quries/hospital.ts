@@ -26,7 +26,7 @@ export function useGetHospitalReservation(year: number, month: number) {
 
 // [POST] 병원 예약 일정 등록
 export function useAddHospitalReservation() {
-  useApiMutation({
+  return useApiMutation({
     mutationFn: ({
       hospitalName,
       reservationDate,
@@ -44,7 +44,7 @@ export function useAddHospitalReservation() {
 
 // [PATCH] 병원 예약 일정 변경
 export function useEditHospitalReservation() {
-  useApiMutation({
+  return useApiMutation({
     mutationFn: ({
       id,
       hospitalName,
@@ -64,7 +64,7 @@ export function useEditHospitalReservation() {
 
 // [DELETE] 병원 예약 일정 삭제
 export function useDeleteHospitalReservation() {
-  useApiMutation({
+  return useApiMutation({
     mutationFn: (id: number) => deleteHospitalReservation(id),
     keysToInvalidate: [["hospitalReservation"], ["daily"], ["hospitalAlert"]],
 
