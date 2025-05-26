@@ -1,5 +1,5 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Alert, ToastAndroid } from "react-native";
+import { useQuery } from "@tanstack/react-query";
+import { useApiMutation } from "../../hooks/useApiMutation";
 import {
   addHospitalReservation,
   deleteHospitalReservation,
@@ -26,9 +26,7 @@ export function useGetHospitalReservation(year: number, month: number) {
 
 // [POST] 병원 예약 일정 등록
 export function useAddHospitalReservation() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
+  useApiMutation({
     mutationFn: ({
       hospitalName,
       reservationDate,
@@ -38,32 +36,15 @@ export function useAddHospitalReservation() {
       reservationDate: string;
       purpose: string;
     }) => addHospitalReservation(hospitalName, reservationDate, purpose),
-    onSuccess: (data) => {
-      console.log("☑️병원 예약 일정 등록 성공: ", data);
-      ToastAndroid.showWithGravity(
-        "병원 예약 일정이 성공적으로 등록되었습니다.",
-        ToastAndroid.SHORT,
-        ToastAndroid.TOP
-      );
-      queryClient.invalidateQueries({
-        queryKey: ["hospitalReservation"],
-        exact: false,
-      });
-      queryClient.invalidateQueries({ queryKey: ["daily"], exact: false });
-      queryClient.invalidateQueries({ queryKey: ["hospitalAlert"] });
-    },
-    onError: (error) => {
-      console.log("✖️병원 예약 일정 등록 실패: ", error);
-      Alert.alert("병원 예약 일정 등록 실패", "잠시 후 다시 시도해주세요.");
-    },
+    keysToInvalidate: [["hospitalReservation"], ["daily"], ["hospitalAlert"]],
+    successMessage: "병원 예약 일정이 성공적으로 등록되었습니다.",
+    errorMessage: "병원 예약 일정 등록 실패",
   });
 }
 
 // [PATCH] 병원 예약 일정 변경
 export function useEditHospitalReservation() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
+  useApiMutation({
     mutationFn: ({
       id,
       hospitalName,
@@ -75,50 +56,19 @@ export function useEditHospitalReservation() {
       reservationDate?: string;
       purpose?: string;
     }) => editHospitalReservation(id, hospitalName, reservationDate, purpose),
-    onSuccess: (data) => {
-      console.log("☑️병원 예약 일정 변경 성공: ", data);
-      ToastAndroid.showWithGravity(
-        "병원 예약 일정이 성공적으로 변경되었습니다.",
-        ToastAndroid.SHORT,
-        ToastAndroid.TOP
-      );
-      queryClient.invalidateQueries({
-        queryKey: ["hospitalReservation"],
-        exact: false,
-      });
-      queryClient.invalidateQueries({ queryKey: ["daily"], exact: false });
-      queryClient.invalidateQueries({ queryKey: ["hospitalAlert"] });
-    },
-    onError: (error) => {
-      console.log("✖️병원 예약 일정 변경 실패: ", error);
-      Alert.alert("병원 예약 일정 변경 실패", "잠시 후 다시 시도해주세요.");
-    },
+    keysToInvalidate: [["hospitalReservation"], ["daily"], ["hospitalAlert"]],
+    successMessage: "병원 예약 일정이 성공적으로 변경되었습니다.",
+    errorMessage: "병원 예약 일정 변경 실패",
   });
 }
 
 // [DELETE] 병원 예약 일정 삭제
 export function useDeleteHospitalReservation() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
+  useApiMutation({
     mutationFn: (id: number) => deleteHospitalReservation(id),
-    onSuccess: () => {
-      console.log("☑️병원 예약 일정 삭제 성공");
-      ToastAndroid.showWithGravity(
-        "병원 예약 일정이 성공적으로 삭제되었습니다.",
-        ToastAndroid.SHORT,
-        ToastAndroid.TOP
-      );
-      queryClient.invalidateQueries({
-        queryKey: ["hospitalReservation"],
-        exact: false,
-      });
-      queryClient.invalidateQueries({ queryKey: ["daily"], exact: false });
-      queryClient.invalidateQueries({ queryKey: ["hospitalAlert"] });
-    },
-    onError: (error) => {
-      console.log("✖️병원 예약 일정 삭제 실패: ", error);
-      Alert.alert("병원 예약 일정 삭제 실패", "잠시 후 다시 시도해주세요.");
-    },
+    keysToInvalidate: [["hospitalReservation"], ["daily"], ["hospitalAlert"]],
+
+    successMessage: "병원 예약 일정이 성공적으로 삭제되었습니다.",
+    errorMessage: "병원 예약 일정 삭제 실패",
   });
 }

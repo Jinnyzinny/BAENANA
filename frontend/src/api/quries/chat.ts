@@ -1,5 +1,5 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Alert } from "react-native";
+import { useQuery } from "@tanstack/react-query";
+import { useApiMutation } from "../../hooks/useApiMutation";
 import { addChat, getChat, getChatList, getSessionId } from "../chat";
 
 // [GET] 세션 id 조회(새로운 채팅 생성)
@@ -40,9 +40,7 @@ export function useGetChat(sessionId: string | null, isEnabled: boolean) {
 
 // [POST] 챗봇 채팅
 export function useAddChat() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
+  return useApiMutation({
     mutationFn: ({
       inputType,
       content,
@@ -52,13 +50,8 @@ export function useAddChat() {
       content: string;
       sessionId: string;
     }) => addChat(inputType, content, sessionId),
-    onSuccess: (data) => {
-      console.log("☑️챗봇 채팅 성공: ", data);
-      queryClient.invalidateQueries({ queryKey: ["chatList"] });
-    },
-    onError: (error) => {
-      console.log("✖️챗봇 채팅 실패: ", error);
-      Alert.alert("챗봇 채팅 실패", "잠시 후 다시 시도해주세요.");
-    },
+    keysToInvalidate: [["chatList"]],
+    successMessage: null,
+    errorMessage: "챗봇 채팅 실패",
   });
 }
