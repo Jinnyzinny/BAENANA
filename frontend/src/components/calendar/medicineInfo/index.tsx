@@ -206,7 +206,6 @@ export function MedicineInfo({ data }: { data: Daily }) {
                     </Text>
                     <View className="mx-5">
                       <DateDropdown
-                        title="복용 시작일"
                         year={startYear}
                         month={startMonth}
                         day={startDay}
@@ -222,7 +221,6 @@ export function MedicineInfo({ data }: { data: Daily }) {
                     </Text>
                     <View className="mx-5">
                       <DateDropdown
-                        title="복용 종료일"
                         year={endYear}
                         month={endMonth}
                         day={endDay}
@@ -242,7 +240,6 @@ export function MedicineInfo({ data }: { data: Daily }) {
                         className="mx-5 flex-row items-center gap-3"
                       >
                         <TimeDropdown
-                          title="복용 시간"
                           hour={item.time?.getHours() ?? 9}
                           minute={item.time?.getMinutes() ?? 0}
                           onChange={(d) => handleTimeChange(item.id, d)}

@@ -1,20 +1,18 @@
 import { ChevronDown } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
-import { InteractionManager, Text, TouchableOpacity, View } from "react-native";
-import DatePicker from "react-native-date-picker";
+import { Text, TouchableOpacity, View } from "react-native";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 export function TimeDropdown({
-  title,
   onChange,
   hour,
   minute,
 }: {
-  title: string;
   onChange: (time: Date) => void;
   hour?: number;
   minute?: number;
 }) {
-  function getInitialTime() {
+  const getInitialTime = () => {
     const now = new Date();
     return new Date(
       now.getFullYear(),
@@ -23,10 +21,10 @@ export function TimeDropdown({
       hour ?? 9,
       minute ?? 0
     );
-  }
+  };
 
-  const [open, setOpen] = useState(false);
   const [time, setTime] = useState(getInitialTime());
+  const [isPickerVisible, setPickerVisible] = useState(false);
 
   useEffect(() => {
     const updatedTime = getInitialTime();
@@ -34,14 +32,16 @@ export function TimeDropdown({
     onChange(updatedTime);
   }, [hour, minute]);
 
+  const handleConfirm = (selectedTime: Date) => {
+    setPickerVisible(false);
+    setTime(selectedTime);
+    onChange(selectedTime);
+  };
+
   return (
     <View className="flex-1 pb-3 border-b border-neutral-400">
       <TouchableOpacity
-        onPress={() => {
-          InteractionManager.runAfterInteractions(() => {
-            setOpen(true);
-          });
-        }}
+        onPress={() => setPickerVisible(true)}
         className="flex-row mx-3 items-center justify-between"
       >
         <Text className="text-lg font-bold text-violet-400">
@@ -50,25 +50,14 @@ export function TimeDropdown({
             minute: "2-digit",
           })}
         </Text>
-        <ChevronDown color="#A3A3A3" size={20} />
+        <ChevronDown size={18} color="#7C3AED" />
       </TouchableOpacity>
-
-      <DatePicker
-        modal
-        open={open}
-        date={time}
+      <DateTimePickerModal
+        isVisible={isPickerVisible}
         mode="time"
-        locale="ko"
-        title={title}
-        confirmText="확인"
-        cancelText="취소"
-        onConfirm={(selectedTime) => {
-          setOpen(false);
-          setTime(selectedTime);
-          onChange(selectedTime);
-        }}
-        onCancel={() => setOpen(false)}
-        is24hourSource="locale"
+        date={time}
+        onConfirm={handleConfirm}
+        onCancel={() => setPickerVisible(false)}
       />
     </View>
   );

@@ -138,7 +138,7 @@ export function MedicineBottomSheet({
         />
         <Text className="text-lg font-bold self-center">복용약 입력</Text>
       </View>
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}>
         <View className="mx-7 gap-7">
           {/* 복용약 이름 입력 */}
           <View className="gap-3">
@@ -171,7 +171,6 @@ export function MedicineBottomSheet({
                 year={year}
                 month={month}
                 day={day}
-                title="복용 시작일"
                 onChange={setStartDate}
               />
             </View>
@@ -187,7 +186,6 @@ export function MedicineBottomSheet({
                 year={year}
                 month={month}
                 day={day}
-                title="복용 종료일"
                 onChange={setEndDate}
               />
             </View>
@@ -204,7 +202,6 @@ export function MedicineBottomSheet({
                 className="mx-5 flex-row justify-center items-center gap-3"
               >
                 <TimeDropdown
-                  title="복용 시간"
                   onChange={(date) => handleTimeChange(item.id, date)}
                 />
                 {reservationTimes.length < 3 &&

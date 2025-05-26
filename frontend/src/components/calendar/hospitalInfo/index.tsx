@@ -231,7 +231,6 @@ export function HospitalInfo({ data }: { data: Daily }) {
                         year={year}
                         month={month}
                         day={day}
-                        title="병원 예약 일시"
                         onChange={(date) => {
                           const copy = [...reservationDateList];
                           copy[index] = date;
@@ -248,7 +247,6 @@ export function HospitalInfo({ data }: { data: Daily }) {
                     </Text>
                     <View className="mx-5">
                       <TimeDropdown
-                        title="예약 시간"
                         hour={hour}
                         minute={minute}
                         onChange={(time) => {

@@ -75,7 +75,6 @@ export function PeriodBottomSheet({
                 year={startYear}
                 month={startMonth}
                 day={startDay}
-                title="월경 시작일"
                 onChange={setStartDate}
               />
             </View>
@@ -91,7 +90,6 @@ export function PeriodBottomSheet({
                 year={endYear}
                 month={endMonth}
                 day={endDay}
-                title="월경 종료일"
                 onChange={setEndDate}
               />
             </View>

@@ -132,7 +132,6 @@ export function HospitalBottomSheet({
                 year={year}
                 month={month}
                 day={day}
-                title="병원 예약 일시"
                 onChange={setReservationDate}
               />
             </View>
@@ -144,7 +143,7 @@ export function HospitalBottomSheet({
               예약 시간
             </Text>
             <View className="mx-5">
-              <TimeDropdown title="예약 시간" onChange={setReservationTime} />
+              <TimeDropdown onChange={setReservationTime} />
             </View>
           </View>
 
