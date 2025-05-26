@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Platform } from "react-native";
 import { check, PERMISSIONS, request, RESULTS } from "react-native-permissions";
-import { PermissionAlert } from "../utils/permissionAlert";
+import { permissionAlert } from "../utils/Alert";
 
 function isAuthorized(status: string): boolean {
   return status === RESULTS.GRANTED;
@@ -44,7 +44,7 @@ export function useStoragePermission() {
       // 권한이 거부된 상태인 경우 권한 부여 메시지 노출
       if (requestedStatus === RESULTS.BLOCKED) {
         console.log("[저장소 권한] BLOCKED");
-        PermissionAlert("저장소");
+        permissionAlert("저장소");
         setHasPermission(false);
         return;
       }

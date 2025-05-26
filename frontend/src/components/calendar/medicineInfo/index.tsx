@@ -8,16 +8,16 @@ import {
 } from "lucide-react-native";
 import { useRef, useState } from "react";
 import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { Daily } from "../../../types/Daily";
-import { parseDate } from "../../../utils/parseDate";
-import { parseTime } from "../../../utils/parseTime";
-import { CustomButton } from "../../common/customButton";
-import { DateDropdown } from "../../common/dateDropdown";
-import { TimeDropdown } from "../../common/timeDropdown";
 import {
   useDeleteMedicineReservation,
   useEditMedicineReservation,
 } from "../../../api/quries/medicine";
+import { Daily } from "../../../types/Daily";
+import { formatDateKST, parseDate } from "../../../utils/Date";
+import { parseTime } from "../../../utils/Time";
+import { CustomButton } from "../../common/customButton";
+import { DateDropdown } from "../../common/dateDropdown";
+import { TimeDropdown } from "../../common/timeDropdown";
 
 export function MedicineInfo({ data }: { data: Daily }) {
   const color = "#A3A3A3";
@@ -110,11 +110,12 @@ export function MedicineInfo({ data }: { data: Daily }) {
             return;
           }
 
-          const start = startDate.toISOString().split("T")[0]; // YYYY-MM-DD
-          const end = endDate.toISOString().split("T")[0]; // YYYY-MM-DD
-          const timeTaken = times.map(
-            (t) => t.time!.toTimeString().slice(0, 5) // "HH:mm"
-          );
+          const formatStartDate = formatDateKST(startDate);
+          const formatEndDate = formatDateKST(endDate);
+          const timeTaken = times.map((t) => {
+            const kstTime = new Date(t.time!.getTime() + 9 * 60 * 60 * 1000);
+            return kstTime.toISOString().slice(11, 16); // "HH:mm"
+          });
 
           // console.log(
           //   medicine.medication_id,
@@ -128,8 +129,8 @@ export function MedicineInfo({ data }: { data: Daily }) {
           editMedicineReservation({
             id: medicine.medication_id,
             medicineName,
-            startDate: start,
-            endDate: end,
+            startDate: formatStartDate,
+            endDate: formatEndDate,
             timeTaken,
             memo,
           });
@@ -306,18 +307,25 @@ export function MedicineInfo({ data }: { data: Daily }) {
                     <Text className="text-neutral-800 text-sm font-bold">
                       복용 시간
                     </Text>
-                    {times.map((item, i) => (
-                      <Text
-                        key={item.id}
-                        className="mx-5 text-lg font-bold text-violet-400"
-                      >
-                        {i + 1}.{" "}
-                        {item.time?.toLocaleTimeString("ko-KR", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </Text>
-                    ))}
+                    {times.map((item, i) => {
+                      const hours = item.time
+                        ?.getHours()
+                        .toString()
+                        .padStart(2, "0");
+                      const minutes = item.time
+                        ?.getMinutes()
+                        .toString()
+                        .padStart(2, "0");
+
+                      return (
+                        <Text
+                          key={item.id}
+                          className="mx-5 text-lg font-bold text-violet-400"
+                        >
+                          {i + 1}. {hours}:{minutes}
+                        </Text>
+                      );
+                    })}
                   </View>
 
                   {/* 메모 */}

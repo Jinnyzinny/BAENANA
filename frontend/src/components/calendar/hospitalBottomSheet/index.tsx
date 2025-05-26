@@ -1,8 +1,17 @@
 import { RefObject, useState } from "react";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { Modalize } from "react-native-modalize";
 import { useAddHospitalReservation } from "../../../api/quries/hospital";
+import { parseDateString } from "../../../utils/Date";
+import { formatDateTimeKST } from "../../../utils/Time";
 import { CustomButton } from "../../common/customButton";
 import { DateDropdown } from "../../common/dateDropdown";
 import { SelectTag } from "../../common/selectTag";
@@ -18,9 +27,7 @@ export function HospitalBottomSheet({
   selectedDate: string | null;
 }) {
   const [hospitalName, setHospitalName] = useState<string>("");
-  const year = Number(selectedDate?.slice(0, 4));
-  const month = Number(selectedDate?.slice(5, 7));
-  const day = Number(selectedDate?.slice(8, 10));
+  const { year, month, day } = parseDateString(selectedDate ?? "");
   const [reservationDate, setReservationDate] = useState<Date>(
     new Date(year, month - 1, day)
   );
@@ -41,10 +48,15 @@ export function HospitalBottomSheet({
   const { mutate: addHospitalReservation } = useAddHospitalReservation();
 
   function handleSave() {
+    if (!hospitalName) {
+      Alert.alert("입력 오류", "병원 이름을 입력해주세요.");
+    }
+
     if (hospitalName && reservationDate && reservationTime) {
-      const datePart = reservationDate.toISOString().split("T")[0];
-      const timePart = reservationTime.toTimeString().slice(0, 5);
-      const formattedDateTime = `${datePart}T${timePart}`;
+      const formattedDateTime = formatDateTimeKST(
+        reservationDate,
+        reservationTime
+      );
 
       const finalPurpose = purpose === "기타" ? purposeInput : purpose;
 

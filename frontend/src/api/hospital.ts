@@ -1,19 +1,19 @@
 import { FullHospitalReservation, HospitalAlert } from "../types/Hospital";
 import authClient from "./client/authClient";
 
-// 병원 예약 알림 메시지 조회
-export async function getHospitalAlert(): Promise<HospitalAlert> {
+// [GET] 병원 예약 알림 메시지 조회
+export async function getHospitalAlert(): Promise<HospitalAlert | null> {
   try {
     const response = await authClient.get("/home/reservation");
     console.log("병원 예약 알림 메시지 조회 성공: ", response.data);
     return response.data;
   } catch (error: unknown) {
     console.error("병원 예약 알림 메시지 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
-// 병원 예약 일정 등록
+// [GET] 병원 예약 일정 등록
 export async function addHospitalReservation(
   hospitalName: string,
   reservationDate: string,
@@ -29,26 +29,26 @@ export async function addHospitalReservation(
     return response.data;
   } catch (error: unknown) {
     console.error("병원 예약 일정 등록 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
-// 월별 병원 예약 일정 조회
+// [POST] 월별 병원 예약 일정 조회
 export async function getHospitalReservation(
   year: number,
   month: number
-): Promise<FullHospitalReservation> {
+): Promise<FullHospitalReservation | null> {
   try {
     const response = await authClient.get(`/calendar/ob_gyn/${year}/${month}`);
     console.log("월별 병원 예약 일정 조회 성공: ", response.data);
     return response.data;
   } catch (error: unknown) {
     console.error("월별 병원 예약 일정 조회 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
-// 병원 예약 일정 변경
+// [PATCH] 병원 예약 일정 변경
 export async function editHospitalReservation(
   id: number,
   hospitalName?: string,
@@ -68,11 +68,11 @@ export async function editHospitalReservation(
     return response.data;
   } catch (error: unknown) {
     console.error("병원 예약 일정 변경 실패: ", error);
-    throw error;
+    return null;
   }
 }
 
-// 병원 예약 일정 삭제
+// [DELETE] 병원 예약 일정 삭제
 export async function deleteHospitalReservation(id: number) {
   try {
     const response = await authClient.delete(`/calendar/ob_gyn/${id}`);
@@ -80,6 +80,6 @@ export async function deleteHospitalReservation(id: number) {
     return response.data;
   } catch (error: unknown) {
     console.error("병원 예약 일정 삭제 실패: ", error);
-    throw error;
+    return null;
   }
 }

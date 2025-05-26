@@ -2,6 +2,7 @@ import { API_BASE } from "@env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { Alert } from "react-native";
+import { client } from "./client";
 
 interface CustomAxiosRequestConfig extends AxiosRequestConfig {
   _retry?: boolean;
@@ -35,14 +36,14 @@ async function refreshingToken(): Promise<AxiosResponse> {
   const refreshToken = await AsyncStorage.getItem("refreshToken");
   console.log("리프레시 토큰 요청 시도: ", refreshToken);
   try {
-    const response = await authClient.post("/auth/refresh", {
-      refresh_token: refreshToken,
+    const response = await client.post("/auth/refresh", {
+      refreshToken: refreshToken,
     });
     console.log("☑️리프레시 토큰 요청 성공:", response.data);
     return response;
   } catch (error) {
     console.log("✖️리프레시 토큰 요청 실패:", error);
-    throw error;
+    return null;
   }
 }
 

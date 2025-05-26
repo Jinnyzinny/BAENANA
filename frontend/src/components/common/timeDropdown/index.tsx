@@ -1,32 +1,47 @@
 import { ChevronDown } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { InteractionManager, Text, TouchableOpacity, View } from "react-native";
 import DatePicker from "react-native-date-picker";
 
 export function TimeDropdown({
   title,
   onChange,
-  hour = 9,
-  minute = 0,
+  hour,
+  minute,
 }: {
   title: string;
   onChange: (time: Date) => void;
   hour?: number;
   minute?: number;
 }) {
+  function getInitialTime() {
+    const now = new Date();
+    return new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      hour ?? 9,
+      minute ?? 0
+    );
+  }
+
   const [open, setOpen] = useState(false);
-  const [time, setTime] = useState(new Date(0, 0, 0, hour, minute));
+  const [time, setTime] = useState(getInitialTime());
 
   useEffect(() => {
-    const newTime = new Date(0, 0, 0, hour, minute);
-    setTime(newTime);
-    onChange(newTime); // optional: 초기 설정을 부모에도 전달
+    const updatedTime = getInitialTime();
+    setTime(updatedTime);
+    onChange(updatedTime);
   }, [hour, minute]);
 
   return (
     <View className="flex-1 pb-3 border-b border-neutral-400">
       <TouchableOpacity
-        onPress={() => setOpen(true)}
+        onPress={() => {
+          InteractionManager.runAfterInteractions(() => {
+            setOpen(true);
+          });
+        }}
         className="flex-row mx-3 items-center justify-between"
       >
         <Text className="text-lg font-bold text-violet-400">

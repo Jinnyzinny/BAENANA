@@ -1,24 +1,44 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Alert } from "react-native";
-import { addChat, getChat, getChatList } from "../chat";
+import { addChat, getChat, getChatList, getSessionId } from "../chat";
 
-// 세션 목록 조회
+// [GET] 세션 id 조회(새로운 채팅 생성)
+// 불필요하게 여러 번 조회하지 않기 위해 props 추가
+export function useGetSessionId(isEnabled: boolean) {
+  return useQuery({
+    queryKey: ["sessionId"],
+    queryFn: () => getSessionId(),
+    enabled: isEnabled,
+  });
+}
+
+// [GET] 세션 목록 조회
 export function useGetChatList() {
   return useQuery({
     queryKey: ["chatList"],
     queryFn: () => getChatList(),
+    enabled: false,
   });
 }
 
-// 채팅 내역 조회 (세션 기준)
-export function useGetChat(sessionId: number) {
+// [GET] 채팅 내역 조회 (세션 기준)
+// 세션 목록에서 채팅을 조회하기 위해 props 추가
+// sessionId가 null이면 비활성화
+export function useGetChat(sessionId: string | null, isEnabled: boolean) {
   return useQuery({
     queryKey: ["chat", sessionId],
-    queryFn: () => getChat(sessionId),
+    queryFn: () => {
+      if (!sessionId) {
+        console.log("채팅 sessionId: null");
+        return null;
+      }
+      return getChat(sessionId);
+    },
+    enabled: isEnabled && !!sessionId,
   });
 }
 
-// 챗봇 채팅
+// [POST] 챗봇 채팅
 export function useAddChat() {
   const queryClient = useQueryClient();
 
@@ -30,7 +50,7 @@ export function useAddChat() {
     }: {
       inputType: string;
       content: string;
-      sessionId: number;
+      sessionId: string;
     }) => addChat(inputType, content, sessionId),
     onSuccess: (data) => {
       console.log("☑️챗봇 채팅 성공: ", data);
@@ -38,7 +58,7 @@ export function useAddChat() {
     },
     onError: (error) => {
       console.log("✖️챗봇 채팅 실패: ", error);
-      Alert.alert("FAQ 작성 실패", "잠시 후 다시 시도해주세요.");
+      Alert.alert("챗봇 채팅 실패", "잠시 후 다시 시도해주세요.");
     },
   });
 }

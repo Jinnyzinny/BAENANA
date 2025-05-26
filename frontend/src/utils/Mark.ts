@@ -1,5 +1,6 @@
 import { eachDayOfInterval, format, parseISO } from "date-fns";
 
+// 각 날짜별로 표시할 점 색상 정보를 매핑하는 함수
 export function getDotDates(
   hospitalDates: string[],
   medicineRanges: { start_date: string; end_date: string }[]
@@ -27,6 +28,7 @@ export function getDotDates(
   return dotsMap;
 }
 
+// 주어진 기간에 커스텀 스타일을 적용하는 함수
 export function getPeriodDates(
   period: { start: string; end: string },
   strongColor: string,

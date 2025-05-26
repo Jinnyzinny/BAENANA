@@ -1,35 +1,17 @@
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ChevronRight } from "lucide-react-native";
-import { Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { SettingsStackParamList } from "../../../navigation/types";
-
-const dummyNotice = [
-  {
-    id: 1,
-    type: "업데이트",
-    title: "iOS 업데이트 관련",
-    date: "2025.04.25",
-  },
-  {
-    id: 2,
-    type: "업데이트",
-    title: "안드로이드 업데이트 관련",
-    date: "2025.04.24",
-  },
-  {
-    id: 3,
-    type: "보안",
-    title: "안드로이드 보안 관련",
-    date: "2025.04.23",
-  },
-];
+import { useGetNoticeList } from "../../../api/quries/notice";
 
 export function Notice() {
   const navigation =
     useNavigation<NativeStackNavigationProp<SettingsStackParamList>>();
   const size: number = 22;
   const color: string = "#A1A1A1";
+
+  const { data } = useGetNoticeList();
 
   return (
     <View className="bg-white p-5 rounded-xl gap-3">
@@ -39,16 +21,21 @@ export function Notice() {
           <ChevronRight size={size} color={color} />
         </TouchableOpacity>
       </View>
-      <View className="gap-1">
-        {dummyNotice.map((item) => (
-          <View key={item.id} className="flex-row gap-3">
-            <Text className="text-sm text-neutral-600">{item.date}</Text>
-            <Text className="text-sm text-neutral-600">
-              [{item.type}] {item.title}
-            </Text>
-          </View>
-        ))}
-      </View>
+      {data && (
+        <FlatList
+          data={data.slice(0, 5)}
+          renderItem={({ item, index }) => (
+            <View className={index === data.length ? "" : "pb-1"}>
+              <View className="flex-row items-center gap-2">
+                <Text className="text-neutral-600 text-sm">
+                  {item.createdAt.slice(0, 10).replaceAll("-", ".")}
+                </Text>
+                <Text className="text-neutral-600 text-sm">{item.title}</Text>
+              </View>
+            </View>
+          )}
+        />
+      )}
     </View>
   );
 }

@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Alert, ToastAndroid } from "react-native";
 import { addFaq, deleteFaq, editFaq, getFaqDetail, getFaqList } from "../faq";
-import { Alert } from "react-native";
 
-// FAQ 목록 조회
+// [GET] Faq 목록 조회
 export function useGetFaqList() {
   return useQuery({
     queryKey: ["faqList"],
@@ -11,7 +11,7 @@ export function useGetFaqList() {
   });
 }
 
-// FAQ 상세 조회
+// [GET] Faq 상세 조회
 export function useGetFaqDetail(faqId: number) {
   return useQuery({
     queryKey: ["faqDetail", faqId],
@@ -19,7 +19,8 @@ export function useGetFaqDetail(faqId: number) {
   });
 }
 
-// [관리자] FAQ 작성
+// 관리자
+// [POST] Faq 작성
 export function useAddFaq() {
   const queryClient = useQueryClient();
 
@@ -27,17 +28,22 @@ export function useAddFaq() {
     mutationFn: ({ question, answer }: { question: string; answer: string }) =>
       addFaq(question, answer),
     onSuccess: (data) => {
-      console.log("☑️FAQ 작성 성공: ", data);
+      console.log("☑️Faq 작성 성공: ", data);
+      ToastAndroid.showWithGravity(
+        "Faq가 성공적으로 등록되었습니다.",
+        ToastAndroid.SHORT,
+        ToastAndroid.TOP
+      );
       queryClient.invalidateQueries({ queryKey: ["faqList"] });
     },
     onError: (error) => {
-      console.log("✖️FAQ 작성 실패: ", error);
-      Alert.alert("FAQ 작성 실패", "잠시 후 다시 시도해주세요.");
+      console.log("✖️Faq 작성 실패: ", error);
+      Alert.alert("Faq 작성 실패", "잠시 후 다시 시도해주세요.");
     },
   });
 }
 
-// [관리자] FAQ 변경
+// [PATCH] Faq 변경
 export function useEditFaq() {
   const queryClient = useQueryClient();
 
@@ -51,30 +57,43 @@ export function useEditFaq() {
       question?: string;
       answer?: string;
     }) => editFaq(faqId, question, answer),
-    onSuccess: (data) => {
-      console.log("☑️FAQ 변경 성공: ", data);
+    onSuccess: (data, variables) => {
+      console.log("☑️Faq 변경 성공: ", data);
+      ToastAndroid.showWithGravity(
+        "Faq가 성공적으로 변경되었습니다.",
+        ToastAndroid.SHORT,
+        ToastAndroid.TOP
+      );
       queryClient.invalidateQueries({ queryKey: ["faqList"] });
+      queryClient.invalidateQueries({
+        queryKey: ["faqDetail", variables.faqId],
+      });
     },
     onError: (error) => {
-      console.log("✖️FAQ 변경 실패: ", error);
-      Alert.alert("FAQ 변경 실패", "잠시 후 다시 시도해주세요.");
+      console.log("✖️Faq 변경 실패: ", error);
+      Alert.alert("Faq 변경 실패", "잠시 후 다시 시도해주세요.");
     },
   });
 }
 
-// [관리자] FAQ 삭제
+// [DELETE] Faq 삭제
 export function useDeleteFaq() {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (faqId: number) => deleteFaq(faqId),
     onSuccess: () => {
-      console.log("☑️FAQ 삭제 성공");
+      console.log("☑️Faq 삭제 성공");
+      ToastAndroid.showWithGravity(
+        "Faq가 성공적으로 삭제되었습니다.",
+        ToastAndroid.SHORT,
+        ToastAndroid.TOP
+      );
       queryClient.invalidateQueries({ queryKey: ["faqList"] });
     },
     onError: (error) => {
-      console.log("✖️FAQ 삭제 실패: ", error);
-      Alert.alert("FAQ 삭제 실패", "잠시 후 다시 시도해주세요.");
+      console.log("✖️Faq 삭제 실패: ", error);
+      Alert.alert("Faq 삭제 실패", "잠시 후 다시 시도해주세요.");
     },
   });
 }

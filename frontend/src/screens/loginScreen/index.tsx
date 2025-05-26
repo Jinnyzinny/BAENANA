@@ -7,8 +7,6 @@ import { LoginButton } from "../../components/login/loginButton";
 export function LoginScreen() {
   const { mutate: kakaoLogin } = useKaKaoLogin();
 
-  function handleLogin() {}
-
   async function handleKakaoLogin() {
     try {
       // 카카오에서 토큰을 받아옴
@@ -30,12 +28,12 @@ export function LoginScreen() {
         className="w-28 h-28 self-center"
       />
       <View className="gap-7 mx-5">
-        <Text className="self-center text-neutral-800 text-sm">
+        <Text className="self-center text-neutral-600 text-sm">
           SNS 계정으로 로그인
         </Text>
         <View className="gap-5">
           <LoginButton type="kakao" onPress={handleKakaoLogin} />
-          <LoginButton type="google" onPress={handleLogin} />
+          {/* <LoginButton type="google" onPress={() => {}} /> */}
         </View>
       </View>
     </SafeAreaView>

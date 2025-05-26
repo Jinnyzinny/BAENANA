@@ -62,7 +62,7 @@ export function InfoCard({
               <View className="flex-1 p-3 rounded-xl gap-7 bg-white shadow-neutral-300">
                 <Image
                   source={{ uri: item.imageUrl }}
-                  className="w-full h-28 rounded-lg"
+                  className="w-full h-32 rounded-lg"
                 />
                 <Text className="text-neutral-800 font-bold">{item.title}</Text>
               </View>

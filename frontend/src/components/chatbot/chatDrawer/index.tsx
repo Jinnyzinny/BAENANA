@@ -1,51 +1,81 @@
 import {
   DrawerContentComponentProps,
   DrawerContentScrollView,
+  useDrawerStatus,
 } from "@react-navigation/drawer";
-import { ArrowLeftFromLine } from "lucide-react-native";
-import { Text, TouchableOpacity, View } from "react-native";
-import { FormatTime } from "../../../utils/formatTime";
+import { ArrowLeftFromLine, RotateCcw } from "lucide-react-native";
+import { useEffect } from "react";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { useGetChatList } from "../../../api/quries/chat";
+import { formatTime } from "../../../utils/Time";
 
 export function ChatDrawer(props: DrawerContentComponentProps) {
-  const dummyChats = [
-    { id: "1", title: "첫 번째 대화", createAt: "2025-03-21T12:17:02.123Z" },
-    { id: "2", title: "두 번째 대화", createAt: "2025-04-12T12:19:02.123Z" },
-    { id: "3", title: "세 번째 대화", createAt: "2025-04-19T12:25:02.123Z" },
-    { id: "4", title: "네 번째 대화", createAt: "2025-04-20T12:31:02.123Z" },
-    { id: "5", title: "다섯 번째 대화", createAt: "2025-04-21T11:10:02.123Z" },
-  ];
+  const drawerStatus = useDrawerStatus();
+  const { data: chatData, refetch: refetchChat } = useGetChatList();
+
+  async function handleRotate() {
+    props.navigation.navigate("Chat", {
+      sessionId: null,
+    });
+    console.log("sessionId: null");
+    props.navigation.closeDrawer();
+  }
+
+  useEffect(() => {
+    if (drawerStatus === "open") {
+      refetchChat();
+    }
+  }, [drawerStatus]);
 
   return (
     <View className="flex-1 ">
       <DrawerContentScrollView {...props}>
-        <View className="p-3 gap-5">
+        <View className="p-3 gap-10">
           <Text className="text-neutral-800 font-bold text-lg">채팅 목록</Text>
-          <View className="gap-3">
-            {dummyChats.map((chat) => (
-              <TouchableOpacity
-                key={chat.id}
-                onPress={() => {
-                  props.navigation.navigate("Chat", { chatId: chat.id });
-                  props.navigation.closeDrawer();
-                }}
-              >
-                <View className="flex-row items-center justify-between">
-                  <Text className="text-neutral-800">{chat.title}</Text>
-                  <Text className="text-neutral-800">
-                    {FormatTime(chat.createAt)}
-                  </Text>
+          {chatData && (
+            <FlatList
+              data={chatData.slice(0, 10)}
+              scrollEnabled={false}
+              renderItem={({ item, index }) => (
+                <View
+                  className={`${index < chatData.length - 1 ? "pb-4" : ""}`}
+                >
+                  <View className="flex-row items-center justify-between">
+                    <TouchableOpacity
+                      key={item.lastTime}
+                      onPress={() => {
+                        props.navigation.navigate("Chat", {
+                          sessionId: item.sessionId,
+                        });
+                        props.navigation.closeDrawer();
+                      }}
+                    >
+                      <Text className="text-neutral-800">
+                        {item.lastMessage.length > 20
+                          ? `${item.lastMessage.slice(0, 20)}...`
+                          : item.lastMessage}
+                      </Text>
+                    </TouchableOpacity>
+                    <Text className="text-neutral-400">
+                      {formatTime(item.lastTime)}
+                    </Text>
+                  </View>
                 </View>
-              </TouchableOpacity>
-            ))}
-          </View>
+              )}
+            />
+          )}
         </View>
       </DrawerContentScrollView>
-      <TouchableOpacity
-        className="px-5 py-10 self-end"
-        onPress={() => props.navigation.closeDrawer()}
-      >
-        <ArrowLeftFromLine color={"#737373"} size={22} />
-      </TouchableOpacity>
+      <View className="flex-row px-7 pb-10 items-center justify-between">
+        <View className="self-end">
+          <TouchableOpacity onPress={handleRotate}>
+            <RotateCcw color={"#737373"} size={20} />
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity onPress={() => props.navigation.closeDrawer()}>
+          <ArrowLeftFromLine color={"#737373"} size={22} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }

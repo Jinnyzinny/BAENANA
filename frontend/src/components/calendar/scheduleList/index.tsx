@@ -35,7 +35,7 @@ export function ScheduleList({
               key={item.medication_id}
               className="flex-row items-center gap-3"
             >
-              <View className="w-3" />
+              <View className="w-4" />
               <View
                 style={{
                   width: 6,
@@ -62,7 +62,7 @@ export function ScheduleList({
             key={item.reservation_id}
             className="flex-row items-center gap-3"
           >
-            <View className="w-3" />
+            <View className="w-4" />
             <View
               style={{
                 width: 6,
@@ -82,6 +82,13 @@ export function ScheduleList({
             </View>
           </View>
         ))}
+
+      {/* 정보가 입력되지 않은 경우 */}
+      {medicineReservation.length === 0 && hospitalReservation.length == 0 && (
+        <Text className="text-neutral-400 text-sm">
+          입력된 정보가 없습니다.
+        </Text>
+      )}
     </View>
   );
 }

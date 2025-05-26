@@ -1,10 +1,14 @@
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback, useRef } from "react";
-import { ScrollView, ToastAndroid, View } from "react-native";
+import { Image, ScrollView, Text, ToastAndroid, View } from "react-native";
 import RNFS from "react-native-fs";
 import RNHTMLtoPDF from "react-native-html-to-pdf";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ViewShot, { captureRef } from "react-native-view-shot";
+import {
+  useGetChildbearingAge,
+  useGetPredictedPeriod,
+} from "../../api/quries/period";
 import {
   useGetOvulationTest,
   useGetPeriodAlert,
@@ -23,10 +27,6 @@ import { OvulationInfo } from "../../components/report/ovulationInfo";
 import { RecentPeriod } from "../../components/report/recentPeriod";
 import { Summary } from "../../components/report/summary";
 import { useStoragePermission } from "../../hooks/useStoragePermission";
-import {
-  useGetChildbearingAge,
-  useGetPredictedPeriod,
-} from "../../api/quries/period";
 
 export function ReportScreen() {
   const hasPermission = useStoragePermission();
@@ -140,9 +140,10 @@ export function ReportScreen() {
       console.log("실제 다운로드 폴더 경로:", finalPath);
 
       // 7. 저장 완료 알림
-      ToastAndroid.show(
+      ToastAndroid.showWithGravity(
         "PDF가 Downloads 폴더에 저장되었습니다.",
-        ToastAndroid.SHORT
+        ToastAndroid.SHORT,
+        ToastAndroid.TOP
       );
     } catch (error) {
       console.error("PDF 생성 중 오류 발생: ", error);
@@ -212,7 +213,9 @@ export function ReportScreen() {
               {periodInfoData?.data && (
                 <View className="flex-row gap-3">
                   <BeforePeriod
-                    type="warn"
+                    type={
+                      periodInfoData.data.is_cycle_normal ? "normal" : "warn"
+                    }
                     title="월경 주기"
                     date={
                       periodInfoData?.data.cycle
@@ -221,7 +224,9 @@ export function ReportScreen() {
                     }
                   />
                   <BeforePeriod
-                    type="normal"
+                    type={
+                      periodInfoData.data.is_period_normal ? "normal" : "warn"
+                    }
                     title="월경 기간"
                     date={
                       periodInfoData?.data.period
@@ -270,12 +275,59 @@ export function ReportScreen() {
           {reportData?.data && <Summary data={reportData.data} />}
           <View />
 
+          {/* 입력된 정보가 없는 경우 */}
+          {!periodAlertData?.data?.message &&
+            !periodInfoData?.data &&
+            !ovulationTestData?.data &&
+            !recentPeriodData?.data &&
+            !recentMedicineData?.data &&
+            !reportData?.data &&
+            !childbearingAgeData?.data &&
+            !predictedPeriodData?.data && (
+              <>
+                <View
+                  className="flex-1 items-center gap-3"
+                  style={{ marginVertical: 150 }}
+                >
+                  <Image
+                    source={require("../..//assets/images/mascot_monocle.png")}
+                    style={{ width: 100, height: 110 }}
+                  />
+                  <View className="items-center gap-1">
+                    <Text className="text-neutral-600 text-sm mt-5">
+                      배나나에 입력된 정보가 없어요.
+                    </Text>
+                    <View className="flex-row">
+                      <Text className="text-neutral-600 text-sm">
+                        캘린더에서{" "}
+                      </Text>
+                      <Text className="text-violet-700 font-bold text-sm">
+                        "월경일 정보"
+                      </Text>
+                      <Text className="text-neutral-600 text-sm">
+                        를 입력해주세요.
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              </>
+            )}
+
           {/* 버튼 */}
-          <CustomButton
-            fill={true}
-            content="PDF로 저장"
-            onPress={handleCaptureToPdf}
-          />
+          {(!!periodAlertData?.data?.message ||
+            !!periodInfoData?.data ||
+            !!ovulationTestData?.data ||
+            !!recentPeriodData?.data ||
+            !!recentMedicineData?.data ||
+            !!reportData?.data ||
+            !!childbearingAgeData?.data ||
+            !!predictedPeriodData?.data) && (
+            <CustomButton
+              fill={true}
+              content="PDF로 저장"
+              onPress={handleCaptureToPdf}
+            />
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>

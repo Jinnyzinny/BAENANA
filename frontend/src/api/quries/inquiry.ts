@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Alert, ToastAndroid } from "react-native";
 import {
   addAdminInquiry,
   addInquiry,
@@ -11,10 +12,26 @@ import {
   getInquiryDetail,
   getInquiryList,
 } from "../inquiry";
-import { Alert } from "react-native";
 
 // 사용자
-// [사용자] 문의사항 등록
+
+// [GET] 문의사항 목록 조회
+export function useGetInquiryList() {
+  return useQuery({
+    queryKey: ["inquiryList"],
+    queryFn: () => getInquiryList(),
+  });
+}
+
+// [GET] 문의사항 상세 조회
+export function useGetInquiryDetail(inquiryId: number) {
+  return useQuery({
+    queryKey: ["inquiryDetail", inquiryId],
+    queryFn: () => getInquiryDetail(inquiryId),
+  });
+}
+
+// [POST] 문의사항 등록
 export function useAddInquiry() {
   const queryClient = useQueryClient();
 
@@ -28,6 +45,11 @@ export function useAddInquiry() {
     }) => addInquiry(title, questionContent),
     onSuccess: (data) => {
       console.log("☑️[사용자] 문의사항 등록 성공: ", data);
+      ToastAndroid.showWithGravity(
+        "문의사항이 성공적으로 등록되었습니다.",
+        ToastAndroid.SHORT,
+        ToastAndroid.TOP
+      );
       queryClient.invalidateQueries({ queryKey: ["inquiryList"] });
     },
     onError: (error) => {
@@ -37,23 +59,7 @@ export function useAddInquiry() {
   });
 }
 
-// [사용자] 문의사항 목록 조회
-export function useGetInquiryList() {
-  return useQuery({
-    queryKey: ["inquiryList"],
-    queryFn: () => getInquiryList(),
-  });
-}
-
-// [사용자] 문의사항 상세 조회
-export function useGetInquiryDetail(inquiryId: number) {
-  return useQuery({
-    queryKey: ["inquiryDetail", inquiryId],
-    queryFn: () => getInquiryDetail(inquiryId),
-  });
-}
-
-// [사용자] 문의사항 변경
+// [PATCH] 문의사항 변경
 export function useEditInquiry() {
   const queryClient = useQueryClient();
 
@@ -67,9 +73,17 @@ export function useEditInquiry() {
       title?: string;
       questionContent?: string;
     }) => editInquiry(inquiryId, title, questionContent),
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       console.log("☑️[사용자] 문의사항 변경 성공: ", data);
+      ToastAndroid.showWithGravity(
+        "문의사항이 성공적으로 변경되었습니다.",
+        ToastAndroid.SHORT,
+        ToastAndroid.TOP
+      );
       queryClient.invalidateQueries({ queryKey: ["inquiryList"] });
+      queryClient.invalidateQueries({
+        queryKey: ["inquiryDetail", variables.inquiryId],
+      });
     },
     onError: (error) => {
       console.log("✖️[사용자] 문의사항 변경 실패: ", error);
@@ -78,7 +92,7 @@ export function useEditInquiry() {
   });
 }
 
-// [사용자] 문의사항 삭제
+// [DELETE] 문의사항 삭제
 export function useDeleteInquiry() {
   const queryClient = useQueryClient();
 
@@ -86,6 +100,11 @@ export function useDeleteInquiry() {
     mutationFn: (inquiryId: number) => deleteInquiry(inquiryId),
     onSuccess: () => {
       console.log("☑️[사용자] 문의사항 삭제 성공");
+      ToastAndroid.showWithGravity(
+        "문의사항이 성공적으로 삭제되었습니다.",
+        ToastAndroid.SHORT,
+        ToastAndroid.TOP
+      );
       queryClient.invalidateQueries({ queryKey: ["inquiryList"] });
     },
     onError: (error) => {
@@ -96,7 +115,7 @@ export function useDeleteInquiry() {
 }
 
 // 관리자
-// [관리자] 문의사항 목록 조회
+// [GET] 문의사항 목록 조회
 export function useGetAdminInquiryList() {
   return useQuery({
     queryKey: ["adminInquiryList"],
@@ -104,7 +123,7 @@ export function useGetAdminInquiryList() {
   });
 }
 
-// [관리자] 문의사항 상세 조회
+// [GET] 문의사항 상세 조회
 export function useGetAdminInquiryDetail(inquiryId: number) {
   return useQuery({
     queryKey: ["adminInquiryDetail", inquiryId],
@@ -112,7 +131,7 @@ export function useGetAdminInquiryDetail(inquiryId: number) {
   });
 }
 
-// [관리자] 문의사항 답변 등록
+// [POST] 문의사항 답변 등록
 export function useAddAdminInquiry() {
   const queryClient = useQueryClient();
 
@@ -124,9 +143,17 @@ export function useAddAdminInquiry() {
       inquiryId: number;
       answerContent: string;
     }) => addAdminInquiry(inquiryId, answerContent),
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       console.log("☑️[관리자] 문의사항 답변 등록 성공: ", data);
+      ToastAndroid.showWithGravity(
+        "답변이 성공적으로 등록되었습니다.",
+        ToastAndroid.SHORT,
+        ToastAndroid.TOP
+      );
       queryClient.invalidateQueries({ queryKey: ["adminInquiryList"] });
+      queryClient.invalidateQueries({
+        queryKey: ["adminInquiryDetail", variables.inquiryId],
+      });
     },
     onError: (error) => {
       console.log("✖️[관리자] 문의사항 답변 등록 실패: ", error);
@@ -135,7 +162,7 @@ export function useAddAdminInquiry() {
   });
 }
 
-// [관리자] 문의사항 답변 변경
+// [PATCH] 문의사항 답변 변경
 export function useEditAdminInquiry() {
   const queryClient = useQueryClient();
 
@@ -147,9 +174,17 @@ export function useEditAdminInquiry() {
       inquiryId: number;
       answerContent: string;
     }) => editAdminInquiry(inquiryId, answerContent),
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       console.log("☑️[관리자] 문의사항 답변 변경 성공: ", data);
+      ToastAndroid.showWithGravity(
+        "답변이 성공적으로 변경되었습니다.",
+        ToastAndroid.SHORT,
+        ToastAndroid.TOP
+      );
       queryClient.invalidateQueries({ queryKey: ["adminInquiryList"] });
+      queryClient.invalidateQueries({
+        queryKey: ["adminInquiryDetail", variables.inquiryId],
+      });
     },
     onError: (error) => {
       console.log("✖️[관리자] 문의사항 답변 변경 실패: ", error);
@@ -158,7 +193,7 @@ export function useEditAdminInquiry() {
   });
 }
 
-// [관리자] 문의사항 답변 삭제
+// [DELETE] 문의사항 답변 삭제
 export function useDeleteAdminInquiry() {
   const queryClient = useQueryClient();
 
@@ -166,6 +201,11 @@ export function useDeleteAdminInquiry() {
     mutationFn: (inquiryId: number) => deleteAdminInquiry(inquiryId),
     onSuccess: () => {
       console.log("☑️[관리자] 문의사항 답변 삭제 성공");
+      ToastAndroid.showWithGravity(
+        "답변이 성공적으로 삭제되었습니다.",
+        ToastAndroid.SHORT,
+        ToastAndroid.TOP
+      );
       queryClient.invalidateQueries({ queryKey: ["adminInquiryList"] });
     },
     onError: (error) => {

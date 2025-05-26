@@ -1,11 +1,13 @@
 import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { HeaderLogo } from "../../components/common/headerLogo";
-import { TabMenu } from "../../components/common/tabMenu";
-import { useState } from "react";
+import { AdminInquriy } from "../../components/inquiry/adminInquriy";
+import { UserInquriy } from "../../components/inquiry/userInquriy";
+import { useLoginStore } from "../../store/loginStore";
 
 export function InquriyScreen() {
-  const [selectedMenu, setSelectedMenu] = useState<string>("inquriy");
+  const { user } = useLoginStore();
+  // console.log("계정: ", user?.role);
 
   return (
     <SafeAreaView>
@@ -20,15 +22,12 @@ export function InquriyScreen() {
             </Text>
           </View>
           <View className="m-1" />
-          <TabMenu
-            tabs={[
-              { key: "inquriy", label: "문의 하기" },
-              { key: "list", label: "문의 내역" },
-            ]}
-            onSelect={(key) => {
-              setSelectedMenu(key);
-            }}
-          />
+
+          {/* 사용자인 경우 */}
+          {user?.role === "USER" && <UserInquriy />}
+
+          {/* 관리자인 경우 */}
+          {user?.role === "ADMIN" && <AdminInquriy />}
         </View>
       </ScrollView>
     </SafeAreaView>

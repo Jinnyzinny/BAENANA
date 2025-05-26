@@ -12,8 +12,7 @@ import {
 } from "react-native";
 import { useGetDaily } from "../../../api/quries/daily";
 import { Daily } from "../../../types/Daily";
-import { FormatDate } from "../../../utils/formatDate";
-import { IsInRange } from "../../../utils/isInRange";
+import { formatFullDate, isInRange } from "../../../utils/Date";
 import { HospitalInfo } from "../hospitalInfo";
 import { MedicineInfo } from "../medicineInfo";
 import { PeriodInfo } from "../periodInfo";
@@ -106,7 +105,9 @@ export function ScheduleModal({
                   source={require("../../../assets/images/mascot.png")}
                   className="w-10 h-10"
                 />
-                <Text className="text-lg font-bold">{FormatDate(date)}</Text>
+                <Text className="text-lg font-bold">
+                  {formatFullDate(date)}
+                </Text>
               </View>
               <TouchableOpacity onPress={onClose}>
                 <X color="#A3A3A3" size={24} />
@@ -121,7 +122,7 @@ export function ScheduleModal({
                 {/* 실제 주기 데이터를 받아와서 그 날짜 안에 있는 경우 */}
 
                 {!data.prediction &&
-                  IsInRange(
+                  isInRange(
                     date,
                     data.menstrual_cycle.start_date,
                     data.menstrual_cycle.end_date
@@ -159,8 +160,8 @@ export function ScheduleModal({
                 )}
 
                 {/* 토글이 전부 안 나오는 경우  */}
-                {!data.prediction &&
-                  !IsInRange(
+                {data.prediction &&
+                  !isInRange(
                     date,
                     data.menstrual_cycle.start_date,
                     data.menstrual_cycle.end_date
@@ -180,12 +181,19 @@ export function ScheduleModal({
                       onPress={() => handleBottomSheet("medicine")}
                     />
                   </View>
-                  <View className="flex-row">
-                    <ScheduleButton
-                      type="period"
-                      onPress={() => handleBottomSheet("symptom")}
-                    />
-                  </View>
+
+                  {/* 선택한 날짜가 주기에 해당하는 경우 증상 입력 */}
+                  {!data.prediction &&
+                    isInRange(
+                      date,
+                      data.menstrual_cycle.start_date,
+                      data.menstrual_cycle.end_date
+                    ) && (
+                      <ScheduleButton
+                        type="period"
+                        onPress={() => handleBottomSheet("symptom")}
+                      />
+                    )}
                 </View>
               </View>
             </ScrollView>

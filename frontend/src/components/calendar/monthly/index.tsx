@@ -1,10 +1,10 @@
+import { ChevronLeft, ChevronRight } from "lucide-react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
-import { View, Text, TouchableOpacity } from "react-native";
-import { getDotDates, getPeriodDates } from "../../../utils/markUtils";
 import { HospitalReservation } from "../../../types/Hospital";
 import { Medicine } from "../../../types/Medicine";
-import { ChevronLeft, ChevronRight } from "lucide-react-native";
 import { Period } from "../../../types/Period";
+import { getDotDates, getPeriodDates } from "../../../utils/Mark";
 
 LocaleConfig.locales["ko"] = {
   monthNames: [
@@ -78,32 +78,35 @@ export function Monthly({
     }))
   );
 
+  // 월경일
   let periodMark: Record<string, any> = {};
   period.forEach((p) => {
     const mark = getPeriodDates(
       { start: p.start_date, end: p.end_date },
-      "#C4B4FF", // 진한 배경 (시작/종료)
+      "#C4B4FF", // 진한 배경 (시작 & 종료)
       "#FFFFFF", // 진한 텍스트
       "#DDD6FF", // 연한 배경 (중간)
-      "#525252" // 연한 텍스트
+      "#A684FF" // 연한 텍스트
     );
     periodMark = { ...periodMark, ...mark };
   });
 
+  // 월경 예정일
   const predictedPeriodMark = getPeriodDates(
     { start: predictedPeriod.startDate, end: predictedPeriod.endDate },
-    "#EDE9FE",
-    "#7008E7",
-    "#F5F3FF",
-    "#A684FF"
+    "#EDE9FE", // 진한 배경 (시작 & 종료)
+    "#7008E7", // 진한 텍스트
+    "#F5F3FF", // 연한 배경 (중간)
+    "#A684FF" // 연한 텍스트
   );
 
+  // 가임기
   const childbearingMark = getPeriodDates(
     { start: childbearingAge.startDate, end: childbearingAge.endDate },
-    "#FEF9C3",
-    "#262626",
-    "#FEFCE8",
-    "#525252"
+    "#FEF9C3", // 진한 배경 (시작 & 종료)
+    "#262626", // 진한 텍스트
+    "#FEFCE8", // 연한 배경 (중간)
+    "#525252" // 연한 텍스트
   );
 
   const markedDates: any = {
