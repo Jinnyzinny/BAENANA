@@ -1,7 +1,8 @@
 import { Alert } from "react-native";
 import { openSettings } from "react-native-permissions";
 
-export function PermissionAlert(name: string) {
+// 권한 요청을 하는 함수
+export function permissionAlert(name: string) {
   Alert.alert(
     `${name} 권한이 필요합니다.`,
     `설정에서 ${name} 권한을 허용해주세요.`,

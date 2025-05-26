@@ -6,7 +6,7 @@ import {
   useEditHospitalReservation,
 } from "../../../api/quries/hospital";
 import { Daily } from "../../../types/Daily";
-import { FormatDateTimeKST } from "../../../utils/formatTime";
+import { formatDateTimeKST } from "../../../utils/Time";
 import { CustomButton } from "../../common/customButton";
 import { DateDropdown } from "../../common/dateDropdown";
 import { SelectTag } from "../../common/selectTag";
@@ -118,7 +118,7 @@ export function HospitalInfo({ data }: { data: Daily }) {
       return;
     }
 
-    const formattedDateTime = FormatDateTimeKST(date, time);
+    const formattedDateTime = formatDateTimeKST(date, time);
     // console.log(id, hospitalName, formattedDateTime, purpose);
     editHospitalReservation({
       id,

@@ -7,7 +7,7 @@ import { ArrowLeftFromLine, RotateCcw } from "lucide-react-native";
 import { useEffect } from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { useGetChatList } from "../../../api/quries/chat";
-import { FormatTime } from "../../../utils/formatTime";
+import { formatTime } from "../../../utils/Time";
 
 export function ChatDrawer(props: DrawerContentComponentProps) {
   const drawerStatus = useDrawerStatus();
@@ -57,7 +57,7 @@ export function ChatDrawer(props: DrawerContentComponentProps) {
                       </Text>
                     </TouchableOpacity>
                     <Text className="text-neutral-400">
-                      {FormatTime(item.lastTime)}
+                      {formatTime(item.lastTime)}
                     </Text>
                   </View>
                 </View>

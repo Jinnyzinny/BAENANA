@@ -4,7 +4,7 @@ import { Calendar, LocaleConfig } from "react-native-calendars";
 import { HospitalReservation } from "../../../types/Hospital";
 import { Medicine } from "../../../types/Medicine";
 import { Period } from "../../../types/Period";
-import { getDotDates, getPeriodDates } from "../../../utils/markUtils";
+import { getDotDates, getPeriodDates } from "../../../utils/Mark";
 
 LocaleConfig.locales["ko"] = {
   monthNames: [

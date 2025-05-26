@@ -10,7 +10,8 @@ import {
 import { TextInput } from "react-native-gesture-handler";
 import { Modalize } from "react-native-modalize";
 import { useAddHospitalReservation } from "../../../api/quries/hospital";
-import { FormatDateTimeKST } from "../../../utils/formatTime";
+import { parseDateString } from "../../../utils/Date";
+import { formatDateTimeKST } from "../../../utils/Time";
 import { CustomButton } from "../../common/customButton";
 import { DateDropdown } from "../../common/dateDropdown";
 import { SelectTag } from "../../common/selectTag";
@@ -26,9 +27,7 @@ export function HospitalBottomSheet({
   selectedDate: string | null;
 }) {
   const [hospitalName, setHospitalName] = useState<string>("");
-  const year = Number(selectedDate?.slice(0, 4));
-  const month = Number(selectedDate?.slice(5, 7));
-  const day = Number(selectedDate?.slice(8, 10));
+  const { year, month, day } = parseDateString(selectedDate ?? "");
   const [reservationDate, setReservationDate] = useState<Date>(
     new Date(year, month - 1, day)
   );
@@ -54,7 +53,7 @@ export function HospitalBottomSheet({
     }
 
     if (hospitalName && reservationDate && reservationTime) {
-      const formattedDateTime = FormatDateTimeKST(
+      const formattedDateTime = formatDateTimeKST(
         reservationDate,
         reservationTime
       );

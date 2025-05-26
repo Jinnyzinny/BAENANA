@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Camera, CameraPermissionStatus } from "react-native-vision-camera";
-import { PermissionAlert } from "../utils/permissionAlert";
+import { permissionAlert } from "../utils/Alert";
 
 function isAuthorized(status: CameraPermissionStatus): boolean {
   return status === "granted";
@@ -29,7 +29,7 @@ export function useCameraPermission() {
       // 권한이 거부된 상태인 경우 권한 부여 메시지 노출
       if (requestedStatus === "denied") {
         console.log("[카메라 권한] BLOCKED");
-        PermissionAlert("카메라");
+        permissionAlert("카메라");
         setHasPermission(false);
         return;
       }

@@ -13,9 +13,8 @@ import {
   useEditMedicineReservation,
 } from "../../../api/quries/medicine";
 import { Daily } from "../../../types/Daily";
-import { FormatDateKST } from "../../../utils/formatDate";
-import { parseDate } from "../../../utils/parseDate";
-import { parseTime } from "../../../utils/parseTime";
+import { formatDateKST, parseDate } from "../../../utils/Date";
+import { parseTime } from "../../../utils/Time";
 import { CustomButton } from "../../common/customButton";
 import { DateDropdown } from "../../common/dateDropdown";
 import { TimeDropdown } from "../../common/timeDropdown";
@@ -111,8 +110,8 @@ export function MedicineInfo({ data }: { data: Daily }) {
             return;
           }
 
-          const formatStartDate = FormatDateKST(startDate);
-          const formatEndDate = FormatDateKST(endDate);
+          const formatStartDate = formatDateKST(startDate);
+          const formatEndDate = formatDateKST(endDate);
           const timeTaken = times.map((t) => {
             const kstTime = new Date(t.time!.getTime() + 9 * 60 * 60 * 1000);
             return kstTime.toISOString().slice(11, 16); // "HH:mm"

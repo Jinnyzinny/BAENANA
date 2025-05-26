@@ -11,7 +11,7 @@ import {
 import { TextInput } from "react-native-gesture-handler";
 import { Modalize } from "react-native-modalize";
 import { useAddMedicineReservation } from "../../../api/quries/medicine";
-import { FormatDateKST } from "../../../utils/formatDate";
+import { formatDateKST } from "../../../utils/Date";
 import { CustomButton } from "../../common/customButton";
 import { DateDropdown } from "../../common/dateDropdown";
 import { TimeDropdown } from "../../common/timeDropdown";
@@ -63,8 +63,8 @@ export function MedicineBottomSheet({
       return;
     }
 
-    const formatStartDate = FormatDateKST(startDate);
-    const formatEndDate = FormatDateKST(endDate);
+    const formatStartDate = formatDateKST(startDate);
+    const formatEndDate = formatDateKST(endDate);
 
     const timeTaken = reservationTimes
       .map((item) => {

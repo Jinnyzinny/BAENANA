@@ -6,7 +6,7 @@ import {
   useEditPeriodSymptom,
 } from "../../../api/quries/period";
 import { Daily } from "../../../types/Daily";
-import { PeriodDate } from "../../../utils/periodDate";
+import { periodDate } from "../../../utils/Date";
 import { CustomButton } from "../../common/customButton";
 import { SelectTag } from "../../common/selectTag";
 import { SelectLevel } from "../selectLevel";
@@ -99,7 +99,7 @@ export function PeriodInfo({ data }: { data: Daily }) {
       <View className="flex-row items-center justify-between">
         <View className="flex-row items-center gap-2">
           <Text className="text-neutral-800 text-lg font-bold">
-            {PeriodDate(data.menstrual_cycle.start_date, data.date)}
+            {periodDate(data.menstrual_cycle.start_date, data.date)}
           </Text>
           <View className="pt-1 flex-row items-center gap-1">
             {/* 수정 버튼 */}
