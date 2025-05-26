@@ -40,7 +40,7 @@ export function FormatDateTimeKST(date: Date, time: Date): string {
     time.getHours(),
     time.getMinutes()
   );
-  const kstDateTime = new Date(localDateTime.getTime() + 9 * 60 * 60 * 1000);
+  const kstDateTime = new Date(localDateTime.getTime());
 
   return kstDateTime.toISOString().slice(0, 16);
 }

@@ -70,7 +70,7 @@ export function MedicineBottomSheet({
       .map((item) => {
         if (!item.time) return null;
 
-        const kstDate = new Date(item.time.getTime() + 9 * 60 * 60 * 1000);
+        const kstDate = new Date(item.time.getTime());
 
         return kstDate.toISOString().slice(11, 16);
       })
