@@ -18,6 +18,7 @@ import { AlertMessage } from "../../components/common/alertMessage";
 import { CustomButton } from "../../components/common/customButton";
 import { HeaderLogo } from "../../components/common/headerLogo";
 import { DonutChart } from "../../components/home/donutChart";
+import { getTodayDateString } from "../../utils/Date";
 
 export function HomeScreen() {
   const sheetRef = useRef<Modalize>(null);
@@ -27,15 +28,6 @@ export function HomeScreen() {
     useGetHospitalAlert();
   const { data: medicineData, refetch: refetchMedicineData } =
     useGetMedicineAlert();
-
-  // 오늘 날짜 문자열("yyyy-MM-dd")로 변경
-  function getTodayDateString(): string {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, "0");
-    const day = String(today.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  }
 
   // 도넛차트 - 퍼센트, D-day 계산
   const { percentage, dDay, isValid } = useMemo(() => {

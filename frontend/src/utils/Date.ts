@@ -1,5 +1,14 @@
 import { isWithinInterval, parseISO } from "date-fns";
 
+// 오늘 날짜를 문자열("yyyy-MM-dd")로 반환하는 함수
+export function getTodayDateString(): string {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
 // "yyyy-MM-dd" 형태의 문자열을 Date 객체로 변환하는 함수
 export function parseDate(dateStr: string): Date {
   const [year, month, day] = dateStr.split("-").map(Number);

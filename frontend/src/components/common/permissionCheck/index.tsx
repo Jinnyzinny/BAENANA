@@ -7,8 +7,8 @@ export function PermissionCheck({ name }: { name: string }) {
     <SafeAreaView className="flex-1">
       <HeaderLogo before={true} settings={false} />
       <View className="flex-1 justify-center items-center">
-        <ActivityIndicator size="large" />
-        <Text className="mt-2 text-lg font-bold">{name} 권한 확인 중...</Text>
+        <ActivityIndicator size="large" color="#A684FF" />
+        <Text className="mt-4 text-neutral-400">{name} 권한 확인 중...</Text>
       </View>
     </SafeAreaView>
   );

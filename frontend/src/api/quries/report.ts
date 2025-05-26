@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import {
+  addOvulationTest,
   getMedicineList,
   getOvulationTest,
   getPeriodAlert,
@@ -9,6 +10,7 @@ import {
   getRecentPeriod,
   getReport,
 } from "../report";
+import { useApiMutation } from "../../hooks/useApiMutation";
 
 // [GET] 월경 알림 메시지 조회
 export function useGetPeriodAlert() {
@@ -31,6 +33,17 @@ export function useGetOvulationTest() {
   return useQuery({
     queryKey: ["ovulationTest"],
     queryFn: () => getOvulationTest(),
+  });
+}
+
+// [POST] 배란테스트 결과 입력
+export function useAddOvulationTest() {
+  return useApiMutation({
+    mutationFn: ({ date, value }: { date: string; value: number }) =>
+      addOvulationTest(date, value),
+    keysToInvalidate: [["ovulationTest"]],
+    successMessage: "배란테스트 결과가 성공적으로 등록되었습니다.",
+    errorMessage: "배란테스트 결과 등록 실패",
   });
 }
 

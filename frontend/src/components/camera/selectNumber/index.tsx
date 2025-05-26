@@ -3,56 +3,56 @@ import React, { useState } from "react";
 import { Pressable, TextInput, View } from "react-native";
 
 export function SelectNumber({
-  type,
-  min,
-  max,
   initial,
   onChange,
 }: {
-  type: boolean;
-  min: number;
-  max: number;
   initial: number;
   onChange: (val: number) => void;
 }) {
-  const [value, setValue] = useState(
-    Math.min(Math.max(initial ?? 10, min), max)
-  );
-  const [input, setInput] = useState(value.toString());
+  const [value, setValue] = useState(Math.min(Math.max(initial ?? 10, 0), 100));
+  const [input, setInput] = useState(value.toFixed(1));
 
   const handleChange = (direction: "up" | "down") => {
-    const nextValue = direction === "up" ? value + 1 : value - 1;
-    const withinRange = direction === "up" ? value < max : value > min;
+    const step = 0.1;
+    const nextValue = direction === "up" ? value + step : value - step;
+    const withinRange = direction === "up" ? value < 100 : value > 0;
 
     if (!withinRange) return;
 
-    setValue(nextValue);
-    setInput(nextValue.toString());
-    onChange?.(nextValue);
+    const rounded = parseFloat(nextValue.toFixed(1));
+    setValue(rounded);
+    setInput(rounded.toFixed(1));
+    onChange?.(rounded);
   };
 
   const handleInputBlur = () => {
-    const numeric = parseInt(input, 10);
+    const numeric = parseFloat(input);
     if (!isNaN(numeric)) {
-      const clamped = Math.max(min, Math.min(numeric, max));
-      setValue(clamped);
-      setInput(clamped.toString());
-      onChange?.(clamped);
+      const clamped = Math.max(0, Math.min(numeric, 100));
+      const rounded = parseFloat(clamped.toFixed(1));
+      setValue(rounded);
+      setInput(rounded.toFixed(1));
+      onChange?.(rounded);
     } else {
-      setInput(value.toString());
+      setInput(value.toFixed(1));
+    }
+  };
+
+  const handleInputChange = (text: string) => {
+    const regex = /^\d*\.?\d{0,1}$/;
+    if (regex.test(text)) {
+      setInput(text);
     }
   };
 
   return (
-    <View
-      className={`${type ? "w-[82px]" : "w-[62px]"} bg-violet-50 rounded-xl px-2 py-1`}
-    >
+    <View className="flex-1 bg-violet-50 rounded-xl px-2 py-1">
       <View className="flex-row items-center justify-end">
         <TextInput
           className="mx-1 text-xl text-violet-700 font-bold text-center"
-          keyboardType="numeric"
+          keyboardType="decimal-pad"
           value={input}
-          onChangeText={setInput}
+          onChangeText={handleInputChange}
           onBlur={handleInputBlur}
           returnKeyType="done"
         />

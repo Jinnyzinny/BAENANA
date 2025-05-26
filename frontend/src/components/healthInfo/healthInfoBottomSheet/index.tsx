@@ -40,7 +40,7 @@ export function HealthInfoBottomSheet({
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 32 }}>
         <View className="mx-7 gap-5">
           {isFetching ? (
-            <ActivityIndicator size="large" />
+            <ActivityIndicator size="large" color="#A684FF" />
           ) : (
             <View className="items-center gap-5">
               <Image

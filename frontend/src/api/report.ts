@@ -45,6 +45,21 @@ export async function getOvulationTest(): Promise<FullOvulation | null> {
   }
 }
 
+// [POST] 배란테스트 결과 입력
+export async function addOvulationTest(date: string, value: number) {
+  try {
+    const response = await authClient.post("/report/menstrual/ovulation_test", {
+      date,
+      value,
+    });
+    console.log("배란테스트 결과 등록 성공: ", response.data);
+    return response.data;
+  } catch (error: unknown) {
+    console.error("배란테스트 결과 등록 실패: ", error);
+    return null;
+  }
+}
+
 // [GET] 최근 6개월 간 월경 주기 조회
 export async function getRecentPeriod(): Promise<FullRecentPeriod | null> {
   try {
