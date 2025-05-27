@@ -2,6 +2,7 @@ import { ChevronDown } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import { InteractionManager, Text, TouchableOpacity, View } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { Portal } from "react-native-portalize";
 
 export function TimeDropdown({
   onChange,
@@ -56,13 +57,15 @@ export function TimeDropdown({
         </Text>
         <ChevronDown size={18} color="#7C3AED" />
       </TouchableOpacity>
-      <DateTimePickerModal
-        isVisible={isPickerVisible}
-        mode="time"
-        date={time}
-        onConfirm={handleConfirm}
-        onCancel={() => setPickerVisible(false)}
-      />
+      <Portal>
+        <DateTimePickerModal
+          isVisible={isPickerVisible}
+          mode="time"
+          date={time}
+          onConfirm={handleConfirm}
+          onCancel={() => setPickerVisible(false)}
+        />
+      </Portal>
     </View>
   );
 }

@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import RNBootSplash from "react-native-bootsplash";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { Host } from "react-native-portalize";
 import "./global.css";
 import { RootStackNavigator } from "./src/navigation/rootStackNavigator";
 import { LoginScreen } from "./src/screens/loginScreen";
@@ -36,9 +37,11 @@ export default function App(): React.JSX.Element {
   return (
     <QueryClientProvider client={queryClient}>
       <GestureHandlerRootView className="flex-1">
-        <NavigationContainer theme={mainTheme}>
-          {isLoggedIn ? <RootStackNavigator /> : <LoginScreen />}
-        </NavigationContainer>
+        <Host>
+          <NavigationContainer theme={mainTheme}>
+            {isLoggedIn ? <RootStackNavigator /> : <LoginScreen />}
+          </NavigationContainer>
+        </Host>
       </GestureHandlerRootView>
     </QueryClientProvider>
   );

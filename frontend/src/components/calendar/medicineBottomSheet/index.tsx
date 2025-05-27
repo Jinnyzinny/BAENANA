@@ -134,6 +134,7 @@ export function MedicineBottomSheet({
       snapPoint={height * 0.9}
       onOpen={resetForm}
       panGestureEnabled={false}
+      modalStyle={{ zIndex: 1, elevation: 1 }}
       scrollViewProps={{ keyboardShouldPersistTaps: "handled" }}
     >
       {/* 헤더 */}

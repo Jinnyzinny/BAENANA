@@ -58,6 +58,7 @@ export function PeriodBottomSheet({
       ref={sheetRef}
       snapPoint={height * 0.55}
       panGestureEnabled={false}
+      modalStyle={{ zIndex: 1, elevation: 1 }}
       scrollViewProps={{ keyboardShouldPersistTaps: "handled" }}
     >
       {/* 헤더 */}
