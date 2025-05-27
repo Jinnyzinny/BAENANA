@@ -1,6 +1,12 @@
 import { ChevronDown } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
-import { InteractionManager, Text, TouchableOpacity, View } from "react-native";
+import {
+  InteractionManager,
+  Keyboard,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Portal } from "react-native-portalize";
 
@@ -34,8 +40,11 @@ export function DateDropdown({
     <View className="flex-1 pb-3 border-b border-neutral-400">
       <TouchableOpacity
         onPress={() => {
+          Keyboard.dismiss();
           InteractionManager.runAfterInteractions(() => {
-            setPickerVisible(true);
+            setTimeout(() => {
+              setPickerVisible(true);
+            }, 50);
           });
         }}
         className="flex-row mx-3 items-center justify-between"
