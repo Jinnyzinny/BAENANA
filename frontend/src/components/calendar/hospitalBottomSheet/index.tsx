@@ -88,7 +88,13 @@ export function HospitalBottomSheet({
   }
 
   return (
-    <Modalize ref={sheetRef} snapPoint={height * 0.8} onOpen={resetForm}>
+    <Modalize
+      ref={sheetRef}
+      snapPoint={height * 0.8}
+      onOpen={resetForm}
+      panGestureEnabled={false}
+      scrollViewProps={{ keyboardShouldPersistTaps: "handled" }}
+    >
       {/* 헤더 */}
       <View className="mx-5 mt-7 mb-5 flex-row items-start justify-start gap-2">
         <Image

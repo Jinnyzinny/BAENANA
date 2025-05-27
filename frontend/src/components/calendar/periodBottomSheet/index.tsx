@@ -54,7 +54,12 @@ export function PeriodBottomSheet({
   }
 
   return (
-    <Modalize ref={sheetRef} snapPoint={height * 0.55}>
+    <Modalize
+      ref={sheetRef}
+      snapPoint={height * 0.55}
+      panGestureEnabled={false}
+      scrollViewProps={{ keyboardShouldPersistTaps: "handled" }}
+    >
       {/* 헤더 */}
       <View className="mx-5 mt-7 mb-5 flex-row items-start justify-start gap-2">
         <Image
