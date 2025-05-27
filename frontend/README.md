@@ -83,6 +83,34 @@ src/
 
 ---
 
+## 🧭 네비게이션
+
+```
+
+RootStackNavigator
+├── Main (BottomTabNavigator)
+│   ├── Home (HomeScreen)
+│   ├── Calendar (CalendarScreen)
+│   ├── Test (TestStackNavigator)
+│   │    ├── TestInfo (TestInfoScreen)
+│   │    └── Camera (CameraScreen)
+│   ├── Report (ReportStackNavigator)
+│   │    ├── Total (ReportScreen)
+│   │    ├── Period (PeriodScreen)
+│   │    └── Medicine (MedicineScreen)
+│   └── Chatbot (ChatbotDrawerNavigator)
+│        └── Chat (ChatbotScreen)
+└── Settings (SettingsStackNavigator)
+     ├── SettingsList (SettingsScreen)
+     ├── HealthInfo (HealthInfoScreen)
+     ├── Notice (NoticeScreen)
+     ├── FAQ (FAQScreen)
+     └── Inquriy (InquriyScreen)
+
+```
+
+---
+
 ## ⚙️ 프로젝트 실행 방법
 
 ### 1. 클론 및 패키지 설치
