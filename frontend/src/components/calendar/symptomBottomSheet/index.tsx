@@ -1,25 +1,26 @@
-import { RefObject, useState } from "react";
+import { useState } from "react";
 import {
   Alert,
   Image,
+  Modal,
   ScrollView,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { Modalize } from "react-native-modalize";
 import { useAddPeriodSymptom } from "../../../api/quries/period";
 import { CustomButton } from "../../common/customButton";
 import { SelectTag } from "../../common/selectTag";
 import { SelectLevel } from "../selectLevel";
 
 export function SymptomBottomSheet({
-  height,
-  sheetRef,
+  visible,
+  onClose,
   selectedDate,
 }: {
-  height: number;
-  sheetRef: RefObject<Modalize | null>;
+  visible: boolean;
+  onClose: () => void;
   selectedDate: string | null;
 }) {
   const [selectedPeriod, setSelectedPeriod] = useState<0 | 1 | 2 | 3 | 4 | 5>(
@@ -54,14 +55,23 @@ export function SymptomBottomSheet({
 
     console.log(selectedDate, selectedPeriod, selectedStress, symptom);
 
-    addPeriodSymptom({
-      date: selectedDate,
-      bleedingLevel: selectedPeriod,
-      painLevel: selectedStress,
-      symptom,
-    });
-
-    sheetRef.current?.close();
+    addPeriodSymptom(
+      {
+        date: selectedDate,
+        bleedingLevel: selectedPeriod,
+        painLevel: selectedStress,
+        symptom,
+      },
+      {
+        onSuccess: () => {
+          onClose();
+          resetForm();
+        },
+        onError: (error) => {
+          console.error("월경 증상 등록 실패:", error);
+        },
+      }
+    );
   }
 
   function resetForm() {
@@ -71,96 +81,109 @@ export function SymptomBottomSheet({
   }
 
   return (
-    <Modalize
-      ref={sheetRef}
-      snapPoint={height * 0.7}
-      onOpen={resetForm}
-      panGestureEnabled={false}
-      modalStyle={{ zIndex: 1, elevation: 1 }}
-      scrollViewProps={{ keyboardShouldPersistTaps: "handled" }}
+    <Modal
+      visible={visible}
+      transparent
+      statusBarTranslucent
+      animationType="fade"
     >
-      {/* 헤더 */}
-      <View className="mx-5 mt-7 mb-5 flex-row items-start justify-start gap-2">
-        <Image
-          source={require("../../../assets/images/mascot.png")}
-          className="w-10 h-10"
-        />
-        <Text className="text-lg font-bold self-center">월경 증상 입력</Text>
-      </View>
-      <ScrollView>
-        <View className="mx-7 gap-7">
-          {/* 출혈량 입력 */}
-          <View className="gap-3">
-            <Text className="text-neutral-800 text-sm font-bold ">
-              출혈량 입력
-            </Text>
-            <View className="mx-5">
-              <SelectLevel
-                selected={selectedPeriod}
-                setSelected={setSelectedPeriod}
-                contents={["매우 적음", "보통", "매우 많음"]}
-              />
-            </View>
-          </View>
-
-          {/* 스트레스 지수 입력 */}
-          <View className="gap-3">
-            <Text className="text-neutral-800 text-sm font-bold ">
-              스트레스 지수 입력
-            </Text>
-            <View className="mx-5">
-              <SelectLevel
-                selected={selectedStress}
-                setSelected={setSelectedStress}
-                contents={["매우 낮음", "보통", "매우 높음"]}
-              />
-            </View>
-          </View>
-
-          {/* 증상 입력 */}
-          <View className="gap-3">
-            <Text className="text-neutral-800 text-sm font-bold ">
-              증상 입력 (중복 선택 가능)
-            </Text>
-            <View className="gap-3">
-              {/* 증상: 복통 / 두통 / 요통 / 메스꺼움 */}
-              <View className="mx-5 flex-row gap-2 flex-wrap">
-                {symptomItems.slice(0, 4).map((item) => (
-                  <TouchableOpacity
-                    key={item.id}
-                    onPress={() => handleSymptom(item.label)}
-                  >
-                    <SelectTag
-                      fill={symptom.includes(item.label)}
-                      content={item.label}
-                    />
-                  </TouchableOpacity>
-                ))}
+      <TouchableWithoutFeedback onPress={() => onClose()}>
+        <View className="flex-1 justify-end items-center bg-black/50">
+          {/* 모달 내부 */}
+          <TouchableWithoutFeedback onPress={() => {}}>
+            <View className="w-[100%] max-h-[80%] bg-white rounded-t-xl pb-20">
+              {/* 헤더 */}
+              <View className="mx-5 mt-7 mb-5 flex-row items-start justify-start gap-2">
+                <Image
+                  source={require("../../../assets/images/mascot.png")}
+                  className="w-10 h-10"
+                />
+                <Text className="text-lg font-bold self-center">
+                  월경 증상 입력
+                </Text>
               </View>
+              <ScrollView>
+                <View className="mx-7 gap-7">
+                  {/* 출혈량 입력 */}
+                  <View className="gap-3">
+                    <Text className="text-neutral-800 text-sm font-bold ">
+                      출혈량 입력
+                    </Text>
+                    <View className="mx-5">
+                      <SelectLevel
+                        selected={selectedPeriod}
+                        setSelected={setSelectedPeriod}
+                        contents={["매우 적음", "보통", "매우 많음"]}
+                      />
+                    </View>
+                  </View>
 
-              {/* 증상: 피로 / 우울 */}
-              <View className="mx-5 flex-row gap-2">
-                {symptomItems.slice(4).map((item) => (
-                  <TouchableOpacity
-                    key={item.id}
-                    onPress={() => handleSymptom(item.label)}
-                  >
-                    <SelectTag
-                      fill={symptom.includes(item.label)}
-                      content={item.label}
+                  {/* 스트레스 지수 입력 */}
+                  <View className="gap-3">
+                    <Text className="text-neutral-800 text-sm font-bold ">
+                      스트레스 지수 입력
+                    </Text>
+                    <View className="mx-5">
+                      <SelectLevel
+                        selected={selectedStress}
+                        setSelected={setSelectedStress}
+                        contents={["매우 낮음", "보통", "매우 높음"]}
+                      />
+                    </View>
+                  </View>
+
+                  {/* 증상 입력 */}
+                  <View className="gap-3">
+                    <Text className="text-neutral-800 text-sm font-bold ">
+                      증상 입력 (중복 선택 가능)
+                    </Text>
+                    <View className="gap-3">
+                      {/* 증상: 복통 / 두통 / 요통 / 메스꺼움 */}
+                      <View className="mx-5 flex-row gap-2 flex-wrap">
+                        {symptomItems.slice(0, 4).map((item) => (
+                          <TouchableOpacity
+                            key={item.id}
+                            onPress={() => handleSymptom(item.label)}
+                          >
+                            <SelectTag
+                              fill={symptom.includes(item.label)}
+                              content={item.label}
+                            />
+                          </TouchableOpacity>
+                        ))}
+                      </View>
+
+                      {/* 증상: 피로 / 우울 */}
+                      <View className="mx-5 flex-row gap-2">
+                        {symptomItems.slice(4).map((item) => (
+                          <TouchableOpacity
+                            key={item.id}
+                            onPress={() => handleSymptom(item.label)}
+                          >
+                            <SelectTag
+                              fill={symptom.includes(item.label)}
+                              content={item.label}
+                            />
+                          </TouchableOpacity>
+                        ))}
+                      </View>
+                    </View>
+                  </View>
+
+                  {/* 저장 버튼 */}
+                  <View className="mt-10">
+                    <CustomButton
+                      fill={true}
+                      content="저장"
+                      onPress={handleSave}
                     />
-                  </TouchableOpacity>
-                ))}
-              </View>
+                  </View>
+                </View>
+              </ScrollView>
             </View>
-          </View>
-
-          {/* 저장 버튼 */}
-          <View className="mt-10">
-            <CustomButton fill={true} content="저장" onPress={handleSave} />
-          </View>
+          </TouchableWithoutFeedback>
         </View>
-      </ScrollView>
-    </Modalize>
+      </TouchableWithoutFeedback>
+    </Modal>
   );
 }

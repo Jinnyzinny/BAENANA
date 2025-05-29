@@ -1,14 +1,7 @@
 import { useFocusEffect } from "@react-navigation/native";
 import { differenceInCalendarDays, parseISO } from "date-fns";
-import { useCallback, useMemo, useRef } from "react";
-import {
-  Image,
-  InteractionManager,
-  Text,
-  useWindowDimensions,
-  View,
-} from "react-native";
-import { Modalize } from "react-native-modalize";
+import { useCallback, useMemo, useState } from "react";
+import { Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGetHospitalAlert } from "../../api/quries/hospital";
 import { useGetMedicineAlert } from "../../api/quries/medicine";
@@ -21,13 +14,12 @@ import { DonutChart } from "../../components/home/donutChart";
 import { getTodayDateString } from "../../utils/Date";
 
 export function HomeScreen() {
-  const sheetRef = useRef<Modalize>(null);
-  const { height } = useWindowDimensions();
   const { data: dDayData, refetch: refetchDday } = useGetDday();
   const { data: hospitalData, refetch: refetchHospitalData } =
     useGetHospitalAlert();
   const { data: medicineData, refetch: refetchMedicineData } =
     useGetMedicineAlert();
+  const [periodVisible, setPeriodVisible] = useState<boolean>(false);
 
   // 도넛차트 - 퍼센트, D-day 계산
   const { percentage, dDay, isValid } = useMemo(() => {
@@ -59,9 +51,7 @@ export function HomeScreen() {
 
   // 월경일 입력 바텀시트 열기
   function handlePeriodOpen() {
-    InteractionManager.runAfterInteractions(() => {
-      sheetRef.current?.open();
-    });
+    setPeriodVisible(true);
   }
 
   useFocusEffect(
@@ -146,7 +136,11 @@ export function HomeScreen() {
           )}
         </View>
       </SafeAreaView>
-      <PeriodBottomSheet height={height} sheetRef={sheetRef} period={6} />
+      <PeriodBottomSheet
+        visible={periodVisible}
+        onClose={() => setPeriodVisible(false)}
+        period={6}
+      />
     </>
   );
 }

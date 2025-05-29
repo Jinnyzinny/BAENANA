@@ -1,12 +1,6 @@
 import { useFocusEffect } from "@react-navigation/native";
-import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  InteractionManager,
-  ScrollView,
-  useWindowDimensions,
-  View,
-} from "react-native";
-import { Modalize } from "react-native-modalize";
+import { useCallback, useEffect, useState } from "react";
+import { ScrollView, View } from "react-native";
 import { useGetHospitalReservation } from "../../api/quries/hospital";
 import { useGetMedicineReservation } from "../../api/quries/medicine";
 import {
@@ -35,12 +29,14 @@ export function CalendarScreen() {
   const [selectedType, setSelectedType] = useState<
     "period" | "symptom" | "hospital" | "medicine" | null
   >(null);
-  const sheetRef = useRef<Modalize>(null);
-  const { height } = useWindowDimensions();
   const year = new Date().getFullYear();
   const month = new Date().getMonth() + 1;
   const [selectedYear, setSelectedYear] = useState<number>(year);
   const [selectedMonth, setSelectedMonth] = useState<number>(month);
+  const [periodVisible, setPeriodVisible] = useState<boolean>(false);
+  const [symptomVisible, setSymptomVisible] = useState<boolean>(false);
+  const [hospitalVisible, setHospitalVisible] = useState<boolean>(false);
+  const [medicineVisible, setMedicineVisible] = useState<boolean>(false);
 
   // 월별 월경일
   const [period, setPeriod] = useState<Period[]>([]);
@@ -135,17 +131,14 @@ export function CalendarScreen() {
   function handleBottomSheet(type: "symptom" | "hospital" | "medicine" | null) {
     setSelectedType(type);
     setModalVisible(false);
-    InteractionManager.runAfterInteractions(() => {
-      sheetRef.current?.open();
-    });
-  }
 
-  // 주기 입력 바텀시트: 모달 닫기
-  function handlePeriodOpen() {
-    setSelectedType("period");
-    InteractionManager.runAfterInteractions(() => {
-      sheetRef.current?.open();
-    });
+    if (type === "symptom") {
+      setSymptomVisible(true);
+    } else if (type === "hospital") {
+      setHospitalVisible(true);
+    } else if (type === "medicine") {
+      setMedicineVisible(true);
+    }
   }
 
   return (
@@ -180,13 +173,11 @@ export function CalendarScreen() {
           <CustomButton
             fill={true}
             content="월경일 입력"
-            onPress={handlePeriodOpen}
+            onPress={() => setPeriodVisible(true)}
           />
         </View>
       </ScrollView>
-
       {/* SafeAreaView 외부 */}
-
       {/* 일정 및 입력 버튼 모달 */}
       <ScheduleModal
         visible={modalVisible}
@@ -194,39 +185,34 @@ export function CalendarScreen() {
         onClose={() => setModalVisible(false)}
         handleBottomSheet={handleBottomSheet}
       />
-
       {/* 바텀 시트 */}
-      {selectedType === "period" && (
-        // 월경일 입력
-        <PeriodBottomSheet height={height} sheetRef={sheetRef} period={6} />
-      )}
+      {/* 월경일 입력 */}
+      <PeriodBottomSheet
+        visible={periodVisible}
+        onClose={() => setPeriodVisible(false)}
+        period={6}
+      />
 
-      {selectedType === "symptom" && (
-        // 월경 증상 입력
-        <SymptomBottomSheet
-          height={height}
-          sheetRef={sheetRef}
-          selectedDate={selectedDate}
-        />
-      )}
+      {/* 월경 증상 입력 */}
+      <SymptomBottomSheet
+        visible={symptomVisible}
+        onClose={() => setSymptomVisible(false)}
+        selectedDate={selectedDate}
+      />
 
-      {selectedType === "hospital" && (
-        // 병원 입력
-        <HospitalBottomSheet
-          height={height}
-          sheetRef={sheetRef}
-          selectedDate={selectedDate}
-        />
-      )}
+      {/* 병원 입력 */}
+      <HospitalBottomSheet
+        visible={hospitalVisible}
+        onClose={() => setHospitalVisible(false)}
+        selectedDate={selectedDate}
+      />
 
-      {selectedType === "medicine" && (
-        // 복용약 입력
-        <MedicineBottomSheet
-          height={height}
-          sheetRef={sheetRef}
-          selectedDate={selectedDate}
-        />
-      )}
+      {/* 복용약 입력 */}
+      <MedicineBottomSheet
+        visible={medicineVisible}
+        onClose={() => setMedicineVisible(false)}
+        selectedDate={selectedDate}
+      />
     </SafeAreaView>
   );
 }

@@ -1,15 +1,16 @@
 import { Minus, Plus } from "lucide-react-native";
-import { RefObject, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   Alert,
   Image,
+  Modal,
   ScrollView,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import { Modalize } from "react-native-modalize";
 import { useAddMedicineReservation } from "../../../api/quries/medicine";
 import { formatDateKST } from "../../../utils/Date";
 import { CustomButton } from "../../common/customButton";
@@ -17,12 +18,12 @@ import { DateDropdown } from "../../common/dateDropdown";
 import { TimeDropdown } from "../../common/timeDropdown";
 
 export function MedicineBottomSheet({
-  height,
-  sheetRef,
+  visible,
+  onClose,
   selectedDate,
 }: {
-  height: number;
-  sheetRef: RefObject<Modalize | null>;
+  visible: boolean;
+  onClose: () => void;
   selectedDate: string | null;
 }) {
   const [medicineName, setMedicineName] = useState<string>("");
@@ -98,7 +99,8 @@ export function MedicineBottomSheet({
       },
       {
         onSuccess: () => {
-          sheetRef.current?.close();
+          onClose();
+          resetForm();
         },
       }
     );
@@ -129,135 +131,160 @@ export function MedicineBottomSheet({
   }
 
   return (
-    <Modalize
-      ref={sheetRef}
-      snapPoint={height * 0.9}
-      onOpen={resetForm}
-      panGestureEnabled={false}
-      modalStyle={{ zIndex: 1, elevation: 1 }}
-      scrollViewProps={{ keyboardShouldPersistTaps: "handled" }}
+    <Modal
+      visible={visible}
+      transparent
+      statusBarTranslucent
+      animationType="fade"
     >
-      {/* 헤더 */}
-      <View className="mx-5 mt-7 mb-5 flex-row items-start justify-start gap-2">
-        <Image
-          source={require("../../../assets/images/mascot.png")}
-          className="w-10 h-10"
-        />
-        <Text className="text-lg font-bold self-center">복용약 입력</Text>
-      </View>
-      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}>
-        <View className="mx-7 gap-7">
-          {/* 복용약 이름 입력 */}
-          <View className="gap-3">
-            <Text className="text-neutral-800 text-sm font-bold ">
-              복용약 이름
-            </Text>
-            <View className="mx-5 border-b border-neutral-400">
-              <View className="relative justify-center h-12">
-                {medicineName === "" && (
-                  <Text className="absolute left-3 text-neutral-400 font-bold text-lg">
-                    복용약 이름을 입력해주세요.
-                  </Text>
-                )}
-                <TextInput
-                  className="pl-3 h-12 font-bold text-lg"
-                  value={medicineName}
-                  onChangeText={setMedicineName}
+      <TouchableWithoutFeedback onPress={() => onClose()}>
+        <View className="flex-1 justify-end items-center bg-black/50">
+          {/* 모달 내부 */}
+          <TouchableWithoutFeedback onPress={() => {}}>
+            <View className="w-[100%] max-h-[80%] bg-white rounded-t-xl pb-20">
+              {/* 헤더 */}
+              <View className="mx-5 mt-7 mb-5 flex-row items-start justify-start gap-2">
+                <Image
+                  source={require("../../../assets/images/mascot.png")}
+                  className="w-10 h-10"
                 />
-              </View>
-            </View>
-          </View>
-
-          {/* 복용 시작일 */}
-          <View className="gap-3">
-            <Text className="text-neutral-800 text-sm font-bold ">
-              복용 시작일
-            </Text>
-            <View className="flex-row mx-5 items-center justify-between">
-              <DateDropdown
-                year={year}
-                month={month}
-                day={day}
-                onChange={setStartDate}
-              />
-            </View>
-          </View>
-
-          {/* 복용 종료일 */}
-          <View className="gap-3">
-            <Text className="text-neutral-800 text-sm font-bold ">
-              복용 종료일
-            </Text>
-            <View className="flex-row mx-5 items-center justify-between">
-              <DateDropdown
-                year={year}
-                month={month}
-                day={day}
-                onChange={setEndDate}
-              />
-            </View>
-          </View>
-
-          {/* 복용 시간 */}
-          <View className="gap-3">
-            <Text className="text-neutral-800 text-sm font-bold ">
-              복용 시간
-            </Text>
-            {reservationTimes.map((item, index) => (
-              <View
-                key={item.id}
-                className="mx-5 flex-row justify-center items-center gap-3"
-              >
-                <TimeDropdown
-                  onChange={(date) => handleTimeChange(item.id, date)}
-                />
-                {reservationTimes.length < 3 &&
-                  index === reservationTimes.length - 1 && (
-                    <TouchableOpacity onPress={addReservationTime}>
-                      <View className="p-1 bg-violet-400 rounded-full">
-                        <Plus color="#FFFFFF" size={12} strokeWidth={3} />
-                      </View>
-                    </TouchableOpacity>
-                  )}
-                {reservationTimes.length > 1 && (
-                  <TouchableOpacity
-                    onPress={() => removeReservationTime(item.id)}
-                  >
-                    <View className="p-1 bg-violet-400 rounded-full">
-                      <Minus color="#FFFFFF" size={12} strokeWidth={3} />
-                    </View>
-                  </TouchableOpacity>
-                )}
-              </View>
-            ))}
-          </View>
-
-          {/* 메모 */}
-          <View className="gap-3">
-            <Text className="text-neutral-800 text-sm font-bold">메모</Text>
-            <View className="mx-5 flex-1 border-b border-neutral-400">
-              {memo === "" && (
-                <Text
-                  className="absolute text-neutral-400 text-sm"
-                  style={{ left: 4, top: 10 }}
-                >
-                  메모할 사항을 입력해주세요 (선택)
+                <Text className="text-lg font-bold self-center">
+                  복용약 입력
                 </Text>
-              )}
-              <TextInput
-                value={memo}
-                onChangeText={setMemo}
-                className="text-sm"
-              />
-            </View>
-          </View>
+              </View>
+              <ScrollView
+                contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}
+              >
+                <View className="mx-7 gap-7">
+                  {/* 복용약 이름 입력 */}
+                  <View className="gap-3">
+                    <Text className="text-neutral-800 text-sm font-bold ">
+                      복용약 이름
+                    </Text>
+                    <View className="mx-5 border-b border-neutral-400">
+                      <View className="relative justify-center h-12">
+                        {medicineName === "" && (
+                          <Text className="absolute left-3 text-neutral-400 font-bold text-lg">
+                            복용약 이름을 입력해주세요.
+                          </Text>
+                        )}
+                        <TextInput
+                          className="pl-3 h-12 font-bold text-lg"
+                          value={medicineName}
+                          onChangeText={setMedicineName}
+                        />
+                      </View>
+                    </View>
+                  </View>
 
-          {/* 저장 버튼 */}
-          <View className="mt-10">
-            <CustomButton fill={true} content="저장" onPress={handleSave} />
-          </View>
+                  {/* 복용 시작일 */}
+                  <View className="gap-3">
+                    <Text className="text-neutral-800 text-sm font-bold ">
+                      복용 시작일
+                    </Text>
+                    <View className="flex-row mx-5 items-center justify-between">
+                      <DateDropdown
+                        year={year}
+                        month={month}
+                        day={day}
+                        onChange={setStartDate}
+                      />
+                    </View>
+                  </View>
+
+                  {/* 복용 종료일 */}
+                  <View className="gap-3">
+                    <Text className="text-neutral-800 text-sm font-bold ">
+                      복용 종료일
+                    </Text>
+                    <View className="flex-row mx-5 items-center justify-between">
+                      <DateDropdown
+                        year={year}
+                        month={month}
+                        day={day}
+                        onChange={setEndDate}
+                      />
+                    </View>
+                  </View>
+
+                  {/* 복용 시간 */}
+                  <View className="gap-3">
+                    <Text className="text-neutral-800 text-sm font-bold ">
+                      복용 시간
+                    </Text>
+                    {reservationTimes.map((item, index) => (
+                      <View
+                        key={item.id}
+                        className="mx-5 flex-row justify-center items-center gap-3"
+                      >
+                        <TimeDropdown
+                          onChange={(date) => handleTimeChange(item.id, date)}
+                        />
+                        {reservationTimes.length < 3 &&
+                          index === reservationTimes.length - 1 && (
+                            <TouchableOpacity onPress={addReservationTime}>
+                              <View className="p-1 bg-violet-400 rounded-full">
+                                <Plus
+                                  color="#FFFFFF"
+                                  size={12}
+                                  strokeWidth={3}
+                                />
+                              </View>
+                            </TouchableOpacity>
+                          )}
+                        {reservationTimes.length > 1 && (
+                          <TouchableOpacity
+                            onPress={() => removeReservationTime(item.id)}
+                          >
+                            <View className="p-1 bg-violet-400 rounded-full">
+                              <Minus
+                                color="#FFFFFF"
+                                size={12}
+                                strokeWidth={3}
+                              />
+                            </View>
+                          </TouchableOpacity>
+                        )}
+                      </View>
+                    ))}
+                  </View>
+
+                  {/* 메모 */}
+                  <View className="gap-3">
+                    <Text className="text-neutral-800 text-sm font-bold">
+                      메모
+                    </Text>
+                    <View className="mx-5 flex-1 border-b border-neutral-400">
+                      {memo === "" && (
+                        <Text
+                          className="absolute text-neutral-400 text-sm"
+                          style={{ left: 4, top: 10 }}
+                        >
+                          메모할 사항을 입력해주세요 (선택)
+                        </Text>
+                      )}
+                      <TextInput
+                        value={memo}
+                        onChangeText={setMemo}
+                        className="text-sm"
+                      />
+                    </View>
+                  </View>
+
+                  {/* 저장 버튼 */}
+                  <View className="mt-10">
+                    <CustomButton
+                      fill={true}
+                      content="저장"
+                      onPress={handleSave}
+                    />
+                  </View>
+                </View>
+              </ScrollView>
+            </View>
+          </TouchableWithoutFeedback>
         </View>
-      </ScrollView>
-    </Modalize>
+      </TouchableWithoutFeedback>
+    </Modal>
   );
 }

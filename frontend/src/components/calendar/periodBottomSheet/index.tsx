@@ -1,17 +1,23 @@
-import { RefObject, useState } from "react";
-import { Image, ScrollView, Text, View } from "react-native";
-import { Modalize } from "react-native-modalize";
+import { useState } from "react";
+import {
+  Image,
+  Modal,
+  ScrollView,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import { useAddPeriod } from "../../../api/quries/period";
 import { CustomButton } from "../../common/customButton";
 import { DateDropdown } from "../../common/dateDropdown";
 
 export function PeriodBottomSheet({
-  height,
-  sheetRef,
+  visible,
+  onClose,
   period,
 }: {
-  height: number;
-  sheetRef: RefObject<Modalize | null>;
+  visible: boolean;
+  onClose: () => void;
   period: number;
 }) {
   const selectedDate = new Date();
@@ -43,10 +49,10 @@ export function PeriodBottomSheet({
         { startDate: start, endDate: end },
         {
           onSuccess: () => {
-            sheetRef.current?.close();
+            onClose();
           },
           onError: (error) => {
-            console.error("생리 기간 등록 실패:", error);
+            console.error("월경 기간 등록 실패:", error);
           },
         }
       );
@@ -54,59 +60,73 @@ export function PeriodBottomSheet({
   }
 
   return (
-    <Modalize
-      ref={sheetRef}
-      snapPoint={height * 0.55}
-      panGestureEnabled={false}
-      modalStyle={{ zIndex: 1, elevation: 1 }}
-      scrollViewProps={{ keyboardShouldPersistTaps: "handled" }}
+    <Modal
+      visible={visible}
+      transparent
+      statusBarTranslucent
+      animationType="fade"
     >
-      {/* 헤더 */}
-      <View className="mx-5 mt-7 mb-5 flex-row items-start justify-start gap-2">
-        <Image
-          source={require("../../../assets/images/mascot.png")}
-          className="w-10 h-10"
-        />
-        <Text className="text-lg font-bold self-center">월경일 입력</Text>
-      </View>
-      <ScrollView>
-        <View className="mx-7 gap-7">
-          {/* 월경 시작일 */}
-          <View className="gap-3">
-            <Text className="text-neutral-800 text-sm font-bold ">
-              월경 시작일
-            </Text>
-            <View className="flex-row mx-5 items-center justify-between">
-              <DateDropdown
-                year={startYear}
-                month={startMonth}
-                day={startDay}
-                onChange={setStartDate}
-              />
-            </View>
-          </View>
+      <TouchableWithoutFeedback onPress={() => onClose()}>
+        <View className="flex-1 justify-end items-center bg-black/50">
+          {/* 모달 내부 */}
+          <TouchableWithoutFeedback onPress={() => {}}>
+            <View className="w-[100%] max-h-[80%] bg-white rounded-t-xl pb-20">
+              {/* 헤더 */}
+              <View className="mx-5 mt-7 mb-5 flex-row items-start justify-start gap-2">
+                <Image
+                  source={require("../../../assets/images/mascot.png")}
+                  className="w-10 h-10"
+                />
+                <Text className="text-lg font-bold self-center">
+                  월경일 입력
+                </Text>
+              </View>
+              <ScrollView>
+                <View className="mx-7 gap-7">
+                  {/* 월경 시작일 */}
+                  <View className="gap-3">
+                    <Text className="text-neutral-800 text-sm font-bold ">
+                      월경 시작일
+                    </Text>
+                    <View className="flex-row mx-5 items-center justify-between">
+                      <DateDropdown
+                        year={startYear}
+                        month={startMonth}
+                        day={startDay}
+                        onChange={setStartDate}
+                      />
+                    </View>
+                  </View>
 
-          {/* 월경 종료일 */}
-          <View className="gap-3">
-            <Text className="text-neutral-800 text-sm font-bold ">
-              월경 종료일
-            </Text>
-            <View className="flex-row mx-5 items-center justify-between">
-              <DateDropdown
-                year={endYear}
-                month={endMonth}
-                day={endDay}
-                onChange={setEndDate}
-              />
-            </View>
-          </View>
+                  {/* 월경 종료일 */}
+                  <View className="gap-3">
+                    <Text className="text-neutral-800 text-sm font-bold ">
+                      월경 종료일
+                    </Text>
+                    <View className="flex-row mx-5 items-center justify-between">
+                      <DateDropdown
+                        year={endYear}
+                        month={endMonth}
+                        day={endDay}
+                        onChange={setEndDate}
+                      />
+                    </View>
+                  </View>
 
-          {/* 저장 버튼 */}
-          <View className="mt-10">
-            <CustomButton fill={true} content="저장" onPress={handleSave} />
-          </View>
+                  {/* 저장 버튼 */}
+                  <View className="mt-10">
+                    <CustomButton
+                      fill={true}
+                      content="저장"
+                      onPress={handleSave}
+                    />
+                  </View>
+                </View>
+              </ScrollView>
+            </View>
+          </TouchableWithoutFeedback>
         </View>
-      </ScrollView>
-    </Modalize>
+      </TouchableWithoutFeedback>
+    </Modal>
   );
 }

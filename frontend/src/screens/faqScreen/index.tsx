@@ -50,7 +50,7 @@ export function FaqScreen() {
               <>
                 <CustomButton
                   fill={true}
-                  content="공지사항 작성"
+                  content="자주 묻는 질문 작성"
                   onPress={handleBottomSheet}
                 />
               </>
