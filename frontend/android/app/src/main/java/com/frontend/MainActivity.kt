@@ -1,5 +1,8 @@
 package com.frontend
 
+// react-native-bootsplash에서 RNBootSplash 클래스 추가
+import com.zoontek.rnbootsplash.RNBootSplash
+
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnabled

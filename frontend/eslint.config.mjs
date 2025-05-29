@@ -34,6 +34,7 @@ export default [
         NodeJS: true,
         setInterval: "readonly",
         clearInterval: "readonly",
+        setTimeout: "readonly",
       },
     },
     plugins: {

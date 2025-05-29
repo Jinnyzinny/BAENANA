@@ -67,7 +67,7 @@ export function TimerModal({
       visible={visible}
       transparent
       statusBarTranslucent
-      animationType="slide"
+      animationType="fade"
     >
       <TouchableWithoutFeedback onPress={onClose}>
         <View className="flex-1 justify-center items-center bg-black/50">
@@ -104,7 +104,7 @@ export function TimerModal({
                         x2="0"
                         y2="1.1"
                       >
-                        <Stop offset="0%" stopColor="#FFF7B4" />
+                        <Stop offset="0%" stopColor="#DDD6FF" />
                         <Stop offset="100%" stopColor="#A684FF" />
                       </LinearGradient>
                     </Defs>
@@ -132,7 +132,7 @@ export function TimerModal({
                   </Svg>
 
                   <View className="absolute items-center justify-center">
-                    <Text className="text-2xl font-bold text-violet-400">
+                    <Text className="text-2xl font-bold text-neutral-600">
                       {formattedTime}
                     </Text>
                   </View>

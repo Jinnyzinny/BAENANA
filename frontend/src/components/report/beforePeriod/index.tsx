@@ -22,7 +22,22 @@ export function BeforePeriod({
           <TriangleAlert size={size} color={"#EC6344"} />
         )}
       </View>
-      <Text className="text-violet-700 font-semibold text-lg">{date}일 </Text>
+      {date ? (
+        <Text className="text-violet-700 font-semibold text-lg">{date}일 </Text>
+      ) : title === "월경 주기" ? (
+        <View className="gap-1">
+          <View className="flex-row items-center">
+            <Text className="text-neutral-400 text-sm">월경 기간이 </Text>
+            <Text className="text-violet-700 font-bold text-sm">2회 이상</Text>
+          </View>
+          <Text className="text-neutral-400 text-sm">입력되어야 합니다.</Text>
+        </View>
+      ) : (
+        <View className="gap-1">
+          <Text className="text-neutral-400 text-sm">월경 기간이 </Text>
+          <Text className="text-neutral-400 text-sm">입력되어야 합니다.</Text>
+        </View>
+      )}
     </View>
   );
 }

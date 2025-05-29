@@ -1,7 +1,10 @@
 import { ChevronLeft, ChevronRight } from "lucide-react-native";
-import { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
+import { HospitalReservation } from "../../../types/Hospital";
+import { Medicine } from "../../../types/Medicine";
+import { Period } from "../../../types/Period";
+import { getDotDates, getPeriodDates } from "../../../utils/Mark";
 
 LocaleConfig.locales["ko"] = {
   monthNames: [
@@ -44,34 +47,99 @@ LocaleConfig.locales["ko"] = {
   dayNamesShort: ["일", "월", "화", "수", "목", "금", "토"],
   today: "오늘",
 };
-
 LocaleConfig.defaultLocale = "ko";
 
 export function Monthly({
   onDateSelect,
+  selectedMonth,
+  setSelectedYear,
+  setSelectedMonth,
+  period,
+  hospitalReservation,
+  medicineReservation,
+  predictedPeriod,
+  childbearingAge,
 }: {
   onDateSelect: (date: string) => void;
+  selectedMonth: number;
+  setSelectedYear: (year: number) => void;
+  setSelectedMonth: (month: number) => void;
+  period: Period[];
+  hospitalReservation: HospitalReservation[];
+  medicineReservation: Medicine[];
+  predictedPeriod: { startDate: string; endDate: string };
+  childbearingAge: { startDate: string; endDate: string };
 }) {
-  const [currentMonth, setCurrentMonth] = useState<number>(
-    new Date().getMonth() + 1
+  const dotsMap = getDotDates(
+    hospitalReservation.map((h) => h.reservation_date_time),
+    medicineReservation.map((m) => ({
+      start_date: m.start_date,
+      end_date: m.end_date,
+    }))
   );
+
+  // 월경일
+  let periodMark: Record<string, any> = {};
+  period.forEach((p) => {
+    const mark = getPeriodDates(
+      { start: p.start_date, end: p.end_date },
+      "#C4B4FF", // 진한 배경 (시작 & 종료)
+      "#FFFFFF", // 진한 텍스트
+      "#DDD6FF", // 연한 배경 (중간)
+      "#A684FF" // 연한 텍스트
+    );
+    periodMark = { ...periodMark, ...mark };
+  });
+
+  // 월경 예정일
+  const predictedPeriodMark = getPeriodDates(
+    { start: predictedPeriod.startDate, end: predictedPeriod.endDate },
+    "#EDE9FE", // 진한 배경 (시작 & 종료)
+    "#7008E7", // 진한 텍스트
+    "#F5F3FF", // 연한 배경 (중간)
+    "#A684FF" // 연한 텍스트
+  );
+
+  // 가임기
+  const childbearingMark = getPeriodDates(
+    { start: childbearingAge.startDate, end: childbearingAge.endDate },
+    "#FEF9C3", // 진한 배경 (시작 & 종료)
+    "#262626", // 진한 텍스트
+    "#FEFCE8", // 연한 배경 (중간)
+    "#525252" // 연한 텍스트
+  );
+
+  const markedDates: any = {
+    ...predictedPeriodMark,
+    ...childbearingMark,
+    ...periodMark,
+  };
+
+  Object.keys(dotsMap).forEach((date) => {
+    if (!markedDates[date]) markedDates[date] = {};
+    markedDates[date].dots = dotsMap[date];
+    markedDates[date].marked = true;
+  });
 
   return (
     <View>
       <Calendar
+        disableAllTouchEventsForDisabledDays={false}
+        markingType="custom"
+        markedDates={markedDates}
         onDayPress={(day) => {
           onDateSelect(day.dateString);
         }}
         onMonthChange={(date) => {
-          setCurrentMonth(date.month);
+          setSelectedYear(date.year);
+          setSelectedMonth(date.month);
         }}
         style={{
           borderRadius: 10,
           overflow: "hidden",
           paddingTop: 5,
           paddingBottom: 30,
-          paddingRight: 10,
-          paddingLeft: 10,
+          paddingHorizontal: 10,
           shadowColor: "#D4D4D4",
         }}
         theme={{
@@ -85,7 +153,6 @@ export function Monthly({
           textDayHeaderFontSize: 12,
           textSectionTitleColor: "#525252",
         }}
-        // 화살표 커스텀
         renderArrow={(direction) =>
           direction === "left" ? (
             <ChevronLeft color={"#A1A1A1"} size={22} />
@@ -93,40 +160,64 @@ export function Monthly({
             <ChevronRight color={"#A1A1A1"} size={22} />
           )
         }
-        // 헤더 커스텀 (MM월 yyyy => yyyy년 MM월)
-        renderHeader={(date) => {
-          const year = date.getFullYear();
-          const month = date.getMonth() + 1;
-          return (
-            <Text className="p-3 text-violet-400 text-xl font-bold text-center">
-              {year}년 {month}월
-            </Text>
-          );
-        }}
-        // 날짜 색상 커스텀(토 - 파란색, 일 - 빨간색)
+        renderHeader={(date) => (
+          <Text className="p-3 text-violet-400 text-xl font-bold text-center">
+            {date.getFullYear()}년 {date.getMonth() + 1}월
+          </Text>
+        )}
         dayComponent={({ date, state }) => {
           if (!date) return null;
-          const dayOfWeek = new Date(date.dateString).getDay(); // 0(일) ~ 6(토)
 
-          let textColor = "#262626"; // 기본 텍스트 색상
+          const dateStr = date.dateString;
+          const mark = markedDates[dateStr] || {};
+          const customStyles = mark.customStyles ?? {};
+          const dayOfWeek = new Date(dateStr).getDay();
 
-          // 'disabled'이거나, 다른 달이면 흐리게
-          if (state === "disabled" || date.month !== currentMonth) {
+          let textColor = "#262626";
+          if (state === "disabled" || date.month !== selectedMonth) {
             textColor = "#D4D4D4";
           } else if (dayOfWeek === 0) {
-            textColor = "#EC6344"; // 일요일 빨강
+            textColor = "#EC6344";
           } else if (dayOfWeek === 6) {
-            textColor = "#4492EC"; // 토요일 파랑
+            textColor = "#4492EC";
+          }
+
+          // 기간 텍스트 색상이 있으면 덮어씌움
+          if (customStyles.text?.color) {
+            textColor = customStyles.text.color;
           }
 
           return (
             <TouchableOpacity
-              onPress={() => onDateSelect(date.dateString)}
-              className="items-center justify-center w-8 h-8"
+              onPress={() => onDateSelect(dateStr)}
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                width: 32,
+                height: 32,
+                ...customStyles.container,
+              }}
             >
-              <Text style={{ color: textColor, fontWeight: "400" }}>
+              <Text style={{ color: textColor, fontWeight: "normal" }}>
                 {date.day}
               </Text>
+
+              {mark.dots?.length > 0 && (
+                <View style={{ flexDirection: "row", marginTop: 2 }}>
+                  {mark.dots.map((dot, index) => (
+                    <View
+                      key={index}
+                      style={{
+                        width: 4,
+                        height: 4,
+                        borderRadius: 2,
+                        backgroundColor: dot.color,
+                        marginHorizontal: 1,
+                      }}
+                    />
+                  ))}
+                </View>
+              )}
             </TouchableOpacity>
           );
         }}

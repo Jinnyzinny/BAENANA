@@ -1,81 +1,75 @@
-import { FlatList, Image, Text, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { useEffect } from "react";
+import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+import { useGetCategoryHealthInfo } from "../../../api/quries/healthInfo";
 
-const data = [
-  {
-    id: "1",
-    title: "건강 정보 1",
-    img: "https://i.namu.wiki/i/Mj0aArUbJiq5_c500MqmbYyDPWnSiDBCsxbesdkR0XTOtDvwrjj2ponJvctbYgQ7zPE_LvjsJHAl786rZu0tkw.webp",
-    content: "건강 정보 관련 내용이 들어갈 예정입니다.",
-  },
-  {
-    id: "2",
-    title: "건강 정보 2",
-    img: "https://i.namu.wiki/i/Mj0aArUbJiq5_c500MqmbYyDPWnSiDBCsxbesdkR0XTOtDvwrjj2ponJvctbYgQ7zPE_LvjsJHAl786rZu0tkw.webp",
-    content: "건강 정보 관련 내용이 들어갈 예정입니다.",
-  },
-  {
-    id: "3",
-    title: "건강 정보 3",
-    img: "https://i.namu.wiki/i/Mj0aArUbJiq5_c500MqmbYyDPWnSiDBCsxbesdkR0XTOtDvwrjj2ponJvctbYgQ7zPE_LvjsJHAl786rZu0tkw.webp",
-    content: "건강 정보 관련 내용이 들어갈 예정입니다.",
-  },
-  {
-    id: "4",
-    title: "건강 정보 4",
-    img: "https://i.namu.wiki/i/Mj0aArUbJiq5_c500MqmbYyDPWnSiDBCsxbesdkR0XTOtDvwrjj2ponJvctbYgQ7zPE_LvjsJHAl786rZu0tkw.webp",
-    content: "건강 정보 관련 내용이 들어갈 예정입니다.",
-  },
-  {
-    id: "5",
-    title: "건강 정보 5",
-    img: "https://i.namu.wiki/i/Mj0aArUbJiq5_c500MqmbYyDPWnSiDBCsxbesdkR0XTOtDvwrjj2ponJvctbYgQ7zPE_LvjsJHAl786rZu0tkw.webp",
-    content: "건강 정보 관련 내용이 들어갈 예정입니다.",
-  },
-  {
-    id: "6",
-    title: "건강 정보 6",
-    img: "https://i.namu.wiki/i/Mj0aArUbJiq5_c500MqmbYyDPWnSiDBCsxbesdkR0XTOtDvwrjj2ponJvctbYgQ7zPE_LvjsJHAl786rZu0tkw.webp",
-    content: "건강 정보 관련 내용이 들어갈 예정입니다.",
-  },
-  {
-    id: "7",
-    title: "건강 정보 7",
-    img: "https://i.namu.wiki/i/Mj0aArUbJiq5_c500MqmbYyDPWnSiDBCsxbesdkR0XTOtDvwrjj2ponJvctbYgQ7zPE_LvjsJHAl786rZu0tkw.webp",
-    content: "건강 정보 관련 내용이 들어갈 예정입니다.",
-  },
-  {
-    id: "8",
-    title: "건강 정보 8",
-    img: "https://i.namu.wiki/i/Mj0aArUbJiq5_c500MqmbYyDPWnSiDBCsxbesdkR0XTOtDvwrjj2ponJvctbYgQ7zPE_LvjsJHAl786rZu0tkw.webp",
-    content: "건강 정보 관련 내용이 들어갈 예정입니다.",
-  },
-];
+export function InfoCard({
+  onPress,
+  selectedNumber,
+}: {
+  onPress: (id: number) => void;
+  selectedNumber: number;
+}) {
+  const { data, refetch } = useGetCategoryHealthInfo(selectedNumber);
+  const navigation = useNavigation();
+  const paddedData = (() => {
+    const safeData = data ?? [];
+    return safeData.length % 2 === 0
+      ? safeData
+      : [
+          ...safeData,
+          {
+            id: "placeholder",
+            title: "",
+            imageUrl: "",
+            createdAt: "",
+          },
+        ];
+  })();
 
-export function InfoCard() {
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      console.log("🔄건강 정보 목록 포커스 → 게시글 다시 불러오기");
+      refetch();
+    });
+
+    return unsubscribe;
+  }, [navigation, refetch]);
+
   return (
     <FlatList
-      data={data}
+      data={paddedData}
       numColumns={2}
       scrollEnabled={false}
       columnWrapperStyle={{ gap: 12 }}
       contentContainerStyle={{ gap: 12 }}
-      keyExtractor={(item) => item.id}
-      renderItem={({ item }) => (
-        <View className="flex-1">
-          <View className="flex-1 p-3 rounded-xl gap-2 bg-white shadow-neutral-300">
-            <Image
-              source={{
-                uri: item.img,
-              }}
-              className="w-full h-28 rounded-lg"
-            />
-            <View className="gap-5">
-              <Text className="text-neutral-800 font-bold">{item.title}</Text>
-              <Text className="text-neutral-800 text-sm">{item.content}</Text>
+      keyExtractor={(item) => item.title}
+      renderItem={({ item }) => {
+        if (item.id === "placeholder") {
+          return (
+            <View className="flex-1">
+              <View className="p-3 rounded-xl bg-white opacity-0" />
             </View>
-          </View>
-        </View>
-      )}
+          );
+        }
+
+        return (
+          <TouchableOpacity
+            className="flex-1"
+            onPress={() => onPress(item.id as number)}
+          >
+            <View className="flex-1">
+              <View className="flex-1 p-3 rounded-xl gap-7 bg-white shadow-neutral-300">
+                <Image
+                  source={{ uri: item.imageUrl }}
+                  className="w-full h-32 rounded-lg"
+                />
+                <Text className="text-neutral-800 font-bold">{item.title}</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        );
+      }}
     />
   );
 }

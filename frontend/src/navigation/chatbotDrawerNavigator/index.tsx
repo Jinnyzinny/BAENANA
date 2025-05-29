@@ -3,7 +3,7 @@ import { ChatDrawer } from "../../components/chatbot/chatDrawer";
 import { ChatbotScreen } from "../../screens/chatbotScreen";
 
 export type ChatbotDrawerParamList = {
-  Chat: { chatId?: string } | undefined;
+  Chat: { sessionId?: string } | undefined;
 };
 
 export function ChatbotDrawerNavigator() {
