@@ -1,163 +1,317 @@
-# 배나나
+# BAENANA - 여성 건강 관리 및 AI 상담 헬스케어 앱
 
-![image](/uploads/2c607d531b2ec5e9cf08e55cee4fdaa0/image.png){width=1289 height=716}
+SSAFY 3차 기업연계 프로젝트로 진행한 여성 건강 관리 헬스케어 앱입니다.
+사용자가 생리 주기, 약 복용, 산부인과 예약 정보를 기록하고, 캘린더·홈·리포트 화면에서 자신의 건강 상태를 확인할 수 있도록 구현했습니다.
 
-## 목차
+백엔드에서는 사용자별 건강 데이터를 날짜 기준으로 관리하는 API를 개발했으며, Spring Actuator, Prometheus, Grafana를 활용해 서버 모니터링 환경을 구성했습니다.
 
-1. [프로젝트 콘셉트](#프로젝트-콘셉트)
-2. [핵심 기능](#핵심-기능)
-3. [기능 소개](#기능-소개)
-4. [기술 스택](#기술-스택)
-   - [Management Tool](#management-tool)
-   - [IDE](#ide)
-   - [Infra](#infra)
-   - [Frontend](#frontend)
-   - [Backend](#backend)
-5. [서비스 아키텍처](#서비스-아키텍처)
-6. [설계 문서](#설계-문서)
-   - [요구사항 정의서](#요구사항-정의서)
-   - [기능 명세서](#기능-명세서)
-   - [Flow Chart](#flow-chart)
-   - [Mockup](#mockup)
-   - [API 명세서](#api-명세서)
-7. [ERD](#erd)
-8. [포팅메뉴얼](#포팅메뉴얼)
-9. [발표자료](#발표자료)
-10. [팀 구성원](#팀-구성원)
+<br>
 
-## 프로젝트 콘셉트
+## 프로젝트 개요
 
-**여성 건강 주기 관리 및 AI 챗봇 상담 지원 헬스케어 앱**
+BAENANA는 여성 건강 주기 관리와 AI 챗봇 상담을 지원하는 헬스케어 서비스입니다.
 
-### 핵심 기능
+사용자는 생리 주기, 세부 증상, 약 복용 정보, 산부인과 예약 일정을 기록할 수 있습니다.
+서비스는 이를 바탕으로 홈 화면, 캘린더, 리포트 화면에서 건강 정보를 확인할 수 있도록 제공합니다.
 
-- **홈 화면**
-  - 약 복용 / 산부인과 예약 알림 메시지
-  - 남은 예정일 그래프 시각화
-- **캘린더**
-  - 주요 일정 확인
-  - 약 복용 / 산부인과 예약 일정 등록 및 열람
-  - 생리 주기 / 세부 증상 기록 및 열람
-- **리포트**
-  - 생리 주기 및 검사 결과 기반 그래프 생성
-  - 사용자 입력 데이터 기반 이상 징후 알림
-- **건강 컨텐츠**
-  - 공인된 의료 정보 바탕 카드 뉴스 생성
-- **챗봇**
-  - 규칙 기반 챗봇 AI 챗봇 (LLM+RAG 혼합 모델)
+<br>
 
-## 기능 소개
+## 주요 기능
 
-### 홈 화면
+### 1. 홈 화면
 
-![image](/uploads/5458d8015845e52bb7f91f8057f6a0c3/image.png){width=299 height=629}
+* 다음 생리 예정일 및 남은 날짜 조회
+* 약 복용 일정 조회
+* 산부인과 예약 알림 조회
+* 사용자 건강 상태 요약 정보 제공
 
-### 캘린더
+### 2. 캘린더
 
-![image](/uploads/8f97afc60f809248cee61f1126ddc016/image.png){width=957 height=651}
+* 월 단위 건강 일정 조회
+* 생리 주기 등록 및 조회
+* 생리 세부 증상 기록 및 조회
+* 약 복용 일정 등록 및 조회
+* 산부인과 예약 일정 등록 및 조회
 
-### 리포트
+### 3. 리포트
 
-![image](/uploads/a1aa419fef51c6919df189aae18dc633/image.png){width=689 height=678}
+* 생리 주기 데이터 기반 리포트 제공
+* 사용자 입력 데이터 기반 건강 상태 요약
+* 주기, 증상, 검사 결과 기반 그래프 제공
 
-### 건강 컨텐츠
+### 4. 건강 콘텐츠
 
-![image](/uploads/68ef6c9620c02a3a965007bc19e31a2d/image.png){width=307 height=630}
+* 여성 건강 관련 카드 뉴스 제공
+* 의료 정보 기반 콘텐츠 확인
 
-### 챗봇
+### 5. AI 챗봇
 
-![image](/uploads/e96d97966bb714e18547095c153b03d1/image.png){width=339 height=646}
+* 사용자 건강 정보 기반 상담 지원
+* LLM과 RAG 기반 질의응답 제공
+
+<br>
 
 ## 기술 스택
 
-### Management Tool
-
-![gitlab](https://img.shields.io/badge/gitlab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white)
-![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
-![jira](https://img.shields.io/badge/jira-0052CC?style=for-the-badge&logo=jira&logoColor=white)
-![notion](https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white)
-![figma](https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)
-
-### IDE
-
-![intellij](https://img.shields.io/badge/intellij_idea-000000?style=for-the-badge&logo=intellijidea&logoColor=white)
-![vscode](https://img.shields.io/badge/vscode-0078d7?style=for-the-badge&logo=visual%20studio&logoColor=white)
-![postman](https://img.shields.io/badge/postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
-
-### Infra
-
-![AWS EC2](https://img.shields.io/badge/aws%20ec2-FF9900?style=for-the-badge&logo=amazon-ec2&logoColor=white)
-![Nginx](https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white)
-![Docker](https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
-![Ubuntu](https://img.shields.io/badge/ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)
-![Putty](https://img.shields.io/badge/putty-0078d7?style=for-the-badge&logo=visual%20studio&logoColor=white)
-<img src="https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=Jenkins&logoColor=white">
-
-### Frontend
-
-<img src="https://img.shields.io/badge/Typescript_-3178C6?style=for-the-badge&logo=Typescript&logoColor=white"> 
-<img src="https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
-
 ### Backend
 
-![java](https://img.shields.io/badge/Java-007396?style=for-the-badge)
-![springboot](https://img.shields.io/badge/spring%20boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
-![springDatajpa](https://img.shields.io/badge/spring%20jpa-6DB33F?style=for-the-badge&logo=Spring&logoColor=white)
-![springsecurity](https://img.shields.io/badge/spring%20security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white)
-![jwt](https://img.shields.io/badge/jwt-000000?style=for-the-badge&logo=jwt&logoColor=white)
-![mysql](https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
-![Spring Actuator](https://img.shields.io/badge/Spring%20Actuator-000000?style=for-the-badge&logo=jwt&logoColor=white)
-![Prometheus](https://img.shields.io/badge/prometheus-E6522C?style=for-the-badge&logo=prometheus&logoColor=white)
-![Grafana](https://img.shields.io/badge/grafana-F46800?style=for-the-badge&logo=grafana&logoColor=white)
+| 구분         | 기술                                               |
+| ---------- | ------------------------------------------------ |
+| Language   | Java 17                                          |
+| Framework  | Spring Boot 3.4.4                                |
+| ORM        | Spring Data JPA                                  |
+| Query      | QueryDSL                                         |
+| Database   | MySQL                                            |
+| Security   | Spring Security, JWT, OAuth2                     |
+| Validation | Spring Validation                                |
+| Monitoring | Spring Actuator, Micrometer, Prometheus, Grafana |
+| Build Tool | Gradle                                           |
 
 ### AI
 
-![Python](https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![FastAPI](https://img.shields.io/badge/fastapi-009688?style=for-the-badge&logo=fastapi&logoColor=white)
-![Pydantic](https://img.shields.io/badge/pydantic-0A223A?style=for-the-badge&logo=pydantic&logoColor=white)
-![Uvicorn](https://img.shields.io/badge/uvicorn-0A223A?style=for-the-badge&logo=uvicorn&logoColor=white)
-![llama.cpp](https://img.shields.io/badge/llama.cpp-3C1379?style=for-the-badge&logo=uvicorn&logoColor=white)
-![SentenceTransformers](https://img.shields.io/badge/sentence%20transformers-00599C?style=for-the-badge&logo=python&logoColor=white)
-![RAG](https://img.shields.io/badge/rag-FF6F00?style=for-the-badge&logo=question&logoColor=white)
-![ChromaDB](https://img.shields.io/badge/chromadb-E6522C?style=for-the-badge&logo=database&logoColor=white)
-![Langchain TextSplitter](https://img.shields.io/badge/langchain%20textsplitter-0FA958?style=for-the-badge&logo=python&logoColor=white)
-![Cosine Similarity](https://img.shields.io/badge/cosine%20similarity-5A189A?style=for-the-badge&logo=python&logoColor=white)
-![python-docx](https://img.shields.io/badge/python--docx-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![pandas](https://img.shields.io/badge/pandas-150458?style=for-the-badge&logo=pandas&logoColor=white)
+| 구분        | 기술                   |
+| --------- | -------------------- |
+| Language  | Python               |
+| Framework | FastAPI              |
+| LLM / RAG | LLM + RAG            |
+| Vector DB | ChromaDB             |
+| Embedding | SentenceTransformers |
 
+### Infra
 
+| 구분         | 기술      |
+| ---------- | ------- |
+| Server     | AWS EC2 |
+| Web Server | Nginx   |
+| Container  | Docker  |
+| OS         | Ubuntu  |
 
-## 서비스 아키텍처
+<br>
 
-![image](/uploads/e62e4949d379462776d1a5f431306086/image.png){width=1054 height=595}
+## 백엔드 담당 역할
 
-## 설계 문서
+* Spring Boot 기반 REST API 설계 및 개발
+* 생리 주기, 약 복용, 병원 예약 도메인 API 구현
+* 사용자별 건강 데이터 조회 로직 설계
+* 날짜 범위 기반 캘린더 조회 API 구현
+* Spring Data JPA와 QueryDSL 기반 조건 조회 구현
+* MySQL 기반 DB 관리
+* Spring Actuator, Prometheus, Grafana 기반 서버 모니터링 환경 구성
 
-### [요구사항 정의서](https://lab.ssafy.com/s12-final/S12P31S205/-/blob/master/exec/%ED%8F%AC%ED%8C%85_%EB%A9%94%EB%89%B4%EC%96%BC.pdf)
+<br>
 
-### [기능 명세서](https://lab.ssafy.com/s12-final/S12P31S205/-/blob/master/exec/%ED%8F%AC%ED%8C%85_%EB%A9%94%EB%89%B4%EC%96%BC.pdf)
+## 주요 구현 내용
 
-### [Flow Chart](https://lab.ssafy.com/s12-final/S12P31S205/-/blob/master/exec/%ED%8F%AC%ED%8C%85_%EB%A9%94%EB%89%B4%EC%96%BC.pdf)
+### 1. 생리 주기 관리 API 구현
 
-### [Mockup](https://lab.ssafy.com/s12-final/S12P31S205/-/blob/master/exec/%ED%8F%AC%ED%8C%85_%EB%A9%94%EB%89%B4%EC%96%BC.pdf)
+사용자의 생리 주기 정보를 등록하고, 월 단위로 조회할 수 있는 API를 구현했습니다.
 
-### [API 명세서](https://lab.ssafy.com/s12-final/S12P31S205/-/blob/master/exec/%ED%8F%AC%ED%8C%85_%EB%A9%94%EB%89%B4%EC%96%BC.pdf)
+생리 주기는 단일 날짜 데이터가 아니라 시작일과 종료일을 기준으로 기간이 존재합니다.
+따라서 특정 월을 조회할 때 해당 월 안에 시작된 데이터뿐 아니라, 이전 월에 시작되어 현재 월까지 이어지는 데이터도 함께 조회해야 했습니다.
 
-## ERD
+이를 위해 날짜 범위가 겹치는 데이터를 조회하도록 로직을 구성했습니다.
 
-![image](/uploads/41cf793137e2df8d953eaf7929db25ce/image.png)
+```text
+조회 월: 2025-05-01 ~ 2025-05-31
 
-### [포팅메뉴얼](https://lab.ssafy.com/s12-final/S12P31S205/-/blob/master/exec/%ED%8F%AC%ED%8C%85_%EB%A9%94%EB%89%B4%EC%96%BC.pdf)
+포함되어야 하는 데이터 예시
+- 2025-05-03 ~ 2025-05-08
+- 2025-04-28 ~ 2025-05-03
+- 2025-05-29 ~ 2025-06-02
+```
 
-## [발표자료](/uploads/97b6e4a82c826ebe23552daece741908/12기_자율PJT_발표자료_S205.pdf)
+이 과정에서 단순히 시작일 기준으로만 조회하면 실제 캘린더에 표시되어야 하는 데이터를 누락할 수 있다는 점을 고려했습니다.
 
-## 팀 구성원
+<br>
 
-| 역할          | 이름   | 담당 업무                                           |
-| ------------- | ------ | --------------------------------------------------- |
-| **FE**        | 최이화 | UI 화면 스타일 설계, React Native 프로젝트 세팅, 카카오 로그인, 홈·캘린더·카메라·리포트·챗봇·건강 정보 등 주요 화면 및 컴포넌트 구현                                                    |
-| **FE**        | 김태열 |                                                     |
-| **BE**        | 이진형 | API 설계, 개발, 유지보수 및 DB 관리, 서버 모니터링 |
-| **AI**        | 박가연 | RAG 챗봇 개발, FastAPI 서버 및 Docker 배포, 사용자 정보 기반 프롬프트 설계, 응답 유사도 평가 지표 설계 |
-| **AI, BE**    | 김민경 |                                                     |
-| **INFRA, BE** | 지수인 | 회원, 채팅, 건강 정보 관리 구현 및 인프라 세팅      |
+### 2. 약 복용 관리 API 구현
+
+사용자가 복용 중인 약 정보를 등록하고, 복용 기간과 복용 시간을 기준으로 조회할 수 있도록 구현했습니다.
+
+약 복용 데이터는 다음과 같은 특성을 가지고 있었습니다.
+
+* 약 이름
+* 복용 시작일
+* 복용 종료일
+* 복용 시간
+* 사용자별 복용 여부
+
+약 복용 정보는 홈 화면과 캘린더 화면에서 모두 사용되어야 했습니다.
+홈 화면에서는 현재 복용 중인 약 정보를 보여줘야 했고, 캘린더에서는 월 단위 복용 일정을 표시해야 했습니다.
+
+이를 위해 현재 날짜 기준 조회와 월 단위 범위 조회를 분리했습니다.
+종료일이 현재 날짜 이후인 약은 복용 중인 약으로 판단하고, 월 단위 조회에서는 해당 월과 복용 기간이 겹치는 데이터를 조회하도록 구현했습니다.
+
+<br>
+
+### 3. 산부인과 예약 관리 API 구현
+
+사용자의 산부인과 예약 정보를 등록하고 조회할 수 있는 API를 구현했습니다.
+
+예약 정보는 특정 날짜와 시간을 기준으로 관리되어야 했기 때문에 `LocalDateTime`을 활용했습니다.
+또한 예약 목적을 구분할 수 있도록 정기검진, 초음파, 배란확인, 상담, 기타 등의 타입을 분리했습니다.
+
+월 단위 캘린더 화면에서 예약 일정을 확인할 수 있도록 특정 월의 시작일과 종료일을 기준으로 예약 데이터를 조회했습니다.
+
+<br>
+
+### 4. 캘린더 조회 응답 구조 설계
+
+BAENANA의 주요 화면 중 하나는 캘린더였습니다.
+캘린더 화면에서는 생리 주기, 약 복용, 병원 예약처럼 서로 다른 도메인의 데이터를 한 번에 확인할 수 있어야 했습니다.
+
+문제는 각 데이터의 날짜 기준이 서로 다르다는 점이었습니다.
+
+```text
+생리 주기: 시작일 ~ 종료일
+약 복용: 복용 시작일 ~ 복용 종료일 + 복용 시간
+병원 예약: 특정 예약 일시
+```
+
+초기에는 각 도메인의 CRUD API를 중심으로 구현했지만, 실제 화면 요구사항을 만족하려면 월 단위로 여러 도메인의 데이터를 함께 조회하고 응답 DTO로 가공해야 했습니다.
+
+이를 해결하기 위해 도메인별 날짜 조건을 분리하고, 프론트엔드에서 바로 사용할 수 있는 응답 구조로 변환했습니다.
+
+<br>
+
+## 모니터링 환경 구성
+
+서비스 운영 중 문제를 빠르게 파악하기 위해 Spring Actuator, Prometheus, Grafana를 활용한 모니터링 환경을 구성했습니다.
+
+단순히 API가 정상적으로 동작하는 것만으로는 운영 중 문제를 파악하기 어렵다고 판단했습니다.
+서버 상태, 요청 처리 상황, 메모리 사용량과 같은 지표를 확인할 수 있어야 장애 상황에서 원인을 추적할 수 있다고 보았습니다.
+
+구성 흐름은 다음과 같습니다.
+
+```text
+Spring Boot Application
+        ↓
+Spring Actuator
+        ↓
+Micrometer
+        ↓
+Prometheus
+        ↓
+Grafana
+```
+
+이를 통해 애플리케이션 상태를 외부에서 확인하고, Grafana 대시보드에서 서버 지표를 시각적으로 확인할 수 있도록 구성했습니다.
+
+<br>
+
+## 트러블슈팅 및 배운 점
+
+### 1. 날짜 기준이 다른 데이터 처리 문제
+
+생리 주기, 약 복용, 병원 예약 데이터는 모두 날짜를 기준으로 조회되지만, 각각의 기준이 달랐습니다.
+
+생리 주기는 기간 데이터였고, 약 복용은 복용 기간과 복용 시간이 함께 필요했으며, 병원 예약은 특정 일시를 기준으로 관리되어야 했습니다.
+하지만 프론트엔드에서는 이 데이터를 월 단위 캘린더 화면에서 한 번에 확인할 수 있는 응답을 필요로 했습니다.
+
+이를 해결하기 위해 각 도메인의 날짜 조건을 분리해 조회 로직을 설계했습니다.
+이 과정에서 단순 CRUD API보다 중요한 것은 화면 요구사항과 데이터 구조를 함께 고려한 API 설계라는 점을 배웠습니다.
+
+<br>
+
+### 2. 월 단위 범위 조회 문제
+
+월별 조회 API를 구현할 때 단순히 해당 월에 시작된 데이터만 조회하면 일부 데이터가 누락될 수 있었습니다.
+
+예를 들어 이전 달에 시작되어 현재 달까지 이어지는 생리 주기나 약 복용 정보는 시작일 기준 조회만으로는 확인할 수 없었습니다.
+이를 해결하기 위해 조회 월과 데이터 기간이 겹치는 경우를 포함하도록 조건을 구성했습니다.
+
+이 경험을 통해 날짜 범위 데이터는 시작일과 종료일을 모두 고려해야 하며, 실제 사용자가 보는 화면 기준으로 조회 조건을 설계해야 한다는 점을 배웠습니다.
+
+<br>
+
+### 3. 운영 상태 확인을 위한 모니터링 필요성
+
+프로젝트를 진행하며 기능 구현뿐 아니라 서버 상태를 확인할 수 있는 구조의 필요성을 느꼈습니다.
+
+API가 정상적으로 동작하더라도 운영 환경에서는 요청 처리 지연, 메모리 사용량 증가, 서버 상태 이상 등을 확인할 수 있어야 합니다.
+이를 위해 Spring Actuator와 Prometheus, Grafana를 연동해 모니터링 환경을 구성했습니다.
+
+이 경험을 통해 백엔드 개발자는 기능 구현에서 끝나는 것이 아니라, 서비스가 운영되는 과정에서 문제를 추적할 수 있는 구조까지 고려해야 한다는 점을 배웠습니다.
+
+<br>
+
+## 프로젝트 구조
+
+```text
+BAENANA
+├── backend
+│   ├── src
+│   │   └── main
+│   │       └── java
+│   │           └── com
+│   │               └── ssafy
+│   │                   └── backend
+│   ├── build.gradle
+│   └── settings.gradle
+├── frontend
+├── ai
+├── exec
+└── README.md
+```
+
+<br>
+
+## 실행 방법
+
+### 1. 프로젝트 클론
+
+```bash
+git clone https://github.com/Jinnyzinny/BAENANA.git
+cd BAENANA/backend
+```
+
+<br>
+
+### 2. 환경 변수 설정
+
+프로젝트 실행을 위해 MySQL, JWT, OAuth2 관련 설정을 구성합니다.
+
+예시:
+
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/baenana
+spring.datasource.username=root
+spring.datasource.password=password
+
+jwt.secret=your-jwt-secret
+```
+
+<br>
+
+### 3. 서버 실행
+
+```bash
+./gradlew bootRun
+```
+
+또는 빌드 후 실행합니다.
+
+```bash
+./gradlew build
+java -jar build/libs/*.jar
+```
+
+<br>
+
+## 성과
+
+* 여성 건강 주기, 약 복용, 병원 예약 도메인 API 구현
+* 사용자별 건강 데이터를 날짜 조건에 맞게 조회하는 로직 구현
+* 월 단위 캘린더 화면 요구사항에 맞는 응답 DTO 구성
+* Spring Data JPA와 QueryDSL 기반 조건 조회 구현
+* Spring Actuator, Prometheus, Grafana 기반 서버 모니터링 환경 구성
+
+<br>
+
+## 배운 점
+
+이번 프로젝트를 통해 단순 CRUD API를 넘어, 실제 화면 요구사항에 맞는 데이터 조회 구조를 설계하는 경험을 쌓았습니다.
+
+특히 생리 주기, 약 복용, 병원 예약처럼 날짜 기준이 서로 다른 데이터를 하나의 캘린더 화면에서 제공하기 위해서는 도메인별 데이터 특성을 이해하고 조회 조건을 세밀하게 분리해야 했습니다.
+
+또한 서버 모니터링 환경을 구성하며 백엔드 개발자는 기능 구현뿐 아니라 운영 중 문제를 확인하고 추적할 수 있는 구조까지 고려해야 한다는 점을 배웠습니다.
